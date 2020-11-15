@@ -12,7 +12,8 @@ import * as costCategoriesActions from '../../store/actions/costCategories';
 
 
 const ProductsOverviewScreen = props => {
-  const products = useSelector(state => state.costCategories);
+  const products = useSelector(state => state.products);
+  const costCategories = useSelector(state => state.costCategories);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -25,15 +26,15 @@ const ProductsOverviewScreen = props => {
       productTitle: title
     });
   };
-  console.log(products);
+  //console.log(costCategories);
   return (
     <FlatList
         data={products}
         renderItem={(itemData) => (
           <ProductItem
           image={"https://picsum.photos/200/300"}
-          title={itemData.name}
-          price={itemData.totalAmount}
+          title={"test"}
+          price={1}
           />
         )}
       ></FlatList>

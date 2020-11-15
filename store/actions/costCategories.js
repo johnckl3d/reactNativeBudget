@@ -24,7 +24,7 @@ export const fetchCostCategories = () => {
 
     }
     //console.log(resData);
-    console.log(loadedCostCategories);
+    //console.log(loadedCostCategories);
     dispatch({type: SET_PRODUCT, costCategories: loadedCostCategories});
 };
 };
