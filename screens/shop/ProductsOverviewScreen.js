@@ -8,13 +8,15 @@ import ProductItem from '../../components/shop/ProductItem';
 import * as cartActions from '../../store/actions/cart';
 import Colors from '../../constants/Colors';
 import * as productsActions from '../../store/actions/products';
+import * as costCategoriesActions from '../../store/actions/costCategories';
+
 
 const ProductsOverviewScreen = props => {
-  const products = useSelector(state => state.products.availableProducts);
+  const products = useSelector(state => state.costCategories);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(productsActions.fetchCostCategories());
+    dispatch(costCategoriesActions.fetchCostCategories());
   }, [dispatch]);
 
   const selectItemHandler = (id, title) => {
@@ -23,37 +25,18 @@ const ProductsOverviewScreen = props => {
       productTitle: title
     });
   };
-
+  console.log(products);
   return (
     <FlatList
-      data={products}
-      keyExtractor={item => item.id}
-      renderItem={itemData => (
-        <ProductItem
-          image={itemData.item.imageUrl}
-          title={itemData.item.title}
-          price={itemData.item.price}
-          onSelect={() => {
-            selectItemHandler(itemData.item.id, itemData.item.title);
-          }}
-        >
-          <Button
-            color={Colors.primary}
-            title="View Details"
-            onPress={() => {
-              selectItemHandler(itemData.item.id, itemData.item.title);
-            }}
+        data={products}
+        renderItem={(itemData) => (
+          <ProductItem
+          image={"https://picsum.photos/200/300"}
+          title={itemData.name}
+          price={itemData.totalAmount}
           />
-          <Button
-            color={Colors.primary}
-            title="To Cart"
-            onPress={() => {
-              dispatch(cartActions.addToCart(itemData.item));
-            }}
-          />
-        </ProductItem>
-      )}
-    />
+        )}
+      ></FlatList>
   );
 };
 
