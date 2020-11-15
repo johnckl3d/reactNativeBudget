@@ -12,7 +12,7 @@ import * as costCategoriesActions from '../../store/actions/costCategories';
 
 
 const ProductsOverviewScreen = props => {
-  const products = useSelector(state => state.products);
+  const products = useSelector(state => state.products.availableProducts);
   const costCategories = useSelector(state => state.costCategories);
   const dispatch = useDispatch();
 
@@ -20,21 +20,22 @@ const ProductsOverviewScreen = props => {
     dispatch(costCategoriesActions.fetchCostCategories());
   }, [dispatch]);
 
+  /*
   const selectItemHandler = (id, title) => {
     props.navigation.navigate('ProductDetail', {
       productId: id,
       productTitle: title
     });
   };
-  //console.log(costCategories);
+  */
   return (
     <FlatList
-        data={products}
+        data={costCategories.costCategories}
         renderItem={(itemData) => (
           <ProductItem
           image={"https://picsum.photos/200/300"}
-          title={"test"}
-          price={1}
+          title={itemData.item.name}
+          price={itemData.item.totalAmount}
           />
         )}
       ></FlatList>

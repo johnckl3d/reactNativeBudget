@@ -2,7 +2,7 @@ import CostCategory from "../../models/costCategory";
 import CostItem from "../../models/costItem";
 
 
-export const SET_PRODUCT = 'SET_PRODUCTS';
+export const SET_PRODUCTS = 'SET_PRODUCTS';
 
 
 export const fetchCostCategories = () => {
@@ -25,6 +25,6 @@ export const fetchCostCategories = () => {
     }
     //console.log(resData);
     //console.log(loadedCostCategories);
-    dispatch({type: SET_PRODUCT, costCategories: loadedCostCategories});
+    dispatch({type: SET_PRODUCTS, costCategories: loadedCostCategories});
 };
 };
