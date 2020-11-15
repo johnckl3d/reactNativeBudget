@@ -14,7 +14,7 @@ const ProductsOverviewScreen = props => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(productsActions.fetchProducts());
+    dispatch(productsActions.fetchCostCategories());
   }, [dispatch]);
 
   const selectItemHandler = (id, title) => {

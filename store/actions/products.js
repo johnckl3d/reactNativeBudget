@@ -1,17 +1,32 @@
+import CostCategory from "../../models/costCategory";
+import CostItem from "../../models/costItem";
+
 export const DELETE_PRODUCT = 'DELETE_PRODUCT';
 export const CREATE_PRODUCT = 'CREATE_PRODUCT';
 export const UPDATE_PRODUCT = 'UPDATE_PRODUCT';
 export const SET_PRODUCT = 'SET_PRODUCTS';
 
 
-export const fetchProducts = () => {
+export const fetchCostCategories = () => {
   return async dispatch => {
     // any async code you want!
     const response = await fetch('https://meetup-api-app-john.azurewebsites.net/api/budget', {
       method: 'GET',
     });
     const resData = await response.json();
-    console.log(resData);
+    const loadedCostCategories = [];
+  
+    for (const item of resData){
+      const cIs = [];
+      for (const cI of item.costItems){
+        cIs.push(new CostItem(cI.name, cI.amount));
+      }
+      
+      loadedCostCategories.push(new CostCategory(item.costCategoryId, item.name, cIs));
+
+    }
+    //console.log(resData);
+    console.log(loadedCostCategories);
     //dispatch({type: SET_PRODUCT, products: []});
 };
 };
