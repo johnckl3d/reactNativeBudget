@@ -7,6 +7,7 @@ import {
   Platform,
   ActivityIndicator,
   StyleSheet,
+  Alert
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -37,6 +38,19 @@ const ProductsOverviewScreen = (props) => {
     setIsLoading(false);
   }, [dispatch, setIsLoading, setError]);
 
+  const deleteProducts = useCallback(async (costCategoryId) => {
+    setError(null);
+    setIsLoading(true);
+    try {
+      await dispatch(costCategoriesActions.deleteProduct(costCategoryId));
+    } catch (err) {
+      setError(err.message);
+    }
+
+    setIsLoading(false);
+    loadProducts();
+  }, [dispatch, setIsLoading, setError]);
+
   useEffect(() => {
     loadProducts();
   }, [dispatch, loadProducts]);
@@ -56,11 +70,18 @@ const ProductsOverviewScreen = (props) => {
     });
   };
 
-  const deleteItemHandler = (id, title) => {
-    props.navigation.navigate("ProductDetail", {
-      productId: id,
-      productTitle: title,
-    });
+
+  const deleteItemHandler = (costCategoryId, name) => {
+    Alert.alert('Are you sure?', `Do you really want to delete ${name}?`, [
+      { text: 'No', style: 'default' },
+      {
+        text: 'Yes',
+        style: 'destructive',
+        onPress: () => {
+          deleteProducts(costCategoryId);
+        }
+      }
+    ]);
   };
 
   if (error) {
@@ -103,14 +124,14 @@ const ProductsOverviewScreen = (props) => {
           title={itemData.item.name}
           price={itemData.item.totalAmount}
           onSelect={() => {
-            selectItemHandler(itemData.item.id, itemData.item.title);
+            selectItemHandler(itemData.item.costCategoryId, itemData.item.name);
           }}
         >
           <Button
             color={Colors.primary}
             title="Delete"
             onPress={() => {
-              deleteItemHandler(itemData.item.id, itemData.item.title);
+              deleteItemHandler(itemData.item.costCategoryId, itemData.item.name);
             }}
           />
         </ProductItem>

@@ -12,6 +12,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import HeaderButton from '../../components/UI/HeaderButton';
 import * as productsActions from '../../store/actions/products';
+import * as costCategoriesActions from "../../store/actions/costCategories";
 import Input from '../../components/UI/Input';
 
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
@@ -70,8 +71,9 @@ const EditProductScreen = props => {
       return;
     }
     if (editedProduct) {
+      console.log("dispatched");
       dispatch(
-        productsActions.updateProduct(
+        costCategoriesActions.updateProduct(
           prodId,
           formState.inputValues.title,
           formState.inputValues.description,
@@ -80,7 +82,7 @@ const EditProductScreen = props => {
       );
     } else {
       dispatch(
-        productsActions.createProduct(
+        costCategoriesActions.createProduct(
           formState.inputValues.title,
           formState.inputValues.description,
           formState.inputValues.imageUrl,

@@ -1,6 +1,6 @@
 
 import {
-  SET_PRODUCTS
+  SET_PRODUCTS, DELETE_PRODUCT
 } from '../actions/costCategories';
 import CostCategory from "../../models/costCategory";
 import CostItem from "../../models/costItem";
@@ -14,6 +14,13 @@ export default (state = initialState, action) => {
     case SET_PRODUCTS:
       return {
         costCategories: action.costCategories,
+      };
+      case DELETE_PRODUCT:
+      return {
+        ...state,
+        costCategories: state.costCategories.filter(
+          costCategory => costCategory.costCategoryId !== costCategory.costCategoryId
+        ),
       };
   }
   return state;

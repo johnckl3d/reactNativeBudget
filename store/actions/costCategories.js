@@ -2,6 +2,7 @@ import CostCategory from "../../models/costCategory";
 import CostItem from "../../models/costItem";
 
 export const SET_PRODUCTS = "SET_PRODUCTS";
+export const DELETE_PRODUCT = "DELETE_PRODUCT";
 
 export const fetchCostCategories = () => {
   return async (dispatch) => {
@@ -56,13 +57,12 @@ export const createProduct = (title, description, imageUrl, price) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          'name': 'Petrol2',
+          name: "Petrol2",
         }),
       }
     );
 
     const resData = await response.json();
-    console.log(JSON.stringify(resData));
     // dispatch({
     //   type: CREATE_PRODUCT,
     //   productData: {
@@ -76,31 +76,63 @@ export const createProduct = (title, description, imageUrl, price) => {
   };
 };
 
+export const deleteProduct = (productId) => {
+  return async (dispatch) => {
+    try {
+      console.log("productId:" + productId);
+      //`https://rn-complete-guide.firebaseio.com/products/${productId}.json`,
+      const response = await fetch(
+        `https://meetup-api-app-john.azurewebsites.net/api/costCategory/${productId}`,
+        {
+          method: "DELETE",
+        }
+      );
+      console.log(response.status);
+      if (response.status != 204) {
+        console.log("Error");
+        throw new Error("something went wrong!");
+      }else{
+        console.log("Success");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
 export const updateProduct = (id, title, description, imageUrl) => {
   return async (dispatch) => {
-    await fetch(
-      `https://rn-complete-guide.firebaseio.com/products/${id}.json`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title,
-          description,
-          imageUrl,
-        }),
-      }
-    );
+    try {
+      // any async code you want!
+      const response = await fetch(
+        "https://meetup-api-app-john.azurewebsites.net/api/costCategory",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: "Petrol2",
+          }),
+        }
+      );
 
-    dispatch({
-      type: UPDATE_PRODUCT,
-      pid: id,
-      productData: {
-        title,
-        description,
-        imageUrl,
-      },
-    });
+      
+      const resData = await response.json();
+      console.log("response:");
+      console.log(resData);
+      // dispatch({
+      //   type: CREATE_PRODUCT,
+      //   productData: {
+      //     id: resData.name,
+      //     title,
+      //     description,
+      //     imageUrl,
+      //     price
+      //   }
+      // });
+    } catch (err) {
+      throw err;
+    }
   };
 };
