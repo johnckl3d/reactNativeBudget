@@ -1,55 +1,132 @@
-import React, { useEffect } from 'react';
-import { FlatList, Button, Platform } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import React, { useEffect, useState, useCallback } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  Button,
+  Platform,
+  ActivityIndicator,
+  StyleSheet,
+} from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
-import HeaderButton from '../../components/UI/HeaderButton';
-import ProductItem from '../../components/shop/ProductItem';
-import * as cartActions from '../../store/actions/cart';
-import Colors from '../../constants/Colors';
-import * as productsActions from '../../store/actions/products';
-import * as costCategoriesActions from '../../store/actions/costCategories';
+import HeaderButton from "../../components/UI/HeaderButton";
+import ProductItem from "../../components/shop/ProductItem";
+import * as cartActions from "../../store/actions/cart";
+import Colors from "../../constants/Colors";
+import * as productsActions from "../../store/actions/products";
+import * as costCategoriesActions from "../../store/actions/costCategories";
 
-
-const ProductsOverviewScreen = props => {
-  const products = useSelector(state => state.products.availableProducts);
-  const costCategories = useSelector(state => state.costCategories);
+const ProductsOverviewScreen = (props) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
+  const products = useSelector((state) => state.products.availableProducts);
+  const costCategories = useSelector((state) => state.costCategories);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(costCategoriesActions.fetchCostCategories());
-  }, [dispatch]);
+  const loadProducts = useCallback(async () => {
+    setError(null);
+    setIsLoading(true);
+    try {
+      await dispatch(costCategoriesActions.fetchCostCategories());
+    } catch (err) {
+      setError(err.message);
+    }
 
-  /*
+    setIsLoading(false);
+  }, [dispatch, setIsLoading, setError]);
+
+  useEffect(() => {
+    loadProducts();
+  }, [dispatch, loadProducts]);
+
+  useEffect(() => {
+    const willFocusSub = props.navigation.addListener('willFocus', loadProducts);
+      return () => {
+        willFocusSub.remove();
+      };
+    }, [loadProducts]);
+  
+
   const selectItemHandler = (id, title) => {
-    props.navigation.navigate('ProductDetail', {
+    props.navigation.navigate("ProductDetail", {
       productId: id,
-      productTitle: title
+      productTitle: title,
     });
   };
-  */
+
+  const deleteItemHandler = (id, title) => {
+    props.navigation.navigate("ProductDetail", {
+      productId: id,
+      productTitle: title,
+    });
+  };
+
+  if (error) {
+    return (
+      <View style={styles.centered}>
+        <Text> An error occured!</Text>
+        <Button
+          title="Try again"
+          onPress={loadProducts}
+          color={Colors.primary}
+        ></Button>
+      </View>
+    );
+  }
+  if (isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator
+          size="large"
+          color={Colors.primary}
+        ></ActivityIndicator>
+      </View>
+    );
+  }
+
+  if (!isLoading && costCategories.costCategories === 0) {
+    return (
+      <View style={styles.centered}>
+        <Text> No cost category found. Maybe start adding some!</Text>
+      </View>
+    );
+  }
+
   return (
     <FlatList
-        data={costCategories.costCategories}
-        renderItem={(itemData) => (
-          <ProductItem
+      data={costCategories.costCategories}
+      renderItem={(itemData) => (
+        <ProductItem
           image={"https://picsum.photos/200/300"}
           title={itemData.item.name}
           price={itemData.item.totalAmount}
+          onSelect={() => {
+            selectItemHandler(itemData.item.id, itemData.item.title);
+          }}
+        >
+          <Button
+            color={Colors.primary}
+            title="Delete"
+            onPress={() => {
+              deleteItemHandler(itemData.item.id, itemData.item.title);
+            }}
           />
-        )}
-      ></FlatList>
+        </ProductItem>
+      )}
+    />
   );
 };
 
-ProductsOverviewScreen.navigationOptions = navData => {
+ProductsOverviewScreen.navigationOptions = (navData) => {
   return {
-    headerTitle: 'All Products',
+    headerTitle: "All Products",
     headerLeft: (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
           title="Menu"
-          iconName={Platform.OS === 'android' ? 'md-menu' : 'ios-menu'}
+          iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
           onPress={() => {
             navData.navigation.toggleDrawer();
           }}
@@ -60,14 +137,17 @@ ProductsOverviewScreen.navigationOptions = navData => {
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
           title="Cart"
-          iconName={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
+          iconName={Platform.OS === "android" ? "md-cart" : "ios-cart"}
           onPress={() => {
-            navData.navigation.navigate('Cart');
+            navData.navigation.navigate("Cart");
           }}
         />
       </HeaderButtons>
-    )
+    ),
   };
 };
 
+const styles = StyleSheet.create({
+  centered: { flex: 1, justifyContent: "center", alignItems: "center" },
+});
 export default ProductsOverviewScreen;
