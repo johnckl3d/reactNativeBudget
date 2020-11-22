@@ -1,29 +1,57 @@
-import React from "react";
+import React, { useEffect, useState, useCallback }  from "react";
 import {
-  ScrollView,
   View,
   Text,
-  Image,
-  Button,
-  StyleSheet,
   FlatList,
+  Button,
+  Platform,
+  ActivityIndicator,
+  StyleSheet,
+  Alert
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import ProductItem from "../../components/shop/ProductItem";
 import Colors from "../../constants/Colors";
-import * as cartActions from "../../store/actions/cart";
+import * as costCategoriesActions from "../../store/actions/costCategories";
 
 const ProductDetailScreen = (props) => {
   const costCategoryId = props.navigation.getParam("costCategoryId");
+  
   const selectedProduct = useSelector((state) =>
     state.costCategories.costCategories.find(
       (prod) => prod.costCategoryId === costCategoryId
     )
   );
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
   const dispatch = useDispatch();
 
+  const loadCostItems = useCallback(async () => {
+    setError(null);
+    setIsLoading(true);
+    try {
+      console.log("sending request:" );
+      await dispatch(costCategoriesActions.fetchCostItems(selectedProduct.costCategoryId));
+    } catch (err) {
+      setError(err.message);
+    }
+
+    setIsLoading(false);
+  }, [dispatch, setIsLoading, setError]);
+
+
+  useEffect(() => {
+    loadCostItems();
+  }, [dispatch, loadCostItems]);
+  
+  useEffect(() => {
+    const willFocusSub = props.navigation.addListener('willFocus', loadCostItems);
+    return () => {
+      willFocusSub.remove();
+    };
+  }, [loadCostItems]);
+
   const selectItemHandler = (costItemsId, name, totalAmount) => {
-    console.log(costItemsId);
     // props.navigation.navigate("ProductDetail", {
     //   costCategoryId: costCategoryId,
     //   name: name,
@@ -32,22 +60,69 @@ const ProductDetailScreen = (props) => {
   };
 
   const deleteItemHandler = (costItemsId, name) => {
-    Alert.alert('Are you sure?', `Do you really want to delete ${name}?`, [
-      { text: 'No', style: 'default' },
+    Alert.alert("Are you sure?", `Do you really want to delete ${name}?`, [
+      { text: "No", style: "default" },
       {
-        text: 'Yes',
-        style: 'destructive',
+        text: "Yes",
+        style: "destructive",
         onPress: () => {
-         
-        }
-      }
+          deleteCostItem(costItemsId);
+        },
+      },
     ]);
   };
+
+  const deleteCostItem = useCallback(
+    async (costItemsId) => {
+      setError(null);
+      setIsLoading(true);
+      try {
+        await dispatch(costCategoriesActions.deleteCostItem(costItemsId));
+      } catch (err) {
+        setError(err.message);
+      }
+
+      setIsLoading(false);
+      loadCostItems();
+    },
+    [dispatch, setIsLoading, setError]
+  );
+
+  if (error) {
+    return (
+      <View style={styles.centered}>
+        <Text> An error occured!</Text>
+        <Button
+          title="Try again"
+          onPress={loadCostItems}
+          color={Colors.primary}
+        ></Button>
+      </View>
+    );
+  }
+  if (isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator
+          size="large"
+          color={Colors.primary}
+        ></ActivityIndicator>
+      </View>
+    );
+  }
+
+  if (!isLoading && selectedProduct === 0) {
+    return (
+      <View style={styles.centered}>
+        <Text> No cost category found. Maybe start adding some!</Text>
+      </View>
+    );
+  }
 
   return (
     <FlatList
       data={selectedProduct.costItems}
-      keyExtractor={(item) => item.costItemsId}
+      keyExtractor={(item) => item.costItemId}
       renderItem={(itemData) => (
         <ProductItem
           image={"https://picsum.photos/200/300"}
@@ -69,10 +144,7 @@ const ProductDetailScreen = (props) => {
             color={Colors.primary}
             title="Delete"
             onPress={() => {
-              deleteItemHandler(
-                itemData.item.costItemsId,
-                itemData.item.name
-              );
+              deleteItemHandler(itemData.item.costItemsId, itemData.item.name);
             }}
           />
         </ProductItem>

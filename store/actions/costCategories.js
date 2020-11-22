@@ -3,6 +3,7 @@ import CostItem from "../../models/costItem";
 
 export const SET_PRODUCTS = "SET_PRODUCTS";
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
+export const SET_COSTITEMS = "SET_COSTITEMS";
 
 export const fetchCostCategories = () => {
   return async (dispatch) => {
@@ -40,6 +41,41 @@ export const fetchCostCategories = () => {
       //console.log(resData);
       //console.log(loadedCostCategories);
       dispatch({ type: SET_PRODUCTS, costCategories: loadedCostCategories });
+    } catch (err) {
+      throw err;
+    }
+  };
+};
+
+export const fetchCostItems = (costCategoryId) => {
+  return async (dispatch) => {
+    // any async code you want!
+    try {
+      console.log(costCategoryId);
+      const response = await fetch(
+        `https://meetup-api-app-john.azurewebsites.net/api/costCategory/${costCategoryId}/costItem`,
+        {
+          method: "GET",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("something went wrong!");
+      }
+      const resData = await response.json();
+      console.log(JSON.stringify(resData));
+      const loadedCostItems = [];
+
+      for (const item of resData) {
+        
+        loadedCostItems.push(
+          new CostItem(
+            item.name,
+            item.amount,
+          )
+        );
+      }
+      dispatch({ type: SET_COSTITEMS, costCategoryId: costCategoryId, costItems: loadedCostItems });
     } catch (err) {
       throw err;
     }
@@ -93,6 +129,29 @@ export const deleteProduct = (productId) => {
       console.log("productId:" + productId);
       const response = await fetch(
         `https://meetup-api-app-john.azurewebsites.net/api/costCategory/${productId}`,
+        {
+          method: "DELETE",
+        }
+      );
+      console.log(response.status);
+      if (response.status != 204) {
+        console.log("Error");
+        throw new Error("something went wrong!");
+      }else{
+        console.log("Success");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const deleteCostItem = (costCategoryId, costItemId) => {
+  return async (dispatch) => {
+    try {
+      console.log("costItemId:" + costItemId);
+      const response = await fetch(
+        `https://meetup-api-app-john.azurewebsites.net/api/costCategory/${costCategoryId}/costItem/${costItemId}`,
         {
           method: "DELETE",
         }

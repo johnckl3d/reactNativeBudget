@@ -37,31 +37,19 @@ const ProductsOverviewScreen = (props) => {
     setIsLoading(false);
   }, [dispatch, setIsLoading, setError]);
 
-  const deleteProducts = useCallback(async (costCategoryId) => {
-    setError(null);
-    setIsLoading(true);
-    try {
-      await dispatch(costCategoriesActions.deleteProduct(costCategoryId));
-    } catch (err) {
-      setError(err.message);
-    }
-
-    setIsLoading(false);
-    loadProducts();
-  }, [dispatch, setIsLoading, setError]);
-
+  
   useEffect(() => {
     loadProducts();
   }, [dispatch, loadProducts]);
-
+  
   useEffect(() => {
     const willFocusSub = props.navigation.addListener('willFocus', loadProducts);
-      return () => {
-        willFocusSub.remove();
-      };
-    }, [loadProducts]);
+    return () => {
+      willFocusSub.remove();
+    };
+  }, [loadProducts]);
   
-
+  
   const selectItemHandler = (costCategoryId, name, totalAmount) => {
     console.log(costCategoryId);
     props.navigation.navigate("ProductDetail", {
@@ -84,6 +72,20 @@ const ProductsOverviewScreen = (props) => {
       }
     ]);
   };
+
+  const deleteProducts = useCallback(async (costCategoryId) => {
+    setError(null);
+    setIsLoading(true);
+    try {
+      await dispatch(costCategoriesActions.deleteProduct(costCategoryId));
+    } catch (err) {
+      setError(err.message);
+    }
+
+    setIsLoading(false);
+    loadProducts();
+  }, [dispatch, setIsLoading, setError]);
+
 
   if (error) {
     return (
