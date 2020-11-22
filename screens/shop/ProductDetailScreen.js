@@ -13,6 +13,8 @@ import { useSelector, useDispatch } from "react-redux";
 import ProductItem from "../../components/shop/ProductItem";
 import Colors from "../../constants/Colors";
 import * as costCategoriesActions from "../../store/actions/costCategories";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import HeaderButton from "../../components/UI/HeaderButton";
 
 const ProductDetailScreen = (props) => {
   const costCategoryId = props.navigation.getParam("costCategoryId");
@@ -159,6 +161,17 @@ console.log(JSON.stringify(selectedProduct));
 ProductDetailScreen.navigationOptions = (navData) => {
   return {
     headerTitle: navData.navigation.getParam("name"),
+    headerRight: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item
+          title="Cart"
+          iconName={Platform.OS === "android" ? "md-add-circle" : "ios-add-circle"}
+          onPress={() => {
+            navData.navigation.navigate('EditCostItem', { costCategoryId: navData.navigation.getParam("costCategoryId") });
+          }}
+        />
+      </HeaderButtons>
+    ),
   };
 };
 
