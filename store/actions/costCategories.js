@@ -91,7 +91,6 @@ export const deleteProduct = (productId) => {
   return async (dispatch) => {
     try {
       console.log("productId:" + productId);
-      //`https://rn-complete-guide.firebaseio.com/products/${productId}.json`,
       const response = await fetch(
         `https://meetup-api-app-john.azurewebsites.net/api/costCategory/${productId}`,
         {

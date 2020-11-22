@@ -22,7 +22,6 @@ import * as costCategoriesActions from "../../store/actions/costCategories";
 const ProductsOverviewScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-  const products = useSelector((state) => state.products.availableProducts);
   const costCategories = useSelector((state) => state.costCategories);
   const dispatch = useDispatch();
 

@@ -170,6 +170,17 @@ const EditProductScreen = (props) => {
 EditProductScreen.navigationOptions = (navData) => {
   return {
     headerTitle: "Add Cost Category",
+    headerLeft: () => (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item
+          title="Menu"
+          iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
+          onPress={() => {
+            navData.navigation.navigate("ProductsOverview");
+          }}
+        />
+      </HeaderButtons>
+    ),
   };
 };
 
