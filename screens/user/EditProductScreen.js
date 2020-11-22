@@ -5,11 +5,12 @@ import {
   StyleSheet,
   Platform,
   Alert,
+  Button,
   KeyboardAvoidingView
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from 'react-redux';
-
+import Colors from "../../constants/Colors";
 import HeaderButton from '../../components/UI/HeaderButton';
 import * as productsActions from '../../store/actions/products';
 import * as costCategoriesActions from "../../store/actions/costCategories";
@@ -93,6 +94,24 @@ const EditProductScreen = props => {
     props.navigation.goBack();
   }, [dispatch, prodId, formState]);
 
+  const addItemHandler = useCallback(() => {
+    if (!formState.formIsValid) {
+      Alert.alert('Wrong input!', 'Please check the errors in the form.', [
+        { text: 'Okay' }
+      ]);
+      return;
+    }
+    dispatch(
+      costCategoriesActions.createProduct(
+        formState.inputValues.title,
+        formState.inputValues.description,
+        formState.inputValues.imageUrl,
+        +formState.inputValues.price
+      )
+    );
+    props.navigation.goBack();
+  }, [dispatch, formState]);
+
   useEffect(() => {
     props.navigation.setParams({ submit: submitHandler });
   }, [submitHandler]);
@@ -170,6 +189,13 @@ const EditProductScreen = props => {
           />
         </View>
       </ScrollView>
+      <Button
+            color={Colors.primary}
+            title="Add"
+            onPress={() => {
+              addItemHandler(itemData.item.name);
+            }}
+          />
     </KeyboardAvoidingView>
   );
 };

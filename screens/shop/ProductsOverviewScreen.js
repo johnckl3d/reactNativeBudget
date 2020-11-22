@@ -118,6 +118,7 @@ const ProductsOverviewScreen = (props) => {
   return (
     <FlatList
       data={costCategories.costCategories}
+      keyExtractor={item => item.costCategoryId}
       renderItem={(itemData) => (
         <ProductItem
           image={"https://picsum.photos/200/300"}
@@ -127,6 +128,13 @@ const ProductsOverviewScreen = (props) => {
             selectItemHandler(itemData.item.costCategoryId, itemData.item.name);
           }}
         >
+          <Button
+            color={Colors.primary}
+            title="Edit"
+            onPress={() => {
+              navData.navigation.navigate("UserProducts");
+            }}
+          />
           <Button
             color={Colors.primary}
             title="Delete"
@@ -142,7 +150,7 @@ const ProductsOverviewScreen = (props) => {
 
 ProductsOverviewScreen.navigationOptions = (navData) => {
   return {
-    headerTitle: "All Products",
+    headerTitle: "Budget",
     headerLeft: (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
@@ -160,7 +168,7 @@ ProductsOverviewScreen.navigationOptions = (navData) => {
           title="Cart"
           iconName={Platform.OS === "android" ? "md-cart" : "ios-cart"}
           onPress={() => {
-            navData.navigation.navigate("Cart");
+            navData.navigation.navigate("EditProduct");
           }}
         />
       </HeaderButtons>
