@@ -62,10 +62,12 @@ const ProductsOverviewScreen = (props) => {
     }, [loadProducts]);
   
 
-  const selectItemHandler = (id, title) => {
+  const selectItemHandler = (costCategoryId, name, totalAmount) => {
+    console.log(costCategoryId);
     props.navigation.navigate("ProductDetail", {
-      productId: id,
-      productTitle: title,
+      costCategoryId: costCategoryId,
+      name: name,
+      totalAmount: totalAmount
     });
   };
 
@@ -124,14 +126,14 @@ const ProductsOverviewScreen = (props) => {
           title={itemData.item.name}
           price={itemData.item.totalAmount}
           onSelect={() => {
-            selectItemHandler(itemData.item.costCategoryId, itemData.item.name);
+            selectItemHandler(itemData.item.costCategoryId, itemData.item.name, itemData.item.totalAmount);
           }}
         >
           <Button
             color={Colors.primary}
             title="Edit"
             onPress={() => {
-              navData.navigation.navigate("UserProducts");
+              selectItemHandler(itemData.item.costCategoryId, itemData.item.name, itemData.item.totalAmount);
             }}
           />
           <Button
