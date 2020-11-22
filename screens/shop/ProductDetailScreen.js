@@ -30,7 +30,7 @@ const ProductDetailScreen = (props) => {
     setError(null);
     setIsLoading(true);
     try {
-      console.log("sending request:" );
+      
       await dispatch(costCategoriesActions.fetchCostItems(selectedProduct.costCategoryId));
     } catch (err) {
       setError(err.message);
@@ -118,7 +118,7 @@ const ProductDetailScreen = (props) => {
       </View>
     );
   }
-
+console.log(JSON.stringify(selectedProduct));
   return (
     <FlatList
       data={selectedProduct.costItems}
