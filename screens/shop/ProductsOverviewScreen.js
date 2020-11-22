@@ -167,7 +167,7 @@ ProductsOverviewScreen.navigationOptions = (navData) => {
           title="Cart"
           iconName={Platform.OS === "android" ? "md-add-circle" : "ios-add-circle"}
           onPress={() => {
-            navData.navigation.navigate("EditProduct");
+            navData.navigation.navigate("EditCostCategory");
           }}
         />
       </HeaderButtons>

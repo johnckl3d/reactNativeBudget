@@ -16,13 +16,32 @@ import * as productsActions from "../../store/actions/products";
 import * as costCategoriesActions from "../../store/actions/costCategories";
 import Input from "../../components/UI/Input";
 
-
+const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
 const formReducer = (state, action) => {
+  if (action.type === FORM_INPUT_UPDATE) {
+    const updatedValues = {
+      ...state.inputValues,
+      [action.input]: action.value,
+    };
+    const updatedValidities = {
+      ...state.inputValidities,
+      [action.input]: action.isValid,
+    };
+    let updatedFormIsValid = true;
+    for (const key in updatedValidities) {
+      updatedFormIsValid = updatedFormIsValid && updatedValidities[key];
+    }
+    return {
+      formIsValid: updatedFormIsValid,
+      inputValidities: updatedValidities,
+      inputValues: updatedValues,
+    };
+  }
   return state;
 };
 
-const EditProductScreen = (props) => {
+const EditCostCategoryScreen = (props) => {
   const prodId = props.navigation.getParam("productId");
   const editedProduct = useSelector((state) =>
     state.products.userProducts.find((prod) => prod.id === prodId)
@@ -43,25 +62,25 @@ const EditProductScreen = (props) => {
     formIsValid: editedProduct ? true : false,
   });
 
-  
-
-  const submitHandler = useCallback(() => {
+  const submitHandler = useCallback(async () => {
     if (!formState.formIsValid) {
       Alert.alert("Wrong input!", "Please check the errors in the form.", [
         { text: "Okay" },
       ]);
       return;
     }
-    dispatch(
-      costCategoriesActions.createProduct(
-        formState.inputValues.title,
-        formState.inputValues.description
-        +formState.inputValues.price
-      )
-    );
-    props.navigation.navigate("ProductsOverview"
-    );
-    //props.navigation.goBack();
+    try {
+      await dispatch(
+        costCategoriesActions.createProduct(
+          formState.inputValues.title,
+          formState.inputValues.description + formState.inputValues.price
+        )
+      );
+    } catch (err) {
+      throw err;
+    }
+    //props.navigation.navigate("ProductsOverview");
+    props.navigation.goBack();
   }, [dispatch, formState]);
 
   useEffect(() => {
@@ -70,8 +89,14 @@ const EditProductScreen = (props) => {
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
-      
-    }
+      dispatchFormState({
+        type: FORM_INPUT_UPDATE,
+        value: inputValue,
+        isValid: inputValidity,
+        input: inputIdentifier,
+      });
+    },
+    [dispatchFormState]
   );
 
   return (
@@ -124,17 +149,16 @@ const EditProductScreen = (props) => {
             minLength={5}
           />
           <View style={styles.button}>
-          <Button
-            style={styles.button}
-            color={Colors.primary}
-            title="Add"
-            onPress={() => {
-              submitHandler();
-              //navData.navigation.getParam("submit");
-              //addItemHandler(itemData.item.name);
-            }}
-          />
-
+            <Button
+              style={styles.button}
+              color={Colors.primary}
+              title="Add"
+              onPress={() => {
+                submitHandler();
+                //navData.navigation.getParam("submit");
+                //addItemHandler(itemData.item.name);
+              }}
+            />
           </View>
         </View>
       </ScrollView>
@@ -142,20 +166,9 @@ const EditProductScreen = (props) => {
   );
 };
 
-EditProductScreen.navigationOptions = (navData) => {
+EditCostCategoryScreen.navigationOptions = (navData) => {
   return {
     headerTitle: "Add Cost Category",
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButton}>
-        <Item
-          title="Menu"
-          iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
-          onPress={() => {
-            navData.navigation.navigate("ProductsOverview");
-          }}
-        />
-      </HeaderButtons>
-    ),
   };
 };
 
@@ -168,4 +181,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditProductScreen;
+export default EditCostCategoryScreen;

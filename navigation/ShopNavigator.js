@@ -13,6 +13,7 @@ import CartScreen from '../screens/shop/CartScreen';
 import OrdersScreen from '../screens/shop/OrdersScreen';
 import UserProductsScreen from '../screens/user/UserProductsScreen';
 import EditProductScreen from '../screens/user/EditProductScreen';
+import EditCostCategoryScreen from '../screens/shop/EditCostCategoryScreen';
 import Colors from '../constants/Colors';
 
 const defaultNavOptions = {
@@ -32,6 +33,7 @@ const ProductsNavigator = createStackNavigator(
   {
     ProductsOverview: ProductsOverviewScreen,
     ProductDetail: ProductDetailScreen,
+    EditCostCategory: EditCostCategoryScreen,
     Cart: CartScreen
   },
   {
