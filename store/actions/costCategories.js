@@ -48,31 +48,42 @@ export const fetchCostCategories = () => {
 
 export const createProduct = (title, description, imageUrl, price) => {
   return async (dispatch) => {
-    // any async code you want!
-    const response = await fetch(
-      "https://meetup-api-app-john.azurewebsites.net/api/costCategory",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: "Petrol2",
-        }),
-      }
-    );
+    try{
 
-    const resData = await response.json();
-    // dispatch({
-    //   type: CREATE_PRODUCT,
-    //   productData: {
-    //     id: resData.name,
-    //     title,
-    //     description,
-    //     imageUrl,
-    //     price
-    //   }
-    // });
+      // any async code you want!
+      const response = await fetch(
+        "https://meetup-api-app-john.azurewebsites.net/api/costCategory",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: title,
+          }),
+        }
+      );
+      console.log(response.status);
+      if (response.status != 201) {
+        console.log("Error");
+        throw new Error("something went wrong!");
+      }else{
+        console.log("Success");
+      }
+      //const resData = await response.json();
+      // dispatch({
+      //   type: CREATE_PRODUCT,
+      //   productData: {
+      //     id: resData.name,
+      //     title,
+      //     description,
+      //     imageUrl,
+      //     price
+      //   }
+      // });
+    }catch(err) {
+      throw err;
+    }
   };
 };
 

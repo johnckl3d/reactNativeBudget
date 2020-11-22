@@ -151,7 +151,7 @@ const ProductsOverviewScreen = (props) => {
 ProductsOverviewScreen.navigationOptions = (navData) => {
   return {
     headerTitle: "Budget",
-    headerLeft: (
+    headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
           title="Menu"
@@ -162,11 +162,11 @@ ProductsOverviewScreen.navigationOptions = (navData) => {
         />
       </HeaderButtons>
     ),
-    headerRight: (
+    headerRight: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
           title="Cart"
-          iconName={Platform.OS === "android" ? "md-cart" : "ios-cart"}
+          iconName={Platform.OS === "android" ? "md-add-circle" : "ios-add-circle"}
           onPress={() => {
             navData.navigation.navigate("EditProduct");
           }}
