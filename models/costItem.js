@@ -1,7 +1,8 @@
 class CostItem {
-    constructor(name, amount) {
+    constructor(name, amount, costItemId) {
       this.name = name;
       this.amount = amount;
+      this.costItemId = costItemId;
     }
   }
   

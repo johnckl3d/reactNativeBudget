@@ -20,7 +20,7 @@ export default (state = initialState, action) => {
       const costCategoryIndex = state.costCategories.findIndex(
         (category) => category.costCategoryId === action.costCategoryId
       );
-
+      console.log("logreducer::" + JSON.stringify(action.costItems));
       const updatedCostCategory = new CostCategory(
         state.costCategories[costCategoryIndex].costCategoryId,
         state.costCategories[costCategoryIndex].name,

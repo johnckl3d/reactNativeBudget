@@ -51,7 +51,6 @@ export const fetchCostItems = (costCategoryId) => {
   return async (dispatch) => {
     // any async code you want!
     try {
-      console.log(costCategoryId);
       const response = await fetch(
         `https://meetup-api-app-john.azurewebsites.net/api/costCategory/${costCategoryId}/costItem`,
         {
@@ -63,7 +62,7 @@ export const fetchCostItems = (costCategoryId) => {
         throw new Error("something went wrong!");
       }
       const resData = await response.json();
-      
+      console.log("fetchCostItems::" + resData);
       const loadedCostItems = [];
 
       for (const item of resData) {
@@ -72,6 +71,7 @@ export const fetchCostItems = (costCategoryId) => {
           new CostItem(
             item.name,
             item.amount,
+            item.costItemId
           )
         );
       }

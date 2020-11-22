@@ -59,25 +59,27 @@ const ProductDetailScreen = (props) => {
     // });
   };
 
-  const deleteItemHandler = (costItemsId, name) => {
+  const deleteItemHandler = (costCategoryId, costItemId, name) => {
     Alert.alert("Are you sure?", `Do you really want to delete ${name}?`, [
       { text: "No", style: "default" },
       {
         text: "Yes",
         style: "destructive",
         onPress: () => {
-          deleteCostItem(costItemsId);
+          console.log(costItemId);
+          deleteCostItem(costCategoryId, costItemId);
         },
       },
     ]);
   };
 
   const deleteCostItem = useCallback(
-    async (costItemsId) => {
+    async (costCategoryId, costItemId) => {
       setError(null);
       setIsLoading(true);
       try {
-        await dispatch(costCategoriesActions.deleteCostItem(costItemsId));
+        console.log(costItemId);
+        await dispatch(costCategoriesActions.deleteCostItem(costCategoryId, costItemId));
       } catch (err) {
         setError(err.message);
       }
@@ -134,7 +136,7 @@ console.log(JSON.stringify(selectedProduct));
             title="Edit"
             onPress={() => {
               selectItemHandler(
-                itemData.item.costItemsId,
+                itemData.item.costItemId,
                 itemData.item.name,
                 itemData.item.amount
               );
@@ -144,7 +146,8 @@ console.log(JSON.stringify(selectedProduct));
             color={Colors.primary}
             title="Delete"
             onPress={() => {
-              deleteItemHandler(itemData.item.costItemsId, itemData.item.name);
+              console.log(itemData.item.costItemId);
+              deleteItemHandler(selectedProduct.costCategoryId, itemData.item.costItemId, itemData.item.name);
             }}
           />
         </ProductItem>
