@@ -66,16 +66,15 @@ export const fetchCostItems = (costCategoryId) => {
       const loadedCostItems = [];
 
       for (const item of resData) {
-        
         loadedCostItems.push(
-          new CostItem(
-            item.name,
-            item.amount,
-            item.costItemId
-          )
+          new CostItem(item.name, item.amount, item.costItemId)
         );
       }
-      dispatch({ type: SET_COSTITEMS, costCategoryId: costCategoryId, costItems: loadedCostItems });
+      dispatch({
+        type: SET_COSTITEMS,
+        costCategoryId: costCategoryId,
+        costItems: loadedCostItems,
+      });
     } catch (err) {
       throw err;
     }
@@ -84,8 +83,7 @@ export const fetchCostItems = (costCategoryId) => {
 
 export const createProduct = (title, description, imageUrl, price) => {
   return async (dispatch) => {
-    try{
-
+    try {
       // any async code you want!
       const response = await fetch(
         "https://meetup-api-app-john.azurewebsites.net/api/costCategory",
@@ -103,7 +101,7 @@ export const createProduct = (title, description, imageUrl, price) => {
       if (response.status != 201) {
         console.log("Error");
         throw new Error("something went wrong!");
-      }else{
+      } else {
         console.log("Success");
       }
       //const resData = await response.json();
@@ -117,7 +115,52 @@ export const createProduct = (title, description, imageUrl, price) => {
       //     price
       //   }
       // });
-    }catch(err) {
+    } catch (err) {
+      throw err;
+    }
+  };
+};
+
+export const createCostItem = (costCategoryId, name, description, amount) => {
+  return async (dispatch) => {
+    try {
+      // any async code you want!
+      const response = await fetch(
+        `https://meetup-api-app-john.azurewebsites.net/api/costCategory/${costCategoryId}/costItem`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: name,
+            amount: amount,
+          }),
+        }
+      );
+      console.log(response.status);
+      if (response.status != 201) {
+        console.log("Error");
+        throw new Error("something went wrong!");
+      } else {
+        console.log("Success");
+      }
+      
+      const resData = await response.json();
+      console.log("fetchCostItems::" + resData);
+      const loadedCostItems = [];
+
+      for (const item of resData) {
+        loadedCostItems.push(
+          new CostItem(item.name, item.amount, item.costItemId)
+        );
+      }
+      dispatch({
+        type: SET_COSTITEMS,
+        costCategoryId: costCategoryId,
+        costItems: loadedCostItems,
+      });
+    } catch (err) {
       throw err;
     }
   };
@@ -137,7 +180,7 @@ export const deleteProduct = (productId) => {
       if (response.status != 204) {
         console.log("Error");
         throw new Error("something went wrong!");
-      }else{
+      } else {
         console.log("Success");
       }
     } catch (err) {
@@ -160,7 +203,7 @@ export const deleteCostItem = (costCategoryId, costItemId) => {
       if (response.status != 204) {
         console.log("Error");
         throw new Error("something went wrong!");
-      }else{
+      } else {
         console.log("Success");
       }
     } catch (err) {
@@ -186,7 +229,6 @@ export const updateProduct = (id, title, description, imageUrl) => {
         }
       );
 
-      
       const resData = await response.json();
       console.log("response:");
       console.log(resData);

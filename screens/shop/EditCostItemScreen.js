@@ -44,14 +44,16 @@ const formReducer = (state, action) => {
 const EditCostItemScreen = (props) => {
   const costCategoryId = props.navigation.getParam("costCategoryId");
   const costItemId = props.navigation.getParam("costItemId");
+  console.log("EditCostItemScreen::costCategoryId::" + costCategoryId);
+  console.log("EditCostItemScreen::costItemId::" + costItemId);
   const editedCostCategory = useSelector((state) =>
-    state.products.userProducts.find(
+    state.costCategories.costCategories.find(
       (prod) => prod.costCategoryId === costCategoryId
     )
   );
-  const editedCostItem = useSelector((state) =>
-    editedCostCategory.find((prod) => prod.costItemId === costItemId)
-  );
+  const costItems = [...editedCostCategory.costItems];
+  const editedCostItem =
+  costItems.find((prod) => prod.costItemId === costItemId);
   const dispatch = useDispatch();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -77,7 +79,8 @@ const EditCostItemScreen = (props) => {
     }
     try {
       await dispatch(
-        costCategoriesActions.createProduct(
+        costCategoriesActions.createCostItem(
+          costCategoryId,
           formState.inputValues.title,
           formState.inputValues.description + formState.inputValues.price
         )
