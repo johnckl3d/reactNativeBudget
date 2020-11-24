@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback }  from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -7,7 +7,7 @@ import {
   Platform,
   ActivityIndicator,
   StyleSheet,
-  Alert
+  Alert,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import ProductItem from "../../components/shop/ProductItem";
@@ -16,25 +16,32 @@ import * as costCategoriesActions from "../../store/actions/costCategories";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderButton";
 
-const ProductDetailScreen = (props) => {
+const CostItemsScreen = (props) => {
   const costCategoryId = props.navigation.getParam("costCategoryId");
-  
+
   const selectedProduct = useSelector((state) =>
     state.costCategories.costCategories.find(
       (prod) => prod.costCategoryId === costCategoryId
     )
+  );
+  const costItems = useSelector((state) =>
+    state.costCategories.costCategories.find(
+      (prod) => prod.costCategoryId === costCategoryId
+    ).costItems
   );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const dispatch = useDispatch();
 
   const loadCostItems = useCallback(async () => {
-    console.log("loadcostitems");
+    console.log("loadCostItems::" + JSON.stringify(selectedProduct));
+    console.log("loadCostItems::" + selectedProduct.costItems[0].costItemId);
     setError(null);
     setIsLoading(true);
     try {
-      
-      await dispatch(costCategoriesActions.fetchCostItems(selectedProduct.costCategoryId));
+      await dispatch(
+        costCategoriesActions.fetchCostItems(selectedProduct.costCategoryId)
+      );
     } catch (err) {
       setError(err.message);
     }
@@ -42,19 +49,21 @@ const ProductDetailScreen = (props) => {
     setIsLoading(false);
   }, [dispatch, setIsLoading, setError]);
 
-
   useEffect(() => {
     loadCostItems();
   }, [dispatch, loadCostItems]);
-  
+
   useEffect(() => {
-    const willFocusSub = props.navigation.addListener('willFocus', loadCostItems);
+    const willFocusSub = props.navigation.addListener(
+      "willFocus",
+      loadCostItems
+    );
     return () => {
       willFocusSub.remove();
     };
   }, [loadCostItems]);
 
-  const selectItemHandler = (costItemsId, name, totalAmount) => {
+  const selectItemHandler = (costItemId, name, totalAmount) => {
     // props.navigation.navigate("ProductDetail", {
     //   costCategoryId: costCategoryId,
     //   name: name,
@@ -80,7 +89,9 @@ const ProductDetailScreen = (props) => {
       setError(null);
       setIsLoading(true);
       try {
-        await dispatch(costCategoriesActions.deleteCostItem(costCategoryId, costItemId));
+        await dispatch(
+          costCategoriesActions.deleteCostItem(costCategoryId, costItemId)
+        );
       } catch (err) {
         setError(err.message);
       }
@@ -123,7 +134,7 @@ const ProductDetailScreen = (props) => {
   }
   return (
     <FlatList
-      data={selectedProduct.costItems}
+      data={costItems}
       keyExtractor={(item) => item.costItemId}
       renderItem={(itemData) => (
         <ProductItem
@@ -146,7 +157,11 @@ const ProductDetailScreen = (props) => {
             color={Colors.primary}
             title="Delete"
             onPress={() => {
-              deleteItemHandler(selectedProduct.costCategoryId, itemData.item.costItemId, itemData.item.name);
+              deleteItemHandler(
+                selectedProduct.costCategoryId,
+                itemData.item.costItemId,
+                itemData.item.name
+              );
             }}
           />
         </ProductItem>
@@ -155,16 +170,20 @@ const ProductDetailScreen = (props) => {
   );
 };
 
-ProductDetailScreen.navigationOptions = (navData) => {
+CostItemsScreen.navigationOptions = (navData) => {
   return {
     headerTitle: navData.navigation.getParam("name"),
     headerRight: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
           title="Cart"
-          iconName={Platform.OS === "android" ? "md-add-circle" : "ios-add-circle"}
+          iconName={
+            Platform.OS === "android" ? "md-add-circle" : "ios-add-circle"
+          }
           onPress={() => {
-            navData.navigation.navigate('EditCostItem', { costCategoryId: navData.navigation.getParam("costCategoryId") });
+            navData.navigation.navigate("EditCostItem", {
+              costCategoryId: navData.navigation.getParam("costCategoryId"),
+            });
           }}
         />
       </HeaderButtons>
@@ -196,4 +215,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductDetailScreen;
+export default CostItemsScreen;

@@ -26,7 +26,7 @@ export const fetchCostCategories = () => {
       for (const item of resData) {
         const cIs = [];
         for (const cI of item.costItems) {
-          cIs.push(new CostItem(cI.name, cI.amount));
+          cIs.push(new CostItem(cI.name, cI.amount, cI.costItemId));
         }
 
         loadedCostCategories.push(
@@ -68,6 +68,7 @@ export const fetchCostItems = (costCategoryId) => {
           new CostItem(item.name, item.amount, item.costItemId)
         );
       }
+      console.log("loadedCostItems::" + JSON.stringify(loadedCostItems));
       dispatch({
         type: SET_COSTITEMS,
         costCategoryId: costCategoryId,

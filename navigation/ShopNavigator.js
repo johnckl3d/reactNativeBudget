@@ -8,7 +8,7 @@ import { Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import ProductsOverviewScreen from '../screens/shop/ProductsOverviewScreen';
-import ProductDetailScreen from '../screens/shop/ProductDetailScreen';
+import CostItemsScreen from '../screens/shop/CostItemsScreen';
 import CartScreen from '../screens/shop/CartScreen';
 import OrdersScreen from '../screens/shop/OrdersScreen';
 import UserProductsScreen from '../screens/user/UserProductsScreen';
@@ -33,7 +33,7 @@ const defaultNavOptions = {
 const ProductsNavigator = createStackNavigator(
   {
     ProductsOverview: ProductsOverviewScreen,
-    ProductDetail: ProductDetailScreen,
+    ProductDetail: CostItemsScreen,
     EditCostCategory: EditCostCategoryScreen,
     EditCostItem: EditCostItemScreen,
     Cart: CartScreen,
