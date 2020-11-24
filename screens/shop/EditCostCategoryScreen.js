@@ -51,13 +51,11 @@ const EditCostCategoryScreen = (props) => {
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       title: editedProduct ? editedProduct.title : "",
-      description: editedProduct ? editedProduct.description : "",
-      price: "",
+      description: editedProduct ? editedProduct.description : ""
     },
     inputValidities: {
       title: editedProduct ? true : false,
-      description: editedProduct ? true : false,
-      price: editedProduct ? true : false,
+      description: editedProduct ? true : false
     },
     formIsValid: editedProduct ? true : false,
   });
@@ -73,13 +71,12 @@ const EditCostCategoryScreen = (props) => {
       await dispatch(
         costCategoriesActions.createProduct(
           formState.inputValues.title,
-          formState.inputValues.description + formState.inputValues.price
+          formState.inputValues.description, 0
         )
       );
     } catch (err) {
       throw err;
     }
-    //props.navigation.navigate("ProductsOverview");
     props.navigation.goBack();
   }, [dispatch, formState]);
 
@@ -120,19 +117,6 @@ const EditCostCategoryScreen = (props) => {
             initiallyValid={!!editedProduct}
             required
           />
-
-          {editedProduct ? null : (
-            <Input
-              id="price"
-              label="Amount"
-              errorText="Please enter a valid amount!"
-              keyboardType="decimal-pad"
-              returnKeyType="next"
-              onInputChange={inputChangeHandler}
-              required
-              min={0.1}
-            />
-          )}
           <Input
             id="description"
             label="Description"
@@ -155,8 +139,6 @@ const EditCostCategoryScreen = (props) => {
               title="Add"
               onPress={() => {
                 submitHandler();
-                //navData.navigation.getParam("submit");
-                //addItemHandler(itemData.item.name);
               }}
             />
           </View>

@@ -19,7 +19,7 @@ import Colors from "../../constants/Colors";
 import * as productsActions from "../../store/actions/products";
 import * as costCategoriesActions from "../../store/actions/costCategories";
 
-const ProductsOverviewScreen = (props) => {
+const CostCategoriesScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const costCategories = useSelector((state) => state.costCategories);
@@ -150,7 +150,7 @@ const ProductsOverviewScreen = (props) => {
   );
 };
 
-ProductsOverviewScreen.navigationOptions = (navData) => {
+CostCategoriesScreen.navigationOptions = (navData) => {
   return {
     headerTitle: "Budget",
     headerLeft: () => (
@@ -181,4 +181,4 @@ ProductsOverviewScreen.navigationOptions = (navData) => {
 const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: "center", alignItems: "center" },
 });
-export default ProductsOverviewScreen;
+export default CostCategoriesScreen;

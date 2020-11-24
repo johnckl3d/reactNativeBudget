@@ -46,12 +46,14 @@ const EditCostItemScreen = (props) => {
   const costItemId = props.navigation.getParam("costItemId");
   const editedCostCategory = useSelector((state) =>
     state.costCategories.costCategories.find(
-      (prod) => prod.costCategoryId === costCategoryId
+      (cc) => cc.costCategoryId === costCategoryId
     )
   );
+  console.log("costCategoryId::" + costCategoryId);
+  console.log("costItemId::" + costItemId);
   const costItems = [...editedCostCategory.costItems];
-  const editedCostItem =
-  costItems.find((prod) => prod.costItemId === costItemId);
+  const editedCostItem = costItems.find((ci) => ci.costItemId === costItemId);
+  console.log("editedCostItem::" + JSON.stringify(editedCostItem));
   const dispatch = useDispatch();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -80,13 +82,13 @@ const EditCostItemScreen = (props) => {
         costCategoriesActions.createCostItem(
           costCategoryId,
           formState.inputValues.title,
-          formState.inputValues.description,  +formState.inputValues.price
+          formState.inputValues.description,
+          +formState.inputValues.price
         )
       );
     } catch (err) {
       throw err;
     }
-    //props.navigation.navigate("ProductsOverview");
     props.navigation.goBack();
   }, [dispatch, formState]);
 
@@ -123,23 +125,23 @@ const EditCostItemScreen = (props) => {
             autoCorrect
             returnKeyType="next"
             onInputChange={inputChangeHandler}
-            initialValue={editedCostItem ? editedCostItem.title : ""}
+            initialValue={editedCostItem ? editedCostItem.name : ""}
             initiallyValid={!!editedCostItem}
             required
           />
 
-          {editedCostItem ? null : (
-            <Input
-              id="price"
-              label="Amount"
-              errorText="Please enter a valid amount!"
-              keyboardType="decimal-pad"
-              returnKeyType="next"
-              onInputChange={inputChangeHandler}
-              required
-              min={0.1}
-            />
-          )}
+          <Input
+            id="amount"
+            label="Amount"
+            errorText="Please enter a valid amount!"
+            keyboardType="decimal-pad"
+            returnKeyType="next"
+            onInputChange={inputChangeHandler}
+            initialValue={editedCostItem ? editedCostItem.amount.toString() : ""}
+            initiallyValid={!!editedCostItem}
+            required
+            min={0.1}
+          />
           <Input
             id="description"
             label="Description"
@@ -176,7 +178,6 @@ const EditCostItemScreen = (props) => {
 EditCostItemScreen.navigationOptions = (navData) => {
   return {
     headerTitle: "Add Cost Item",
-    
   };
 };
 

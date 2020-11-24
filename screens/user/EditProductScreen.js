@@ -59,9 +59,9 @@ const EditProductScreen = (props) => {
         +formState.inputValues.price
       )
     );
-    props.navigation.navigate("ProductsOverview"
-    );
-    //props.navigation.goBack();
+    // props.navigation.navigate("ProductsOverview"
+    // );
+    props.navigation.goBack();
   }, [dispatch, formState]);
 
   useEffect(() => {

@@ -63,12 +63,13 @@ const CostItemsScreen = (props) => {
     };
   }, [loadCostItems]);
 
-  const selectItemHandler = (costItemId, name, totalAmount) => {
-    // props.navigation.navigate("ProductDetail", {
-    //   costCategoryId: costCategoryId,
-    //   name: name,
-    //   totalAmount: totalAmount
-    // });
+  const selectItemHandler = (costCategoryId, costItemId, name, amount) => {
+    props.navigation.navigate("EditCostItem", {
+      costCategoryId: costCategoryId,
+      costItemId: costItemId,
+      name: name,
+      amount: amount
+    });
   };
 
   const deleteItemHandler = (costCategoryId, costItemId, name) => {
@@ -147,6 +148,7 @@ const CostItemsScreen = (props) => {
             title="Edit"
             onPress={() => {
               selectItemHandler(
+                selectedProduct.costCategoryId,
                 itemData.item.costItemId,
                 itemData.item.name,
                 itemData.item.amount
