@@ -44,8 +44,6 @@ const formReducer = (state, action) => {
 const EditCostItemScreen = (props) => {
   const costCategoryId = props.navigation.getParam("costCategoryId");
   const costItemId = props.navigation.getParam("costItemId");
-  console.log("EditCostItemScreen::costCategoryId::" + costCategoryId);
-  console.log("EditCostItemScreen::costItemId::" + costItemId);
   const editedCostCategory = useSelector((state) =>
     state.costCategories.costCategories.find(
       (prod) => prod.costCategoryId === costCategoryId
@@ -82,7 +80,7 @@ const EditCostItemScreen = (props) => {
         costCategoriesActions.createCostItem(
           costCategoryId,
           formState.inputValues.title,
-          formState.inputValues.description + formState.inputValues.price
+          formState.inputValues.description,  +formState.inputValues.price
         )
       );
     } catch (err) {
@@ -178,17 +176,7 @@ const EditCostItemScreen = (props) => {
 EditCostItemScreen.navigationOptions = (navData) => {
   return {
     headerTitle: "Add Cost Item",
-    headerRight: () => (
-        <HeaderButtons HeaderButtonComponent={HeaderButton}>
-          <Item
-            title="Cart"
-            iconName={Platform.OS === "android" ? "md-add-circle" : "ios-add-circle"}
-            onPress={() => {
-              navData.navigation.navigate("EditCostItem");
-            }}
-          />
-        </HeaderButtons>
-      ),
+    
   };
 };
 

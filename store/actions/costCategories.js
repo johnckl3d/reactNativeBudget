@@ -38,8 +38,6 @@ export const fetchCostCategories = () => {
           )
         );
       }
-      //console.log(resData);
-      //console.log(loadedCostCategories);
       dispatch({ type: SET_PRODUCTS, costCategories: loadedCostCategories });
     } catch (err) {
       throw err;
@@ -62,7 +60,7 @@ export const fetchCostItems = (costCategoryId) => {
         throw new Error("something went wrong!");
       }
       const resData = await response.json();
-      console.log("fetchCostItems::" + resData);
+      console.log("fetchCostItems::" + JSON.stringify(resData));
       const loadedCostItems = [];
 
       for (const item of resData) {
@@ -97,24 +95,10 @@ export const createProduct = (title, description, imageUrl, price) => {
           }),
         }
       );
-      console.log(response.status);
       if (response.status != 201) {
-        console.log("Error");
         throw new Error("something went wrong!");
       } else {
-        console.log("Success");
       }
-      //const resData = await response.json();
-      // dispatch({
-      //   type: CREATE_PRODUCT,
-      //   productData: {
-      //     id: resData.name,
-      //     title,
-      //     description,
-      //     imageUrl,
-      //     price
-      //   }
-      // });
     } catch (err) {
       throw err;
     }
@@ -122,6 +106,7 @@ export const createProduct = (title, description, imageUrl, price) => {
 };
 
 export const createCostItem = (costCategoryId, name, description, amount) => {
+
   return async (dispatch) => {
     try {
       // any async code you want!
@@ -138,28 +123,10 @@ export const createCostItem = (costCategoryId, name, description, amount) => {
           }),
         }
       );
-      console.log(response.status);
       if (response.status != 201) {
-        console.log("Error");
         throw new Error("something went wrong!");
       } else {
-        console.log("Success");
       }
-      
-      const resData = await response.json();
-      console.log("fetchCostItems::" + resData);
-      const loadedCostItems = [];
-
-      for (const item of resData) {
-        loadedCostItems.push(
-          new CostItem(item.name, item.amount, item.costItemId)
-        );
-      }
-      dispatch({
-        type: SET_COSTITEMS,
-        costCategoryId: costCategoryId,
-        costItems: loadedCostItems,
-      });
     } catch (err) {
       throw err;
     }
@@ -169,22 +136,17 @@ export const createCostItem = (costCategoryId, name, description, amount) => {
 export const deleteProduct = (productId) => {
   return async (dispatch) => {
     try {
-      console.log("productId:" + productId);
       const response = await fetch(
         `https://meetup-api-app-john.azurewebsites.net/api/costCategory/${productId}`,
         {
           method: "DELETE",
         }
       );
-      console.log(response.status);
       if (response.status != 204) {
-        console.log("Error");
         throw new Error("something went wrong!");
       } else {
-        console.log("Success");
       }
     } catch (err) {
-      console.log(err);
     }
   };
 };
@@ -192,22 +154,17 @@ export const deleteProduct = (productId) => {
 export const deleteCostItem = (costCategoryId, costItemId) => {
   return async (dispatch) => {
     try {
-      console.log("costItemId:" + costItemId);
       const response = await fetch(
         `https://meetup-api-app-john.azurewebsites.net/api/costCategory/${costCategoryId}/costItem/${costItemId}`,
         {
           method: "DELETE",
         }
       );
-      console.log(response.status);
       if (response.status != 204) {
-        console.log("Error");
         throw new Error("something went wrong!");
       } else {
-        console.log("Success");
       }
     } catch (err) {
-      console.log(err);
     }
   };
 };
@@ -230,8 +187,7 @@ export const updateProduct = (id, title, description, imageUrl) => {
       );
 
       const resData = await response.json();
-      console.log("response:");
-      console.log(resData);
+      
       // dispatch({
       //   type: CREATE_PRODUCT,
       //   productData: {

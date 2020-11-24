@@ -29,6 +29,7 @@ const ProductDetailScreen = (props) => {
   const dispatch = useDispatch();
 
   const loadCostItems = useCallback(async () => {
+    console.log("loadcostitems");
     setError(null);
     setIsLoading(true);
     try {
@@ -68,7 +69,6 @@ const ProductDetailScreen = (props) => {
         text: "Yes",
         style: "destructive",
         onPress: () => {
-          console.log(costItemId);
           deleteCostItem(costCategoryId, costItemId);
         },
       },
@@ -80,7 +80,6 @@ const ProductDetailScreen = (props) => {
       setError(null);
       setIsLoading(true);
       try {
-        console.log(costItemId);
         await dispatch(costCategoriesActions.deleteCostItem(costCategoryId, costItemId));
       } catch (err) {
         setError(err.message);
@@ -122,7 +121,6 @@ const ProductDetailScreen = (props) => {
       </View>
     );
   }
-console.log(JSON.stringify(selectedProduct));
   return (
     <FlatList
       data={selectedProduct.costItems}
@@ -148,7 +146,6 @@ console.log(JSON.stringify(selectedProduct));
             color={Colors.primary}
             title="Delete"
             onPress={() => {
-              console.log(itemData.item.costItemId);
               deleteItemHandler(selectedProduct.costCategoryId, itemData.item.costItemId, itemData.item.name);
             }}
           />

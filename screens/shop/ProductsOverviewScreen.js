@@ -51,7 +51,6 @@ const ProductsOverviewScreen = (props) => {
   
   
   const selectItemHandler = (costCategoryId, name, totalAmount) => {
-    console.log(costCategoryId);
     props.navigation.navigate("ProductDetail", {
       costCategoryId: costCategoryId,
       name: name,
