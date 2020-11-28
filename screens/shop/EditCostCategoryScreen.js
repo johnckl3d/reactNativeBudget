@@ -15,7 +15,6 @@ import HeaderButton from "../../components/UI/HeaderButton";
 import * as productsActions from "../../store/actions/products";
 import * as costCategoriesActions from "../../store/actions/costCategories";
 import Input from "../../components/UI/Input";
-import Chart from "../../components/UI/Chart";
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
@@ -52,11 +51,11 @@ const EditCostCategoryScreen = (props) => {
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       title: editedProduct ? editedProduct.title : "",
-      description: editedProduct ? editedProduct.description : ""
+      description: editedProduct ? editedProduct.description : "",
     },
     inputValidities: {
       title: editedProduct ? true : false,
-      description: editedProduct ? true : false
+      description: editedProduct ? true : false,
     },
     formIsValid: editedProduct ? true : false,
   });
@@ -72,7 +71,8 @@ const EditCostCategoryScreen = (props) => {
       await dispatch(
         costCategoriesActions.createProduct(
           formState.inputValues.title,
-          formState.inputValues.description, 0
+          formState.inputValues.description,
+          0
         )
       );
     } catch (err) {
@@ -103,7 +103,6 @@ const EditCostCategoryScreen = (props) => {
       behavior="padding"
       keyboardVerticalOffset={100}
     >
-      <Chart></Chart>
       <ScrollView>
         <View style={styles.form}>
           <Input

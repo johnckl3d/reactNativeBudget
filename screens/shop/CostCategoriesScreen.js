@@ -7,7 +7,8 @@ import {
   Platform,
   ActivityIndicator,
   StyleSheet,
-  Alert
+  Alert,
+  SafeAreaView,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -18,12 +19,15 @@ import * as cartActions from "../../store/actions/cart";
 import Colors from "../../constants/Colors";
 import * as productsActions from "../../store/actions/products";
 import * as costCategoriesActions from "../../store/actions/costCategories";
+import Chart from "../../components/UI/Chart";
 
 const CostCategoriesScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const costCategories = useSelector((state) => state.costCategories);
   const dispatch = useDispatch();
+
+ 
 
   const loadProducts = useCallback(async () => {
     setError(null);
@@ -37,54 +41,56 @@ const CostCategoriesScreen = (props) => {
     setIsLoading(false);
   }, [dispatch, setIsLoading, setError]);
 
-  
   useEffect(() => {
     loadProducts();
   }, [dispatch, loadProducts]);
-  
+
   useEffect(() => {
-    const willFocusSub = props.navigation.addListener('willFocus', loadProducts);
+    const willFocusSub = props.navigation.addListener(
+      "willFocus",
+      loadProducts
+    );
     return () => {
       willFocusSub.remove();
     };
   }, [loadProducts]);
-  
-  
+
   const selectItemHandler = (costCategoryId, name, totalAmount) => {
     props.navigation.navigate("ProductDetail", {
       costCategoryId: costCategoryId,
       name: name,
-      totalAmount: totalAmount
+      totalAmount: totalAmount,
     });
   };
 
-
   const deleteItemHandler = (costCategoryId, name) => {
-    Alert.alert('Are you sure?', `Do you really want to delete ${name}?`, [
-      { text: 'No', style: 'default' },
+    Alert.alert("Are you sure?", `Do you really want to delete ${name}?`, [
+      { text: "No", style: "default" },
       {
-        text: 'Yes',
-        style: 'destructive',
+        text: "Yes",
+        style: "destructive",
         onPress: () => {
           deleteProducts(costCategoryId);
-        }
-      }
+        },
+      },
     ]);
   };
 
-  const deleteProducts = useCallback(async (costCategoryId) => {
-    setError(null);
-    setIsLoading(true);
-    try {
-      await dispatch(costCategoriesActions.deleteProduct(costCategoryId));
-    } catch (err) {
-      setError(err.message);
-    }
+  const deleteProducts = useCallback(
+    async (costCategoryId) => {
+      setError(null);
+      setIsLoading(true);
+      try {
+        await dispatch(costCategoriesActions.deleteProduct(costCategoryId));
+      } catch (err) {
+        setError(err.message);
+      }
 
-    setIsLoading(false);
-    loadProducts();
-  }, [dispatch, setIsLoading, setError]);
-
+      setIsLoading(false);
+      loadProducts();
+    },
+    [dispatch, setIsLoading, setError]
+  );
 
   if (error) {
     return (
@@ -118,35 +124,49 @@ const CostCategoriesScreen = (props) => {
   }
 
   return (
-    <FlatList
-      data={costCategories.costCategories}
-      keyExtractor={item => item.costCategoryId}
-      renderItem={(itemData) => (
-        <ProductItem
-          image={"https://picsum.photos/200/300"}
-          title={itemData.item.name}
-          price={itemData.item.totalAmount}
-          onSelect={() => {
-            selectItemHandler(itemData.item.costCategoryId, itemData.item.name, itemData.item.totalAmount);
-          }}
-        >
-          <Button
-            color={Colors.primary}
-            title="Edit"
-            onPress={() => {
-              selectItemHandler(itemData.item.costCategoryId, itemData.item.name, itemData.item.totalAmount);
+    <SafeAreaView>
+      <Chart/>
+      <FlatList
+        data={costCategories.costCategories}
+        keyExtractor={(item) => item.costCategoryId}
+        renderItem={(itemData) => (
+          <ProductItem
+            image={"https://picsum.photos/200/300"}
+            title={itemData.item.name}
+            price={itemData.item.totalAmount}
+            onSelect={() => {
+              selectItemHandler(
+                itemData.item.costCategoryId,
+                itemData.item.name,
+                itemData.item.totalAmount
+              );
             }}
-          />
-          <Button
-            color={Colors.primary}
-            title="Delete"
-            onPress={() => {
-              deleteItemHandler(itemData.item.costCategoryId, itemData.item.name);
-            }}
-          />
-        </ProductItem>
-      )}
-    />
+          >
+            <Button
+              color={Colors.primary}
+              title="Edit"
+              onPress={() => {
+                selectItemHandler(
+                  itemData.item.costCategoryId,
+                  itemData.item.name,
+                  itemData.item.totalAmount
+                );
+              }}
+            />
+            <Button
+              color={Colors.primary}
+              title="Delete"
+              onPress={() => {
+                deleteItemHandler(
+                  itemData.item.costCategoryId,
+                  itemData.item.name
+                );
+              }}
+            />
+          </ProductItem>
+        )}
+      />
+    </SafeAreaView>
   );
 };
 
@@ -168,7 +188,9 @@ CostCategoriesScreen.navigationOptions = (navData) => {
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
           title="Cart"
-          iconName={Platform.OS === "android" ? "md-add-circle" : "ios-add-circle"}
+          iconName={
+            Platform.OS === "android" ? "md-add-circle" : "ios-add-circle"
+          }
           onPress={() => {
             navData.navigation.navigate("EditCostCategory");
           }}
