@@ -15,6 +15,7 @@ import HeaderButton from "../../components/UI/HeaderButton";
 import * as productsActions from "../../store/actions/products";
 import * as costCategoriesActions from "../../store/actions/costCategories";
 import Input from "../../components/UI/Input";
+import Chart from "../../components/UI/Chart";
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
@@ -102,6 +103,7 @@ const EditCostCategoryScreen = (props) => {
       behavior="padding"
       keyboardVerticalOffset={100}
     >
+      <Chart></Chart>
       <ScrollView>
         <View style={styles.form}>
           <Input

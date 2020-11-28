@@ -13,6 +13,7 @@
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/drawer": "^5.11.4",
     "@react-navigation/native": "^5.0.5",
+    "d3": "^6.2.0",
     "expo": "^39.0.0",
     "moment": "^2.24.0",
     "react": "16.13.1",
@@ -29,7 +30,9 @@
     "react-navigation-stack": "^2.10.1",
     "react-redux": "^7.1.0",
     "redux": "^4.0.4",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "svg-path-properties": "^1.0.9",
+    "react-native-svg": "12.1.0"
   },
   "devDependencies": {
     "babel-preset-expo": "^8.3.0",
