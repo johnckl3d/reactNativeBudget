@@ -8,6 +8,7 @@ import ReduxThunk from 'redux-thunk';
 import productsReducer from './store/reducers/products';
 import cartReducer from './store/reducers/cart';
 import ordersReducer from './store/reducers/orders';
+import budgetsReducer from './store/reducers/budgets';
 import costCategoriesReducer from './store/reducers/costCategories';
 import ShopNavigator from './navigation/ShopNavigator';
 
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   products: productsReducer,
   cart: cartReducer,
   orders: ordersReducer,
+  budgets: budgetsReducer,
   costCategories: costCategoriesReducer,
 });
 

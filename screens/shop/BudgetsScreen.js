@@ -19,21 +19,22 @@ import * as cartActions from "../../store/actions/cart";
 import Colors from "../../constants/Colors";
 import * as productsActions from "../../store/actions/products";
 import * as costCategoriesActions from "../../store/actions/costCategories";
+import * as budgetsActions from "../../store/actions/budgets";
 import Chart from "../../components/UI/Chart";
 
-const CostCategoriesScreen = (props) => {
+const BudgetsScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-  const costCategories = useSelector((state) => state.costCategories);
+  const budgets = useSelector((state) => state.budgets);
   const dispatch = useDispatch();
 
  
 
-  const loadCostCategories = useCallback(async () => {
+  const loadBudgets = useCallback(async () => {
     setError(null);
     setIsLoading(true);
     try {
-      await dispatch(costCategoriesActions.fetchCostCategories());
+      await dispatch(budgetsActions.fetchBudgets());
     } catch (err) {
       setError(err.message);
     }
@@ -42,55 +43,20 @@ const CostCategoriesScreen = (props) => {
   }, [dispatch, setIsLoading, setError]);
 
   useEffect(() => {
-    loadCostCategories();
-  }, [dispatch, loadCostCategories]);
+    loadBudgets();
+  }, [dispatch, loadBudgets]);
 
   useEffect(() => {
     const willFocusSub = props.navigation.addListener(
       "willFocus",
-      loadCostCategories
+      loadBudgets
     );
     return () => {
       willFocusSub.remove();
     };
-  }, [loadCostCategories]);
+  }, [loadBudgets]);
 
-  const selectItemHandler = (costCategoryId, name, totalAmount) => {
-    props.navigation.navigate("ProductDetail", {
-      costCategoryId: costCategoryId,
-      name: name,
-      totalAmount: totalAmount,
-    });
-  };
-
-  const deleteItemHandler = (costCategoryId, name) => {
-    Alert.alert("Are you sure?", `Do you really want to delete ${name}?`, [
-      { text: "No", style: "default" },
-      {
-        text: "Yes",
-        style: "destructive",
-        onPress: () => {
-          deleteProducts(costCategoryId);
-        },
-      },
-    ]);
-  };
-
-  const deleteProducts = useCallback(
-    async (costCategoryId) => {
-      setError(null);
-      setIsLoading(true);
-      try {
-        await dispatch(costCategoriesActions.deleteProduct(costCategoryId));
-      } catch (err) {
-        setError(err.message);
-      }
-
-      setIsLoading(false);
-      loadCostCategories();
-    },
-    [dispatch, setIsLoading, setError]
-  );
+  
 
   if (error) {
     return (
@@ -98,7 +64,7 @@ const CostCategoriesScreen = (props) => {
         <Text> An error occured!</Text>
         <Button
           title="Try again"
-          onPress={loadCostCategories}
+          onPress={loadBudgets}
           color={Colors.primary}
         ></Button>
       </View>
@@ -115,7 +81,7 @@ const CostCategoriesScreen = (props) => {
     );
   }
 
-  if (!isLoading && costCategories.costCategories === 0) {
+  if (!isLoading && budgets.budgets === 0) {
     return (
       <View style={styles.centered}>
         <Text> No cost category found. Maybe start adding some!</Text>
@@ -127,13 +93,13 @@ const CostCategoriesScreen = (props) => {
     <SafeAreaView>
       <Chart/>
       <FlatList
-        data={costCategories.costCategories}
-        keyExtractor={(item) => item.costCategoryId}
+        data={budgets.budgets}
+        keyExtractor={(item) => item.budgetId}
         renderItem={(itemData) => (
           <ProductItem
             image={"https://picsum.photos/200/300"}
             title={itemData.item.name}
-            price={itemData.item.totalAmount}
+            price={itemData.item.totalBudgetAmount}
             onSelect={() => {
               selectItemHandler(
                 itemData.item.costCategoryId,
@@ -170,9 +136,9 @@ const CostCategoriesScreen = (props) => {
   );
 };
 
-CostCategoriesScreen.navigationOptions = (navData) => {
+BudgetsScreen.navigationOptions = (navData) => {
   return {
-    headerTitle: "Cost Category",
+    headerTitle: "Budget",
     headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
@@ -203,4 +169,4 @@ CostCategoriesScreen.navigationOptions = (navData) => {
 const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: "center", alignItems: "center" },
 });
-export default CostCategoriesScreen;
+export default BudgetsScreen;

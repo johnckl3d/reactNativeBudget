@@ -20,7 +20,7 @@ export const fetchCostCategories = () => {
         throw new Error("something went wrong!");
       }
       const resData = await response.json();
-      console.log(JSON.stringify(resData));
+      //console.log(JSON.stringify(resData));
       const loadedCostCategories = [];
 
       for (const item of resData) {
