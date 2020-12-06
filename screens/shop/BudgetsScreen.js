@@ -8,6 +8,8 @@ import {
   ActivityIndicator,
   StyleSheet,
   Alert,
+  TouchableOpacity,
+  TouchableNativeFeedback,
   SafeAreaView,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
@@ -21,14 +23,14 @@ import * as productsActions from "../../store/actions/products";
 import * as costCategoriesActions from "../../store/actions/costCategories";
 import * as budgetsActions from "../../store/actions/budgets";
 import Chart from "../../components/UI/Chart";
+import ChartCard from "../../components/UI/ChartCard";
 
 const BudgetsScreen = (props) => {
+  let TouchableCmp = TouchableOpacity;
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const budgets = useSelector((state) => state.budgets);
   const dispatch = useDispatch();
-
- 
 
   const loadBudgets = useCallback(async () => {
     setError(null);
@@ -47,16 +49,11 @@ const BudgetsScreen = (props) => {
   }, [dispatch, loadBudgets]);
 
   useEffect(() => {
-    const willFocusSub = props.navigation.addListener(
-      "willFocus",
-      loadBudgets
-    );
+    const willFocusSub = props.navigation.addListener("willFocus", loadBudgets);
     return () => {
       willFocusSub.remove();
     };
   }, [loadBudgets]);
-
-  
 
   if (error) {
     return (
@@ -95,8 +92,38 @@ const BudgetsScreen = (props) => {
         data={budgets.budgets}
         keyExtractor={(item) => item.budgetId}
         renderItem={(itemData) => (
-          <Chart snapshots={itemData.item.costSnapShots}/>
+          <ChartCard style={styles.card}>
+            <View style={styles.touchable}>
+              <TouchableCmp onPress={props.onSelect} useForeground>
+                <View>
+                  <View style={styles.details}>
+                  <Text style={styles.title}>{itemData.item.name}</Text>
+                  </View>
+                  <Chart snapshots={itemData.item.costSnapShots} />
+                </View>
+              </TouchableCmp>
+            </View>
+          </ChartCard>
         )}
+      />
+      
+      <Button
+        color={Colors.primary}
+        title="Edit"
+        onPress={() => {
+          selectItemHandler(
+            itemData.item.costCategoryId,
+            itemData.item.name,
+            itemData.item.totalAmount
+          );
+        }}
+      />
+      <Button
+        color={Colors.primary}
+        title="Delete"
+        onPress={() => {
+          deleteItemHandler(itemData.item.costCategoryId, itemData.item.name);
+        }}
       />
     </SafeAreaView>
   );
@@ -134,5 +161,23 @@ BudgetsScreen.navigationOptions = (navData) => {
 
 const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: "center", alignItems: "center" },
+  card: {
+    height: 500,
+    margin: 20,
+  },
+  touchable: {
+    borderRadius: 10,
+    overflow: "hidden",
+  },
+  title: {
+    fontFamily: 'open-sans-bold',
+    fontSize: 18,
+    marginVertical: 2
+  },
+  details: {
+    alignItems: 'center',
+    height: '17%',
+    padding: 10
+  },
 });
 export default BudgetsScreen;

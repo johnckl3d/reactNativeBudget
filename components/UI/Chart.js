@@ -9,6 +9,7 @@ import {
   Text,
 } from "react-native";
 import Svg, { Path, Defs, LinearGradient, Stop } from "react-native-svg";
+import { Grid, LineChart, XAxis, YAxis } from 'react-native-svg-charts'
 import * as path from "svg-path-properties";
 import * as shape from "d3-shape";
 import { scaleTime, scaleLinear, scaleQuantile } from "d3-scale";
@@ -21,17 +22,14 @@ const tabWidth = 100;
 const verticalPadding = 5;
 const cursorRadius = 10;
 const labelWidth = 100;
+const axesSvg = { fontSize: 10, fill: 'grey' };
+const verticalContentInset = { top: 10, bottom: 10 }
+const xAxisHeight = 30
 
 const d3 = {
   shape,
 };
 
-const scaleX = scaleTime()
-  .domain([new Date(2018, 9, 1), new Date(2018, 10, 5)])
-  .range([0, width]);
-const scaleY = scaleLinear()
-  .domain([0, 300])
-  .range([height - verticalPadding, verticalPadding]);
 const scaleLabel = scaleQuantile().domain([0, 300]).range([0, 200, 300]);
 
 //console.log("Chart2::" + JSON.stringify(this.data));
@@ -58,11 +56,6 @@ export default class Chart extends Component {
     Moment.locale("en");
   }
 
-  getDate = (dateTime) => {
-    var dt = dateTime;
-    //return Moment(dt).format("YYYY-MM-DD hh:mm:ss A Z");
-    return new Date(dateTime);
-  };
 
   moveCursor(value) {
     // const { x, y } = properties.getPointAtLength(lineLength - value);
@@ -88,11 +81,24 @@ export default class Chart extends Component {
       return <Text>Loading....</Text>;
     } else {
       const data = this.props.snapshots.map((snapshot) => ({
-        x: this.getDate(snapshot.dateTime),
+        x: new Date(snapshot.dateTime),
         y: snapshot.amount,
       }));
 
       console.log(JSON.stringify(data));
+      const maxY = Math.max.apply(
+        Math,
+        data.map(function (o) {
+          return o.y;
+        })
+      );
+      const scaleX = scaleTime()
+        .domain([data[0].x, data[data.length - 1].x])
+        .range([0, width]);
+      const scaleY = scaleLinear()
+        .domain([0, maxY])
+        .range([height - verticalPadding, verticalPadding]);
+
       const line = d3.shape
         .line()
         .x((d) => scaleX(d.x))
@@ -113,6 +119,12 @@ export default class Chart extends Component {
       console.log("height:" + JSON.stringify(height));
       return (
         <View style={styles.container}>
+            <YAxis
+                    data={data}
+                    style={{ marginBottom: xAxisHeight }}
+                    contentInset={verticalContentInset}
+                    svg={axesSvg}
+                />
           <Svg {...{ width, height }}>
             <Defs>
               <LinearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="gradient">
@@ -156,6 +168,13 @@ export default class Chart extends Component {
             )}
             horizontal
           /> */}
+            <XAxis
+                        style={{ marginHorizontal: -10, height: xAxisHeight }}
+                        data={data}
+                        formatLabel={(value, index) => value}
+                        contentInset={{ left: 10, right: 10 }}
+                        svg={axesSvg}
+                    />
         </View>
       );
     }
