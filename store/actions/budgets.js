@@ -17,7 +17,7 @@ export const fetchBudgets = () => {
         throw new Error("something went wrong!");
       }
       const resData = await response.json();
-      console.log("fetchBudgets::" + JSON.stringify(resData));
+      //console.log("fetchBudgets::" + JSON.stringify(resData));
       const loadedBudget = [];
       const css = [];
 

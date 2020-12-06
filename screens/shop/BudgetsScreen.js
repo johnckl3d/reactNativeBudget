@@ -93,7 +93,7 @@ const BudgetsScreen = (props) => {
     <SafeAreaView>
       <FlatList
         data={budgets.budgets}
-        keyExtractor={(item) => item.dateTime}
+        keyExtractor={(item) => item.budgetId}
         renderItem={(itemData) => (
           <Chart snapshots={itemData.item.costSnapShots}/>
         )}
