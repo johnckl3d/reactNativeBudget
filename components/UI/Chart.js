@@ -9,7 +9,7 @@ import {
   Text,
 } from "react-native";
 import Svg, { Path, Defs, LinearGradient, Stop } from "react-native-svg";
-import { Grid, LineChart, XAxis, YAxis } from 'react-native-svg-charts'
+import { Grid, LineChart, XAxis, YAxis } from "react-native-svg-charts";
 import * as path from "svg-path-properties";
 import * as shape from "d3-shape";
 import { scaleTime, scaleLinear, scaleQuantile } from "d3-scale";
@@ -17,14 +17,14 @@ import Moment from "moment";
 import { dragDisable } from "d3";
 
 const height = 200;
-const { width } = Dimensions.get("window");
+const width = Dimensions.get("window").width * 0.9;
 const tabWidth = 100;
 const verticalPadding = 5;
 const cursorRadius = 10;
 const labelWidth = 100;
-const axesSvg = { fontSize: 10, fill: 'grey' };
-const verticalContentInset = { top: 10, bottom: 10 }
-const xAxisHeight = 30
+const axesSvg = { fontSize: 10, fill: "grey" };
+const verticalContentInset = { top: 10, bottom: 10 };
+const xAxisHeight = 30;
 
 const d3 = {
   shape,
@@ -55,7 +55,6 @@ export default class Chart extends Component {
 
     Moment.locale("en");
   }
-
 
   moveCursor(value) {
     // const { x, y } = properties.getPointAtLength(lineLength - value);
@@ -118,39 +117,40 @@ export default class Chart extends Component {
       console.log("width:" + JSON.stringify(width));
       console.log("height:" + JSON.stringify(height));
       return (
-        <View style={styles.container}>
-            <YAxis
-                    data={data}
-                    style={{ marginBottom: xAxisHeight }}
-                    contentInset={verticalContentInset}
-                    svg={axesSvg}
-                />
-          <Svg {...{ width, height }}>
-            <Defs>
-              <LinearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="gradient">
-                <Stop stopColor="#CDE3F8" offset="0%" />
-                <Stop stopColor="#eef6fd" offset="80%" />
-                <Stop stopColor="#FEFFFF" offset="100%" />
-              </LinearGradient>
-            </Defs>
-            <Path
-              d={line}
-              fill="transparent"
-              stroke="#367be2"
-              strokeWidth={5}
-            />
-            <Path
-              d={`${line} L ${width} ${height} L 0 ${height}`}
-              fill="url(#gradient)"
-            />
-            <View ref={this.cursor} style={styles.cursor} />
-          </Svg>
-          <Animated.View
-            style={[styles.label, { transform: [{ translateX }] }]}
-          >
-            <TextInput ref={this.label} />
-          </Animated.View>
-          {/* <Animated.ScrollView
+        <View style={{flexDirection: "row"}}>
+          <View style={{ paddingLeft:20, flex:1}}>
+            <Svg {...{ width, height }}>
+              <Defs>
+                <LinearGradient
+                  x1="50%"
+                  y1="0%"
+                  x2="50%"
+                  y2="100%"
+                  id="gradient"
+                >
+                  <Stop stopColor="#CDE3F8" offset="0%" />
+                  <Stop stopColor="#eef6fd" offset="80%" />
+                  <Stop stopColor="#FEFFFF" offset="100%" />
+                </LinearGradient>
+              </Defs>
+              <Path
+                d={line}
+                fill="transparent"
+                stroke="#367be2"
+                strokeWidth={5}
+              />
+              <Path
+                d={`${line} L ${width} ${height} L 0 ${height}`}
+                fill="url(#gradient)"
+              />
+              <View ref={this.cursor} style={styles.cursor} />
+            </Svg>
+            <Animated.View
+              style={[styles.label, { transform: [{ translateX }] }]}
+            >
+              <TextInput ref={this.label} />
+            </Animated.View>
+            <Animated.ScrollView
             style={StyleSheet.absoluteFill}
             contentContainerStyle={{ width: lineLength * 2 }}
             showsHorizontalScrollIndicator={false}
@@ -167,14 +167,15 @@ export default class Chart extends Component {
               { useNativeDriver: true }
             )}
             horizontal
-          /> */}
+          />
             <XAxis
-                        style={{ marginHorizontal: -10, height: xAxisHeight }}
-                        data={data}
-                        formatLabel={(value, index) => value}
-                        contentInset={{ left: 10, right: 10 }}
-                        svg={axesSvg}
-                    />
+              style={{ marginHorizontal: -10, height: xAxisHeight }}
+              data={data}
+              formatLabel={(value, index) => Moment(data[index].x).format("dd")}
+              contentInset={{ left: 10, right: 10 }}
+              svg={axesSvg}
+            />
+          </View>
         </View>
       );
     }
