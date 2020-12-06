@@ -49,11 +49,8 @@ const EditCostItemScreen = (props) => {
       (cc) => cc.costCategoryId === costCategoryId
     )
   );
-  console.log("costCategoryId::" + costCategoryId);
-  console.log("costItemId::" + costItemId);
   const costItems = [...editedCostCategory.costItems];
   const editedCostItem = costItems.find((ci) => ci.costItemId === costItemId);
-  console.log("editedCostItem::" + JSON.stringify(editedCostItem));
   const dispatch = useDispatch();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {

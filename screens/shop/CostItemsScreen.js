@@ -34,8 +34,6 @@ const CostItemsScreen = (props) => {
   const dispatch = useDispatch();
 
   const loadCostItems = useCallback(async () => {
-    console.log("loadCostItems::" + JSON.stringify(selectedProduct));
-    console.log("loadCostItems::" + selectedProduct.costItems[0].costItemId);
     setError(null);
     setIsLoading(true);
     try {

@@ -6,11 +6,14 @@ import {
   Dimensions,
   Animated,
   TextInput,
+  Text,
 } from "react-native";
 import Svg, { Path, Defs, LinearGradient, Stop } from "react-native-svg";
 import * as path from "svg-path-properties";
 import * as shape from "d3-shape";
 import { scaleTime, scaleLinear, scaleQuantile } from "d3-scale";
+import Moment from "moment";
+import { dragDisable } from "d3";
 
 const height = 200;
 const { width } = Dimensions.get("window");
@@ -23,14 +26,7 @@ const d3 = {
   shape,
 };
 
-const data = [
-  { x: new Date(2018, 9, 1), y: 0 },
-  { x: new Date(2018, 9, 16), y: 0 },
-  { x: new Date(2018, 9, 17), y: 200 },
-  { x: new Date(2018, 10, 1), y: 200 },
-  { x: new Date(2018, 10, 2), y: 300 },
-  { x: new Date(2018, 10, 5), y: 300 },
-];
+const data = [];
 
 const scaleX = scaleTime()
   .domain([new Date(2018, 9, 1), new Date(2018, 10, 5)])
@@ -57,7 +53,40 @@ export default class Chart extends Component {
 
     this.cursor = React.createRef();
     this.label = React.createRef();
+
+    Moment.locale("en");
+    if (props.snapshots) {
+      this.data = props.snapshots;
+
+      this.data = props.snapshots.map((snapshot) => ({
+        x: this.getDate(snapshot.dateTime),
+        y: snapshot.amount,
+      }));
+      this.data = [
+        { x: new Date(2018, 9, 1), y: 0 },
+        { x: new Date(2018, 9, 16), y: 0 },
+        { x: new Date(2018, 9, 17), y: 200 },
+        { x: new Date(2018, 10, 1), y: 200 },
+        { x: new Date(2018, 10, 2), y: 300 },
+        { x: new Date(2018, 10, 5), y: 300 },
+      ];
+    }
+
+    console.log("Chart2::" + JSON.stringify(this.data));
+    // const data = [
+    //   { x: new Date(2018, 9, 1), y: 0 },
+    //   { x: new Date(2018, 9, 16), y: 0 },
+    //   { x: new Date(2018, 9, 17), y: 200 },
+    //   { x: new Date(2018, 10, 1), y: 200 },
+    //   { x: new Date(2018, 10, 2), y: 300 },
+    //   { x: new Date(2018, 10, 5), y: 300 },
+    // ];
   }
+
+  getDate = (dateTime) => {
+    var dt = dateTime;
+    return Moment(dt).format("MMM DD, YYYY");
+  };
 
   moveCursor(value) {
     const { x, y } = properties.getPointAtLength(lineLength - value);
@@ -95,16 +124,23 @@ export default class Chart extends Component {
               <Stop stopColor="#FEFFFF" offset="100%" />
             </LinearGradient>
           </Defs>
-          <Path d={line} fill="transparent" stroke="#367be2" strokeWidth={5} />
+          <Path
+            d={line}
+            fill="transparent"
+            stroke="#367be2"
+            strokeWidth={5}
+          />
           <Path
             d={`${line} L ${width} ${height} L 0 ${height}`}
             fill="url(#gradient)"
           />
-           <View ref={this.cursor} style={styles.cursor} />
+          <View ref={this.cursor} style={styles.cursor} />
         </Svg>
-        <Animated.View style={[styles.label, { transform: [{ translateX }] }]}>
-            <TextInput ref={this.label} />
-          </Animated.View>
+        <Animated.View
+          style={[styles.label, { transform: [{ translateX }] }]}
+        >
+          <TextInput ref={this.label} />
+        </Animated.View>
         <Animated.ScrollView
           style={StyleSheet.absoluteFill}
           contentContainerStyle={{ width: lineLength * 2 }}
@@ -141,15 +177,15 @@ const styles = StyleSheet.create({
     width: cursorRadius * 2,
     height: cursorRadius * 2,
     borderRadius: cursorRadius,
-    borderColor: '#367be2',
+    borderColor: "#367be2",
     borderWidth: 3,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
   label: {
-    position: 'absolute',
+    position: "absolute",
     top: -45,
     left: 0,
-    backgroundColor: 'lightgray',
+    backgroundColor: "lightgray",
     width: labelWidth,
   },
 });

@@ -20,7 +20,6 @@ export const fetchCostCategories = () => {
         throw new Error("something went wrong!");
       }
       const resData = await response.json();
-      //console.log(JSON.stringify(resData));
       const loadedCostCategories = [];
 
       for (const item of resData) {
@@ -60,7 +59,6 @@ export const fetchCostItems = (costCategoryId) => {
         throw new Error("something went wrong!");
       }
       const resData = await response.json();
-      console.log("fetchCostItems::" + JSON.stringify(resData));
       const loadedCostItems = [];
 
       for (const item of resData) {
@@ -68,7 +66,6 @@ export const fetchCostItems = (costCategoryId) => {
           new CostItem(item.name, item.amount, item.costItemId)
         );
       }
-      console.log("loadedCostItems::" + JSON.stringify(loadedCostItems));
       dispatch({
         type: SET_COSTITEMS,
         costCategoryId: costCategoryId,

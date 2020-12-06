@@ -91,45 +91,11 @@ const BudgetsScreen = (props) => {
 
   return (
     <SafeAreaView>
-      <Chart/>
       <FlatList
         data={budgets.budgets}
-        keyExtractor={(item) => item.budgetId}
+        keyExtractor={(item) => item.dateTime}
         renderItem={(itemData) => (
-          <ProductItem
-            image={"https://picsum.photos/200/300"}
-            title={itemData.item.name}
-            price={itemData.item.totalBudgetAmount}
-            onSelect={() => {
-              selectItemHandler(
-                itemData.item.costCategoryId,
-                itemData.item.name,
-                itemData.item.totalAmount
-              );
-            }}
-          >
-            <Button
-              color={Colors.primary}
-              title="Edit"
-              onPress={() => {
-                selectItemHandler(
-                  itemData.item.costCategoryId,
-                  itemData.item.name,
-                  itemData.item.totalAmount
-                );
-              }}
-            />
-            <Button
-              color={Colors.primary}
-              title="Delete"
-              onPress={() => {
-                deleteItemHandler(
-                  itemData.item.costCategoryId,
-                  itemData.item.name
-                );
-              }}
-            />
-          </ProductItem>
+          <Chart snapshots={itemData.item.costSnapShots}/>
         )}
       />
     </SafeAreaView>
