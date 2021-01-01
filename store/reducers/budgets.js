@@ -1,30 +1,25 @@
-import {
-  SET_BUDGETS
-  } from "../actions/budgets";
-  import {getWeekOfDay} from "../../helpers/helpers"
-  import Moment from "moment";
-  
-  const initialState = {
-    budgets: [],
-  };
-  
-  export default (state = initialState, action) => {
+import { SET_BUDGETS } from "../actions/budgets";
+import { getWeekOfDay } from "../../helpers/helpers";
+import Moment from "moment";
 
-    switch (action.type) {
-      case SET_BUDGETS:
-        action.budgets.forEach(b => {
-          b.costSnapShots.forEach(input => {
-            console.log("debug:" + JSON.stringify(getWeekOfDay(Moment(input.dateTime))));
-            //console.log("debug:" + JSON.stringify(getWeekOfDay(input.x)));
-          }
+const initialState = {
+  budgets: [],
+};
 
-          )
+export default (state = initialState, action) => {
+  switch (action.type) {
+    case SET_BUDGETS:
+      var arr = [0, 0, 0, 0, 0];
+      action.budgets.forEach((b) => {
+        b.costSnapShots.forEach((input) => {
+          arr[getWeekOfDay(Moment(input.dateTime)) - 1] += Number(input.amount).toFixed(2);
+          console.log("debug:" + input.amount);
         });
-        return {
-          budgets: action.budgets,
-        };
-    
-    }
-    return state;
-  };
-  
+      });
+      console.log("debug:" + JSON.stringify(arr));
+      return {
+        budgets: action.budgets,
+      };
+  }
+  return state;
+};

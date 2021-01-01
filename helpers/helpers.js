@@ -1,5 +1,4 @@
 export function getWeekOfDay(input) {
-    console.log(input);
   const firstDayOfMonth = input.clone().startOf("month");
   const firstDayOfWeek = firstDayOfMonth.clone().startOf("week");
 
