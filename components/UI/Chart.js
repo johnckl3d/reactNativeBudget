@@ -117,8 +117,11 @@ export default class Chart extends Component {
       console.log("width:" + JSON.stringify(width));
       console.log("height:" + JSON.stringify(height));
       return (
-        <View style={{flexDirection: "row"}}>
-          <View style={{ paddingLeft:20, flex:1}}>
+        <View style={{flexDirection: "row", borderWidth: 1}}>
+          <View style={{flex:1}}>
+
+          </View>
+          <View style={{flex:1}}>
             <Svg {...{ width, height }}>
               <Defs>
                 <LinearGradient

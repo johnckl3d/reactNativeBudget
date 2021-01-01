@@ -162,8 +162,10 @@ BudgetsScreen.navigationOptions = (navData) => {
 const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: "center", alignItems: "center" },
   card: {
-    height: 500,
+    borderWidth: 1,
+    height: 300,
     margin: 20,
+    borderColor: 'red'
   },
   touchable: {
     borderRadius: 10,
