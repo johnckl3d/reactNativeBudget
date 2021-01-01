@@ -9,7 +9,7 @@ import {
   Text,
 } from "react-native";
 import Svg, { Path, Defs, LinearGradient, Stop } from "react-native-svg";
-import { Grid, LineChart, XAxis, YAxis } from "react-native-svg-charts";
+import { Grid, LineChart, XAxis, YAxis, StackedAreaChart } from "react-native-svg-charts";
 import * as path from "svg-path-properties";
 import * as shape from "d3-shape";
 import { scaleTime, scaleLinear, scaleQuantile } from "d3-scale";
@@ -76,6 +76,7 @@ export default class Chart extends Component {
   }
 
   render() {
+    const keys   = [ 'apples', 'bananas', 'cherries', 'dates' ]
     if (!this.props) {
       return <Text>Loading....</Text>;
     } else {
@@ -113,15 +114,26 @@ export default class Chart extends Component {
         outputRange: [width - labelWidth, 0],
         extrapolate: "clamp",
       });
-      console.log("line:" + JSON.stringify(line));
       console.log("width:" + JSON.stringify(width));
       console.log("height:" + JSON.stringify(height));
       return (
         <View style={{flexDirection: "row", borderWidth: 1}}>
-          <View style={{flex:1}}>
-
+          <View style={{borderWidth:1, flex:1}}>
+          <YAxis
+                    style={ { position: 'absolute', top: 0, bottom: 0 }}
+                    data={ StackedAreaChart.extractDataPoints(data, keys) }
+                    contentInset={ { top: 10, bottom: 10 } }
+                    svg={ {
+                        fontSize: 8,
+                        fill: 'white',
+                        stroke: 'black',
+                        strokeWidth: 0.1,
+                        alignmentBaseline: 'baseline',
+                        baselineShift: '3',
+                    } }
+                />
           </View>
-          <View style={{flex:1}}>
+          <View style={{flex:9}}>
             <Svg {...{ width, height }}>
               <Defs>
                 <LinearGradient
@@ -178,6 +190,7 @@ export default class Chart extends Component {
               contentInset={{ left: 10, right: 10 }}
               svg={axesSvg}
             />
+            
           </View>
         </View>
       );
