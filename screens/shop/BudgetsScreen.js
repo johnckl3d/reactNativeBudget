@@ -93,37 +93,35 @@ const BudgetsScreen = (props) => {
         keyExtractor={(item) => item.budgetId}
         renderItem={(itemData) => (
           <ChartCard style={styles.card}>
-            <View style={styles.touchable}>
-              <TouchableCmp onPress={props.onSelect} useForeground>
-                <View>
-                  <View style={styles.details}>
-                  <Text style={styles.title}>{itemData.item.name}</Text>
-                  </View>
-                  <Chart snapshots={itemData.item.costSnapShots} />
-                </View>
-              </TouchableCmp>
+            <View>
+              <View style={styles.details}>
+                <Text style={styles.title}>{itemData.item.name}</Text>
+              </View>
+              <Chart snapshots={itemData.item.costSnapShots} />
+              <Button
+                color={Colors.primary}
+                title="Edit"
+                onPress={() => {
+                  selectItemHandler(
+                    itemData.item.costCategoryId,
+                    itemData.item.name,
+                    itemData.item.totalAmount
+                  );
+                }}
+              />
+              <Button
+                color={Colors.primary}
+                title="Delete"
+                onPress={() => {
+                  deleteItemHandler(
+                    itemData.item.costCategoryId,
+                    itemData.item.name
+                  );
+                }}
+              />
             </View>
           </ChartCard>
         )}
-      />
-      
-      <Button
-        color={Colors.primary}
-        title="Edit"
-        onPress={() => {
-          selectItemHandler(
-            itemData.item.costCategoryId,
-            itemData.item.name,
-            itemData.item.totalAmount
-          );
-        }}
-      />
-      <Button
-        color={Colors.primary}
-        title="Delete"
-        onPress={() => {
-          deleteItemHandler(itemData.item.costCategoryId, itemData.item.name);
-        }}
       />
     </SafeAreaView>
   );
@@ -162,24 +160,22 @@ BudgetsScreen.navigationOptions = (navData) => {
 const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: "center", alignItems: "center" },
   card: {
-    borderWidth: 1,
-    height: 300,
+    height: 400,
     margin: 20,
-    borderColor: 'red'
   },
   touchable: {
     borderRadius: 10,
     overflow: "hidden",
   },
   title: {
-    fontFamily: 'open-sans-bold',
+    fontFamily: "open-sans-bold",
     fontSize: 18,
-    marginVertical: 2
+    marginVertical: 2,
   },
   details: {
-    alignItems: 'center',
-    height: '17%',
-    padding: 10
+    alignItems: "center",
+    height: "17%",
+    padding: 10,
   },
 });
 export default BudgetsScreen;

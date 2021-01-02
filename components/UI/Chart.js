@@ -216,7 +216,7 @@ export default class Chart extends Component {
               >
                 <TextInput ref={this.label} />
               </Animated.View>
-              <Animated.ScrollView
+              {/* <Animated.ScrollView
                 style={StyleSheet.absoluteFill}
                 contentContainerStyle={{ width: lineLength * 2 }}
                 showsHorizontalScrollIndicator={false}
@@ -233,7 +233,7 @@ export default class Chart extends Component {
                   { useNativeDriver: true }
                 )}
                 horizontal
-              />
+              /> */}
             </View>
             <XAxis
               data={data}
