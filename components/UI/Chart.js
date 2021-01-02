@@ -43,6 +43,8 @@ const scaleLabel = scaleQuantile().domain([0, 300]).range([0, 200, 300]);
 // ];
 
 export default class Chart extends Component {
+
+  
   constructor(props) {
     super(props);
 
@@ -75,15 +77,26 @@ export default class Chart extends Component {
     // this.moveCursor(0);
   }
 
+  normalizeChart(rawData) {
+    var arr = [0, 0, 0, 0, 0];
+    rawData.forEach((input) => {
+      arr[getWeekOfDayWithOffset(Moment(rawData.x)) - 1] += Number(rawData.y).toFixed(2);
+    });
+    console.log("debug:" + JSON.stringify(arr));
+    return arr;
+  }
+
   render() {
-    const keys   = [ 'apples', 'bananas', 'cherries', 'dates' ]
+    const XKeys   = [ 'week 1', 'week 2', 'week 3', 'week 4', 'week 5']
     if (!this.props) {
       return <Text>Loading....</Text>;
     } else {
-      const data = this.props.snapshots.map((snapshot) => ({
+      const rawData = this.props.snapshots.map((snapshot) => ({
         x: new Date(snapshot.dateTime),
         y: snapshot.amount,
       }));
+
+      constData = normalizeChart(rawData);
 
       console.log(JSON.stringify(data));
       const maxY = Math.max.apply(

@@ -1,4 +1,4 @@
-export function getWeekOfDay(input) {
+export function getWeekOfDayWithOffset(input = moment()) {
   const firstDayOfMonth = input.clone().startOf("month");
   const firstDayOfWeek = firstDayOfMonth.clone().startOf("week");
 
@@ -6,3 +6,4 @@ export function getWeekOfDay(input) {
 
   return Math.ceil((input.date() + offset) / 7);
 }
+
