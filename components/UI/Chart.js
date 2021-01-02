@@ -23,6 +23,8 @@ import Moment from "moment";
 import { dragDisable } from "d3";
 import { getWeekOfDayWithOffset, getFirstDayOfWeek } from "../../helpers/helpers";
 import CostSnapShot from "../../models/costSnapShot";
+import dateFns from 'date-fns';
+import {format} from "date-fns/format";
 
 const height = 200;
 const width = Dimensions.get("window").width * 0.9;
@@ -157,21 +159,23 @@ export default class Chart extends Component {
       });
       console.log("width:" + JSON.stringify(width));
       console.log("height:" + JSON.stringify(height));
+
+      const yAxesSvg = { fontSize: 12, fill: "black" };
+      const verticalContentInset = { left: 10, right: 10, top: 10, bottom: 10 };
+
       return (
         <View style={{ flexDirection: "row", borderWidth: 1 }}>
           <View style={{ borderWidth: 1, flex: 1 }}>
-            {/* <YAxis
-              data={StackedAreaChart.extractDataPoints(data, XKeys)}
-              contentInset={{ top: 10, bottom: 10 }}
-              svg={{
-                fontSize: 8,
-                fill: "white",
-                stroke: "black",
-                strokeWidth: 0.1,
-                alignmentBaseline: "baseline",
-                baselineShift: "3",
-              }}
-            /> */}
+          <YAxis
+          style={{ marginHorizontal: -10, height: height }}
+            data={data}
+            yAccessor={({ item }) => item.y}
+            contentInset={verticalContentInset}
+            svg={yAxesSvg}
+            formatLabel={(value) => 
+              '' + value
+            }
+          />
           </View>
           <View style={{ flex: 9 }}>
             <Svg {...{ width, height }}>
@@ -223,13 +227,25 @@ export default class Chart extends Component {
               )}
               horizontal
             />
-            <XAxis
-              style={{ marginHorizontal: -10, height: xAxisHeight }}
-              data={data}
-              formatLabel={(value, index) => data[index].x.toDate()}
-              contentInset={{ left: 10, right: 10 }}
-              svg={axesSvg}
-            />
+             <XAxis
+                    data={ data }
+                    svg={{
+                        fill: 'black',
+                        fontSize: 8,
+                        fontWeight: 'bold',
+                        rotation: 20,
+                        originY: 30,
+                        y: 5,
+                    }}
+                    xAccessor={ ({ item }) => item.x }
+                    scale={ scaleTime }
+                    numberOfTicks={ 6 }
+                    style={{ marginHorizontal: -15, height: 20 }}
+                    contentInset={{ left: 10, right: 25 }}
+                    formatLabel={ (index) => 
+                      Moment(index).format('D')}
+                    
+                />
           </View>
         </View>
       );
