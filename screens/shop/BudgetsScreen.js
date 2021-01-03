@@ -88,22 +88,12 @@ const BudgetsScreen = (props) => {
 
   return (
     <SafeAreaView>
-      <ChartCard style={styles.card}>
-            <View>
-              <View style={styles.details}>
-                <Text style={styles.title}>{budgets.budgets[0].name}</Text>
-              </View>
-              <Chart snapshots={budgets.budgets[0].costSnapShots} />
-              <Button
-                color={Colors.primary}
-                title="Edit"
-              />
-              <Button
-                color={Colors.primary}
-                title="Delete"
-              />
-            </View>
-          </ChartCard>
+      <View style={styles.centered}>
+        <Text style={styles.title}>{budgets.budgets[0].name}</Text>
+        <Chart snapshots={budgets.budgets[0].costSnapShots} />
+        <Button style={styles.button} color={Colors.primary} title="Edit" />
+        <Button style={styles.button} color={Colors.primary} title="Delete" />
+      </View>
     </SafeAreaView>
   );
 };
@@ -139,10 +129,10 @@ BudgetsScreen.navigationOptions = (navData) => {
 };
 
 const styles = StyleSheet.create({
-  centered: { flex: 1, justifyContent: "center", alignItems: "center" },
-  card: {
-    height: 400,
-    margin: 20,
+  centered: { height: 400, justifyContent: "space-between", alignItems: "center", borderWidth: 1 },
+  
+  button: {
+    height: 50,
   },
   touchable: {
     borderRadius: 10,
@@ -152,6 +142,7 @@ const styles = StyleSheet.create({
     fontFamily: "open-sans-bold",
     fontSize: 18,
     marginVertical: 2,
+    height: 30,
   },
   details: {
     alignItems: "center",
