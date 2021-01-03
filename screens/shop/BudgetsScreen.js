@@ -78,7 +78,7 @@ const BudgetsScreen = (props) => {
     );
   }
 
-  if (!isLoading && budgets.budgets === 0) {
+  if (!isLoading && budgets.budgets.length == 0) {
     return (
       <View style={styles.centered}>
         <Text> No cost category found. Maybe start adding some!</Text>
@@ -88,41 +88,22 @@ const BudgetsScreen = (props) => {
 
   return (
     <SafeAreaView>
-      <FlatList
-        data={budgets.budgets}
-        keyExtractor={(item) => item.budgetId}
-        renderItem={(itemData) => (
-          <ChartCard style={styles.card}>
+      <ChartCard style={styles.card}>
             <View>
               <View style={styles.details}>
-                <Text style={styles.title}>{itemData.item.name}</Text>
+                <Text style={styles.title}>{budgets.budgets[0].name}</Text>
               </View>
-              <Chart snapshots={itemData.item.costSnapShots} />
+              <Chart snapshots={budgets.budgets[0].costSnapShots} />
               <Button
                 color={Colors.primary}
                 title="Edit"
-                onPress={() => {
-                  selectItemHandler(
-                    itemData.item.costCategoryId,
-                    itemData.item.name,
-                    itemData.item.totalAmount
-                  );
-                }}
               />
               <Button
                 color={Colors.primary}
                 title="Delete"
-                onPress={() => {
-                  deleteItemHandler(
-                    itemData.item.costCategoryId,
-                    itemData.item.name
-                  );
-                }}
               />
             </View>
           </ChartCard>
-        )}
-      />
     </SafeAreaView>
   );
 };

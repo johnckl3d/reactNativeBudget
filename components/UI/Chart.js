@@ -22,7 +22,7 @@ const height = 200;
 const width = Dimensions.get("window").width * 0.9;
 const tabWidth = 100;
 const verticalPadding = 5;
-const cursorRadius = 10;
+const cursorRadius = 50;
 const labelWidth = 100;
 const xAxisHeight = 30;
 const yAxesSvg = { fill: "black", fontSize: 8, fontWeight: "bold" };
@@ -43,7 +43,7 @@ export default class Chart extends Component {
 
     Moment.locale("en");
 
-    const  x = new Animated.Value(0);
+    const x = new Animated.Value(0);
 
     const rawData = this.props.snapshots.map((snapshot) => ({
       x: new Date(snapshot.dateTime),
@@ -60,6 +60,7 @@ export default class Chart extends Component {
     const scaleX = scaleTime()
       .domain([data[0].x, data[data.length - 1].x])
       .range([0, width]);
+      console.log("scaleX::" + JSON.stringify(scaleX));
     const scaleY = scaleLinear()
       .domain([0, maxY])
       .range([height - verticalPadding, verticalPadding]);
@@ -95,12 +96,13 @@ export default class Chart extends Component {
   }
 
   moveCursor(value) {
-    console.log("movecursor");
     const { x, y } = this.state.properties.getPointAtLength(
       this.state.lineLength - value
     );
 
     if (this.cursor && this.cursor.current) {
+      console.log("movecursor::" + x);
+      console.log("movecursor::" + y);
       this.cursor.current.setNativeProps({
         top: y - cursorRadius,
         left: x - cursorRadius,
@@ -115,6 +117,10 @@ export default class Chart extends Component {
   componentDidMount() {
     this.state.x.addListener(({ value }) => this.moveCursor(value));
     this.moveCursor(0);
+  }
+
+  componentWillUnmount() {
+    //BackHandler.removeEventListener('backTapped', this.backButtonTap);
   }
 
   normalizeChart = (rawData) => {
@@ -135,19 +141,20 @@ export default class Chart extends Component {
       arr[week - 1].x = firstDayOfWeek;
     });
     return arr;
-  }
+  };
 
   render() {
     if (!this.props) {
       return <Text>Loading....</Text>;
     } else {
-      //console.log("data:" + JSON.stringify(data));
+      const { x } = this.state.x;
       const translateX = this.state.translateX;
+      const lineLength = this.state.lineLength;
       console.log("width:" + JSON.stringify(width));
       console.log("height:" + JSON.stringify(height));
 
       return (
-        <View style={{ flexDirection: "row" }}>
+        <View style={{ flexDirection: "row", borderWidth: 5 }}>
           <View style={{ flex: 1 }}>
             <YAxis
               style={{ marginHorizontal: -10, height: height }}
@@ -186,29 +193,27 @@ export default class Chart extends Component {
                 />
                 <View ref={this.cursor} style={styles.cursor} />
               </Svg>
-              <Animated.View
-                style={[styles.label, { transform: [{ translateX }] }]}
-              >
-                <TextInput ref={this.label} />
-              </Animated.View>
-              {/* <Animated.ScrollView
-                style={StyleSheet.absoluteFill}
-                contentContainerStyle={{ width: lineLength * 2 }}
-                showsHorizontalScrollIndicator={false}
-                scrollEventThrottle={16}
-                bounces={false}
-                onScroll={Animated.event(
-                  [
-                    {
-                      nativeEvent: {
-                        contentOffset: { x },
-                      },
-                    },
-                  ],
-                  { useNativeDriver: true }
-                )}
-                horizontal
-              /> */}
+              <Animated.View style={[styles.label, { transform: [{ translateX }] }]}>
+            <TextInput ref={this.label} />
+          </Animated.View>
+          <Animated.ScrollView
+            style={StyleSheet.absoluteFill}
+            contentContainerStyle={{ width: lineLength * 2 }}
+            showsHorizontalScrollIndicator={false}
+            scrollEventThrottle={16}
+            bounces={false}
+            onScroll={Animated.event(
+              [
+                {
+                  nativeEvent: {
+                    contentOffset: { x },
+                  },
+                },
+              ],
+              { useNativeDriver: true },
+            )}
+            horizontal
+          />
             </View>
             <XAxis
               data={this.state.data}
