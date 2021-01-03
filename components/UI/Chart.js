@@ -60,7 +60,7 @@ export default class Chart extends Component {
     const scaleX = scaleTime()
       .domain([data[0].x, data[data.length - 1].x])
       .range([0, width]);
-      console.log("scaleX::" + JSON.stringify(scaleX));
+    console.log("scaleX::" + JSON.stringify(scaleX));
     const scaleY = scaleLinear()
       .domain([0, maxY])
       .range([height - verticalPadding, verticalPadding]);
@@ -74,12 +74,6 @@ export default class Chart extends Component {
 
     const lineLength = properties.getTotalLength();
 
-    const translateX = x.interpolate({
-      inputRange: [0, lineLength],
-      outputRange: [width - labelWidth, 0],
-      extrapolate: "clamp",
-    });
-
     this.state = {
       x: new Animated.Value(0),
       data: data,
@@ -89,13 +83,14 @@ export default class Chart extends Component {
       line: line,
       maxY: maxY,
       properties: properties,
-      translateX: translateX,
+      ready: false
     };
 
     console.log("state:" + JSON.stringify(this.state));
   }
 
   moveCursor(value) {
+    console.log("movecursor::");
     const { x, y } = this.state.properties.getPointAtLength(
       this.state.lineLength - value
     );
@@ -115,8 +110,10 @@ export default class Chart extends Component {
   }
 
   componentDidMount() {
-    this.state.x.addListener(({ value }) => this.moveCursor(value));
-    this.moveCursor(0);
+    this.setState({ ready: true }, () => {
+      this.state.x.addListener(({ value }) => this.moveCursor(value));
+      this.moveCursor(0);
+    });
   }
 
   componentWillUnmount() {
@@ -144,11 +141,20 @@ export default class Chart extends Component {
   };
 
   render() {
+    if (!this.state.ready) {
+      return null;
+    }
+
     if (!this.props) {
       return <Text>Loading....</Text>;
     } else {
-      const { x } = this.state.x;
-      const translateX = this.state.translateX;
+      const { ready, x } = this.state;
+
+      const translateX = x.interpolate({
+        inputRange: [0, width],
+        outputRange: [width - cursorRadius * 2, 0],
+        extrapolate: "clamp",
+      });
       const lineLength = this.state.lineLength;
       console.log("width:" + JSON.stringify(width));
       console.log("height:" + JSON.stringify(height));
@@ -193,27 +199,29 @@ export default class Chart extends Component {
                 />
                 <View ref={this.cursor} style={styles.cursor} />
               </Svg>
-              <Animated.View style={[styles.label, { transform: [{ translateX }] }]}>
-            <TextInput ref={this.label} />
-          </Animated.View>
-          <Animated.ScrollView
-            style={StyleSheet.absoluteFill}
-            contentContainerStyle={{ width: lineLength * 2 }}
-            showsHorizontalScrollIndicator={false}
-            scrollEventThrottle={16}
-            bounces={false}
-            onScroll={Animated.event(
-              [
-                {
-                  nativeEvent: {
-                    contentOffset: { x },
-                  },
-                },
-              ],
-              { useNativeDriver: true },
-            )}
-            horizontal
-          />
+              <Animated.View
+                style={[styles.label, { transform: [{ translateX }] }]}
+              >
+                <TextInput ref={this.label} />
+              </Animated.View>
+              <Animated.ScrollView
+                style={StyleSheet.absoluteFill}
+                contentContainerStyle={{ width: lineLength * 2 }}
+                showsHorizontalScrollIndicator={false}
+                scrollEventThrottle={16}
+                bounces={false}
+                onScroll={Animated.event(
+                  [
+                    {
+                      nativeEvent: {
+                        contentOffset: { x },
+                      },
+                    },
+                  ],
+                  { useNativeDriver: true }
+                )}
+                horizontal
+              />
             </View>
             <XAxis
               data={this.state.data}
