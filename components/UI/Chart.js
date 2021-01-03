@@ -24,9 +24,9 @@ const tabWidth = 100;
 const verticalPadding = 5;
 const cursorRadius = 10;
 const labelWidth = 100;
-const axesSvg = { fontSize: 10, fill: "grey" };
-const verticalContentInset = { top: 10, bottom: 10 };
 const xAxisHeight = 30;
+const yAxesSvg = { fill: "black", fontSize: 8, fontWeight: "bold" };
+const verticalContentInset = { left: 10, right: 10, top: 10, bottom: 10 };
 
 const d3 = {
   shape,
@@ -35,41 +35,89 @@ const d3 = {
 const scaleLabel = scaleQuantile().domain([0, 300]).range([0, 200, 300]);
 
 export default class Chart extends Component {
-  //const [state]
   constructor(props) {
     super(props);
-
-    this.state = {
-      x: new Animated.Value(0),
-    };
 
     this.cursor = React.createRef();
     this.label = React.createRef();
 
     Moment.locale("en");
+
+    const  x = new Animated.Value(0);
+
+    const rawData = this.props.snapshots.map((snapshot) => ({
+      x: new Date(snapshot.dateTime),
+      y: snapshot.amount,
+    }));
+    const data = this.normalizeChart(rawData);
+    console.log("data::" + JSON.stringify(data));
+    const maxY = Math.max.apply(
+      Math,
+      data.map(function (o) {
+        return o.y;
+      })
+    );
+    const scaleX = scaleTime()
+      .domain([data[0].x, data[data.length - 1].x])
+      .range([0, width]);
+    const scaleY = scaleLinear()
+      .domain([0, maxY])
+      .range([height - verticalPadding, verticalPadding]);
+
+    const line = d3.shape
+      .line()
+      .x((d) => scaleX(d.x))
+      .y((d) => scaleY(d.y))
+      .curve(d3.shape.curveBasis)(data);
+    const properties = path.svgPathProperties(line);
+
+    const lineLength = properties.getTotalLength();
+
+    const translateX = x.interpolate({
+      inputRange: [0, lineLength],
+      outputRange: [width - labelWidth, 0],
+      extrapolate: "clamp",
+    });
+
+    this.state = {
+      x: new Animated.Value(0),
+      data: data,
+      lineLength: lineLength,
+      scaleX: scaleX,
+      scaleY: scaleY,
+      line: line,
+      maxY: maxY,
+      properties: properties,
+      translateX: translateX,
+    };
+
+    console.log("state:" + JSON.stringify(this.state));
   }
 
   moveCursor(value) {
-    // const { x, y } = properties.getPointAtLength(lineLength - value);
-    // if (this.cursor && this.cursor.current) {
-    //   this.cursor.current.setNativeProps({
-    //     top: y - cursorRadius,
-    //     left: x - cursorRadius,
-    //   });
-    // }
-    // const label = scaleLabel(scaleY.invert(y));
-    // if (this.label && this.label.current) {
-    //   this.label.current.setNativeProps({ text: `${label} CHF` });
-    // }
+    console.log("movecursor");
+    const { x, y } = this.state.properties.getPointAtLength(
+      this.state.lineLength - value
+    );
+
+    if (this.cursor && this.cursor.current) {
+      this.cursor.current.setNativeProps({
+        top: y - cursorRadius,
+        left: x - cursorRadius,
+      });
+    }
+    const label = scaleLabel(this.state.scaleY.invert(y));
+    if (this.label && this.label.current) {
+      this.label.current.setNativeProps({ text: `${label}` });
+    }
   }
 
   componentDidMount() {
-    // this.state.x.addListener(({ value }) => this.moveCursor(value));
-    // this.moveCursor(0);
+    this.state.x.addListener(({ value }) => this.moveCursor(value));
+    this.moveCursor(0);
   }
 
-  normalizeChart(rawData) {
-    console.log("raw:" + JSON.stringify(rawData));
+  normalizeChart = (rawData) => {
     var arr = [
       { x: Moment(), y: 0 },
       { x: Moment(), y: 0 },
@@ -90,61 +138,20 @@ export default class Chart extends Component {
   }
 
   render() {
-    const XKeys = ["week 1", "week 2", "week 3", "week 4", "week 5"];
-
     if (!this.props) {
       return <Text>Loading....</Text>;
     } else {
-      const rawData = this.props.snapshots.map((snapshot) => ({
-        x: new Date(snapshot.dateTime),
-        y: snapshot.amount,
-      }));
-
-      const data = this.normalizeChart(rawData);
-
-      console.log("data:" + JSON.stringify(data));
-      const maxY = Math.max.apply(
-        Math,
-        data.map(function (o) {
-          return o.y;
-        })
-      );
-
-      const scaleX = scaleTime()
-        .domain([data[0].x, data[data.length - 1].x])
-        .range([0, width]);
-      const scaleY = scaleLinear()
-        .domain([0, maxY])
-        .range([height - verticalPadding, verticalPadding]);
-
-      const line = d3.shape
-        .line()
-        .x((d) => scaleX(d.x))
-        .y((d) => scaleY(d.y))
-        .curve(d3.shape.curveBasis)(data);
-      const properties = path.svgPathProperties(line);
-
-      const lineLength = properties.getTotalLength();
-
-      const { x } = this.state;
-      const translateX = x.interpolate({
-        inputRange: [0, lineLength],
-        outputRange: [width - labelWidth, 0],
-        extrapolate: "clamp",
-      });
+      //console.log("data:" + JSON.stringify(data));
+      const translateX = this.state.translateX;
       console.log("width:" + JSON.stringify(width));
       console.log("height:" + JSON.stringify(height));
-
-      const yAxesSvg = { fill: "black", fontSize: 8, fontWeight: "bold" };
-
-      const verticalContentInset = { left: 10, right: 10, top: 10, bottom: 10 };
 
       return (
         <View style={{ flexDirection: "row" }}>
           <View style={{ flex: 1 }}>
             <YAxis
               style={{ marginHorizontal: -10, height: height }}
-              data={data}
+              data={this.state.data}
               yAccessor={({ item }) => item.y}
               contentInset={verticalContentInset}
               svg={yAxesSvg}
@@ -168,13 +175,13 @@ export default class Chart extends Component {
                   </LinearGradient>
                 </Defs>
                 <Path
-                  d={line}
+                  d={this.state.line}
                   fill="transparent"
                   stroke="#367be2"
                   strokeWidth={5}
                 />
                 <Path
-                  d={`${line} L ${width} ${height} L 0 ${height}`}
+                  d={`${this.state.line} L ${width} ${height} L 0 ${height}`}
                   fill="url(#gradient)"
                 />
                 <View ref={this.cursor} style={styles.cursor} />
@@ -204,7 +211,7 @@ export default class Chart extends Component {
               /> */}
             </View>
             <XAxis
-              data={data}
+              data={this.state.data}
               svg={{
                 fill: "black",
                 fontSize: 8,
