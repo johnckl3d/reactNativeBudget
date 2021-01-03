@@ -1,33 +1,22 @@
+import { scaleLinear, scaleQuantile, scaleTime } from "d3-scale";
+import * as shape from "d3-shape";
+import Moment from "moment";
 import React, { Component } from "react";
 import {
-  StyleSheet,
-  View,
-  SafeAreaView,
-  Dimensions,
   Animated,
-  TextInput,
+  Dimensions,
+  StyleSheet,
   Text,
+  TextInput,
+  View,
 } from "react-native";
-import Svg, { Path, Defs, LinearGradient, Stop } from "react-native-svg";
-import {
-  Grid,
-  LineChart,
-  XAxis,
-  YAxis,
-  StackedAreaChart,
-} from "react-native-svg-charts";
+import Svg, { Defs, LinearGradient, Path, Stop } from "react-native-svg";
+import { XAxis, YAxis } from "react-native-svg-charts";
 import * as path from "svg-path-properties";
-import * as shape from "d3-shape";
-import { scaleTime, scaleLinear, scaleQuantile } from "d3-scale";
-import Moment from "moment";
-import { dragDisable } from "d3";
 import {
-  getWeekOfDayWithOffset,
   getFirstDayOfWeek,
+  getWeekOfDayWithOffset,
 } from "../../helpers/helpers";
-import CostSnapShot from "../../models/costSnapShot";
-import dateFns from "date-fns";
-import { format } from "date-fns/format";
 
 const height = 200;
 const width = Dimensions.get("window").width * 0.9;
@@ -45,17 +34,8 @@ const d3 = {
 
 const scaleLabel = scaleQuantile().domain([0, 300]).range([0, 200, 300]);
 
-//console.log("Chart2::" + JSON.stringify(this.data));
-// const data = [
-//   { x: new Date(2018, 9, 1), y: 0 },
-//   { x: new Date(2018, 9, 16), y: 0 },
-//   { x: new Date(2018, 9, 17), y: 200 },
-//   { x: new Date(2018, 10, 1), y: 200 },
-//   { x: new Date(2018, 10, 2), y: 300 },
-//   { x: new Date(2018, 10, 5), y: 300 },
-// ];
-
 export default class Chart extends Component {
+  //const [state]
   constructor(props) {
     super(props);
 
@@ -106,17 +86,6 @@ export default class Chart extends Component {
       const firstDayOfWeek = getFirstDayOfWeek(Moment(input.x));
       arr[week - 1].x = firstDayOfWeek;
     });
-
-    // const arrXY = arr.map((snapshot) => ({
-    //   x: new Date(snapshot.dateTime),
-    //   y: snapshot.amount,
-    // }));
-    // const arrXY = [];
-    // for (var i = 0; i < arr.length; i++) {
-    //   console.log("here");
-    //   arrXY.push({ x: Moment.week(arr[i]), y: arr[i] });
-    // }
-    console.log("added:" + JSON.stringify(arr));
     return arr;
   }
 
@@ -130,9 +99,8 @@ export default class Chart extends Component {
         x: new Date(snapshot.dateTime),
         y: snapshot.amount,
       }));
-      //const data = rawData;
+
       const data = this.normalizeChart(rawData);
-      //constData = normalizeChartY(rawData);
 
       console.log("data:" + JSON.stringify(data));
       const maxY = Math.max.apply(
