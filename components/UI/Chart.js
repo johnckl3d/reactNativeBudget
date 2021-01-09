@@ -1,7 +1,7 @@
 import { scaleLinear, scaleQuantile, scaleTime } from "d3-scale";
 import * as shape from "d3-shape";
 import Moment from "moment";
-import React, { Component } from "react";
+import React, { useEffect,Component } from "react";
 import {
   Animated,
   Dimensions,
@@ -87,6 +87,8 @@ export default class Chart extends Component {
     };
   }
 
+  
+
   moveCursor(value) {
     const { x, y } = this.state.properties.getPointAtLength(
       this.state.lineLength - value
@@ -105,6 +107,7 @@ export default class Chart extends Component {
   }
 
   componentDidMount() {
+    console.log("mount");
     this.setState({ ready: true }, () => {
       this.state.x.addListener(({ value }) => this.moveCursor(value));
       this.moveCursor(0);
@@ -112,8 +115,10 @@ export default class Chart extends Component {
   }
 
   componentWillUnmount() {
-    //BackHandler.removeEventListener('backTapped', this.backButtonTap);
+    console.log("unmount");
+    this.state.x.removeAllListeners();
   }
+
 
   normalizeChart = (rawData) => {
     var arr = [
@@ -136,9 +141,10 @@ export default class Chart extends Component {
   };
 
   render() {
+
     const x = this.state.x;
     if (!this.state.ready) {
-      return null;
+      return <View/>;
     }
     const translateX = x.interpolate({
       inputRange: [0, this.state.lineLength],

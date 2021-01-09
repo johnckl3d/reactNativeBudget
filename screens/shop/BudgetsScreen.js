@@ -28,6 +28,7 @@ const BudgetsScreen = (props) => {
   let TouchableCmp = TouchableOpacity;
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
+  const [isFocus, setFocus] = useState(true);
   const budgets = useSelector((state) => state.budgets);
   const dispatch = useDispatch();
 
@@ -56,7 +57,8 @@ const BudgetsScreen = (props) => {
 
   const selectItemHandler = (costCategoryId, name, totalAmount) => {
     console.log("selectItemHandler");
-    props.navigation.navigate("costCategories", {
+    setFocus(false);
+    props.navigation.navigate("CostCategory", {
       costCategoryId: costCategoryId,
       name: name,
       totalAmount: totalAmount,
@@ -118,9 +120,13 @@ const BudgetsScreen = (props) => {
   if (!isLoading && budgets.budgets.length == 0) {
     return (
       <View style={styles.centered}>
-        <Text> No cost category found. Maybe start adding some!</Text>
+        <Text> No budgets found. Maybe start adding some!</Text>
       </View>
     );
+  }
+
+  if(!isFocus){
+    return<View/>;
   }
 
   return (

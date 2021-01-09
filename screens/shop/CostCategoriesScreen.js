@@ -125,7 +125,6 @@ const CostCategoriesScreen = (props) => {
 
   return (
     <SafeAreaView>
-      <Chart/>
       <FlatList
         data={costCategories.costCategories}
         keyExtractor={(item) => item.costCategoryId}
