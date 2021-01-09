@@ -23,7 +23,6 @@ import * as productsActions from "../../store/actions/products";
 import * as costCategoriesActions from "../../store/actions/costCategories";
 import * as budgetsActions from "../../store/actions/budgets";
 import Chart from "../../components/UI/Chart";
-import ChartCard from "../../components/UI/ChartCard";
 
 const BudgetsScreen = (props) => {
   let TouchableCmp = TouchableOpacity;
@@ -88,7 +87,7 @@ const BudgetsScreen = (props) => {
 
   return (
     <SafeAreaView>
-      <View style={styles.centered}>
+      <View style={styles.mainContent}>
         <Text style={styles.title}>{budgets.budgets[0].name}</Text>
         <Chart snapshots={budgets.budgets[0].costSnapShots} />
         <Button style={styles.button} color={Colors.primary} title="Edit" />
@@ -129,8 +128,8 @@ BudgetsScreen.navigationOptions = (navData) => {
 };
 
 const styles = StyleSheet.create({
-  centered: { height: 400, justifyContent: "space-between", alignItems: "center", borderWidth: 1 },
-  
+  centered: {justifyContent: "center", alignItems: "center", flex: 1},
+  mainContent: { height: 600, justifyContent: "space-between", alignItems: "center"},
   button: {
     height: 50,
   },

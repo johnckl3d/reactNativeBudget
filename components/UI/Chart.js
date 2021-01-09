@@ -19,9 +19,8 @@ import {
   getWeekOfDayWithOffset,
 } from "../../helpers/helpers";
 
-const height = 200;
+const height = 300;
 const width = Dimensions.get("window").width * 0.9;
-const tabWidth = 100;
 const verticalPadding = 5;
 const cursorRadius = 10;
 const labelWidth = 100;
@@ -70,7 +69,7 @@ export default class Chart extends Component {
       .line()
       .x((d) => scaleX(d.x))
       .y((d) => scaleY(d.y))
-      .curve(d3.shape.curveBasis)(data);
+      .curve(d3.shape.curveMonotoneX)(data);
     const properties = path.svgPathProperties(line);
 
     const lineLength = properties.getTotalLength();
@@ -149,49 +148,67 @@ export default class Chart extends Component {
     return (
       <SafeAreaView>
         <View style={styles.container}>
-          <Svg {...{ width, height }}>
-            <Defs>
-              <LinearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="gradient">
-                <Stop stopColor="#CDE3F8" offset="0%" />
-                <Stop stopColor="#eef6fd" offset="80%" />
-                <Stop stopColor="#FEFFFF" offset="100%" />
-              </LinearGradient>
-            </Defs>
-            <Path
-              d={this.state.line}
-              fill="transparent"
-              stroke="#367be2"
-              strokeWidth={5}
-            />
-            <Path
-              d={`${this.state.line} L ${width} ${height} L 0 ${height}`}
-              fill="url(#gradient)"
-            />
-            <View ref={this.cursor} style={styles.cursor} />
-          </Svg>
-          <Animated.View
-            style={[styles.label, { transform: [{ translateX }] }]}
-          >
-            <TextInput ref={this.label} />
-          </Animated.View>
-          <Animated.ScrollView
-            style={StyleSheet.absoluteFill}
-            contentContainerStyle={{ width: this.state.lineLength * 2 }}
-            showsHorizontalScrollIndicator={false}
-            scrollEventThrottle={16}
-            bounces={false}
-            onScroll={Animated.event(
-              [
-                {
-                  nativeEvent: {
-                    contentOffset: { x },
+          <View style={{ flexDirection: "row" }}>
+            <View style={{ width: 1, left: -10 }}>
+              <YAxis
+                style={{ marginHorizontal: -10, height: height }}
+                data={this.state.data}
+                yAccessor={({ item }) => item.y}
+                contentInset={verticalContentInset}
+                svg={yAxesSvg}
+                formatLabel={(value) => "" + value}
+              />
+            </View>
+            <View style={{flex: 9, borderBottomWidth: 1, borderLeftWidth: 1 }}>
+            <Svg {...{ width, height}}>
+              <Defs>
+                <LinearGradient
+                  x1="50%"
+                  y1="0%"
+                  x2="50%"
+                  y2="100%"
+                  id="gradient"
+                >
+                  <Stop stopColor="#CDE3F8" offset="0%" />
+                  <Stop stopColor="#eef6fd" offset="80%" />
+                  <Stop stopColor="#FEFFFF" offset="100%" />
+                </LinearGradient>
+              </Defs>
+              <Path
+                d={this.state.line}
+                fill="transparent"
+                stroke="#367be2"
+                strokeWidth={5}
+              />
+              <Path
+                d={`${this.state.line} L ${width} ${height} L 0 ${height}`}
+                fill="url(#gradient)"
+              />
+              <View ref={this.cursor} style={styles.cursor} />
+            </Svg>
+            </View>
+            <Animated.View style={[styles.label]}>
+              <TextInput ref={this.label} />
+            </Animated.View>
+            <Animated.ScrollView
+              style={StyleSheet.absoluteFill}
+              contentContainerStyle={{ width: this.state.lineLength * 2 }}
+              showsHorizontalScrollIndicator={false}
+              scrollEventThrottle={16}
+              bounces={false}
+              onScroll={Animated.event(
+                [
+                  {
+                    nativeEvent: {
+                      contentOffset: { x },
+                    },
                   },
-                },
-              ],
-              { useNativeDriver: true }
-            )}
-            horizontal
-          />
+                ],
+                { useNativeDriver: true }
+              )}
+              horizontal
+            />
+          </View>
           <XAxis
             data={this.state.data}
             svg={{
@@ -217,7 +234,6 @@ export default class Chart extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    borderWidth: 1,
     height,
     width,
   },
@@ -233,5 +249,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     backgroundColor: "lightgray",
     width: labelWidth,
+    right: 0,
   },
 });
