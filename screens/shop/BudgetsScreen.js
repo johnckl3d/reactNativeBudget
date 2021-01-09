@@ -54,6 +54,44 @@ const BudgetsScreen = (props) => {
     };
   }, [loadBudgets]);
 
+  const selectItemHandler = (costCategoryId, name, totalAmount) => {
+    console.log("selectItemHandler");
+    props.navigation.navigate("costCategories", {
+      costCategoryId: costCategoryId,
+      name: name,
+      totalAmount: totalAmount,
+    });
+  };
+
+  const deleteItemHandler = (costCategoryId, name) => {
+    Alert.alert("Are you sure?", `Do you really want to delete ${name}?`, [
+      { text: "No", style: "default" },
+      {
+        text: "Yes",
+        style: "destructive",
+        onPress: () => {
+          deleteProducts(costCategoryId);
+        },
+      },
+    ]);
+  };
+
+  const deleteProducts = useCallback(
+    async (costCategoryId) => {
+      setError(null);
+      setIsLoading(true);
+      try {
+        await dispatch(costCategoriesActions.deleteProduct(costCategoryId));
+      } catch (err) {
+        setError(err.message);
+      }
+
+      setIsLoading(false);
+      loadCostCategories();
+    },
+    [dispatch, setIsLoading, setError]
+  );
+
   if (error) {
     return (
       <View style={styles.centered}>
@@ -87,12 +125,33 @@ const BudgetsScreen = (props) => {
 
   return (
     <SafeAreaView>
-      <View style={styles.mainContent}>
-        <Text style={styles.title}>{budgets.budgets[0].name}</Text>
-        <Chart snapshots={budgets.budgets[0].costSnapShots} />
-        <Button style={styles.button} color={Colors.primary} title="Edit" />
-        <Button style={styles.button} color={Colors.primary} title="Delete" />
-      </View>
+      <FlatList
+        data={budgets.budgets}
+        keyExtractor={(item) => item.budgetId}
+        renderItem={(itemData) => (
+          <View style={styles.mainContent}>
+            <Text style={styles.title}>{itemData.item.name}</Text>
+            <Chart snapshots={itemData.item.costSnapShots} />
+            <Button
+              style={styles.button}
+              color={Colors.primary}
+              title="Edit"
+              onPress={() => {
+                selectItemHandler(
+                  itemData.item.costCategoryId,
+                  itemData.item.name,
+                  itemData.item.totalAmount
+                );
+              }}
+            />
+            <Button
+              style={styles.button}
+              color={Colors.primary}
+              title="Delete"
+            />
+          </View>
+        )}
+      />
     </SafeAreaView>
   );
 };
@@ -128,8 +187,12 @@ BudgetsScreen.navigationOptions = (navData) => {
 };
 
 const styles = StyleSheet.create({
-  centered: {justifyContent: "center", alignItems: "center", flex: 1},
-  mainContent: { height: 600, justifyContent: "space-between", alignItems: "center"},
+  centered: { justifyContent: "center", alignItems: "center", flex: 1 },
+  mainContent: {
+    height: 600,
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   button: {
     height: 50,
   },
