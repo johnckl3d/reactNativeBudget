@@ -40,8 +40,8 @@ const BudgetsScreen = (props) => {
     } catch (err) {
       setError(err.message);
     }
-
     setIsLoading(false);
+    setFocus(true);
   }, [dispatch, setIsLoading, setError]);
 
   useEffect(() => {
@@ -56,7 +56,6 @@ const BudgetsScreen = (props) => {
   }, [loadBudgets]);
 
   const selectItemHandler = (costCategoryId, name, totalAmount) => {
-    console.log("selectItemHandler");
     setFocus(false);
     props.navigation.navigate("CostCategory", {
       costCategoryId: costCategoryId,
@@ -94,6 +93,7 @@ const BudgetsScreen = (props) => {
     [dispatch, setIsLoading, setError]
   );
 
+  
   if (error) {
     return (
       <View style={styles.centered}>
@@ -106,6 +106,7 @@ const BudgetsScreen = (props) => {
       </View>
     );
   }
+  
   if (isLoading) {
     return (
       <View style={styles.centered}>
@@ -116,7 +117,7 @@ const BudgetsScreen = (props) => {
       </View>
     );
   }
-
+  console.log("budgetscreen::load::isFocus::" + isFocus);
   if (!isLoading && budgets.budgets.length == 0) {
     return (
       <View style={styles.centered}>
@@ -128,7 +129,6 @@ const BudgetsScreen = (props) => {
   if(!isFocus){
     return<View/>;
   }
-
   return (
     <SafeAreaView>
       <FlatList

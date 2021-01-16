@@ -176,9 +176,10 @@ CostCategoriesScreen.navigationOptions = (navData) => {
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
           title="Menu"
-          iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
+          iconName={Platform.OS === "android" ? "arrow-dropleft" : "ios-arrow-dropleft"}
+          
           onPress={() => {
-            navData.navigation.toggleDrawer();
+            navData.navigation.goBack();
           }}
         />
       </HeaderButtons>

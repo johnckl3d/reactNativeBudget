@@ -51,7 +51,7 @@ export default class Chart extends Component {
       y: snapshot.amount,
     }));
     //const data = this.normalizeChart(rawData);
-    console.log("data::" + JSON.stringify(data));
+    console.log("Chart::data::" + JSON.stringify(data));
     const maxY = Math.max.apply(
       Math,
       data.map(function (o) {
