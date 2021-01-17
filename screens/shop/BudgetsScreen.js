@@ -23,6 +23,7 @@ import * as productsActions from "../../store/actions/products";
 import * as costCategoriesActions from "../../store/actions/costCategories";
 import * as budgetsActions from "../../store/actions/budgets";
 import Chart from "../../components/UI/Chart";
+import BudgetCarousel from "../../components/UI/BudgetCarousel";
 
 const BudgetsScreen = (props) => {
   let TouchableCmp = TouchableOpacity;
@@ -117,7 +118,7 @@ const BudgetsScreen = (props) => {
       </View>
     );
   }
-  console.log("budgetscreen::load::isFocus::" + isFocus);
+  
   if (!isLoading && budgets.budgets.length == 0) {
     return (
       <View style={styles.centered}>
@@ -131,13 +132,14 @@ const BudgetsScreen = (props) => {
   }
   return (
     <SafeAreaView>
-      <FlatList
+       <BudgetCarousel data={budgets.budgets} />
+      {/* <FlatList
         data={budgets.budgets}
         keyExtractor={(item) => item.budgetId}
         renderItem={(itemData) => (
           <View style={styles.mainContent}>
             <Text style={styles.title}>{itemData.item.name}</Text>
-            <Chart snapshots={itemData.item.costSnapShots} />
+           <Chart snapshots={itemData.item.costSnapShots} /> 
             <Button
               style={styles.button}
               color={Colors.primary}
@@ -157,7 +159,7 @@ const BudgetsScreen = (props) => {
             />
           </View>
         )}
-      />
+      /> */}
     </SafeAreaView>
   );
 };
