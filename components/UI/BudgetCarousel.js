@@ -12,6 +12,7 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 import Colors from "../../constants/Colors";
 import Chart from "../../components/UI/Chart";
+import CustomButton from "../../components/UI/CustomButton";
 
 const DEVICE_WIDTH = Dimensions.get("window").width;
 
@@ -26,12 +27,14 @@ class BudgetCarousel extends React.Component {
   }
 
   setSelectedIndex = (event) => {
-    console.log("setSelectedIndex::selectedIndex1::" + selectedIndex);
+    
     // width of the viewSize
     const viewSize = event.nativeEvent.layoutMeasurement.width;
+    console.log("setSelectedIndex::viewSize::" + viewSize);
 
     // get current position of the scrollview
     const contentOffset = event.nativeEvent.contentOffset.x;
+    console.log("setSelectedIndex::contentOffset::" + contentOffset);
 
     const selectedIndex = Math.floor(contentOffset / viewSize);
 
@@ -42,44 +45,42 @@ class BudgetCarousel extends React.Component {
   componentDidMount = () => {
     const { data } = this.props;
     const { selectedIndex } = this.state;
-    setInterval(() => {
-      console.log("componentDidMount::setInterval::data.length::" + data.length);
-      this.setState(
-        (prev) => ({
-          selectedIndex:
-            prev.selectedIndex === data.length - 1
-              ? 0
-              : prev.selectedIndex + 1,
-        }),
-        () => {
-          this.scrollRef.current.scrollTo({
-            animated: true,
-            y: 0,
-            x: DEVICE_WIDTH * this.state.selectedIndex,
-          });
-        }
-      );
-    }, 10000);
+    // setInterval(() => {
+    //   console.log(
+    //     "componentDidMount::setInterval::data.length::" + data.length
+    //   );
+    //   this.setState(
+    //     (prev) => ({
+    //       selectedIndex:
+    //         prev.selectedIndex === data.length - 1 ? 0 : prev.selectedIndex + 1,
+    //     }),
+    //     () => {
+    //       this.scrollRef.current.scrollTo({
+    //         animated: true,
+    //         y: 0,
+    //         x: DEVICE_WIDTH * this.state.selectedIndex,
+    //       });
+    //     }
+    //   );
+    // }, 10000);
   };
 
   render() {
-   
-
     const { data } = this.props;
 
     console.log("data::" + JSON.stringify(data));
     const { selectedIndex } = this.state;
-    console.log("render::data[selectedIndex].budgetId::" + data[selectedIndex].budgetId);
-    if (!data) {
-      return (
-        <View>
-        </View>
-      );
-    }
-    return (
+    console.log(
+      "render::data[selectedIndex].budgetId::" + data[selectedIndex].budgetId
+    );
+
+    return !data ? (
+      <View></View>
+    ) : (
       <View style={{ height: "100%", width: "100%" }}>
         <ScrollView
-        key={data[selectedIndex].budgetId}
+          horizontal
+          key={data[selectedIndex].budgetId}
           pagingEnabled
           onMomentumScrollEnd={this.setSelectedIndex}
           ref={this.scrollRef}
@@ -91,9 +92,16 @@ class BudgetCarousel extends React.Component {
             </View>
           ))}
         </ScrollView>
-
-        <Button style={styles.button} color={Colors.primary} title="Edit" />
-        <Button style={styles.button} color={Colors.primary} title="Delete" />
+        <View style={styles.navigationDiv}>
+        <CustomButton
+          iconName={Platform.OS === "android" ? "arrow-dropleft" : "ios-arrow-dropleft"}
+        />
+        <CustomButton
+          iconName={Platform.OS === "android" ? "arrow-dropright" : "ios-arrow-dropright"}
+        />
+         </View>
+        {/* <Button style={styles.button} color={Colors.primary} title="Edit" />
+        <Button style={styles.button} color={Colors.primary} title="Delete" /> */}
 
         {/* <View style={styles.circleDiv}>
           {data.map((item, i) => (
@@ -112,7 +120,10 @@ class BudgetCarousel extends React.Component {
 const styles = StyleSheet.create({
   centered: { justifyContent: "center", alignItems: "center", flex: 1 },
   mainContent: {
-    height: 600,
+    borderWidth: 1,
+    borderColor: "red",
+    height: "90%", 
+    width: "90%",
     justifyContent: "space-between",
     alignItems: "center",
   },
@@ -134,15 +145,11 @@ const styles = StyleSheet.create({
     height: "17%",
     padding: 10,
   },
-  circleDiv: {
-    position: "absolute",
-    bottom: 15,
-    height: 10,
+  navigationDiv: {
     width: "100%",
-    display: "flex",
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "stretch"
   },
   whiteCircle: {
     width: 6,

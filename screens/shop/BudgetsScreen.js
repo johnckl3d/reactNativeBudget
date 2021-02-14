@@ -96,6 +96,7 @@ const BudgetsScreen = (props) => {
 
   
   if (error) {
+    console.log(error);
     return (
       <View style={styles.centered}>
         <Text> An error occured!</Text>
@@ -130,9 +131,14 @@ const BudgetsScreen = (props) => {
   if(!isFocus){
     return<View/>;
   }
+
+  console.log("budgets::budgets::" + JSON.stringify(budgets.budgets));
   return (
     <SafeAreaView>
-       <BudgetCarousel data={budgets.budgets} />
+      <View style={styles.mainContent}>
+      <BudgetCarousel data={budgets.budgets} />
+      </View>
+      
       {/* <FlatList
         data={budgets.budgets}
         keyExtractor={(item) => item.budgetId}
@@ -197,7 +203,8 @@ BudgetsScreen.navigationOptions = (navData) => {
 const styles = StyleSheet.create({
   centered: { justifyContent: "center", alignItems: "center", flex: 1 },
   mainContent: {
-    height: 600,
+    margin: 10,
+    borderWidth: 1,
     justifyContent: "space-between",
     alignItems: "center",
   },
