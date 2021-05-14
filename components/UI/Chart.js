@@ -20,7 +20,7 @@ import {
 } from "../../helpers/helpers";
 
 const height = 300;
-const width = Dimensions.get("window").width * 0.9;
+const width = Dimensions.get("window").width- 50;
 const verticalPadding = 5;
 const cursorRadius = 10;
 const labelWidth = 100;
@@ -155,7 +155,7 @@ export default class Chart extends Component {
       <SafeAreaView>
         <View style={styles.container}>
           <View style={{ flexDirection: "row" }}>
-            <View style={{ width: 1, left: -10 }}>
+            <View >
               <YAxis
                 style={{ marginHorizontal: -10, height: height }}
                 data={this.state.data}
@@ -165,7 +165,7 @@ export default class Chart extends Component {
                 formatLabel={(value) => "" + value}
               />
             </View>
-            <View style={{flex: 9, borderBottomWidth: 1, borderLeftWidth: 1 }}>
+            <View style={{borderBottomWidth: 1, borderLeftWidth: 1, left: 20 }}>
             <Svg {...{ width, height}}>
               <Defs>
                 <LinearGradient
@@ -240,6 +240,8 @@ export default class Chart extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    borderWidth: 1,
+    borderColor: "green",
     height,
     width,
   },

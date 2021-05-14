@@ -77,12 +77,13 @@ class BudgetCarousel extends React.Component {
     return !data ? (
       <View></View>
     ) : (
-      <View style={{ height: "100%", width: "100%" }}>
+      <View style={styles.mainContent}>
         <ScrollView
           horizontal
           key={data[selectedIndex].budgetId}
           pagingEnabled
           onMomentumScrollEnd={this.setSelectedIndex}
+          scrollEnabled={false}
           ref={this.scrollRef}
         >
           {data.map((item) => (
@@ -94,10 +95,14 @@ class BudgetCarousel extends React.Component {
         </ScrollView>
         <View style={styles.navigationDiv}>
         <CustomButton
-          iconName={Platform.OS === "android" ? "arrow-dropleft" : "ios-arrow-dropleft"}
+          iconName={Platform.OS === "android" ? "arrow-dropleft" : "ios-arrow-dropleft"}  onPress={() => {
+            console.log("left");
+          }}
         />
         <CustomButton
-          iconName={Platform.OS === "android" ? "arrow-dropright" : "ios-arrow-dropright"}
+          iconName={Platform.OS === "android" ? "arrow-dropright" : "ios-arrow-dropright"} onPress={() => {
+            console.log("right");
+          }}
         />
          </View>
         {/* <Button style={styles.button} color={Colors.primary} title="Edit" />
@@ -122,8 +127,8 @@ const styles = StyleSheet.create({
   mainContent: {
     borderWidth: 1,
     borderColor: "red",
-    height: "90%", 
-    width: "90%",
+    height: "100%", 
+    width: "100%",
     justifyContent: "space-between",
     alignItems: "center",
   },
@@ -148,7 +153,7 @@ const styles = StyleSheet.create({
   navigationDiv: {
     width: "100%",
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "stretch"
   },
   whiteCircle: {
