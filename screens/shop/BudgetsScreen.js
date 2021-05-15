@@ -132,7 +132,7 @@ const BudgetsScreen = (props) => {
     return<View/>;
   }
 
-  console.log("budgets::budgets::" + JSON.stringify(budgets.budgets));
+  //console.log("budgets::budgets::" + JSON.stringify(budgets.budgets));
   return (
     <SafeAreaView>
       <View style={styles.mainContent}>

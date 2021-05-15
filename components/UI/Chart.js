@@ -1,7 +1,7 @@
 import { scaleLinear, scaleQuantile, scaleTime } from "d3-scale";
 import * as shape from "d3-shape";
 import Moment from "moment";
-import React, { useEffect,Component } from "react";
+import React, { useEffect, Component } from "react";
 import {
   Animated,
   Dimensions,
@@ -19,9 +19,8 @@ import {
   getWeekOfDayWithOffset,
 } from "../../helpers/helpers";
 
-const height = 300;
-const width = Dimensions.get("window").width- 50;
-const verticalPadding = 5;
+
+const verticalPadding = 0;
 const cursorRadius = 10;
 const labelWidth = 100;
 const xAxisHeight = 30;
@@ -46,19 +45,59 @@ export default class Chart extends Component {
 
     const x = new Animated.Value(0);
 
+   
+    //const data = this.normalizeChart(rawData);
+    //console.log("Chart::data::" + JSON.stringify(data));
+
+    this.state = {
+      x: new Animated.Value(0),
+      ready: false,
+      width: undefined
+    };
+  }
+
+  moveCursor(value) {
+    // const { x, y } = this.state.properties.getPointAtLength(
+    //   this.state.lineLength - value
+    // );
+    // if (this.cursor && this.cursor.current) {
+    //   this.cursor.current.setNativeProps({
+    //     top: y - cursorRadius,
+    //     left: x - cursorRadius,
+    //   });
+    // }
+    // const label = scaleLabel(this.state.scaleY.invert(y));
+    // if (this.label && this.label.current) {
+    //   this.label.current.setNativeProps({ text: `${label}` });
+    // }
+  }
+
+  componentDidMount() {
+    // this.setState({ ready: true }, () => {
+    //   this.state.x.addListener(({ value }) => this.moveCursor(value));
+    //   this.moveCursor(0);
+    // });
+  }
+
+  componentWillUnmount() {
+    //this.state.x.removeAllListeners();
+  }
+
+  calculateGraph = (e) => {
+    console.log("calculateGraph");
     const data = this.props.snapshots.map((snapshot) => ({
       x: new Date(snapshot.dateTime),
       y: snapshot.amount,
     }));
-    //const data = this.normalizeChart(rawData);
-    console.log("Chart::data::" + JSON.stringify(data));
+    const height = e.nativeEvent.layout.height;
+    const width = e.nativeEvent.layout.width * 0.9;
     const maxY = Math.max.apply(
       Math,
       data.map(function (o) {
         return o.y;
       })
     );
-    const scaleX = scaleTime()
+    const scaleX = scaleLinear()
       .domain([data[0].x, data[data.length - 1].x])
       .range([0, width]);
     const scaleY = scaleLinear()
@@ -69,58 +108,26 @@ export default class Chart extends Component {
       .line()
       .x((d) => scaleX(d.x))
       .y((d) => scaleY(d.y))
-      .curve(d3.shape.curveMonotoneX)(data);
+      .curve(d3.shape.curveBasis)(data);
     const properties = path.svgPathProperties(line);
 
     const lineLength = properties.getTotalLength();
 
-    this.state = {
-      x: new Animated.Value(0),
+    this.setState({
       data: data,
-      lineLength: lineLength,
+      width: width,
+      height: height,
+      maxY: maxY,
       scaleX: scaleX,
       scaleY: scaleY,
       line: line,
-      maxY: maxY,
       properties: properties,
-      ready: false,
-    };
-  }
-
-  
-
-  moveCursor(value) {
-    const { x, y } = this.state.properties.getPointAtLength(
-      this.state.lineLength - value
-    );
-
-    if (this.cursor && this.cursor.current) {
-      this.cursor.current.setNativeProps({
-        top: y - cursorRadius,
-        left: x - cursorRadius,
-      });
-    }
-    const label = scaleLabel(this.state.scaleY.invert(y));
-    if (this.label && this.label.current) {
-      this.label.current.setNativeProps({ text: `${label}` });
-    }
-  }
-
-  componentDidMount() {
-    console.log("mount");
-    this.setState({ ready: true }, () => {
-      this.state.x.addListener(({ value }) => this.moveCursor(value));
-      this.moveCursor(0);
+      lineLength: lineLength,
+      ready:true
     });
   }
 
-  componentWillUnmount() {
-    console.log("unmount");
-    this.state.x.removeAllListeners();
-  }
-
-
-  normalizeChart = (rawData) => {
+  normalizeChartData = (rawData) => {
     var arr = [
       { x: Moment(), y: 0 },
       { x: Moment(), y: 0 },
@@ -141,57 +148,61 @@ export default class Chart extends Component {
   };
 
   render() {
-
-    const x = this.state.x;
-    if (!this.state.ready) {
-      return <View/>;
+   
+    if (!this.state.ready || !this.state.width) {
+      return <View style={styles.container} onLayout={this.calculateGraph}/>;
     }
-    const translateX = x.interpolate({
-      inputRange: [0, this.state.lineLength],
-      outputRange: [width - labelWidth, 0],
-      extrapolate: "clamp",
-    });
+    // const translateX = x.interpolate({
+    //   inputRange: [0, this.state.lineLength],
+    //   outputRange: [width - labelWidth, 0],
+    //   extrapolate: "clamp",
+    // });
+    const width = this.state.width;
+    const height = this.state.height;
+    const x = this.state.x;
     return (
       <SafeAreaView>
         <View style={styles.container}>
           <View style={{ flexDirection: "row" }}>
-            <View >
-              <YAxis
-                style={{ marginHorizontal: -10, height: height }}
+            <View>
+              {/* <YAxis
+                style={{ height: height }}
                 data={this.state.data}
                 yAccessor={({ item }) => item.y}
                 contentInset={verticalContentInset}
                 svg={yAxesSvg}
                 formatLabel={(value) => "" + value}
-              />
+              /> */}
             </View>
-            <View style={{borderBottomWidth: 1, borderLeftWidth: 1, left: 20 }}>
-            <Svg {...{ width, height}}>
-              <Defs>
-                <LinearGradient
-                  x1="50%"
-                  y1="0%"
-                  x2="50%"
-                  y2="100%"
-                  id="gradient"
-                >
-                  <Stop stopColor="#CDE3F8" offset="0%" />
-                  <Stop stopColor="#eef6fd" offset="80%" />
-                  <Stop stopColor="#FEFFFF" offset="100%" />
-                </LinearGradient>
-              </Defs>
-              <Path
-                d={this.state.line}
-                fill="transparent"
-                stroke="#367be2"
-                strokeWidth={5}
-              />
-              <Path
-                d={`${this.state.line} L ${width} ${height} L 0 ${height}`}
-                fill="url(#gradient)"
-              />
-              <View ref={this.cursor} style={styles.cursor} />
-            </Svg>
+            <View
+              style={{ borderBottomWidth: 1, borderLeftWidth: 1}}
+            >
+              <Svg {...{ width, height }}>
+                <Defs>
+                  <LinearGradient
+                    x1="50%"
+                    y1="0%"
+                    x2="50%"
+                    y2="100%"
+                    id="gradient"
+                  >
+                    <Stop stopColor="#CDE3F8" offset="0%" />
+                    <Stop stopColor="#eef6fd" offset="80%" />
+                    <Stop stopColor="#FEFFFF" offset="100%" />
+                  </LinearGradient>
+                </Defs>
+                <Path
+                  d={this.state.line}
+                  fill="transparent"
+                  stroke="#367be2"
+                  strokeWidth={5}
+                />
+                <Path
+                  d={`${this.state.line} L ${width} ${height} L 0 ${height}`}
+                  fill="url(#gradient)"
+                />
+                <View ref={this.cursor} style={styles.cursor} />
+              </Svg>
             </View>
             <Animated.View style={[styles.label]}>
               <TextInput ref={this.label} />
@@ -240,10 +251,8 @@ export default class Chart extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    borderWidth: 1,
-    borderColor: "green",
-    height,
-    width,
+    flex: 1,
+    alignSelf: "stretch"
   },
   cursor: {
     width: cursorRadius * 2,

@@ -2,12 +2,13 @@ import * as React from "react";
 import { Text, View, SafeAreaView, StyleSheet, Dimensions } from "react-native";
 
 const SLIDER_WIDTH = Dimensions.get("window").width;
-const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
+const ITEM_WIDTH = Math.round(SLIDER_WIDTH);
 const ITEM_HEIGHT = Math.round((ITEM_WIDTH * 3) / 4);
 
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import { scrollInterpolator, animatedStyles } from "../../utils/animations";
 import Chart from "../../components/UI/Chart";
+import Card from "./Card";
 
 export default class BudgetCarousel extends React.Component {
   constructor(props) {
@@ -21,8 +22,17 @@ export default class BudgetCarousel extends React.Component {
     console.log("budget::item::" + JSON.stringify(item));
     return (
       <View style={styles.itemContainer}>
-        <Text style={styles.itemLabel}>{`Item ${item.name}`}</Text>
         <Chart snapshots={item.costSnapShots} />
+
+        <Text style={styles.itemLabel}>{`Item ${item.name}`}</Text>
+        <Card>
+          <View>
+            <Text style={styles.title}>{item.costSnapShots[0].dateTime}</Text>
+            <Text style={styles.price}>
+              {item.costSnapShots[0].amount.toFixed(2)}
+            </Text>
+          </View>
+        </Card>
       </View>
     );
   }
@@ -48,7 +58,11 @@ export default class BudgetCarousel extends React.Component {
         />
         <View>
           <Pagination
-            containerStyle={{ backgroundColor: "rgba(1, 0, 0, 1)", borderWidth: 5 }}
+            dotsLength={data.length}
+            containerStyle={{
+              backgroundColor: "rgba(1, 0, 0, 1)",
+              borderWidth: 5,
+            }}
             dotStyle={styles.ww}
             inactiveDotOpacity={0.4}
             inactiveDotScale={0.6}
@@ -61,20 +75,21 @@ export default class BudgetCarousel extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  
   carouselContainer: {
     flex: 1,
-    paddingTop: 200,
-    borderWidth: 5
+    paddingTop: 20,
+    flexDirection: "row",
   },
   itemContainer: {
     width: ITEM_WIDTH,
     height: ITEM_HEIGHT,
     alignItems: "center",
     justifyContent: "center",
+    borderColor: "yellow",
+    borderWidth: 5,
   },
   itemLabel: {
-    color: "white",
+    color: "black",
     fontSize: 24,
   },
   counter: {
@@ -89,5 +104,15 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginHorizontal: 8,
     backgroundColor: "rgba(255, 255, 255, 0.92)",
+  },
+  title: {
+    fontFamily: "open-sans-bold",
+    fontSize: 18,
+    marginVertical: 2,
+  },
+  price: {
+    fontFamily: "open-sans",
+    fontSize: 14,
+    color: "#888",
   },
 });

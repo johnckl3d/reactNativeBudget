@@ -17,7 +17,7 @@ export const fetchBudgets = () => {
         throw new Error("something went wrong!");
       }
       const resData = await response.json();
-      console.log("fetchBudgets::" + JSON.stringify(resData));
+      //console.log("fetchBudgets::" + JSON.stringify(resData));
       const loadedBudget = [];
 
       for (const b of resData) {
@@ -36,7 +36,7 @@ export const fetchBudgets = () => {
           )
         );
       }
-      console.log("loadedBudget::" + JSON.stringify(loadedBudget));
+      //console.log("loadedBudget::" + JSON.stringify(loadedBudget));
       dispatch({ type: SET_BUDGETS, budgets: loadedBudget });
     } catch (err) {
       throw err;
