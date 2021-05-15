@@ -9,16 +9,17 @@ const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
 const ITEM_HEIGHT = Math.round(ITEM_WIDTH * 3 / 4);
 
 import Carousel from 'react-native-snap-carousel';
+import { scrollInterpolator, animatedStyles } from '../../utils/animations';
 
 export default class BudgetCarousel extends React.Component {
 
- 
+  state = {
+    index: 0
+  }
     constructor(props){
-        super(props);
-        this.state = {
-          activeIndex:0
+      super(props);
+      this._renderItem = this._renderItem.bind(this)
       }
-    }
 
     _renderItem({item}){
       console.log("budget::item::" + JSON.stringify(item));
@@ -35,19 +36,21 @@ export default class BudgetCarousel extends React.Component {
       return !data ? (
         <View></View>
       ) : (
-          <SafeAreaView style={{flex: 1, backgroundColor:'rebeccapurple', paddingTop: 50, }}>
-            <View style={{ flex: 1, flexDirection:'row', justifyContent: 'center', }}>
-                <Carousel
-                  layout={"default"}
-                  ref={ref => this.carousel = ref}
-                  data={data}
-                  sliderWidth={300}
-                  itemWidth={300}
-                  containerCustomStyle={styles.carouselContainer}
-                  renderItem={this._renderItem}
-                  onSnapToItem = { index => this.setState({activeIndex:index}) } />
-            </View>
-          </SafeAreaView>
+        <View>
+        <Carousel
+          ref={(c) => this.carousel = c}
+          data={data}
+          renderItem={this._renderItem}
+          sliderWidth={SLIDER_WIDTH}
+          itemWidth={ITEM_WIDTH}
+          containerCustomStyle={styles.carouselContainer}
+          inactiveSlideShift={0}
+          onSnapToItem={(index) => this.setState({ index })}
+          scrollInterpolator={scrollInterpolator}
+          slideInterpolatedStyle={animatedStyles}
+          useScrollView={true}          
+        />
+      </View>
         );
     }
 }
