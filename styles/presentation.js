@@ -21,3 +21,8 @@ export const button = {
     height: dimensions.buttonHeight,
     borderRadius: dimensions.buttonHeight / 2,
 }
+
+export const highlight = {
+  borderWidth: 5,
+  borderColor: "red"
+}

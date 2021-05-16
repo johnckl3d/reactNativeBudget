@@ -84,7 +84,30 @@ export default class Chart extends Component {
     //this.state.x.removeAllListeners();
   }
 
-  calculateGraph = (e) => {
+  
+
+  normalizeChartData = (rawData) => {
+    var arr = [
+      { x: Moment(), y: 0 },
+      { x: Moment(), y: 0 },
+      { x: Moment(), y: 0 },
+      { x: Moment(), y: 0 },
+      { x: Moment(), y: 0 },
+    ];
+
+    rawData.forEach((input) => {
+      const week = getWeekOfDayWithOffset(Moment(input.x));
+      const amount = Number(input.y);
+      arr[week - 1].y += parseInt(amount);
+
+      const firstDayOfWeek = getFirstDayOfWeek(Moment(input.x));
+      arr[week - 1].x = firstDayOfWeek;
+    });
+    return arr;
+  };
+
+  render() {
+   
     const data = this.props.snapshots.map((snapshot) => ({
       x: new Date(snapshot.dateTime),
       y: snapshot.amount,
@@ -112,69 +135,21 @@ export default class Chart extends Component {
     const properties = path.svgPathProperties(line);
 
     const lineLength = properties.getTotalLength();
-
-    this.setState({
-      data: data,
-      width: width,
-      height: height,
-      maxY: maxY,
-      scaleX: scaleX,
-      scaleY: scaleY,
-      line: line,
-      properties: properties,
-      lineLength: lineLength,
-      ready:true
-    });
-
-    console.log("calculateGraph::state::" + JSON.stringify(this.state));
-  }
-
-  normalizeChartData = (rawData) => {
-    var arr = [
-      { x: Moment(), y: 0 },
-      { x: Moment(), y: 0 },
-      { x: Moment(), y: 0 },
-      { x: Moment(), y: 0 },
-      { x: Moment(), y: 0 },
-    ];
-
-    rawData.forEach((input) => {
-      const week = getWeekOfDayWithOffset(Moment(input.x));
-      const amount = Number(input.y);
-      arr[week - 1].y += parseInt(amount);
-
-      const firstDayOfWeek = getFirstDayOfWeek(Moment(input.x));
-      arr[week - 1].x = firstDayOfWeek;
-    });
-    return arr;
-  };
-
-  render() {
    
-    if (!this.state.ready) {
-      return <View style={styles.container} onLayout={this.calculateGraph}/>;
-    }
-    // const translateX = x.interpolate({
-    //   inputRange: [0, this.state.lineLength],
-    //   outputRange: [width - labelWidth, 0],
-    //   extrapolate: "clamp",
-    // });
-    const width = this.state.width;
-    const height = this.state.height;
     const x = this.state.x;
     return (
       <SafeAreaView>
         <View style={styles.container}>
           <View style={{ flexDirection: "row" }}>
             <View>
-              {/* <YAxis
+              <YAxis
                 style={{ height: height }}
-                data={this.state.data}
+                data={data}
                 yAccessor={({ item }) => item.y}
                 contentInset={verticalContentInset}
                 svg={yAxesSvg}
                 formatLabel={(value) => "" + value}
-              /> */}
+              />
             </View>
             <View>
               <Svg {...{ width, height }}>
@@ -192,13 +167,13 @@ export default class Chart extends Component {
                   </LinearGradient>
                 </Defs>
                 <Path
-                  d={this.state.line}
+                  d={line}
                   fill="transparent"
                   stroke="#367be2"
                   strokeWidth={5}
                 />
                 <Path
-                  d={`${this.state.line} L ${width} ${height} L 0 ${height}`}
+                  d={`${line} L ${width} ${height} L 0 ${height}`}
                   fill="url(#gradient)"
                 />
                 <View ref={this.cursor} style={styles.cursor} />
@@ -209,7 +184,7 @@ export default class Chart extends Component {
             </Animated.View>
             <Animated.ScrollView
               style={StyleSheet.absoluteFill}
-              contentContainerStyle={{ width: this.state.lineLength * 2 }}
+              contentContainerStyle={{ width: lineLength * 2 }}
               showsHorizontalScrollIndicator={false}
               scrollEventThrottle={16}
               bounces={false}
@@ -227,7 +202,7 @@ export default class Chart extends Component {
             />
           </View>
           <XAxis
-            data={this.state.data}
+            data={data}
             svg={{
               fill: "black",
               fontSize: 8,

@@ -70,8 +70,4 @@ export default StyleSheet.create({
     paddingHorizontal: wp(5),
     paddingVertical: hp(2)
   },
-  highlight: {
-    borderWidth: 50,
-    borderColor: "red"
-  },
 });

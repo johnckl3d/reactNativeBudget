@@ -10,7 +10,7 @@ import Card from "../UI/Card";
 import Chart from "./Chart";
 import CarousellStyles from './styles';
 const SLIDER_WIDTH = Dimensions.get("window").width;
-const ITEM_WIDTH = Math.round(SLIDER_WIDTH);
+const ITEM_WIDTH = Math.round(SLIDER_WIDTH) * 0.8;
 const ITEM_HEIGHT = Math.round((ITEM_WIDTH * 3) / 4);
 
 
@@ -34,7 +34,6 @@ export default class BudgetCarousel extends React.Component {
           color={Colors.p1}
           fontSize={Fonts.medium}
         />
-        <Card>
           <FlatList
             data={item.costSnapShots}
             keyExtractor={(item) => item.dateTime}
@@ -53,7 +52,6 @@ export default class BudgetCarousel extends React.Component {
               </View>
             )}
           />
-        </Card>
       </View>
     );
   }
