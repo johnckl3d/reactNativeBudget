@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text, View, SafeAreaView, StyleSheet, Dimensions } from "react-native";
+import { Text, View, SafeAreaView, StyleSheet, Dimensions,FlatList } from "react-native";
 
 const SLIDER_WIDTH = Dimensions.get("window").width;
 const ITEM_WIDTH = Math.round(SLIDER_WIDTH);
@@ -29,7 +29,7 @@ export default class BudgetCarousel extends React.Component {
   _renderItem({ item }) {
     console.log("budget::item::" + JSON.stringify(item));
     return (
-      <View style={styles.itemContainer}>
+      <View style={Styles.carouselItemContainer}>
         <Chart snapshots={item.costSnapShots} />
 
         <CustomText.SemiBoldText
@@ -38,18 +38,24 @@ export default class BudgetCarousel extends React.Component {
           fontSize={Fonts.medium}
         />
         <Card>
-          <View>
-            <CustomText.RegularText
-              text={item.costSnapShots[0].dateTime}
-              color={Colors.b7}
-              fontSize={Fonts.medium}
-            />
-            <CustomText.RegularText
-              text={item.costSnapShots[0].amount.toFixed(2)}
-              color={Colors.b7}
-              fontSize={Fonts.medium}
-            />
-          </View>
+          <FlatList
+            data={item.costSnapShots}
+            keyExtractor={(item) => item.dateTime}
+            renderItem={(item) => (
+              <View>
+                <CustomText.RegularText
+                  text={item.dateTime}
+                  color={Colors.b7}
+                  fontSize={Fonts.medium}
+                />
+                {/* <CustomText.RegularText
+                  text={item.amount.toFixed(2)}
+                  color={Colors.b7}
+                  fontSize={Fonts.medium}
+                /> */}
+              </View>
+            )}
+          />
         </Card>
       </View>
     );
@@ -67,7 +73,7 @@ export default class BudgetCarousel extends React.Component {
           renderItem={this._renderItem}
           sliderWidth={SLIDER_WIDTH}
           itemWidth={ITEM_WIDTH}
-          containerCustomStyle={styles.carouselContainer}
+          containerCustomStyle={Styles.carouselItemContainer}
           inactiveSlideShift={0}
           onSnapToItem={(index) => this.setState({ activeSlide: index })}
           scrollInterpolator={scrollInterpolator}
@@ -81,7 +87,7 @@ export default class BudgetCarousel extends React.Component {
               backgroundColor: "rgba(1, 0, 0, 1)",
               borderWidth: 5,
             }}
-            dotStyle={styles.ww}
+            dotStyle={Styles.paginationDot}
             inactiveDotOpacity={0.4}
             inactiveDotScale={0.6}
             activeDotIndex={this.state.activeSlide}
@@ -92,45 +98,3 @@ export default class BudgetCarousel extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-  carouselContainer: {
-    flex: 1,
-    paddingTop: 20,
-    flexDirection: "row",
-  },
-  itemContainer: {
-    width: ITEM_WIDTH,
-    height: ITEM_HEIGHT,
-    alignItems: "center",
-    justifyContent: "center",
-    borderColor: "yellow",
-    borderWidth: 5,
-  },
-  itemLabel: {
-    color: "black",
-    fontSize: 24,
-  },
-  counter: {
-    marginTop: 25,
-    fontSize: 30,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  ww: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    marginHorizontal: 8,
-    backgroundColor: "rgba(255, 255, 255, 0.92)",
-  },
-  title: {
-    fontFamily: "open-sans-bold",
-    fontSize: 18,
-    marginVertical: 2,
-  },
-  price: {
-    fontFamily: "open-sans",
-    fontSize: 14,
-    color: "#888",
-  },
-});
