@@ -26,7 +26,16 @@ const store = createStore(rootReducer, composeEnhancers(applyMiddleware(ReduxThu
 const fetchFonts = () => {
   return Font.loadAsync({
     'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
-    'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf')
+    'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
+    'open-sans-boldItalic': require('./assets/fonts/OpenSans-BoldItalic.ttf'),
+    'open-sans-extraBold': require('./assets/fonts/OpenSans-ExtraBold.ttf'),
+    'open-sans-extraBoldItalic': require('./assets/fonts/OpenSans-ExtraBoldItalic.ttf'),
+    'open-sans-italic': require('./assets/fonts/OpenSans-Italic.ttf'),
+    'open-sans-light': require('./assets/fonts/OpenSans-Light.ttf'),
+    'open-sans-lightItalic': require('./assets/fonts/OpenSans-LightItalic.ttf'),
+    'open-sans-regular': require('./assets/fonts/OpenSans-Regular.ttf'),
+    'open-sans-semiBold': require('./assets/fonts/OpenSans-SemiBold.ttf'),
+    'open-sans-semiBoldItalic': require('./assets/fonts/OpenSans-SemiBoldItalic.ttf')
   });
 };
 

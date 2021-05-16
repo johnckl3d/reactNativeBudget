@@ -9,6 +9,14 @@ import Carousel, { Pagination } from "react-native-snap-carousel";
 import { scrollInterpolator, animatedStyles } from "../../utils/animations";
 import Chart from "../../components/UI/Chart";
 import Card from "./Card";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "@Utils/scalingUtils";
+import Colors from "@Styles/colors";
+import Fonts from "@Styles/fonts";
+import Styles from "@Styles/styles";
+import CustomText from "@CustomText";
 
 export default class BudgetCarousel extends React.Component {
   constructor(props) {
@@ -24,13 +32,23 @@ export default class BudgetCarousel extends React.Component {
       <View style={styles.itemContainer}>
         <Chart snapshots={item.costSnapShots} />
 
-        <Text style={styles.itemLabel}>{`Item ${item.name}`}</Text>
+        <CustomText.SemiBoldText
+          text={`Item ${item.name}`}
+          color={Colors.p1}
+          fontSize={Fonts.medium}
+        />
         <Card>
           <View>
-            <Text style={styles.title}>{item.costSnapShots[0].dateTime}</Text>
-            <Text style={styles.price}>
-              {item.costSnapShots[0].amount.toFixed(2)}
-            </Text>
+            <CustomText.RegularText
+              text={item.costSnapShots[0].dateTime}
+              color={Colors.b7}
+              fontSize={Fonts.medium}
+            />
+            <CustomText.RegularText
+              text={item.costSnapShots[0].amount.toFixed(2)}
+              color={Colors.b7}
+              fontSize={Fonts.medium}
+            />
           </View>
         </Card>
       </View>
