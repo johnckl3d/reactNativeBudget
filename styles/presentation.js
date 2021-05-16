@@ -16,13 +16,38 @@ export const centered = {
   justifyContent: 'center'
 }
 
+export const centeredStretch = {
+  alignItems: 'stretch',
+  justifyContent: 'center'
+}
+
 export const button = {
     width: dimensions.buttonWidth,
     height: dimensions.buttonHeight,
     borderRadius: dimensions.buttonHeight / 2,
 }
 
-export const highlight = {
+export const highlightRed = {
   borderWidth: 5,
   borderColor: "red"
+}
+
+export const highlightYellow = {
+  borderWidth: 5,
+  borderColor: "yellow"
+}
+
+export const column = {
+  flexDirection: "column",
+  flex: 1
+}
+
+export const row = {
+  flexDirection: "row",
+  flex: 1
+}
+
+export const bottom = {
+  justifyContent: 'flex-end',
+  position: 'absolute'
 }

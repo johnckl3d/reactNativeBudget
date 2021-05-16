@@ -18,7 +18,7 @@ import {
   getFirstDayOfWeek,
   getWeekOfDayWithOffset,
 } from "../../helpers/helpers";
-import { highlight, centered, shadow } from '../../styles/presentation';
+import { highlightYellow, centered, shadow } from '../../styles/presentation';
 
 
 const verticalPadding = 0;
@@ -112,8 +112,8 @@ export default class Chart extends Component {
       x: new Date(snapshot.dateTime),
       y: snapshot.amount,
     }));
-    const height = this.props.height;
-    const width = this.props.width;
+    const height = this.props.height * 0.5;
+    const width = this.props.width * 0.7;
     const maxY = Math.max.apply(
       Math,
       data.map(function (o) {
@@ -138,7 +138,6 @@ export default class Chart extends Component {
    
     const x = this.state.x;
     return (
-      <SafeAreaView>
         <View style={styles.container}>
           <View style={{ flexDirection: "row" }}>
             <View>
@@ -219,14 +218,13 @@ export default class Chart extends Component {
             formatLabel={(index) => Moment(index).format("D")}
           />
         </View>
-      </SafeAreaView>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    ...highlight,
+    ...highlightYellow,
     flex: 1,
     alignSelf: "stretch"
   },
