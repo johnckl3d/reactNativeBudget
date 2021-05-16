@@ -2,6 +2,8 @@ import { StyleSheet } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '@Utils/scalingUtils';
 import Colors from '@Styles/colors'
 
+const SCREEN_WIDTH = Dimensions.get("window").width;
+const SCREEN_HEIGHT = Dimensions.get("window").height;
 export default StyleSheet.create({
   safeAreaContainer: {
     flex: 1,
@@ -70,5 +72,4 @@ export default StyleSheet.create({
     paddingHorizontal: wp(5),
     paddingVertical: hp(2)
   },
-
 });

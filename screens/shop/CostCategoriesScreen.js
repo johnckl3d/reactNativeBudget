@@ -1,33 +1,27 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  FlatList,
-  Button,
-  Platform,
   ActivityIndicator,
-  StyleSheet,
   Alert,
+  Button,
+  FlatList,
+  Platform,
   SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-
-import HeaderButton from "../../components/UI/HeaderButton";
+import { useDispatch, useSelector } from "react-redux";
 import ProductItem from "../../components/shop/ProductItem";
-import * as cartActions from "../../store/actions/cart";
+import HeaderButton from "../../components/UI/HeaderButton";
 import Colors from "../../constants/Colors";
-import * as productsActions from "../../store/actions/products";
 import * as costCategoriesActions from "../../store/actions/costCategories";
-import Chart from "../../components/UI/Chart";
 
 const CostCategoriesScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const costCategories = useSelector((state) => state.costCategories);
   const dispatch = useDispatch();
-
- 
 
   const loadCostCategories = useCallback(async () => {
     setError(null);
@@ -176,8 +170,9 @@ CostCategoriesScreen.navigationOptions = (navData) => {
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
           title="Menu"
-          iconName={Platform.OS === "android" ? "arrow-dropleft" : "ios-arrow-dropleft"}
-          
+          iconName={
+            Platform.OS === "android" ? "arrow-dropleft" : "ios-arrow-dropleft"
+          }
           onPress={() => {
             navData.navigation.goBack();
           }}

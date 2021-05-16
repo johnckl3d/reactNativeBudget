@@ -1,29 +1,22 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  FlatList,
+  ActivityIndicator,
+  Alert,
   Button,
   Platform,
-  ActivityIndicator,
-  StyleSheet,
-  Alert,
-  TouchableOpacity,
-  TouchableNativeFeedback,
   SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-
+import { useDispatch, useSelector } from "react-redux";
+import BudgetCarousel from "../../components/carousell/BudgetCarousel";
 import HeaderButton from "../../components/UI/HeaderButton";
-import ProductItem from "../../components/shop/ProductItem";
-import * as cartActions from "../../store/actions/cart";
 import Colors from "../../constants/Colors";
-import * as productsActions from "../../store/actions/products";
-import * as costCategoriesActions from "../../store/actions/costCategories";
 import * as budgetsActions from "../../store/actions/budgets";
-import Chart from "../../components/UI/Chart";
-import BudgetCarousel from "../../components/UI/BudgetCarousel";
+import * as costCategoriesActions from "../../store/actions/costCategories";
 
 const BudgetsScreen = (props) => {
   let TouchableCmp = TouchableOpacity;
@@ -94,7 +87,6 @@ const BudgetsScreen = (props) => {
     [dispatch, setIsLoading, setError]
   );
 
-  
   if (error) {
     console.log(error);
     return (
@@ -108,7 +100,7 @@ const BudgetsScreen = (props) => {
       </View>
     );
   }
-  
+
   if (isLoading) {
     return (
       <View style={styles.centered}>
@@ -119,7 +111,7 @@ const BudgetsScreen = (props) => {
       </View>
     );
   }
-  
+
   if (!isLoading && budgets.budgets.length == 0) {
     return (
       <View style={styles.centered}>
@@ -128,17 +120,17 @@ const BudgetsScreen = (props) => {
     );
   }
 
-  if(!isFocus){
-    return<View/>;
+  if (!isFocus) {
+    return <View />;
   }
 
   //console.log("budgets::budgets::" + JSON.stringify(budgets.budgets));
   return (
     <SafeAreaView>
       <View style={styles.mainContent}>
-      <BudgetCarousel data={budgets.budgets} />
+        <BudgetCarousel data={budgets.budgets} />
       </View>
-      
+
       {/* <FlatList
         data={budgets.budgets}
         keyExtractor={(item) => item.budgetId}
