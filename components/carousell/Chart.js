@@ -18,6 +18,7 @@ import {
   getFirstDayOfWeek,
   getWeekOfDayWithOffset,
 } from "../../helpers/helpers";
+import { highlight, centered, shadow } from '../../styles/presentation';
 
 
 const verticalPadding = 0;
@@ -84,13 +85,12 @@ export default class Chart extends Component {
   }
 
   calculateGraph = (e) => {
-    console.log("calculateGraph");
     const data = this.props.snapshots.map((snapshot) => ({
       x: new Date(snapshot.dateTime),
       y: snapshot.amount,
     }));
-    const height = e.nativeEvent.layout.height;
-    const width = e.nativeEvent.layout.width * 0.9;
+    const height = this.props.height;
+    const width = this.props.width;
     const maxY = Math.max.apply(
       Math,
       data.map(function (o) {
@@ -125,6 +125,8 @@ export default class Chart extends Component {
       lineLength: lineLength,
       ready:true
     });
+
+    console.log("calculateGraph::state::" + JSON.stringify(this.state));
   }
 
   normalizeChartData = (rawData) => {
@@ -149,7 +151,7 @@ export default class Chart extends Component {
 
   render() {
    
-    if (!this.state.ready || !this.state.width) {
+    if (!this.state.ready) {
       return <View style={styles.container} onLayout={this.calculateGraph}/>;
     }
     // const translateX = x.interpolate({
@@ -174,9 +176,7 @@ export default class Chart extends Component {
                 formatLabel={(value) => "" + value}
               /> */}
             </View>
-            <View
-              style={{ borderBottomWidth: 1, borderLeftWidth: 1}}
-            >
+            <View>
               <Svg {...{ width, height }}>
                 <Defs>
                   <LinearGradient
@@ -251,6 +251,7 @@ export default class Chart extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    ...highlight,
     flex: 1,
     alignSelf: "stretch"
   },
