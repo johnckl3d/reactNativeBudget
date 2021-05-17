@@ -13,12 +13,12 @@ export const shadow = {
 
 export const centered = {
   alignItems: 'center',
-  justifyContent: 'center'
+  justifyContent: 'center',
 }
 
 export const centeredStretch = {
   alignItems: 'stretch',
-  justifyContent: 'center'
+  justifyContent: 'center',
 }
 
 export const button = {
@@ -35,6 +35,11 @@ export const highlightRed = {
 export const highlightYellow = {
   borderWidth: 5,
   borderColor: "yellow"
+}
+
+export const highlightGreen = {
+  borderWidth: 5,
+  borderColor: "green"
 }
 
 export const column = {

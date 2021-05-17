@@ -38,30 +38,6 @@ export default class BudgetCarousel extends React.Component {
           width={CHART_WIDTH}
           height={CHART_HEIGHT}
         />
-
-        <CustomText.SemiBoldText
-          text={`Item ${item.name}`}
-          color={Colors.p1}
-          fontSize={Fonts.medium}
-        />
-        <FlatList
-          data={item.costSnapShots}
-          keyExtractor={(item) => item.dateTime}
-          renderItem={(item) => (
-            <View>
-              <CustomText.RegularText
-                text={item.dateTime}
-                color={Colors.b7}
-                fontSize={Fonts.medium}
-              />
-              {/* <CustomText.RegularText
-                  text={item.amount.toFixed(2)}
-                  color={Colors.b7}
-                  fontSize={Fonts.medium}
-                /> */}
-            </View>
-          )}
-        />
       </View>
     );
   }
@@ -71,32 +47,22 @@ export default class BudgetCarousel extends React.Component {
     return !data ? (
       <View></View>
     ) : (
-      <View style={styles.container}>
-        <View style={styles.carouselContainer}>
+      <View style={styles.carouselContainer}>
           <Carousel
             ref={(c) => (this.carousel = c)}
             data={data}
             renderItem={this._renderItem}
             sliderWidth={Dimensions.get("window").width}
-            itemWidth={CHART_WIDTH * 0.8}
+            itemWidth={CHART_WIDTH}
             contentContainerStyle={styles.carouselContainer}
             containerCustomStyle={{flexGrow: 0}}
             inactiveSlideShift={0}
-            onSnapToItem={(index) => this.setState({ activeSlide: index })}
+            onSnapToItem={(index) => this.props.parentCallback(index)}
             scrollInterpolator={scrollInterpolator}
             slideInterpolatedStyle={animatedStyles}
             useScrollView={true}
           />
         </View>
-        <Pagination
-          dotsLength={data.length}
-          containerStyle={styles.paginationContainer}
-          dotStyle={CarousellStyles.paginationDot}
-          inactiveDotOpacity={0.4}
-          inactiveDotScale={0.6}
-          activeDotIndex={this.state.activeSlide}
-        />
-      </View>
     );
   }
 }
@@ -114,13 +80,8 @@ const styles = StyleSheet.create({
   carouselItemContainer: {
     ...CarousellStyles.carouselItemContainer,
     ...shadow,
-    ...centeredStretch,
+    ...centered,
 
   },
-  paginationContainer: {
-    backgroundColor: "rgba(1, 0, 0, 1)",
-    height: 20,
-    width: Dimensions.get("window").width,
-...highlightYellow,
-  },
+ 
 });

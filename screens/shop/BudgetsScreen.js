@@ -9,20 +9,38 @@ import {
   Text,
   TouchableOpacity,
   View,
+  FlatList,
+  Dimensions
 } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useDispatch, useSelector } from "react-redux";
 import BudgetCarousel from "../../components/carousell/BudgetCarousel";
 import HeaderButton from "../../components/UI/HeaderButton";
-import Colors from "../../constants/Colors";
 import * as budgetsActions from "../../store/actions/budgets";
 import * as costCategoriesActions from "../../store/actions/costCategories";
+import CustomText from "@CustomText";
+import Colors from "@Styles/colors";
+import Fonts from "@Styles/fonts";
+import Carousel, { Pagination } from "react-native-snap-carousel";
+import CarouselStyles from "../../components/carousell/styles";
+import {
+  column,
+  row,
+  highlightRed,
+  highlightYellow,
+  centered,
+  shadow,
+  bottom,
+  centeredStretch,
+  highlightGreen
+} from "../../styles/presentation";
 
 const BudgetsScreen = (props) => {
   let TouchableCmp = TouchableOpacity;
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [isFocus, setFocus] = useState(true);
+  const [activeIndex, setIndex] = useState(0);
   const budgets = useSelector((state) => state.budgets);
   const dispatch = useDispatch();
 
@@ -48,6 +66,11 @@ const BudgetsScreen = (props) => {
       willFocusSub.remove();
     };
   }, [loadBudgets]);
+
+  const handleCallback = (childData) => {
+    console.log("handleCallback");
+    setIndex(childData);
+  };
 
   const selectItemHandler = (costCategoryId, name, totalAmount) => {
     setFocus(false);
@@ -95,7 +118,7 @@ const BudgetsScreen = (props) => {
         <Button
           title="Try again"
           onPress={loadBudgets}
-          color={Colors.primary}
+          color={Colors.p1}
         ></Button>
       </View>
     );
@@ -104,10 +127,7 @@ const BudgetsScreen = (props) => {
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator
-          size="large"
-          color={Colors.primary}
-        ></ActivityIndicator>
+        <ActivityIndicator size="large" color={Colors.p1}></ActivityIndicator>
       </View>
     );
   }
@@ -124,11 +144,47 @@ const BudgetsScreen = (props) => {
     return <View />;
   }
 
-  //console.log("budgets::budgets::" + JSON.stringify(budgets.budgets));
+  console.log("budgets::budgets::" + JSON.stringify(budgets.budgets[activeIndex]));
+  console.log("budgetScreen::" + activeIndex);
   return (
     <SafeAreaView>
       <View style={styles.mainContent}>
-        <BudgetCarousel data={budgets.budgets} />
+        <BudgetCarousel
+          data={budgets.budgets}
+          parentCallback={handleCallback}
+        />
+        <CustomText.SemiBoldText
+          text={`Item ${budgets.budgets[activeIndex].name}`}
+          color={Colors.p1}
+          fontSize={Fonts.medium}
+        />
+        <FlatList
+          data={budgets.budgets[activeIndex].costSnapShots}
+          keyExtractor={(item) => item.dateTime}
+          renderItem={(item) => (
+            <View>
+              <CustomText.RegularText
+                text={item.dateTime}
+                color={Colors.b7}
+                fontSize={Fonts.medium}
+              />
+              {/* <CustomText.RegularText
+                text={item.amount.toFixed(2)}
+                color={Colors.b7}
+                fontSize={Fonts.medium}
+              /> */}
+            </View>
+          )}
+        />
+
+        <Pagination
+          dotsLength={budgets.budgets[activeIndex].costSnapShots.length}
+          containerStyle={styles.paginationContainer}
+          dotStyle={CarouselStyles.paginationDot}
+          inactiveDotOpacity={0.4}
+          inactiveDotScale={0.6}
+          activeDotIndex={activeIndex}
+        />
       </View>
 
       {/* <FlatList
@@ -193,12 +249,10 @@ BudgetsScreen.navigationOptions = (navData) => {
 };
 
 const styles = StyleSheet.create({
-  centered: { justifyContent: "center", alignItems: "center", flex: 1 },
+  centered: { ...centered, flex: 1},
   mainContent: {
-    margin: 10,
-    borderWidth: 1,
-    justifyContent: "space-between",
-    alignItems: "center",
+   ...centered,
+   ...highlightRed,
   },
   button: {
     height: 50,
@@ -218,5 +272,11 @@ const styles = StyleSheet.create({
     height: "17%",
     padding: 10,
   },
+  paginationContainer: {
+    //backgroundColor: Colors.p1,
+    height: 50,
+    ...highlightGreen,
+  },
+  
 });
 export default BudgetsScreen;
