@@ -19,7 +19,8 @@ import Card from "../UI/Card";
 import Chart from "./Chart";
 import CarousellStyles from "./styles";
 const CHART_WIDTH = Math.round(Dimensions.get("window").width);
-const CHART_HEIGHT = Math.round(Dimensions.get("window").height * 0.5);
+const CHART_HEIGHT = CHART_WIDTH * 0.75;
+const ITEM_WIDTH = Math.round(Dimensions.get("window").width * 0.8);
 
 export default class BudgetCarousel extends React.Component {
   constructor(props) {
@@ -53,7 +54,7 @@ export default class BudgetCarousel extends React.Component {
             data={data}
             renderItem={this._renderItem}
             sliderWidth={Dimensions.get("window").width}
-            itemWidth={CHART_WIDTH}
+            itemWidth={ITEM_WIDTH}
             contentContainerStyle={styles.carouselContainer}
             containerCustomStyle={{flexGrow: 0}}
             inactiveSlideShift={0}

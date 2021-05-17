@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View,
   FlatList,
-  Dimensions
+  Dimensions,
 } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,8 +32,10 @@ import {
   shadow,
   bottom,
   centeredStretch,
-  highlightGreen
+  highlightGreen,
 } from "../../styles/presentation";
+const SCREEN_WIDTH = Math.round(Dimensions.get("window").width);
+const SCREEN_HEIGHT = Math.round(Dimensions.get("window").height);
 
 const BudgetsScreen = (props) => {
   let TouchableCmp = TouchableOpacity;
@@ -144,7 +146,10 @@ const BudgetsScreen = (props) => {
     return <View />;
   }
 
-  console.log("budgets::budgets::" + JSON.stringify(budgets.budgets[activeIndex]));
+  console.log(
+    "budgets::budgets::" +
+      JSON.stringify(budgets.budgets[activeIndex].costSnapShots)
+  );
   console.log("budgetScreen::" + activeIndex);
   return (
     <SafeAreaView>
@@ -163,6 +168,7 @@ const BudgetsScreen = (props) => {
           keyExtractor={(item) => item.dateTime}
           renderItem={(item) => (
             <View>
+              {/* <Text>{item.dateTime.toString()}</Text> */}
               <CustomText.RegularText
                 text={item.dateTime}
                 color={Colors.b7}
@@ -176,44 +182,25 @@ const BudgetsScreen = (props) => {
             </View>
           )}
         />
-
         <Pagination
           dotsLength={budgets.budgets[activeIndex].costSnapShots.length}
-          containerStyle={styles.paginationContainer}
-          dotStyle={CarouselStyles.paginationDot}
+          activeDotIndex={activeIndex}
+          dotStyle={{
+            width: 10,
+            height: 10,
+            borderRadius: 5,
+            marginHorizontal: 8,
+            backgroundColor: Colors.p1,
+          }}
+          inactiveDotStyle={
+            {
+              // Define styles for inactive dots here
+            }
+          }
           inactiveDotOpacity={0.4}
           inactiveDotScale={0.6}
-          activeDotIndex={activeIndex}
         />
       </View>
-
-      {/* <FlatList
-        data={budgets.budgets}
-        keyExtractor={(item) => item.budgetId}
-        renderItem={(itemData) => (
-          <View style={styles.mainContent}>
-            <Text style={styles.title}>{itemData.item.name}</Text>
-           <Chart snapshots={itemData.item.costSnapShots} /> 
-            <Button
-              style={styles.button}
-              color={Colors.primary}
-              title="Edit"
-              onPress={() => {
-                selectItemHandler(
-                  itemData.item.costCategoryId,
-                  itemData.item.name,
-                  itemData.item.totalAmount
-                );
-              }}
-            />
-            <Button
-              style={styles.button}
-              color={Colors.primary}
-              title="Delete"
-            />
-          </View>
-        )}
-      /> */}
     </SafeAreaView>
   );
 };
@@ -249,10 +236,11 @@ BudgetsScreen.navigationOptions = (navData) => {
 };
 
 const styles = StyleSheet.create({
-  centered: { ...centered, flex: 1},
+  centered: { ...centered, flex: 1 },
   mainContent: {
-   ...centered,
-   ...highlightRed,
+    ...centered,
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT - 100,
   },
   button: {
     height: 50,
@@ -277,6 +265,5 @@ const styles = StyleSheet.create({
     height: 50,
     ...highlightGreen,
   },
-  
 });
 export default BudgetsScreen;
