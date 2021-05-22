@@ -149,29 +149,31 @@ const BudgetsScreen = (props) => {
 
   const renderItem = ({ item }) => {
     return (
-     <Card style={styles.costSnapShotContainer}>
-              <CustomText.RegularText
-              color={Colors.p1}
-                text={`Date: ${item.dateTime}`}
-                fontSize={Fonts.medium}
-              />
-              <CustomText.RegularText
-              color={Colors.p1}
-              text={`Amount: ${item.amount.toFixed(2)}`}
-                fontSize={Fonts.medium}
-              />
-            </Card>
+      <Card style={styles.costSnapShotContainer}>
+        <CustomText.RegularText
+          color={Colors.p1}
+          text={`Date: ${item.dateTime}`}
+          fontSize={Fonts.medium}
+        />
+        <CustomText.RegularText
+          color={Colors.p1}
+          text={`Amount: ${item.amount.toFixed(2)}`}
+          fontSize={Fonts.medium}
+        />
+      </Card>
     );
-  }
+  };
 
   const costSnapShots = budgets.budgets[activeIndex].costSnapShots;
-  console.log(
-    "budgets::budgets::" +
-      JSON.stringify(costSnapShots)
-  );
+  console.log("budgets::budgets::" + JSON.stringify(costSnapShots));
   //console.log("budgetScreen::" + activeIndex);
   return (
     <SafeAreaView>
+      <CustomText.SemiBoldText
+        text={`Item ${budgets.budgets[activeIndex].name}`}
+        color={Colors.p1}
+        fontSize={Fonts.medium}
+      />
       <View style={styles.mainContent}>
         <BudgetCarousel
           data={budgets.budgets}
@@ -179,15 +181,10 @@ const BudgetsScreen = (props) => {
           width={Dimensions.get("window").width}
           height={Dimensions.get("window").height * 0.4}
         />
-        <CustomText.SemiBoldText
-          text={`Item ${budgets.budgets[activeIndex].name}`}
-          color={Colors.p1}
-          fontSize={Fonts.medium}
-        />
         <FlatList
           data={budgets.budgets[activeIndex].costSnapShots}
           keyExtractor={(item) => item.dateTime}
-          renderItem={(renderItem)}
+          renderItem={renderItem}
         />
         <Pagination
           dotsLength={budgets.budgets[activeIndex].costSnapShots.length}
