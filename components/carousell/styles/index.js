@@ -14,10 +14,6 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 const CarousellStyles = StyleSheet.create({
-  carouselItemContainer: {
-    width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT * 0.6,
-  },
   paginationDot: {
     width: 10,
     height: 10,

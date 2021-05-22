@@ -112,7 +112,7 @@ export default class Chart extends Component {
       x: new Date(snapshot.dateTime),
       y: snapshot.amount,
     }));
-    const height = this.props.height;
+    const height = this.props.height - 50;
     const width = this.props.width;
     const maxY = Math.max.apply(
       Math,
@@ -224,7 +224,6 @@ export default class Chart extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    ...highlightYellow,
     flex: 1,
     alignSelf: "stretch"
   },

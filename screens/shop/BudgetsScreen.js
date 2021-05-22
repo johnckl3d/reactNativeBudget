@@ -22,6 +22,7 @@ import CustomText from "@CustomText";
 import Colors from "@Styles/colors";
 import Fonts from "@Styles/fonts";
 import Carousel, { Pagination } from "react-native-snap-carousel";
+import Card from "../../components/UI/Card";
 import CarouselStyles from "../../components/carousell/styles";
 import {
   column,
@@ -146,10 +147,28 @@ const BudgetsScreen = (props) => {
     return <View />;
   }
 
-  // console.log(
-  //   "budgets::budgets::" +
-  //     JSON.stringify(budgets.budgets[activeIndex].costSnapShots)
-  // );
+  const renderItem = ({ item }) => {
+    return (
+     <Card style={styles.costSnapShotContainer}>
+              <CustomText.RegularText
+              color={Colors.p1}
+                text={`Date: ${item.dateTime}`}
+                fontSize={Fonts.medium}
+              />
+              <CustomText.RegularText
+              color={Colors.p1}
+              text={`Amount: ${item.amount.toFixed(2)}`}
+                fontSize={Fonts.medium}
+              />
+            </Card>
+    );
+  }
+
+  const costSnapShots = budgets.budgets[activeIndex].costSnapShots;
+  console.log(
+    "budgets::budgets::" +
+      JSON.stringify(costSnapShots)
+  );
   //console.log("budgetScreen::" + activeIndex);
   return (
     <SafeAreaView>
@@ -158,7 +177,7 @@ const BudgetsScreen = (props) => {
           data={budgets.budgets}
           parentCallback={handleCallback}
           width={Dimensions.get("window").width}
-          height={Dimensions.get("window").height * 0.8}
+          height={Dimensions.get("window").height * 0.4}
         />
         <CustomText.SemiBoldText
           text={`Item ${budgets.budgets[activeIndex].name}`}
@@ -168,21 +187,7 @@ const BudgetsScreen = (props) => {
         <FlatList
           data={budgets.budgets[activeIndex].costSnapShots}
           keyExtractor={(item) => item.dateTime}
-          renderItem={(item) => (
-            <View>
-              {/* <Text>{item.dateTime.toString()}</Text> */}
-              <CustomText.RegularText
-                text={item.dateTime}
-                color={Colors.b7}
-                fontSize={Fonts.medium}
-              />
-              {/* <CustomText.RegularText
-                text={item.amount.toFixed(2)}
-                color={Colors.b7}
-                fontSize={Fonts.medium}
-              /> */}
-            </View>
-          )}
+          renderItem={(renderItem)}
         />
         <Pagination
           dotsLength={budgets.budgets[activeIndex].costSnapShots.length}
@@ -194,11 +199,6 @@ const BudgetsScreen = (props) => {
             marginHorizontal: 8,
             backgroundColor: Colors.p1,
           }}
-          inactiveDotStyle={
-            {
-              // Define styles for inactive dots here
-            }
-          }
           inactiveDotOpacity={0.4}
           inactiveDotScale={0.6}
         />
@@ -242,10 +242,12 @@ const styles = StyleSheet.create({
   mainContent: {
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT - 100,
-    ...highlightGreen,
   },
-  button: {
-    height: 50,
+  costSnapShotContainer: {
+    height: 100,
+    margin: 20,
+    padding: 10,
+    ...centered,
   },
   touchable: {
     borderRadius: 10,
@@ -264,7 +266,6 @@ const styles = StyleSheet.create({
   },
   paginationContainer: {
     height: 50,
-    ...highlightGreen,
   },
 });
 export default BudgetsScreen;
