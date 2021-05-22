@@ -146,17 +146,19 @@ const BudgetsScreen = (props) => {
     return <View />;
   }
 
-  console.log(
-    "budgets::budgets::" +
-      JSON.stringify(budgets.budgets[activeIndex].costSnapShots)
-  );
-  console.log("budgetScreen::" + activeIndex);
+  // console.log(
+  //   "budgets::budgets::" +
+  //     JSON.stringify(budgets.budgets[activeIndex].costSnapShots)
+  // );
+  //console.log("budgetScreen::" + activeIndex);
   return (
     <SafeAreaView>
       <View style={styles.mainContent}>
         <BudgetCarousel
           data={budgets.budgets}
           parentCallback={handleCallback}
+          width={Dimensions.get("window").width}
+          height={Dimensions.get("window").height * 0.8}
         />
         <CustomText.SemiBoldText
           text={`Item ${budgets.budgets[activeIndex].name}`}
@@ -238,9 +240,9 @@ BudgetsScreen.navigationOptions = (navData) => {
 const styles = StyleSheet.create({
   centered: { ...centered, flex: 1 },
   mainContent: {
-    ...centered,
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT - 100,
+    ...highlightGreen,
   },
   button: {
     height: 50,
@@ -261,7 +263,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   paginationContainer: {
-    //backgroundColor: Colors.p1,
     height: 50,
     ...highlightGreen,
   },

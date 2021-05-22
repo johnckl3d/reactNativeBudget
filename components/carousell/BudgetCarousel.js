@@ -18,44 +18,47 @@ import { animatedStyles, scrollInterpolator } from "../../utils/animations";
 import Card from "../UI/Card";
 import Chart from "./Chart";
 import CarousellStyles from "./styles";
-const CHART_WIDTH = Math.round(Dimensions.get("window").width);
-const CHART_HEIGHT = CHART_WIDTH * 0.75;
-const ITEM_WIDTH = Math.round(Dimensions.get("window").width * 0.8);
+// const CHART_WIDTH = Math.round(Dimensions.get("window").width);
+// const CHART_HEIGHT = CHART_WIDTH * 0.75;
+// const ITEM_WIDTH = Math.round(Dimensions.get("window").width * 0.8);
 
 export default class BudgetCarousel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeSlide: 0,
+      activeSlide: 0
     };
+    this._renderItem = this._renderItem.bind(this)
   }
 
   _renderItem({ item }) {
-    console.log("budget::item::" + JSON.stringify(item));
     return (
       <View style={styles.carouselItemContainer}>
         <Chart
           snapshots={item.costSnapShots}
-          width={CHART_WIDTH}
-          height={CHART_HEIGHT}
+          width={this.props.width}
+          height={this.props.height}
         />
       </View>
     );
   }
 
   render() {
-    const { data } = this.props;
+    const  data  = this.props.data;
+    console.log("render::" + JSON.stringify(data));
+    console.log("render");
     return !data ? (
       <View></View>
     ) : (
-      <View style={styles.carouselContainer}>
+      
+      <View>
           <Carousel
             ref={(c) => (this.carousel = c)}
             data={data}
             renderItem={this._renderItem}
-            sliderWidth={Dimensions.get("window").width}
-            itemWidth={ITEM_WIDTH}
-            contentContainerStyle={styles.carouselContainer}
+            sliderWidth={this.props.width}
+            itemWidth={this.props.width * 0.8}
+            contentContainerStyle={styles.carouselItemContainer}
             containerCustomStyle={{flexGrow: 0}}
             inactiveSlideShift={0}
             onSnapToItem={(index) => this.props.parentCallback(index)}
@@ -70,19 +73,12 @@ export default class BudgetCarousel extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
     ...highlightRed
   },
-  carouselContainer: {
-    width: CHART_WIDTH,
-    height: CHART_HEIGHT,
-  },
   carouselItemContainer: {
+    ...highlightRed,
     ...CarousellStyles.carouselItemContainer,
-    ...shadow,
     ...centered,
-
   },
  
 });
