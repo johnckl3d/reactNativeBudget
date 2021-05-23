@@ -17,6 +17,8 @@ import * as path from "svg-path-properties";
 import {
   getFirstDayOfWeek,
   getWeekOfDayWithOffset,
+  generateMonthArrayFromMonth,
+  getDayOfMonthFromDate,
 } from "../../helpers/helpers";
 import { highlightYellow, centered, shadow } from "../../styles/presentation";
 
@@ -50,7 +52,8 @@ export default class Chart extends Component {
       x: new Date(snapshot.dateTime),
       y: snapshot.amount,
     }));
-    const data = this.normalizeChartData(rawData);
+    //const data = this.normalizeChartData(rawData);
+    const data = this.testNormalize(rawData);
     const height = this.props.height - 50;
     const width = this.props.width;
     const maxY = Math.max.apply(
@@ -59,12 +62,12 @@ export default class Chart extends Component {
         return o.y;
       })
     );
+    console.log("data::" + JSON.stringify(data));
+    console.log("MaxY::" + maxY);
     const scaleX = scaleLinear()
       .domain([data[0].x, data[data.length - 1].x])
       .range([0, width]);
-    const scaleY = scaleLinear()
-      .domain([0, maxY])
-      .range([height - verticalPadding, verticalPadding]);
+    const scaleY = scaleLinear().domain([0, maxY]).range([height, 0]);
 
     const line = d3.shape
       .line()
@@ -117,26 +120,27 @@ export default class Chart extends Component {
     this.state.x.removeAllListeners();
   }
 
-  normalizeChartData (rawData) {
+  testNormalize() {
     var arr = [
-      { x: Moment(), y: 0 },
-      { x: Moment(), y: 0 },
-      { x: Moment(), y: 0 },
-      { x: Moment(), y: 0 },
-      { x: Moment(), y: 0 },
+      { x: 0, y: 0 },
+      { x: 1, y: 100 },
+      { x: 2, y: 30 },
+      { x: 3, y: 400 },
+      { x: 4, y: 50 },
     ];
-
-    rawData.forEach((input) => {
-      const week = getWeekOfDayWithOffset(Moment(input.x));
-      const amount = Number(input.y);
-      arr[week - 1].y += parseInt(amount);
-
-      const firstDayOfWeek = getFirstDayOfWeek(Moment(input.x));
-      arr[week - 1].x = week;
-    });
-    console.log("normalizeChartData::" + JSON.stringify(arr));
     return arr;
-  };
+  }
+
+  normalizeChartData(rawData) {
+    var testArr = generateMonthArrayFromMonth(Moment());
+    rawData.forEach((input) => {
+      const day = getDayOfMonthFromDate(Moment(input.x));
+      const amount = Number(input.y);
+      testArr[day - 1].y = parseInt(amount);
+    });
+    console.log("normalizeChartData::" + JSON.stringify(testArr));
+    return testArr;
+  }
 
   render() {
     const data = this.state.data;
