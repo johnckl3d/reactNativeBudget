@@ -18,8 +18,7 @@ import {
   getFirstDayOfWeek,
   getWeekOfDayWithOffset,
 } from "../../helpers/helpers";
-import { highlightYellow, centered, shadow } from '../../styles/presentation';
-
+import { highlightYellow, centered, shadow } from "../../styles/presentation";
 
 const verticalPadding = 0;
 const cursorRadius = 10;
@@ -46,72 +45,12 @@ export default class Chart extends Component {
 
     const x = new Animated.Value(0);
 
-   
     //const data = this.normalizeChart(rawData);
-    //console.log("Chart::data::" + JSON.stringify(data));
-
-    this.state = {
-      x: new Animated.Value(0),
-      ready: false,
-      width: undefined
-    };
-  }
-
-  moveCursor(value) {
-    // const { x, y } = this.state.properties.getPointAtLength(
-    //   this.state.lineLength - value
-    // );
-    // if (this.cursor && this.cursor.current) {
-    //   this.cursor.current.setNativeProps({
-    //     top: y - cursorRadius,
-    //     left: x - cursorRadius,
-    //   });
-    // }
-    // const label = scaleLabel(this.state.scaleY.invert(y));
-    // if (this.label && this.label.current) {
-    //   this.label.current.setNativeProps({ text: `${label}` });
-    // }
-  }
-
-  componentDidMount() {
-    // this.setState({ ready: true }, () => {
-    //   this.state.x.addListener(({ value }) => this.moveCursor(value));
-    //   this.moveCursor(0);
-    // });
-  }
-
-  componentWillUnmount() {
-    //this.state.x.removeAllListeners();
-  }
-
-  
-
-  normalizeChartData = (rawData) => {
-    var arr = [
-      { x: Moment(), y: 0 },
-      { x: Moment(), y: 0 },
-      { x: Moment(), y: 0 },
-      { x: Moment(), y: 0 },
-      { x: Moment(), y: 0 },
-    ];
-
-    rawData.forEach((input) => {
-      const week = getWeekOfDayWithOffset(Moment(input.x));
-      const amount = Number(input.y);
-      arr[week - 1].y += parseInt(amount);
-
-      const firstDayOfWeek = getFirstDayOfWeek(Moment(input.x));
-      arr[week - 1].x = firstDayOfWeek;
-    });
-    return arr;
-  };
-
-  render() {
-   
-    const data = this.props.snapshots.map((snapshot) => ({
+    const rawData = this.props.snapshots.map((snapshot) => ({
       x: new Date(snapshot.dateTime),
       y: snapshot.amount,
     }));
+    const data = this.normalizeChartData(rawData);
     const height = this.props.height - 50;
     const width = this.props.width;
     const maxY = Math.max.apply(
@@ -135,89 +74,162 @@ export default class Chart extends Component {
     const properties = path.svgPathProperties(line);
 
     const lineLength = properties.getTotalLength();
-   
+
+    this.state = {
+      x: new Animated.Value(0),
+      data: data,
+      ready: false,
+      height: height,
+      width: width,
+      maxY: maxY,
+      scaleX: scaleX,
+      scaleY: scaleY,
+      line: line,
+      properties: properties,
+      lineLength: lineLength,
+    };
+  }
+
+  moveCursor(value) {
+    const { x, y } = this.state.properties.getPointAtLength(
+      this.state.lineLength - value
+    );
+    if (this.cursor && this.cursor.current) {
+      this.cursor.current.setNativeProps({
+        top: y - cursorRadius,
+        left: x - cursorRadius,
+      });
+    }
+    const label = scaleLabel(this.state.scaleY.invert(y));
+    if (this.label && this.label.current) {
+      this.label.current.setNativeProps({ text: `${label}` });
+    }
+  }
+
+  componentDidMount() {
+    this.setState({ ready: true }, () => {
+      this.state.x.addListener(({ value }) => this.moveCursor(value));
+      this.moveCursor(0);
+    });
+  }
+
+  componentWillUnmount() {
+    this.state.x.removeAllListeners();
+  }
+
+  normalizeChartData (rawData) {
+    var arr = [
+      { x: Moment(), y: 0 },
+      { x: Moment(), y: 0 },
+      { x: Moment(), y: 0 },
+      { x: Moment(), y: 0 },
+      { x: Moment(), y: 0 },
+    ];
+
+    rawData.forEach((input) => {
+      const week = getWeekOfDayWithOffset(Moment(input.x));
+      const amount = Number(input.y);
+      arr[week - 1].y += parseInt(amount);
+
+      const firstDayOfWeek = getFirstDayOfWeek(Moment(input.x));
+      arr[week - 1].x = week;
+    });
+    console.log("normalizeChartData::" + JSON.stringify(arr));
+    return arr;
+  };
+
+  render() {
+    const data = this.state.data;
+    const height = this.state.height;
+    const width = this.state.width;
+    const maxY = this.state.maxY;
+    const scaleX = this.state.scaleX;
+    const scaleY = this.state.scaleY;
+    const line = this.state.line;
+    const properties = this.state.properties;
+    const lineLength = this.state.lineLength;
     const x = this.state.x;
     return (
-        <View style={styles.container}>
-          <View style={{ flexDirection: "row" }}>
-            <View>
-              <YAxis
-                style={{ height: height }}
-                data={data}
-                yAccessor={({ item }) => item.y}
-                contentInset={verticalContentInset}
-                svg={yAxesSvg}
-                formatLabel={(value) => "" + value}
-              />
-            </View>
-            <View>
-              <Svg {...{ width, height }}>
-                <Defs>
-                  <LinearGradient
-                    x1="50%"
-                    y1="0%"
-                    x2="50%"
-                    y2="100%"
-                    id="gradient"
-                  >
-                    <Stop stopColor="#CDE3F8" offset="0%" />
-                    <Stop stopColor="#eef6fd" offset="80%" />
-                    <Stop stopColor="#FEFFFF" offset="100%" />
-                  </LinearGradient>
-                </Defs>
-                <Path
-                  d={line}
-                  fill="transparent"
-                  stroke="#367be2"
-                  strokeWidth={5}
-                />
-                <Path
-                  d={`${line} L ${width} ${height} L 0 ${height}`}
-                  fill="url(#gradient)"
-                />
-                <View ref={this.cursor} style={styles.cursor} />
-              </Svg>
-            </View>
-            <Animated.View style={[styles.label]}>
-              <TextInput ref={this.label} />
-            </Animated.View>
-            <Animated.ScrollView
-              style={StyleSheet.absoluteFill}
-              contentContainerStyle={{ width: lineLength * 2 }}
-              showsHorizontalScrollIndicator={false}
-              scrollEventThrottle={16}
-              bounces={false}
-              onScroll={Animated.event(
-                [
-                  {
-                    nativeEvent: {
-                      contentOffset: { x },
-                    },
-                  },
-                ],
-                { useNativeDriver: true }
-              )}
-              horizontal
+      <View style={styles.container}>
+        <View style={{ flexDirection: "row" }}>
+          <View>
+            <YAxis
+              style={{ height: height }}
+              data={data}
+              yAccessor={({ item }) => item.y}
+              contentInset={verticalContentInset}
+              svg={yAxesSvg}
+              formatLabel={(value) => "" + value}
             />
           </View>
-          <XAxis
-            data={data}
-            svg={{
-              fill: "black",
-              fontSize: 8,
-              fontWeight: "bold",
-              rotation: 20,
-              originY: 30,
-              y: 5,
-            }}
-            xAccessor={({ item }) => item.x}
-            scale={scaleTime}
-            numberOfTicks={6}
-            style={{ marginHorizontal: -15, height: 20 }}
-            contentInset={{ left: 10, right: 25 }}
-            formatLabel={(index) => Moment(index).format("D")}
+          <View>
+            <Svg {...{ width, height }}>
+              <Defs>
+                <LinearGradient
+                  x1="50%"
+                  y1="0%"
+                  x2="50%"
+                  y2="100%"
+                  id="gradient"
+                >
+                  <Stop stopColor="#CDE3F8" offset="0%" />
+                  <Stop stopColor="#eef6fd" offset="80%" />
+                  <Stop stopColor="#FEFFFF" offset="100%" />
+                </LinearGradient>
+              </Defs>
+              <Path
+                d={line}
+                fill="transparent"
+                stroke="#367be2"
+                strokeWidth={5}
+              />
+              <Path
+                d={`${line} L ${width} ${height} L 0 ${height}`}
+                fill="url(#gradient)"
+              />
+              <View ref={this.cursor} style={styles.cursor} />
+            </Svg>
+          </View>
+          <Animated.View style={[styles.label]}>
+            <TextInput ref={this.label} />
+          </Animated.View>
+          <Animated.ScrollView
+            style={StyleSheet.absoluteFill}
+            contentContainerStyle={{ width: lineLength * 2 }}
+            showsHorizontalScrollIndicator={false}
+            scrollEventThrottle={16}
+            bounces={false}
+            onScroll={Animated.event(
+              [
+                {
+                  nativeEvent: {
+                    contentOffset: { x },
+                  },
+                },
+              ],
+              { useNativeDriver: true }
+            )}
+            horizontal
           />
         </View>
+        <XAxis
+          data={data}
+          svg={{
+            fill: "black",
+            fontSize: 8,
+            fontWeight: "bold",
+            rotation: 20,
+            originY: 30,
+            y: 5,
+          }}
+          xAccessor={({ item }) => item.x}
+          scale={scaleTime}
+          numberOfTicks={6}
+          style={{ marginHorizontal: -15, height: 20 }}
+          contentInset={{ left: 10, right: 25 }}
+          formatLabel={(index) => Moment(index).format("D")}
+        />
+      </View>
     );
   }
 }
@@ -225,7 +237,7 @@ export default class Chart extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignSelf: "stretch"
+    alignSelf: "stretch",
   },
   cursor: {
     width: cursorRadius * 2,
