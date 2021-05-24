@@ -13,7 +13,7 @@ export function getFirstDayOfWeek(input = moment()) {
 }
 
 export function getDayOfMonthFromDate(input = moment()) {
-  const result = input.clone().date();
+  const result = input.date();
   return result;
 }
 
@@ -26,7 +26,7 @@ export function generateMonthArrayFromMonth(input = moment()) {
   while (dateEnd.diff(dateStart, "days") >= 0) {
     if (dateStart.isBefore(dateEnd)) {
       //const obj = { x: parseInt(dateStart.format("D")), y: 0 };
-      const obj = { x: dateStart.format("D"), y: 0 };
+      const obj = { x: dateStart.format("YYYY-MM-DD"), y: 0 };
       days.push(obj);
     }
     dateStart.add(1, "days");

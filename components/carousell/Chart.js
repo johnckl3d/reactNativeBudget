@@ -20,7 +20,13 @@ import {
   generateMonthArrayFromMonth,
   getDayOfMonthFromDate,
 } from "../../helpers/helpers";
-import { highlightYellow, centered, shadow } from "../../styles/presentation";
+import {
+  highlightYellow,
+  centered,
+  shadow,
+  highlightRed,
+  highlightGreen,
+} from "../../styles/presentation";
 
 const verticalPadding = 0;
 const cursorRadius = 10;
@@ -52,7 +58,7 @@ export default class Chart extends Component {
       x: new Date(snapshot.dateTime),
       y: snapshot.amount,
     }));
-    
+
     const data = this.normalizeChartData(rawData);
     //const data = this.testNormalize(rawData);
     const height = this.props.height - 50;
@@ -69,8 +75,8 @@ export default class Chart extends Component {
       .domain([data[0].x, data[data.length - 1].x])
       .range([0, width]);
     const scaleY = scaleLinear().domain([0, maxY]).range([height, 0]);
-    console.log("scaleX::" + scaleX);
-    console.log("scaleY::" + scaleY);
+    // console.log("scaleX::" + scaleX);
+    // console.log("scaleY::" + scaleY);
     const line = d3.shape
       .line()
       .x((d) => scaleX(d.x))
@@ -134,12 +140,17 @@ export default class Chart extends Component {
   }
 
   normalizeChartData(rawData) {
-    var testArr = generateMonthArrayFromMonth(Moment());
+    var testArr = generateMonthArrayFromMonth(Moment().month("January"));
+    console.log("rawData::" + JSON.stringify(rawData));
     rawData.forEach((input) => {
-      const day = getDayOfMonthFromDate(Moment(input.x));
+      const day = Moment(input.x).format("YYYY-MM-DD");
+      console.log("day::" + day);
       const amount = Number(input.y);
-      const index = rawData.findIndex(obj => obj.x === input.x)
-      testArr[index].y = parseInt(amount);
+      const index = testArr.findIndex((obj) => obj.x === day);
+      console.log(index + "::");
+      if(index != -1){
+        testArr[index].y = parseInt(amount);
+      }
     });
     console.log("normalizeChartData::" + JSON.stringify(testArr));
     return testArr;
@@ -170,7 +181,7 @@ export default class Chart extends Component {
             />
           </View>
           <View>
-            <Svg {...{ width, height }}>
+            <Svg width={width} height={height}>
               <Defs>
                 <LinearGradient
                   x1="50%"
@@ -219,7 +230,7 @@ export default class Chart extends Component {
             horizontal
           /> */}
         </View>
-        {/* <XAxis
+        <XAxis
           data={data}
           svg={{
             fill: "black",
@@ -230,13 +241,14 @@ export default class Chart extends Component {
             y: 5,
           }}
           xAccessor={({ item }) => item.x}
-          scale={scaleTime}
-          numberOfTicks={6}
-          style={{ marginHorizontal: -15, height: 20 }}
+          //scale={scaleTime}
+          //numberOfTicks={6}
+          style={styles.xAxis}
           contentInset={{ left: 10, right: 25 }}
-          //formatLabel={(index) => Moment(index).format("D")}
-          formatLabel={(index) => getDayOfMonthFromDate(index)}
-        /> */}
+          //formatLabel={(value, index) => data[index].x}
+          formatLabel={(index) => Moment(index).format("D")}
+          //formatLabel={(index) => getDayOfMonthFromDate(index)}
+        />
       </View>
     );
   }
@@ -244,8 +256,7 @@ export default class Chart extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignSelf: "stretch",
+    ...highlightGreen,
   },
   cursor: {
     width: cursorRadius * 2,
@@ -260,5 +271,10 @@ const styles = StyleSheet.create({
     backgroundColor: "lightgray",
     width: labelWidth,
     right: 0,
+  },
+  xAxis: {
+    ...highlightRed,
+    marginHorizontal: -15,
+    height: 20,
   },
 });

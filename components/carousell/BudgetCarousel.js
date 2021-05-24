@@ -22,7 +22,7 @@ export default class BudgetCarousel extends React.Component {
       <View style={styles.carouselItemContainer} width={this.props.width} height={this.props.height}>
         <Chart
           snapshots={item.costSnapShots}
-          width={this.props.width * 0.8}
+          width={this.props.width}
           height={this.props.height}
         />
       </View>
@@ -43,7 +43,7 @@ export default class BudgetCarousel extends React.Component {
             data={data}
             renderItem={this._renderItem}
             sliderWidth={this.props.width}
-            itemWidth={this.props.width * 0.8}
+            itemWidth={this.props.width}
             //contentContainerStyle={styles.carouselItemContainer}
             //containerCustomStyle={{flexGrow: 0}}
             inactiveSlideShift={0}
