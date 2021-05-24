@@ -7,11 +7,9 @@ export function getWeekOfDayWithOffset(input = moment()) {
   return Math.ceil((input.date() + offset) / 7);
 }
 
-
 export function getFirstDayOfWeek(input = moment()) {
   const firstDayOfWeek = input.clone().startOf("week").toDate();
   return firstDayOfWeek;
-
 }
 
 export function getDayOfMonthFromDate(input = moment()) {
@@ -25,10 +23,13 @@ export function generateMonthArrayFromMonth(input = moment()) {
   const lastDayOfMonth = input.clone().endOf("month");
   const dateStart = firstDayOfMonth;
   const dateEnd = lastDayOfMonth;
-  while (dateEnd.diff(dateStart, 'days') >= 0) {
-    const obj = {'x': dateStart.format('D'), 'y':0};
-   days.push(obj);
-   dateStart.add(1, 'days')
+  while (dateEnd.diff(dateStart, "days") >= 0) {
+    if (dateStart.isBefore(dateEnd)) {
+      //const obj = { x: parseInt(dateStart.format("D")), y: 0 };
+      const obj = { x: dateStart.format("D"), y: 0 };
+      days.push(obj);
+    }
+    dateStart.add(1, "days");
   }
-  return days
+  return days;
 }

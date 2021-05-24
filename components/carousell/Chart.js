@@ -52,8 +52,9 @@ export default class Chart extends Component {
       x: new Date(snapshot.dateTime),
       y: snapshot.amount,
     }));
-    //const data = this.normalizeChartData(rawData);
-    const data = this.testNormalize(rawData);
+    
+    const data = this.normalizeChartData(rawData);
+    //const data = this.testNormalize(rawData);
     const height = this.props.height - 50;
     const width = this.props.width;
     const maxY = Math.max.apply(
@@ -68,7 +69,8 @@ export default class Chart extends Component {
       .domain([data[0].x, data[data.length - 1].x])
       .range([0, width]);
     const scaleY = scaleLinear().domain([0, maxY]).range([height, 0]);
-
+    console.log("scaleX::" + scaleX);
+    console.log("scaleY::" + scaleY);
     const line = d3.shape
       .line()
       .x((d) => scaleX(d.x))
@@ -136,7 +138,8 @@ export default class Chart extends Component {
     rawData.forEach((input) => {
       const day = getDayOfMonthFromDate(Moment(input.x));
       const amount = Number(input.y);
-      testArr[day - 1].y = parseInt(amount);
+      const index = rawData.findIndex(obj => obj.x === input.x)
+      testArr[index].y = parseInt(amount);
     });
     console.log("normalizeChartData::" + JSON.stringify(testArr));
     return testArr;
@@ -194,7 +197,7 @@ export default class Chart extends Component {
               <View ref={this.cursor} style={styles.cursor} />
             </Svg>
           </View>
-          <Animated.View style={[styles.label]}>
+          {/* <Animated.View style={[styles.label]}>
             <TextInput ref={this.label} />
           </Animated.View>
           <Animated.ScrollView
@@ -214,9 +217,9 @@ export default class Chart extends Component {
               { useNativeDriver: true }
             )}
             horizontal
-          />
+          /> */}
         </View>
-        <XAxis
+        {/* <XAxis
           data={data}
           svg={{
             fill: "black",
@@ -231,8 +234,9 @@ export default class Chart extends Component {
           numberOfTicks={6}
           style={{ marginHorizontal: -15, height: 20 }}
           contentInset={{ left: 10, right: 25 }}
-          formatLabel={(index) => Moment(index).format("D")}
-        />
+          //formatLabel={(index) => Moment(index).format("D")}
+          formatLabel={(index) => getDayOfMonthFromDate(index)}
+        /> */}
       </View>
     );
   }
