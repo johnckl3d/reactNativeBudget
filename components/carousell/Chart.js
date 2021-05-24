@@ -143,7 +143,8 @@ export default class Chart extends Component {
     var testArr = generateMonthArrayFromMonth(Moment().month("January"));
     console.log("rawData::" + JSON.stringify(rawData));
     rawData.forEach((input) => {
-      const day = Moment(input.x).format("YYYY-MM-DD");
+      //const day = Moment(input.x).format("YYYY-MM-DD");
+      const day = new Date(input.x).toISOString();
       console.log("day::" + day);
       const amount = Number(input.y);
       const index = testArr.findIndex((obj) => obj.x === day);

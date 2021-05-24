@@ -25,8 +25,8 @@ export function generateMonthArrayFromMonth(input = moment()) {
   const dateEnd = lastDayOfMonth;
   while (dateEnd.diff(dateStart, "days") >= 0) {
     if (dateStart.isBefore(dateEnd)) {
-      //const obj = { x: parseInt(dateStart.format("D")), y: 0 };
-      const obj = { x: dateStart.format("YYYY-MM-DD"), y: 0 };
+      const obj = { x: new Date(dateStart).toISOString(), y: 0 };
+      //const obj = { x: dateStart.format("YYYY-MM-DD"), y: 0 };
       days.push(obj);
     }
     dateStart.add(1, "days");
