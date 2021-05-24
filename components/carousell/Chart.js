@@ -41,6 +41,8 @@ const d3 = {
 
 const scaleLabel = scaleQuantile().domain([0, 300]).range([0, 200, 300]);
 
+const getDomain = (domain) => [Math.min(...domain), Math.max(...domain)];
+
 export default class Chart extends Component {
   cursor = React.createRef();
 
@@ -71,12 +73,19 @@ export default class Chart extends Component {
     );
     console.log("data::" + JSON.stringify(data));
     console.log("MaxY::" + maxY);
-    const scaleX = scaleLinear()
-      .domain([data[0].x, data[data.length - 1].x])
+    const scaleX = scaleTime()
+      .domain(getDomain(data.map((d) => d.x)))
       .range([0, width]);
-    const scaleY = scaleLinear().domain([0, maxY]).range([height, 0]);
-    // console.log("scaleX::" + scaleX);
-    // console.log("scaleY::" + scaleY);
+    const scaleY = scaleLinear()
+      .domain(getDomain(data.map((d) => d.y)))
+      .range([height, 0]);
+
+    // const scaleX = scaleLinear()
+    //   .domain([data[0].x, data[data.length - 1].x])
+    //   .range([0, width]);
+    // const scaleY = scaleLinear().domain([0, maxY]).range([height, 0]);
+    console.log("scaleX::" + scaleX);
+    console.log("scaleY::" + scaleY);
     const line = d3.shape
       .line()
       .x((d) => scaleX(d.x))
@@ -130,11 +139,12 @@ export default class Chart extends Component {
 
   testNormalize() {
     var arr = [
-      { x: 0, y: 0 },
-      { x: 1, y: 100 },
-      { x: 2, y: 30 },
-      { x: 3, y: 400 },
-      { x: 4, y: 50 },
+      { x: new Date(2018, 9, 1).getTime(), y: 0 },
+      { x: new Date(2018, 9, 16).getTime(), y: 0 },
+      { x: new Date(2018, 9, 17).getTime(), y: 200 },
+      { x: new Date(2018, 10, 1).getTime(), y: 200 },
+      { x: new Date(2018, 10, 2).getTime(), y: 300 },
+      { x: new Date(2018, 10, 5).getTime(), y: 300 },
     ];
     return arr;
   }
@@ -143,13 +153,13 @@ export default class Chart extends Component {
     var testArr = generateMonthArrayFromMonth(Moment().month("January"));
     console.log("rawData::" + JSON.stringify(rawData));
     rawData.forEach((input) => {
-      //const day = Moment(input.x).format("YYYY-MM-DD");
-      const day = new Date(input.x).toISOString();
+      const day = new Date(input.x).getTime();
+      //const day = new Date(input.x).toISOString();
       console.log("day::" + day);
       const amount = Number(input.y);
       const index = testArr.findIndex((obj) => obj.x === day);
       console.log(index + "::");
-      if(index != -1){
+      if (index != -1) {
         testArr[index].y = parseInt(amount);
       }
     });
@@ -257,7 +267,7 @@ export default class Chart extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    ...highlightGreen,
+    //...highlightGreen,
   },
   cursor: {
     width: cursorRadius * 2,
@@ -274,7 +284,7 @@ const styles = StyleSheet.create({
     right: 0,
   },
   xAxis: {
-    ...highlightRed,
+    //...highlightRed,
     marginHorizontal: -15,
     height: 20,
   },
