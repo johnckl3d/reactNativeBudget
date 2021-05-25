@@ -15,6 +15,7 @@ import {
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useDispatch, useSelector } from "react-redux";
 import BudgetCarousel from "../../components/carousell/BudgetCarousel";
+import MonthCarousel from "../../components/carousell/MonthCarousel";
 import HeaderButton from "../../components/UI/HeaderButton";
 import * as budgetsActions from "../../store/actions/budgets";
 import * as costCategoriesActions from "../../store/actions/costCategories";
@@ -43,9 +44,12 @@ const BudgetsScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [isFocus, setFocus] = useState(true);
-  const [activeIndex, setIndex] = useState(0);
+  const [budgetIndex, setBudgetIndex] = useState(0);
+  const [monthIndex, setMonthsIndex] = useState(0);
   const budgets = useSelector((state) => state.budgets);
   const dispatch = useDispatch();
+  const monthsList = moment.monthsShort();
+
 
   const loadBudgets = useCallback(async () => {
     setError(null);
@@ -70,9 +74,12 @@ const BudgetsScreen = (props) => {
     };
   }, [loadBudgets]);
 
-  const handleCallback = (childData) => {
-    console.log("handleCallback");
-    setIndex(childData);
+  const handleBudgetSwipeCallback = (childData) => {
+    setBudgetIndex(childData);
+  };
+
+  const handleMonthsSwipeCallback = (childData) => {
+    setMonthsIndex(childData);
   };
 
   const selectItemHandler = (costCategoryId, name, totalAmount) => {
@@ -164,31 +171,37 @@ const BudgetsScreen = (props) => {
     );
   };
 
-  const costSnapShots = budgets.budgets[activeIndex].costSnapShots;
+  const costSnapShots = budgets.budgets[budgetIndex].costSnapShots;
   console.log("budgets::budgets::" + JSON.stringify(costSnapShots));
   //console.log("budgetScreen::" + activeIndex);
   return (
     <SafeAreaView>
       <CustomText.SemiBoldText
-        text={`Item ${budgets.budgets[activeIndex].name}`}
+        text={`Item ${budgets.budgets[budgetIndex].name}`}
         color={Colors.p1}
         fontSize={Fonts.medium}
       />
       <View style={styles.mainContent}>
+      <MonthCarousel
+          data={monthsList}
+          parentCallback={handleMonthsSwipeCallback}
+          width={Dimensions.get("window").width}
+          height={100}
+        />
         <BudgetCarousel
           data={budgets.budgets}
-          parentCallback={handleCallback}
+          parentCallback={handleBudgetSwipeCallback}
           width={Dimensions.get("window").width}
           height={Dimensions.get("window").height * 0.4}
         />
         <FlatList
-          data={budgets.budgets[activeIndex].costSnapShots}
+          data={budgets.budgets[budgetIndex].costSnapShots}
           keyExtractor={(item) => item.dateTime}
           renderItem={renderItem}
         />
         <Pagination
-          dotsLength={budgets.budgets[activeIndex].costSnapShots.length}
-          activeDotIndex={activeIndex}
+          dotsLength={budgets.budgets[budgetIndex].costSnapShots.length}
+          activeDotIndex={budgetIndex}
           dotStyle={{
             width: 10,
             height: 10,

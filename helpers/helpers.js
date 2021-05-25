@@ -33,3 +33,14 @@ export function generateMonthArrayFromMonth(input = moment()) {
   }
   return days;
 }
+
+export function generateMonthArrayList() {
+  var dateStart = moment("1980-1-1");
+  var dateEnd = moment("2099-1-1");
+  var timeValues = [];
+
+  while (dateEnd > dateStart || dateStart.format("M") === dateEnd.format("M")) {
+    timeValues.push(dateStart.format("YYYY-MM"));
+    dateStart.add(1, "month");
+  }
+}
