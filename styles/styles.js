@@ -1,6 +1,17 @@
 import { StyleSheet } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '@Utils/scalingUtils';
 import Colors from '@Styles/colors'
+import {
+  column,
+  row,
+  highlightRed,
+  highlightYellow,
+  centered,
+  shadow,
+  bottom,
+  centeredStretch,
+  highlightGreen,
+} from "@Styles/presentation";
 
 export default StyleSheet.create({
   safeAreaContainer: {
@@ -69,5 +80,20 @@ export default StyleSheet.create({
     backgroundColor: Colors.b2,
     paddingHorizontal: wp(5),
     paddingVertical: hp(2)
+  },
+  modalContainer: {
+    // height: hp(35),
+    flex: 1,
+    backgroundColor: Colors.w,
+    // borderTopLeftRadius: hp(2),
+    // borderTopRightRadius: hp(2),
+    // paddingHorizontal: wp(5),
+    //paddingVertical: wp(5)
+  },
+  costSnapShotContainer: {
+    height: hp(10),
+    margin: hp(0.5),
+    padding: hp(0.5),
+    ...centered,
   },
 });

@@ -3,7 +3,7 @@ import { View, Text, Button, StyleSheet } from 'react-native';
 
 import CartItem from './CartItem';
 import Colors from '../../constants/Colors';
-import Card from '../UI/Card';
+import Card from '@UIComponents/Card';
 
 const OrderItem = props => {
   const [showDetails, setShowDetails] = useState(false);

@@ -4,7 +4,7 @@ import Carousel from "react-native-snap-carousel";
 import { centered, highlightRed } from "../../styles/presentation";
 import { animatedStyles, scrollInterpolator } from "../../utils/animations";
 import Chart from "./Chart";
-import CarousellStyles from "./styles";
+
 import CustomText from "@CustomText";
 import Colors from "@Styles/colors";
 import Fonts from "@Styles/fonts";

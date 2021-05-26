@@ -6,7 +6,6 @@ import {
 } from "../../styles/presentation";
 import { animatedStyles, scrollInterpolator } from "../../utils/animations";
 import Chart from "./Chart";
-import CarousellStyles from "./styles";
 
 export default class BudgetCarousel extends React.Component {
   constructor(props) {

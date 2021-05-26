@@ -22,9 +22,9 @@ import * as costCategoriesActions from "../../store/actions/costCategories";
 import CustomText from "@CustomText";
 import Colors from "@Styles/colors";
 import Fonts from "@Styles/fonts";
+import Styles from '@Styles/styles';
 import Carousel, { Pagination } from "react-native-snap-carousel";
-import Card from "../../components/UI/Card";
-import CarouselStyles from "../../components/carousell/styles";
+import Card from "@UIComponents/Card";
 import {
   column,
   row,
@@ -260,25 +260,11 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT - 100,
   },
   costSnapShotContainer: {
-    height: 100,
-    margin: 20,
-    padding: 10,
-    ...centered,
+    ...Styles.safeAreaContainer,
   },
   touchable: {
     borderRadius: 10,
     overflow: "hidden",
-  },
-  title: {
-    fontFamily: "open-sans-bold",
-    fontSize: 18,
-    marginVertical: 2,
-    height: 30,
-  },
-  details: {
-    alignItems: "center",
-    height: "17%",
-    padding: 10,
   },
   paginationContainer: {
     height: 50,
