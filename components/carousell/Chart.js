@@ -28,6 +28,10 @@ import {
   highlightRed,
   highlightGreen,
 } from "../../styles/presentation";
+import CustomText from "@CustomText";
+import Colors from "@Styles/colors";
+import Fonts from "@Styles/fonts";
+import Styles from '@Styles/styles';
 
 const verticalPadding = 0;
 const cursorRadius = 10;
@@ -190,15 +194,15 @@ export default class Chart extends Component {
                   y2="100%"
                   id="gradient"
                 >
-                  <Stop stopColor="#CDE3F8" offset="0%" />
-                  <Stop stopColor="#eef6fd" offset="80%" />
-                  <Stop stopColor="#FEFFFF" offset="100%" />
+                  <Stop stopColor={Colors.s1} offset="0%" />
+                  <Stop stopColor={Colors.t1} offset="80%" />
+                  <Stop stopColor={Colors.t1} offset="100%" />
                 </LinearGradient>
               </Defs>
               <Path
                 d={line}
                 fill="transparent"
-                stroke="#367be2"
+                stroke={Colors.p1}
                 strokeWidth={5}
               />
               <Path
@@ -262,7 +266,7 @@ const styles = StyleSheet.create({
     width: cursorRadius * 2,
     height: cursorRadius * 2,
     borderRadius: cursorRadius,
-    borderColor: "#367be2",
+    borderColor: Colors.p1,
     borderWidth: 3,
     backgroundColor: "white",
   },

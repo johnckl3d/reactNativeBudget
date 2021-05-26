@@ -6,7 +6,9 @@
  */
 
 import React, {PureComponent} from "react";
-import { Text, StyleSheet, Platform } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
+
+import { Text } from "galio-framework";
 import Colors from '@Styles/colors';
 import { widthPercentageToDP as wp } from '@Utils/scalingUtils';
 

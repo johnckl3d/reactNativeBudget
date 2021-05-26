@@ -21,7 +21,9 @@ export default colors = {
 
   u1: '#FF0000', u2: '#FF5500', u3: '#405B70', u4: '#769FAB',
 
-  grey: '#CBCBCB',
+  grey: '#DCDCDC',
+
+  
 
   //Vitality Status Color
   g2: ['#F15A22', '#FBC49D'],

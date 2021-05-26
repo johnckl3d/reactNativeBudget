@@ -7,7 +7,6 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
   FlatList,
   Dimensions,
@@ -22,7 +21,7 @@ import * as costCategoriesActions from "../../store/actions/costCategories";
 import CustomText from "@CustomText";
 import Colors from "@Styles/colors";
 import Fonts from "@Styles/fonts";
-import Styles from '@Styles/styles';
+import Styles from "@Styles/styles";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import Card from "@UIComponents/Card";
 import {
@@ -41,13 +40,12 @@ import {
   getWeekOfDayWithOffset,
   generateMonthArrayFromMonth,
   getDayOfMonthFromDate,
-  generateMonthArrayList
+  generateMonthArrayList,
 } from "@Utils/dates";
 const SCREEN_WIDTH = Math.round(Dimensions.get("window").width);
 const SCREEN_HEIGHT = Math.round(Dimensions.get("window").height);
 
 const BudgetsScreen = (props) => {
-  let TouchableCmp = TouchableOpacity;
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [isFocus, setFocus] = useState(true);
@@ -164,16 +162,26 @@ const BudgetsScreen = (props) => {
   const renderItem = ({ item }) => {
     return (
       <Card style={styles.costSnapShotContainer}>
-        <CustomText.RegularText
-          color={Colors.p1}
-          text={`Date: ${item.dateTime}`}
-          fontSize={Fonts.medium}
-        />
-        <CustomText.RegularText
-          color={Colors.p1}
-          text={`Amount: ${item.amount.toFixed(2)}`}
-          fontSize={Fonts.medium}
-        />
+        <View>
+          <CustomText.RegularText
+            style={Styles.modalTitleText}
+            color={Colors.p1}
+            text={`Date: ${item.dateTime}`}
+            fontSize={Fonts.medium}
+          />
+        </View>
+        <View>
+          <CustomText.RegularText
+            color={Colors.p1}
+            text={`Date: ${item.dateTime}`}
+            fontSize={Fonts.small}
+          />
+          <CustomText.RegularText
+            color={Colors.p1}
+            text={`Amount: ${item.amount.toFixed(2)}`}
+            fontSize={Fonts.small}
+          />
+        </View>
       </Card>
     );
   };
@@ -188,7 +196,7 @@ const BudgetsScreen = (props) => {
         fontSize={Fonts.medium}
       />
       <View style={styles.mainContent}>
-      <MonthCarousel
+        <MonthCarousel
           data={monthsList}
           parentCallback={handleMonthsSwipeCallback}
           width={Dimensions.get("window").width}
@@ -208,13 +216,7 @@ const BudgetsScreen = (props) => {
         <Pagination
           dotsLength={budgets.budgets[budgetIndex].costSnapShots.length}
           activeDotIndex={budgetIndex}
-          dotStyle={{
-            width: 10,
-            height: 10,
-            borderRadius: 5,
-            marginHorizontal: 8,
-            backgroundColor: Colors.p1,
-          }}
+          dotStyle={styles.paginationDot}
           inactiveDotOpacity={0.4}
           inactiveDotScale={0.6}
         />
@@ -260,14 +262,13 @@ const styles = StyleSheet.create({
     height: SCREEN_HEIGHT - 100,
   },
   costSnapShotContainer: {
-    ...Styles.safeAreaContainer,
-  },
-  touchable: {
-    borderRadius: 10,
-    overflow: "hidden",
+    ...Styles.costSnapShotContainer,
   },
   paginationContainer: {
     height: 50,
+  },
+  paginationDot: {
+    ...Styles.paginationDot,
   },
 });
 export default BudgetsScreen;

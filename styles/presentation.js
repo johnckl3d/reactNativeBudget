@@ -5,10 +5,11 @@ import { StyleSheet, Dimensions } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '@Utils/scalingUtils';
 
 export const shadow = {
-  shadowColor: colors.b1,
-  shadowRadius: dimensions.shadowSize,
-  shadowOpacity: 0.35,
-  shadowOffset: {width: 0, height: 0}
+  shadowColor: colors.k,
+  shadowRadius: 8,
+  shadowOpacity: 0.15,
+  shadowOffset: {width: 0, height: 0},
+  elevation: 1,
 };
 
 export const centered = {

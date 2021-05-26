@@ -68,7 +68,9 @@ export default StyleSheet.create({
     backgroundColor: Colors.w
   },
   modalTitleText: {
-    flex: 1
+    flex: 1,
+    paddingTop: hp(1),
+    paddingBottom: hp(0.5),
   },
   modalCloseIcon: {
     width: wp(8),
@@ -94,6 +96,14 @@ export default StyleSheet.create({
     height: hp(10),
     margin: hp(0.5),
     padding: hp(0.5),
+    backgroundColor: Colors.b2,
     ...centered,
+  },
+  paginationDot: {
+  width: 10,
+  height: 10,
+  borderRadius: 5,
+  marginHorizontal: 8,
+  backgroundColor: Colors.p1,
   },
 });
