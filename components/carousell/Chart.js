@@ -71,8 +71,6 @@ export default class Chart extends Component {
         return o.y;
       })
     );
-    console.log("data::" + JSON.stringify(data));
-    console.log("MaxY::" + maxY);
     const scaleX = scaleTime()
       .domain(getDomain(data.map((d) => d.x)))
       .range([0, width]);
@@ -80,12 +78,6 @@ export default class Chart extends Component {
       .domain(getDomain(data.map((d) => d.y)))
       .range([height, 0]);
 
-    // const scaleX = scaleLinear()
-    //   .domain([data[0].x, data[data.length - 1].x])
-    //   .range([0, width]);
-    // const scaleY = scaleLinear().domain([0, maxY]).range([height, 0]);
-    console.log("scaleX::" + scaleX);
-    console.log("scaleY::" + scaleY);
     const line = d3.shape
       .line()
       .x((d) => scaleX(d.x))
@@ -151,14 +143,10 @@ export default class Chart extends Component {
 
   normalizeChartData(rawData) {
     var testArr = generateMonthArrayFromMonth(Moment().month("January"));
-    console.log("rawData::" + JSON.stringify(rawData));
     rawData.forEach((input) => {
       const day = new Date(input.x).getTime();
-      //const day = new Date(input.x).toISOString();
-      console.log("day::" + day);
       const amount = Number(input.y);
       const index = testArr.findIndex((obj) => obj.x === day);
-      console.log(index + "::");
       if (index != -1) {
         testArr[index].y = parseInt(amount);
       }

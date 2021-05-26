@@ -36,6 +36,7 @@ import {
   centeredStretch,
   highlightGreen,
 } from "../../styles/presentation";
+import moment from "moment";
 const SCREEN_WIDTH = Math.round(Dimensions.get("window").width);
 const SCREEN_HEIGHT = Math.round(Dimensions.get("window").height);
 
@@ -172,8 +173,7 @@ const BudgetsScreen = (props) => {
   };
 
   const costSnapShots = budgets.budgets[budgetIndex].costSnapShots;
-  console.log("budgets::budgets::" + JSON.stringify(costSnapShots));
-  //console.log("budgetScreen::" + activeIndex);
+  console.log("budgetsScreen::costSnapShots::" + JSON.stringify(costSnapShots));
   return (
     <SafeAreaView>
       <CustomText.SemiBoldText
