@@ -35,8 +35,14 @@ import {
   bottom,
   centeredStretch,
   highlightGreen,
-} from "../../styles/presentation";
-import moment from "moment";
+} from "@Styles/presentation";
+import {
+  getFirstDayOfWeek,
+  getWeekOfDayWithOffset,
+  generateMonthArrayFromMonth,
+  getDayOfMonthFromDate,
+  generateMonthArrayList
+} from "@Utils/dates";
 const SCREEN_WIDTH = Math.round(Dimensions.get("window").width);
 const SCREEN_HEIGHT = Math.round(Dimensions.get("window").height);
 
@@ -49,8 +55,8 @@ const BudgetsScreen = (props) => {
   const [monthIndex, setMonthsIndex] = useState(0);
   const budgets = useSelector((state) => state.budgets);
   const dispatch = useDispatch();
-  const monthsList = moment.monthsShort();
-
+  //const monthsList = moment.monthsShort();
+  const monthsList = generateMonthArrayList();
 
   const loadBudgets = useCallback(async () => {
     setError(null);

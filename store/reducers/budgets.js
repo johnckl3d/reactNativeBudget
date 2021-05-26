@@ -1,6 +1,4 @@
 import { SET_BUDGETS } from "../actions/budgets";
-import { getWeekOfDayWithOffset } from "../../helpers/helpers";
-import Moment from "moment";
 
 const initialState = {
   budgets: [],
