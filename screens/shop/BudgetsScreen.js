@@ -31,13 +31,11 @@ import {
   Paragraph,
   Card,
   Button,
-  IconButton,
   useTheme,
-  Text,
   Switch,
 } from "react-native-paper";
 import Carousel, { Pagination } from "react-native-snap-carousel";
-import Card from "@UIComponents/Card";
+//import Card from "@UIComponents/Card";
 import {
   column,
   row,
@@ -58,6 +56,8 @@ import {
 } from "@Utils/dates";
 const SCREEN_WIDTH = Math.round(Dimensions.get("window").width);
 const SCREEN_HEIGHT = Math.round(Dimensions.get("window").height);
+const isOutlined = false;
+const mode = isOutlined ? "outlined" : "elevated";
 
 const BudgetsScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -197,11 +197,6 @@ const BudgetsScreen = (props) => {
   console.log("budgetsScreen::costSnapShots::" + JSON.stringify(costSnapShots));
   return (
     <SafeAreaView>
-      <CustomText.SemiBoldText
-        text={`Item ${budgets.budgets[budgetIndex].name}`}
-        color={Colors.p1}
-        fontSize={Fonts.medium}
-      />
       <View style={styles.mainContent}>
         <MonthCarousel
           data={monthsList}
@@ -209,22 +204,13 @@ const BudgetsScreen = (props) => {
           width={Dimensions.get("window").width}
           height={100}
         />
-            <Card style={styles.card} mode={mode}>
-          <Card.Cover
-            source={require('../../assets/images/wrecked-ship.jpg')}
-          />
-          <Card.Title title="Abandoned Ship" />
-          <Card.Content>
-            <Paragraph>
-              The Abandoned Ship is a wrecked ship located on Route 108 in
-              Hoenn, originally being a ship named the S.S. Cactus. The second
-              part of the ship can only be accessed by using Dive and contains
-              the Scanner.
-            </Paragraph>
-          </Card.Content>
-        </Card>
         <Card style={styles.card} mode={mode}>
-          <Card.Cover source={require('../../assets/images/forest.jpg')} />
+          <BudgetCarousel
+            data={budgets.budgets}
+            parentCallback={handleBudgetSwipeCallback}
+            width={Dimensions.get("window").width}
+            height={Dimensions.get("window").height * 0.4}
+          />
           <Card.Actions>
             <Button onPress={() => {}}>Share</Button>
             <Button onPress={() => {}}>Explore</Button>
@@ -232,29 +218,16 @@ const BudgetsScreen = (props) => {
         </Card>
         <Card style={styles.card} mode={mode}>
           <Card.Title
-            title="Berries that are trimmed at the end"
+            title={budgets.budgets[budgetIndex].name}
             subtitle="Omega Ruby"
-            left={(props: any) => <Avatar.Icon {...props} icon="folder" />}
-            right={(props: any) => (
+            left={(props) => <Avatar.Icon {...props} icon="folder" />}
+            right={(props) => (
               <IconButton {...props} icon="dots-vertical" onPress={() => {}} />
             )}
           />
-          <Card.Content>
-            <Paragraph>
-              Dotted around the Hoenn region, you will find loamy soil, many of
-              which are housing berries. Once you have picked the berries, then
-              you have the ability to use that loamy soil to grow your own
-              berries. These can be any berry and will require attention to get
-              the best crop.
-            </Paragraph>
-          </Card.Content>
+          <Card.Content></Card.Content>
         </Card>
-        {/* <BudgetCarousel
-          data={budgets.budgets}
-          parentCallback={handleBudgetSwipeCallback}
-          width={Dimensions.get("window").width}
-          height={Dimensions.get("window").height * 0.4}
-        /> */}
+
         <FlatList
           data={budgets.budgets[budgetIndex].costSnapShots}
           keyExtractor={(item) => item.dateTime}
