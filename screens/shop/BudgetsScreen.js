@@ -22,7 +22,7 @@ import CustomText from "@CustomText";
 import Colors from "@Styles/colors";
 import Fonts from "@Styles/fonts";
 import Styles from "@Styles/styles";
-import { List, Text, Chip, Divider } from "react-native-paper";
+import { List, Text, Chip, Divider, IconButton } from "react-native-paper";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import Card from "@UIComponents/Card";
 import {
@@ -162,28 +162,43 @@ const BudgetsScreen = (props) => {
 
   const renderItem = ({ item }) => {
     return (
-      <Card style={styles.costSnapShotContainer}>
-        <View>
-          <CustomText.RegularText
-            style={Styles.modalTitleText}
-            color={Colors.p1}
-            text={`Date: ${item.dateTime}`}
-            fontSize={Fonts.medium}
-          />
-        </View>
-        <View>
-          <CustomText.RegularText
-            color={Colors.p1}
-            text={`Date: ${item.dateTime}`}
-            fontSize={Fonts.small}
-          />
-          <CustomText.RegularText
-            color={Colors.p1}
-            text={`Amount: ${item.amount.toFixed(2)}`}
-            fontSize={Fonts.small}
-          />
-        </View>
-      </Card>
+      // <Card style={styles.costSnapShotContainer}>
+      //   <View>
+      //     <CustomText.RegularText
+      //       style={Styles.modalTitleText}
+      //       color={Colors.p1}
+      //       text={`Date: ${item.dateTime}`}
+      //       fontSize={Fonts.medium}
+      //     />
+      //   </View>
+      //   <View>
+      //     <CustomText.RegularText
+      //       color={Colors.p1}
+      //       text={`Date: ${item.dateTime}`}
+      //       fontSize={Fonts.small}
+      //     />
+      //     <CustomText.RegularText
+      //       color={Colors.p1}
+      //       text={`Amount: ${item.amount.toFixed(2)}`}
+      //       fontSize={Fonts.small}
+      //     />
+      //   </View>
+      // </Card>
+      <View>
+       <Divider />
+       <List.Section>
+         <List.Subheader>{item.dateTime}</List.Subheader>
+         <List.Item
+           left={() => (
+            <IconButton icon="camera" size={24} onPress={() => {}} />
+           )}
+           right={(props) => <List.Icon {...props} icon="information" />}
+           title={`Amount: ${item.amount.toFixed(2)}`}
+           //description="Describes item 1"
+         />
+       </List.Section>
+       <Divider />
+       </View>
     );
   };
 
@@ -214,32 +229,7 @@ const BudgetsScreen = (props) => {
           keyExtractor={(item) => item.dateTime}
           renderItem={renderItem}
         />
-        {/* <Divider />
-        <List.Section>
-          <List.Subheader>Two line</List.Subheader>
-          <List.Item
-            left={() => (
-              <Image
-                source={require("../../assets/icon.png")}
-                style={styles.image}
-              />
-            )}
-            title="List item 1"
-            description="Describes item 1"
-          />
-          <List.Item
-            left={() => (
-              <Image
-                source={require("../../assets/icon.png")}
-                style={styles.image}
-              />
-            )}
-            right={(props) => <List.Icon {...props} icon="information" />}
-            title="List item 2"
-            description="Describes item 2"
-          />
-        </List.Section>
-        <Divider /> */}
+       
         <Pagination
           dotsLength={budgets.budgets[budgetIndex].costSnapShots.length}
           activeDotIndex={budgetIndex}
