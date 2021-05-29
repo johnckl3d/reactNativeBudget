@@ -54,7 +54,7 @@ const ProductsNavigator = createStackNavigator(
   }
 );
 
-const OrdersNavigator = createStackNavigator(
+const DrawerNavigator = createStackNavigator(
   {
     Orders: OrdersScreen
   },
@@ -94,7 +94,7 @@ const AdminNavigator = createStackNavigator(
 const ShopNavigator = createDrawerNavigator(
   {
     Products: ProductsNavigator,
-    Orders: OrdersNavigator,
+    Orders: DrawerNavigator,
     Admin: AdminNavigator
   },
   {
