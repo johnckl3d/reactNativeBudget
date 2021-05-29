@@ -91,7 +91,7 @@ const AdminNavigator = createStackNavigator(
     }
   );
 
-const ShopNavigator = createDrawerNavigator(
+const RootNavigator = createDrawerNavigator(
   {
     Products: ProductsNavigator,
     Orders: DrawerNavigator,
@@ -104,4 +104,4 @@ const ShopNavigator = createDrawerNavigator(
   }
 );
 
-export default createAppContainer(ShopNavigator);
+export default createAppContainer(RootNavigator);
