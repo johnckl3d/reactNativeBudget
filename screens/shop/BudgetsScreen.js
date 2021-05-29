@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
-  Button,
   Platform,
   SafeAreaView,
   StyleSheet,
@@ -22,7 +21,21 @@ import CustomText from "@CustomText";
 import Colors from "@Styles/colors";
 import Fonts from "@Styles/fonts";
 import Styles from "@Styles/styles";
-import { List, Text, Chip, Divider, IconButton } from "react-native-paper";
+import {
+  List,
+  Text,
+  Chip,
+  Divider,
+  IconButton,
+  Avatar,
+  Paragraph,
+  Card,
+  Button,
+  IconButton,
+  useTheme,
+  Text,
+  Switch,
+} from "react-native-paper";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import Card from "@UIComponents/Card";
 import {
@@ -162,43 +175,21 @@ const BudgetsScreen = (props) => {
 
   const renderItem = ({ item }) => {
     return (
-      // <Card style={styles.costSnapShotContainer}>
-      //   <View>
-      //     <CustomText.RegularText
-      //       style={Styles.modalTitleText}
-      //       color={Colors.p1}
-      //       text={`Date: ${item.dateTime}`}
-      //       fontSize={Fonts.medium}
-      //     />
-      //   </View>
-      //   <View>
-      //     <CustomText.RegularText
-      //       color={Colors.p1}
-      //       text={`Date: ${item.dateTime}`}
-      //       fontSize={Fonts.small}
-      //     />
-      //     <CustomText.RegularText
-      //       color={Colors.p1}
-      //       text={`Amount: ${item.amount.toFixed(2)}`}
-      //       fontSize={Fonts.small}
-      //     />
-      //   </View>
-      // </Card>
       <View>
-       <Divider />
-       <List.Section>
-         <List.Subheader>{item.dateTime}</List.Subheader>
-         <List.Item
-           left={() => (
-            <IconButton icon="camera" size={24} onPress={() => {}} />
-           )}
-           right={(props) => <List.Icon {...props} icon="information" />}
-           title={`Amount: ${item.amount.toFixed(2)}`}
-           //description="Describes item 1"
-         />
-       </List.Section>
-       <Divider />
-       </View>
+        <Divider />
+        <List.Section>
+          <List.Subheader>{item.dateTime}</List.Subheader>
+          <List.Item
+            left={() => (
+              <IconButton icon="camera" size={24} onPress={() => {}} />
+            )}
+            right={(props) => <List.Icon {...props} icon="information" />}
+            title={`Amount: ${item.amount.toFixed(2)}`}
+            //description="Describes item 1"
+          />
+        </List.Section>
+        <Divider />
+      </View>
     );
   };
 
@@ -218,18 +209,58 @@ const BudgetsScreen = (props) => {
           width={Dimensions.get("window").width}
           height={100}
         />
-        <BudgetCarousel
+            <Card style={styles.card} mode={mode}>
+          <Card.Cover
+            source={require('../../assets/images/wrecked-ship.jpg')}
+          />
+          <Card.Title title="Abandoned Ship" />
+          <Card.Content>
+            <Paragraph>
+              The Abandoned Ship is a wrecked ship located on Route 108 in
+              Hoenn, originally being a ship named the S.S. Cactus. The second
+              part of the ship can only be accessed by using Dive and contains
+              the Scanner.
+            </Paragraph>
+          </Card.Content>
+        </Card>
+        <Card style={styles.card} mode={mode}>
+          <Card.Cover source={require('../../assets/images/forest.jpg')} />
+          <Card.Actions>
+            <Button onPress={() => {}}>Share</Button>
+            <Button onPress={() => {}}>Explore</Button>
+          </Card.Actions>
+        </Card>
+        <Card style={styles.card} mode={mode}>
+          <Card.Title
+            title="Berries that are trimmed at the end"
+            subtitle="Omega Ruby"
+            left={(props: any) => <Avatar.Icon {...props} icon="folder" />}
+            right={(props: any) => (
+              <IconButton {...props} icon="dots-vertical" onPress={() => {}} />
+            )}
+          />
+          <Card.Content>
+            <Paragraph>
+              Dotted around the Hoenn region, you will find loamy soil, many of
+              which are housing berries. Once you have picked the berries, then
+              you have the ability to use that loamy soil to grow your own
+              berries. These can be any berry and will require attention to get
+              the best crop.
+            </Paragraph>
+          </Card.Content>
+        </Card>
+        {/* <BudgetCarousel
           data={budgets.budgets}
           parentCallback={handleBudgetSwipeCallback}
           width={Dimensions.get("window").width}
           height={Dimensions.get("window").height * 0.4}
-        />
+        /> */}
         <FlatList
           data={budgets.budgets[budgetIndex].costSnapShots}
           keyExtractor={(item) => item.dateTime}
           renderItem={renderItem}
         />
-       
+
         <Pagination
           dotsLength={budgets.budgets[budgetIndex].costSnapShots.length}
           activeDotIndex={budgetIndex}
