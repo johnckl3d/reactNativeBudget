@@ -43,8 +43,8 @@ export default class BudgetCarousel extends React.Component {
             renderItem={this._renderItem}
             sliderWidth={this.props.width}
             itemWidth={this.props.width}
-            //contentContainerStyle={styles.carouselItemContainer}
-            //containerCustomStyle={{flexGrow: 0}}
+            // contentContainerStyle={styles.carouselItemContainer}
+            // containerCustomStyle={{flexGrow: 0}}
             inactiveSlideShift={0}
             onSnapToItem={(index) => this.props.parentCallback(index)}
             scrollInterpolator={scrollInterpolator}

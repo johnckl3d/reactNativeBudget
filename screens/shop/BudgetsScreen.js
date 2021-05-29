@@ -6,10 +6,10 @@ import {
   Platform,
   SafeAreaView,
   StyleSheet,
-  Text,
   View,
   FlatList,
   Dimensions,
+  Image,
 } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,6 +22,7 @@ import CustomText from "@CustomText";
 import Colors from "@Styles/colors";
 import Fonts from "@Styles/fonts";
 import Styles from "@Styles/styles";
+import { List, Text, Chip, Divider } from "react-native-paper";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import Card from "@UIComponents/Card";
 import {
@@ -213,6 +214,32 @@ const BudgetsScreen = (props) => {
           keyExtractor={(item) => item.dateTime}
           renderItem={renderItem}
         />
+        {/* <Divider />
+        <List.Section>
+          <List.Subheader>Two line</List.Subheader>
+          <List.Item
+            left={() => (
+              <Image
+                source={require("../../assets/icon.png")}
+                style={styles.image}
+              />
+            )}
+            title="List item 1"
+            description="Describes item 1"
+          />
+          <List.Item
+            left={() => (
+              <Image
+                source={require("../../assets/icon.png")}
+                style={styles.image}
+              />
+            )}
+            right={(props) => <List.Icon {...props} icon="information" />}
+            title="List item 2"
+            description="Describes item 2"
+          />
+        </List.Section>
+        <Divider /> */}
         <Pagination
           dotsLength={budgets.budgets[budgetIndex].costSnapShots.length}
           activeDotIndex={budgetIndex}
@@ -269,6 +296,11 @@ const styles = StyleSheet.create({
   },
   paginationDot: {
     ...Styles.paginationDot,
+  },
+  image: {
+    height: 40,
+    width: 40,
+    margin: 8,
   },
 });
 export default BudgetsScreen;
