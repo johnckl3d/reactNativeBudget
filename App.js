@@ -21,6 +21,7 @@ import {
   FlatList,
   Dimensions,
   Image,
+  Text
 } from "react-native";
 import RootNavigator from "./navigation/RootNavigator";
 //import Root from "./navigation/Root";
@@ -32,7 +33,7 @@ import {
 } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 //import { createDrawerNavigator } from "react-navigation-drawer";
-//import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 
 const PERSISTENCE_KEY = "NAVIGATION_STATE";
@@ -40,21 +41,37 @@ const PREFERENCES_KEY = "APP_PREFERENCES";
 
 const PreferencesContext = React.createContext(null);
 
-// const DrawerContent = () => {
-//   return (
-//     <PreferencesContext.Consumer>
-//       {preferences => (
-//         <DrawerItems
-//           toggleTheme={preferences.toggleTheme}
-//           isDarkTheme={preferences.theme === DarkTheme}
-//         />
-//       )}
-//     </PreferencesContext.Consumer>
-//   );
-// };
+const DrawerContent = () => {
+  return (
+    <PreferencesContext.Consumer>
+      {/* {preferences => (
+        <DrawerItems
+          toggleTheme={preferences.toggleTheme}
+          isDarkTheme={preferences.theme === DarkTheme}
+        />
+      )} */}
+    </PreferencesContext.Consumer>
+  );
+};
 
-//console.log("here0");
-//const Drawer = createDrawerNavigator();
+function Feed() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Feed Screen</Text>
+    </View>
+  );
+}
+
+function Article() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Article Screen</Text>
+    </View>
+  );
+}
+
+console.log("here0");
+const Drawer = createDrawerNavigator();
 //console.log("here1");
 // const theme = {
 //   ...DefaultTheme,
@@ -167,18 +184,17 @@ export default function App() {
         <SafeAreaProvider>
           <PreferencesContext.Provider value={preferences}>
             <React.Fragment>
-            <RootNavigator/>
-              {/* <NavigationContainer
+              <NavigationContainer
                 initialState={initialState}
                 onStateChange={(state) =>
                   AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state))
                 }
               >
-                 <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props}/>}>
-                  <Drawer.Screen name="Home" component={RootNavigator} />
+                 <Drawer.Navigator>
+                  <Drawer.Screen name="Home" component={Feed} />
                 </Drawer.Navigator>
-                <RootNavigator />
-              </NavigationContainer> */}
+                {/* <RootNavigator /> */}
+              </NavigationContainer>
             </React.Fragment>
           </PreferencesContext.Provider>
         </SafeAreaProvider>
