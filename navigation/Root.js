@@ -1,5 +1,5 @@
 import * as React from "react";
-//import { Appbar } from 'react-native-paper';
+import { Appbar } from 'react-native-paper';
 //import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { View, Text, Button } from "react-native";
 // import {
@@ -22,7 +22,26 @@ function Feed() {
 export default function Root() {
   return (
   
-    <Stack.Navigator initialRouteName='InitialScreen'>
+    <Stack.Navigator
+    headerMode="screen"
+    screenOptions={{
+      header: ({ navigation, scene, previous }) => (
+        <Appbar.Header>
+          {previous ? (
+            <Appbar.BackAction onPress={() => navigation.goBack()} />
+          ) : navigation.openDrawer ? (
+            <Appbar.Action
+              icon="menu"
+              onPress={() =>
+                navigation.openDrawer()
+              }
+            />
+          ) : null}
+          <Appbar.Content title={scene.descriptor.options.title} />
+        </Appbar.Header>
+      ),
+    }}
+  >
       <Stack.Screen name="Home" component={Feed} />
     </Stack.Navigator>
   );
