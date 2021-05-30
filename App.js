@@ -25,7 +25,7 @@ import {
   Text
 } from "react-native";
 //import RootNavigator from "./navigation/RootNavigator";
-import Root from "./navigation/Root";
+import BudgetStack from "./navigation/BudgetStack";
 //import BudgetStack from "./navigation/BudgetStack";
 import {
   Provider as PaperProvider,
@@ -104,9 +104,9 @@ export default function App() {
     const restoreState = async () => {
       try {
         const savedStateString = await AsyncStorage.getItem(PERSISTENCE_KEY);
-        //const state = JSON.parse(savedStateString || "");
+        const state = JSON.parse(savedStateString || "");
 
-        const state = savedStateString ? savedStateString : null;
+        //const state = savedStateString ? savedStateString : null;
 
         if (state !== null) {
           setInitialState(state);
@@ -188,7 +188,7 @@ export default function App() {
                 }
               >
                   <Drawer.Navigator drawerContent={() => <DrawerContent />}>
-                  <Drawer.Screen name="Home" component={Root} />
+                  <Drawer.Screen name="Home" component={BudgetStack} />
                 </Drawer.Navigator>
                 {/* <RootNavigator /> */}
               </NavigationContainer>

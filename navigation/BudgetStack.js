@@ -19,7 +19,7 @@ function Feed() {
   );
 }
 
-export default function Root() {
+export default function BudgetStack() {
   return (
   
     <Stack.Navigator
