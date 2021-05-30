@@ -190,7 +190,6 @@ export default function App() {
                   <Drawer.Navigator drawerContent={() => <DrawerContent />}>
                   <Drawer.Screen name="Home" component={BudgetStack} />
                 </Drawer.Navigator>
-                {/* <RootNavigator /> */}
               </NavigationContainer>
             </React.Fragment>
           </PreferencesContext.Provider>

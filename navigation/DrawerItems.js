@@ -23,7 +23,7 @@ const DrawerItems = (props) => {
   const _setDrawerItem = (index) => setDrawerItemIndex(index);
 
   const { colors } = useTheme();
-console.log(props);
+console.log("DrawerItems::" + props);
   return (
     <View style={[styles.drawerContent, { backgroundColor: colors.surface }]}>
      
