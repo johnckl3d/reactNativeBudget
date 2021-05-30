@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  createStackNavigator
-} from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import { createAppContainer } from "react-navigation";
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import { Platform } from 'react-native';
@@ -17,6 +15,7 @@ import EditProductScreen from '../screens/user/EditProductScreen';
 import EditCostCategoryScreen from '../screens/shop/EditCostCategoryScreen';
 import EditCostItemScreen from '../screens/shop/EditCostItemScreen';
 import Colors from '../constants/Colors';
+//import BudgetStack from './BudgetStack';
 
 const defaultNavOptions = {
   headerStyle: {

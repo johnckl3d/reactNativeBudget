@@ -23,8 +23,9 @@ import {
   Image,
   Text
 } from "react-native";
-import RootNavigator from "./navigation/RootNavigator";
-//import Root from "./navigation/Root";
+//import RootNavigator from "./navigation/RootNavigator";
+import Root from "./navigation/Root";
+//import BudgetStack from "./navigation/BudgetStack";
 import {
   Provider as PaperProvider,
   DarkTheme,
@@ -54,33 +55,28 @@ const DrawerContent = () => {
   );
 };
 
-function Feed() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Feed Screen</Text>
-    </View>
-  );
-}
 
-function Article() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Article Screen</Text>
-    </View>
-  );
-}
 
-console.log("here0");
 const Drawer = createDrawerNavigator();
-//console.log("here1");
-// const theme = {
-//   ...DefaultTheme,
-//   colors: {
-//     ...DefaultTheme.colors,
-//     primary: "tomato",
-//     accent: "yellow",
-//   },
-// };
+
+
+
+const CustomDefaultTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    customColor: '#BADA55',
+  },
+  fonts: {
+    ...DefaultTheme.fonts,
+    superLight: { ...DefaultTheme.fonts['light'] },
+  },
+  userDefinedThemeProperty: '',
+  animation: {
+    ...DefaultTheme.animation,
+    customProperty: 1,
+  },
+};
 
 const rootReducer = combineReducers({
   products: productsReducer,
@@ -101,7 +97,7 @@ export default function App() {
   const [isStateLoaded, setStateLoaded] = useState(false);
   const [initialState, setInitialState] = useState();
 
-  const [theme, setTheme] = useState(DefaultTheme);
+  const [theme, setTheme] = useState(CustomDefaultTheme);
 
   useEffect(() => {
     const restoreState = async () => {
@@ -191,7 +187,7 @@ export default function App() {
                 }
               >
                   <Drawer.Navigator drawerContent={() => <DrawerContent />}>
-                  <Drawer.Screen name="Home" component={Feed} />
+                  <Drawer.Screen name="Home" component={Root} />
                 </Drawer.Navigator>
                 {/* <RootNavigator /> */}
               </NavigationContainer>

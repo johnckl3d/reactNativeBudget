@@ -23,24 +23,10 @@ const DrawerItems = (props) => {
   const _setDrawerItem = (index) => setDrawerItemIndex(index);
 
   const { colors } = useTheme();
-
+console.log(props);
   return (
     <View style={[styles.drawerContent, { backgroundColor: colors.surface }]}>
-      <Drawer.Section title="Example items">
-        {DrawerItemsData.map((props, index) => (
-          <Drawer.Item
-            {...props}
-            key={props.key}
-            theme={
-              props.key === 3
-                ? { colors: { primary: Colors.tealA200 } }
-                : undefined
-            }
-            active={drawerItemIndex === index}
-            onPress={() => _setDrawerItem(index)}
-          />
-        ))}
-      </Drawer.Section>
+     
 
       <Drawer.Section title="Preferences">
         <TouchableRipple onPress={props.toggleTheme}>
