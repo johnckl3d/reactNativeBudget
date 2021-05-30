@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import { Provider } from "react-redux";
 import { AppLoading } from "expo";
@@ -10,6 +10,7 @@ import cartReducer from "./store/reducers/cart";
 import ordersReducer from "./store/reducers/orders";
 import budgetsReducer from "./store/reducers/budgets";
 import costCategoriesReducer from "./store/reducers/costCategories";
+//import DrawerItems from './navigation/DrawerItems';
 import {
   ActivityIndicator,
   Alert,
@@ -22,24 +23,47 @@ import {
   Image,
 } from "react-native";
 import RootNavigator from "./navigation/RootNavigator";
+//import Root from "./navigation/Root";
 import {
   Provider as PaperProvider,
   DarkTheme,
   DefaultTheme,
   Theme,
 } from "react-native-paper";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+//import { createDrawerNavigator } from "react-navigation-drawer";
+//import { createDrawerNavigator } from '@react-navigation/drawer';
+
 
 const PERSISTENCE_KEY = "NAVIGATION_STATE";
 const PREFERENCES_KEY = "APP_PREFERENCES";
 
-const theme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: "tomato",
-    accent: "yellow",
-  },
-};
+const PreferencesContext = React.createContext(null);
+
+// const DrawerContent = () => {
+//   return (
+//     <PreferencesContext.Consumer>
+//       {preferences => (
+//         <DrawerItems
+//           toggleTheme={preferences.toggleTheme}
+//           isDarkTheme={preferences.theme === DarkTheme}
+//         />
+//       )}
+//     </PreferencesContext.Consumer>
+//   );
+// };
+
+//console.log("here0");
+//const Drawer = createDrawerNavigator();
+//console.log("here1");
+// const theme = {
+//   ...DefaultTheme,
+//   colors: {
+//     ...DefaultTheme.colors,
+//     primary: "tomato",
+//     accent: "yellow",
+//   },
+// };
 
 const rootReducer = combineReducers({
   products: productsReducer,
@@ -55,26 +79,10 @@ const store = createStore(
   composeEnhancers(applyMiddleware(ReduxThunk))
 );
 
-const fetchFonts = () => {
-  return Font.loadAsync({
-    "open-sans": require("./assets/fonts/OpenSans-Regular.ttf"),
-    "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
-    "open-sans-boldItalic": require("./assets/fonts/OpenSans-BoldItalic.ttf"),
-    "open-sans-extraBold": require("./assets/fonts/OpenSans-ExtraBold.ttf"),
-    "open-sans-extraBoldItalic": require("./assets/fonts/OpenSans-ExtraBoldItalic.ttf"),
-    "open-sans-italic": require("./assets/fonts/OpenSans-Italic.ttf"),
-    "open-sans-light": require("./assets/fonts/OpenSans-Light.ttf"),
-    "open-sans-lightItalic": require("./assets/fonts/OpenSans-LightItalic.ttf"),
-    "open-sans-regular": require("./assets/fonts/OpenSans-Regular.ttf"),
-    "open-sans-semiBold": require("./assets/fonts/OpenSans-SemiBold.ttf"),
-    "open-sans-semiBoldItalic": require("./assets/fonts/OpenSans-SemiBoldItalic.ttf"),
-  });
-};
-
 export default function App() {
   const [isFontLoaded, setFontLoaded] = useState(false);
   const [isStateLoaded, setStateLoaded] = useState(false);
-  const [initialState, setInitialState] = useState(InitialState);
+  const [initialState, setInitialState] = useState();
 
   const [theme, setTheme] = useState(DefaultTheme);
 
@@ -82,9 +90,13 @@ export default function App() {
     const restoreState = async () => {
       try {
         const savedStateString = await AsyncStorage.getItem(PERSISTENCE_KEY);
-        const state = JSON.parse(savedStateString || '');
+        //const state = JSON.parse(savedStateString || "");
 
-        setInitialState(state);
+        const state = savedStateString ? savedStateString : null;
+
+        if (state !== null) {
+          setInitialState(state);
+        }
       } catch (e) {
         // ignore error
       } finally {
@@ -121,11 +133,11 @@ export default function App() {
     const restorePrefs = async () => {
       try {
         const prefString = await AsyncStorage.getItem(PREFERENCES_KEY);
-        const preferences = JSON.parse(prefString || '');
+        const preferences = JSON.parse(prefString || "");
 
         if (preferences) {
           // eslint-disable-next-line react/no-did-mount-set-state
-          setTheme(preferences.theme === 'dark' ? DarkTheme : DefaultTheme);
+          setTheme(preferences.theme === "dark" ? DarkTheme : DefaultTheme);
         }
       } catch (e) {
         // ignore error
@@ -135,21 +147,41 @@ export default function App() {
     restorePrefs();
   }, []);
 
+  const preferences = React.useMemo(
+    () => ({
+      toggleTheme: () =>
+        setTheme((theme) =>
+          theme === DefaultTheme ? DarkTheme : DefaultTheme
+        ),
+      theme,
+    }),
+    [theme]
+  );
+
   if (!isFontLoaded || !isStateLoaded) {
-    return (
-      // <AppLoading
-      //   startAsync={fetchFonts}
-      //   onFinish={() => {
-      //     setFontLoaded(true);
-      //   }}
-      // />
-      <View></View>
-    );
+    return null;
   }
   return (
     <Provider store={store}>
-      <PaperProvider>
-        <RootNavigator />
+      <PaperProvider theme={theme}>
+        <SafeAreaProvider>
+          <PreferencesContext.Provider value={preferences}>
+            <React.Fragment>
+            <RootNavigator/>
+              {/* <NavigationContainer
+                initialState={initialState}
+                onStateChange={(state) =>
+                  AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state))
+                }
+              >
+                 <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props}/>}>
+                  <Drawer.Screen name="Home" component={RootNavigator} />
+                </Drawer.Navigator>
+                <RootNavigator />
+              </NavigationContainer> */}
+            </React.Fragment>
+          </PreferencesContext.Provider>
+        </SafeAreaProvider>
       </PaperProvider>
     </Provider>
   );
