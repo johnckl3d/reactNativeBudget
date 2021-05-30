@@ -10,7 +10,7 @@ import cartReducer from "./store/reducers/cart";
 import ordersReducer from "./store/reducers/orders";
 import budgetsReducer from "./store/reducers/budgets";
 import costCategoriesReducer from "./store/reducers/costCategories";
-//import DrawerItems from './navigation/DrawerItems';
+import DrawerItems from './navigation/DrawerItems';
 import {
   ActivityIndicator,
   Alert,
@@ -44,12 +44,12 @@ const PreferencesContext = React.createContext(null);
 const DrawerContent = () => {
   return (
     <PreferencesContext.Consumer>
-      {/* {preferences => (
+      {preferences => (
         <DrawerItems
           toggleTheme={preferences.toggleTheme}
           isDarkTheme={preferences.theme === DarkTheme}
         />
-      )} */}
+      )}
     </PreferencesContext.Consumer>
   );
 };
@@ -190,7 +190,7 @@ export default function App() {
                   AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state))
                 }
               >
-                 <Drawer.Navigator>
+                  <Drawer.Navigator drawerContent={() => <DrawerContent />}>
                   <Drawer.Screen name="Home" component={Feed} />
                 </Drawer.Navigator>
                 {/* <RootNavigator /> */}
