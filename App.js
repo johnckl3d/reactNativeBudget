@@ -82,6 +82,7 @@ export default function App() {
   const [isFontLoaded, setFontLoaded] = useState(false);
   const [isStateLoaded, setStateLoaded] = useState(false);
   const [initialState, setInitialState] = useState();
+  const [isLoading, setIsLoading] = React.useState(true);
 
   const [theme, setTheme] = useState(CustomDefaultTheme);
 

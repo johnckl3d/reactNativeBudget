@@ -1,15 +1,17 @@
 import React from 'react';
-
+import  {AuthContext} from "@Context/Context";
 import { View, Text, StyleSheet, Button } from "react-native";
 
 
-export const CreateAccount = () => {
+const CreateAccount = ({ navigation }) => {
     const { signUp } = React.useContext(AuthContext);
   
     return (
-      <ScreenContainer>
+      <View>
         <Text>Create Account Screen</Text>
         <Button title="Sign Up" onPress={() => signUp()} />
-      </ScreenContainer>
+        </View>
     );
   };
+
+  export default CreateAccount;
