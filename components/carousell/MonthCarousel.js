@@ -9,7 +9,31 @@ import CustomText from "@CustomText";
 import Colors from "@Styles/colors";
 import Fonts from "@Styles/fonts";
 
+
+import {
+  List,
+  Text,
+  Chip,
+  Divider,
+  IconButton,
+  Avatar,
+  Card,
+  Button,
+  useTheme,
+  Switch,
+  Caption,
+  Headline,
+  Paragraph,
+  Subheading,
+  Title,
+  withTheme, 
+} from "react-native-paper";
+
+
+
 export default class MonthCarousel extends React.Component {
+ 
+
   constructor(props) {
     super(props);
     this.state = {
@@ -25,11 +49,7 @@ export default class MonthCarousel extends React.Component {
         width={this.props.width}
         height={this.props.height}
       >
-        <CustomText.SemiBoldText
-          text={item}
-          color={Colors.p1}
-          fontSize={Fonts.medium}
-        />
+        <Button onPress={() => {}}>{item}</Button>
       </View>
     );
   }

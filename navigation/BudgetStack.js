@@ -1,20 +1,11 @@
-import * as React from "react";
-import { Appbar } from 'react-native-paper';
-//import { DrawerNavigationProp } from '@react-navigation/drawer';
-import { View, Text, Button } from "react-native";
-// import {
-//     createStackNavigator
-//   } from 'react-navigation-stack';
+
 import { createStackNavigator } from "@react-navigation/stack";
-//import ExampleList, { examples } from './ExampleList';
-//import { NavigationContainer } from '@react-navigation/native'
+import * as React from "react";
+import { Text, View } from "react-native";
+import { Appbar } from 'react-native-paper';
 import BudgetsScreen from '../screens/shop/BudgetsScreen';
-import CostCategoriesScreen from '../screens/shop/CostCategoriesScreen';
-import CostItemsScreen from '../screens/shop/CostItemsScreen';
 import CartScreen from '../screens/shop/CartScreen';
-import OrdersScreen from '../screens/shop/OrdersScreen';
-import UserProductsScreen from '../screens/user/UserProductsScreen';
-import EditProductScreen from '../screens/user/EditProductScreen';
+import CostItemsScreen from '../screens/shop/CostItemsScreen';
 import EditCostCategoryScreen from '../screens/shop/EditCostCategoryScreen';
 import EditCostItemScreen from '../screens/shop/EditCostItemScreen';
 

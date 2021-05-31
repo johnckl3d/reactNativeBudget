@@ -1,15 +1,43 @@
+import Colors from "@Styles/colors";
+//import Card from "@UIComponents/Card";
+import {
+  centered
+} from "@Styles/presentation";
+import Styles from "@Styles/styles";
+import {
+  generateMonthArrayList
+} from "@Utils/dates";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
-  Platform,
+
+
+
+
+
+  Dimensions, FlatList, Platform,
   SafeAreaView,
   StyleSheet,
-  View,
-  FlatList,
-  Dimensions,
-  Image,
+  View
 } from "react-native";
+import {
+  Avatar,
+
+
+  Button, Card, Divider,
+  IconButton, List,
+  Text,
+
+
+
+
+
+
+
+  useTheme
+} from "react-native-paper";
+import { Pagination } from "react-native-snap-carousel";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useDispatch, useSelector } from "react-redux";
 import BudgetCarousel from "../../components/carousell/BudgetCarousel";
@@ -17,43 +45,6 @@ import MonthCarousel from "../../components/carousell/MonthCarousel";
 import HeaderButton from "../../components/UI/HeaderButton";
 import * as budgetsActions from "../../store/actions/budgets";
 import * as costCategoriesActions from "../../store/actions/costCategories";
-import CustomText from "@CustomText";
-import Colors from "@Styles/colors";
-import Fonts from "@Styles/fonts";
-import Styles from "@Styles/styles";
-import {
-  List,
-  Text,
-  Chip,
-  Divider,
-  IconButton,
-  Avatar,
-  Paragraph,
-  Card,
-  Button,
-  useTheme,
-  Switch,
-} from "react-native-paper";
-import Carousel, { Pagination } from "react-native-snap-carousel";
-//import Card from "@UIComponents/Card";
-import {
-  column,
-  row,
-  highlightRed,
-  highlightYellow,
-  centered,
-  shadow,
-  bottom,
-  centeredStretch,
-  highlightGreen,
-} from "@Styles/presentation";
-import {
-  getFirstDayOfWeek,
-  getWeekOfDayWithOffset,
-  generateMonthArrayFromMonth,
-  getDayOfMonthFromDate,
-  generateMonthArrayList,
-} from "@Utils/dates";
 const SCREEN_WIDTH = Math.round(Dimensions.get("window").width);
 const SCREEN_HEIGHT = Math.round(Dimensions.get("window").height);
 const isOutlined = false;
@@ -69,6 +60,7 @@ const BudgetsScreen = (props) => {
   const dispatch = useDispatch();
   //const monthsList = moment.monthsShort();
   const monthsList = generateMonthArrayList();
+  const theme = useTheme();
 
   const loadBudgets = useCallback(async () => {
     setError(null);
@@ -179,11 +171,11 @@ const BudgetsScreen = (props) => {
         <Divider />
         <List.Section>
           <List.Subheader>{item.dateTime}</List.Subheader>
-          <List.Item
+          <List.Item 
             left={() => (
               <IconButton icon="camera" size={24} onPress={() => {}} />
             )}
-            right={(props) => <List.Icon {...props} icon="information" />}
+            right={(props) => <List.Icon {...props} icon="information"/>}
             title={`Amount: ${item.amount.toFixed(2)}`}
             //description="Describes item 1"
           />
@@ -198,19 +190,20 @@ const BudgetsScreen = (props) => {
   return (
     <SafeAreaView>
       <View style={styles.mainContent}>
-        <MonthCarousel
-          data={monthsList}
-          parentCallback={handleMonthsSwipeCallback}
-          width={Dimensions.get("window").width}
-          height={100}
-        />
-        <Card style={styles.card} mode={mode}>
+       
+        <Card style={styles.card} mode="outlined" >
           <BudgetCarousel
             data={budgets.budgets}
             parentCallback={handleBudgetSwipeCallback}
             width={Dimensions.get("window").width}
             height={Dimensions.get("window").height * 0.4}
           />
+           <MonthCarousel
+          data={monthsList}
+          parentCallback={handleMonthsSwipeCallback}
+          width={Dimensions.get("window").width}
+          height={100}
+        />
           <Card.Actions>
             <Button onPress={() => {}}>Share</Button>
             <Button onPress={() => {}}>Explore</Button>
@@ -225,7 +218,6 @@ const BudgetsScreen = (props) => {
               <IconButton {...props} icon="dots-vertical" onPress={() => {}} />
             )}
           />
-          <Card.Content></Card.Content>
         </Card>
 
         <FlatList

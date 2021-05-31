@@ -1,41 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { createStore, combineReducers, applyMiddleware, compose } from "redux";
-import { Provider } from "react-redux";
-import { AppLoading } from "expo";
-import * as Font from "expo-font";
-import ReduxThunk from "redux-thunk";
-import { InitialState, NavigationContainer } from "@react-navigation/native";
-import productsReducer from "./store/reducers/products";
-import cartReducer from "./store/reducers/cart";
-import ordersReducer from "./store/reducers/orders";
-import budgetsReducer from "./store/reducers/budgets";
-import costCategoriesReducer from "./store/reducers/costCategories";
-import DrawerItems from './navigation/DrawerItems';
 import AsyncStorage from '@react-native-community/async-storage';
-import {
-  ActivityIndicator,
-  Alert,
-  Platform,
-  SafeAreaView,
-  StyleSheet,
-  View,
-  FlatList,
-  Dimensions,
-  Image,
-  Text
-} from "react-native";
-//import RootNavigator from "./navigation/RootNavigator";
-import BudgetStack from "./navigation/BudgetStack";
-//import BudgetStack from "./navigation/BudgetStack";
-import {
-  Provider as PaperProvider,
-  DarkTheme,
-  DefaultTheme,
-  Theme,
-} from "react-native-paper";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 //import { createDrawerNavigator } from "react-navigation-drawer";
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { NavigationContainer } from "@react-navigation/native";
+import * as Font from "expo-font";
+import React, { useEffect, useState } from "react";
+//import BudgetStack from "./navigation/BudgetStack";
+import {
+  DarkTheme,
+  DefaultTheme, Provider as PaperProvider
+} from "react-native-paper";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { Provider } from "react-redux";
+import { applyMiddleware, combineReducers, compose, createStore } from "redux";
+import ReduxThunk from "redux-thunk";
+//import RootNavigator from "./navigation/RootNavigator";
+import BudgetStack from "./navigation/BudgetStack";
+import DrawerItems from './navigation/DrawerItems';
+import FloatingActionButton from "./navigation/FloatingActionButton";
+import budgetsReducer from "./store/reducers/budgets";
+import cartReducer from "./store/reducers/cart";
+import costCategoriesReducer from "./store/reducers/costCategories";
+import ordersReducer from "./store/reducers/orders";
+import productsReducer from "./store/reducers/products";
 
 
 const PERSISTENCE_KEY = "NAVIGATION_STATE";
@@ -66,7 +52,8 @@ const CustomDefaultTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    customColor: '#BADA55',
+    background: '#FFFFFF',
+    primary: '#5202FD',
   },
   fonts: {
     ...DefaultTheme.fonts,
@@ -190,6 +177,7 @@ export default function App() {
                   <Drawer.Navigator drawerContent={() => <DrawerContent />}>
                   <Drawer.Screen name="Home" component={BudgetStack} />
                 </Drawer.Navigator>
+                <FloatingActionButton></FloatingActionButton>
               </NavigationContainer>
             </React.Fragment>
           </PreferencesContext.Provider>
