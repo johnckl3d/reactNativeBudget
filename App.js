@@ -1,13 +1,14 @@
-import AsyncStorage from '@react-native-community/async-storage';
-//import { createDrawerNavigator } from "react-navigation-drawer";
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import AsyncStorage from "@react-native-community/async-storage";
+import  {AuthContext} from "@Context/Context";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import * as Font from "expo-font";
 import React, { useEffect, useState } from "react";
 //import BudgetStack from "./navigation/BudgetStack";
 import {
   DarkTheme,
-  DefaultTheme, Provider as PaperProvider
+  DefaultTheme,
+  Provider as PaperProvider,
 } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
@@ -15,14 +16,15 @@ import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import ReduxThunk from "redux-thunk";
 //import RootNavigator from "./navigation/RootNavigator";
 import BudgetStack from "./navigation/BudgetStack";
-import DrawerItems from './navigation/DrawerItems';
-import FloatingActionButton from "./navigation/FloatingActionButton";
+import AuthStack from "./navigation/AuthStack";
+import DrawerItems from "./navigation/DrawerItems";
 import budgetsReducer from "./store/reducers/budgets";
 import cartReducer from "./store/reducers/cart";
 import costCategoriesReducer from "./store/reducers/costCategories";
 import ordersReducer from "./store/reducers/orders";
 import productsReducer from "./store/reducers/products";
-
+import SplashScreen from "./screens/SplashScreen";
+import { View, Text, StyleSheet, Button } from "react-native";
 
 const PERSISTENCE_KEY = "NAVIGATION_STATE";
 const PREFERENCES_KEY = "APP_PREFERENCES";
@@ -32,7 +34,7 @@ const PreferencesContext = React.createContext(null);
 const DrawerContent = () => {
   return (
     <PreferencesContext.Consumer>
-      {preferences => (
+      {(preferences) => (
         <DrawerItems
           toggleTheme={preferences.toggleTheme}
           isDarkTheme={preferences.theme === DarkTheme}
@@ -42,24 +44,20 @@ const DrawerContent = () => {
   );
 };
 
-
-
 const Drawer = createDrawerNavigator();
-
-
 
 const CustomDefaultTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: '#FFFFFF',
-    primary: '#5202FD',
+    background: "#FFFFFF",
+    primary: "#5202FD",
   },
   fonts: {
     ...DefaultTheme.fonts,
-    superLight: { ...DefaultTheme.fonts['light'] },
+    superLight: { ...DefaultTheme.fonts["light"] },
   },
-  userDefinedThemeProperty: '',
+  userDefinedThemeProperty: "",
   animation: {
     ...DefaultTheme.animation,
     customProperty: 1,
@@ -86,6 +84,25 @@ export default function App() {
   const [initialState, setInitialState] = useState();
 
   const [theme, setTheme] = useState(CustomDefaultTheme);
+
+  const [userToken, setUserToken] = useState(null);
+
+  const authContext = React.useMemo(() => {
+    return {
+      signIn: () => {
+        setIsLoading(false);
+        setUserToken("asdf");
+      },
+      signUp: () => {
+        setIsLoading(false);
+        setUserToken("asdf");
+      },
+      signOut: () => {
+        setIsLoading(false);
+        setUserToken(null);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const restoreState = async () => {
@@ -160,7 +177,7 @@ export default function App() {
   );
 
   if (!isFontLoaded || !isStateLoaded) {
-    return null;
+    return <SplashScreen />;
   }
   return (
     <Provider store={store}>
@@ -168,17 +185,22 @@ export default function App() {
         <SafeAreaProvider>
           <PreferencesContext.Provider value={preferences}>
             <React.Fragment>
+            <AuthContext.Provider value={authContext}>
               <NavigationContainer
                 initialState={initialState}
                 onStateChange={(state) =>
                   AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state))
                 }
               >
-                  <Drawer.Navigator drawerContent={() => <DrawerContent />}>
-                  <Drawer.Screen name="Home" component={BudgetStack} />
-                </Drawer.Navigator>
-                <FloatingActionButton></FloatingActionButton>
+                {userToken ? (
+                    <Drawer.Navigator drawerContent={() => <DrawerContent />}>
+                      <Drawer.Screen name="Home" component={BudgetStack} />
+                    </Drawer.Navigator>
+                ) : (
+                  <AuthStack />
+                )}
               </NavigationContainer>
+              </AuthContext.Provider>
             </React.Fragment>
           </PreferencesContext.Provider>
         </SafeAreaProvider>

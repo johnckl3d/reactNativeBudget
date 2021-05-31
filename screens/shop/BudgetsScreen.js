@@ -1,41 +1,28 @@
 import Colors from "@Styles/colors";
 //import Card from "@UIComponents/Card";
-import {
-  centered
-} from "@Styles/presentation";
+import { centered } from "@Styles/presentation";
 import Styles from "@Styles/styles";
-import {
-  generateMonthArrayList
-} from "@Utils/dates";
+import { generateMonthArrayList } from "@Utils/dates";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
-
-
-
-
-
-  Dimensions, FlatList, Platform,
+  Dimensions,
+  FlatList,
+  Platform,
   SafeAreaView,
   StyleSheet,
-  View
+  View,
 } from "react-native";
 import {
   Avatar,
-
-
-  Button, Card, Divider,
-  IconButton, List,
+  Button,
+  Card,
+  Divider,
+  IconButton,
+  List,
   Text,
-
-
-
-
-
-
-
-  useTheme
+  useTheme,
 } from "react-native-paper";
 import { Pagination } from "react-native-snap-carousel";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -45,6 +32,9 @@ import MonthCarousel from "../../components/carousell/MonthCarousel";
 import HeaderButton from "../../components/UI/HeaderButton";
 import * as budgetsActions from "../../store/actions/budgets";
 import * as costCategoriesActions from "../../store/actions/costCategories";
+
+import FloatingActionButton from "../../navigation/FloatingActionButton";
+
 const SCREEN_WIDTH = Math.round(Dimensions.get("window").width);
 const SCREEN_HEIGHT = Math.round(Dimensions.get("window").height);
 const isOutlined = false;
@@ -171,11 +161,11 @@ const BudgetsScreen = (props) => {
         <Divider />
         <List.Section>
           <List.Subheader>{item.dateTime}</List.Subheader>
-          <List.Item 
+          <List.Item
             left={() => (
               <IconButton icon="camera" size={24} onPress={() => {}} />
             )}
-            right={(props) => <List.Icon {...props} icon="information"/>}
+            right={(props) => <List.Icon {...props} icon="information" />}
             title={`Amount: ${item.amount.toFixed(2)}`}
             //description="Describes item 1"
           />
@@ -190,20 +180,19 @@ const BudgetsScreen = (props) => {
   return (
     <SafeAreaView>
       <View style={styles.mainContent}>
-       
-        <Card style={styles.card} mode="outlined" >
+        <Card style={styles.card} mode="outlined">
           <BudgetCarousel
             data={budgets.budgets}
             parentCallback={handleBudgetSwipeCallback}
             width={Dimensions.get("window").width}
             height={Dimensions.get("window").height * 0.4}
           />
-           <MonthCarousel
-          data={monthsList}
-          parentCallback={handleMonthsSwipeCallback}
-          width={Dimensions.get("window").width}
-          height={100}
-        />
+          <MonthCarousel
+            data={monthsList}
+            parentCallback={handleMonthsSwipeCallback}
+            width={Dimensions.get("window").width}
+            height={100}
+          />
           <Card.Actions>
             <Button onPress={() => {}}>Share</Button>
             <Button onPress={() => {}}>Explore</Button>
@@ -226,6 +215,7 @@ const BudgetsScreen = (props) => {
           renderItem={renderItem}
         />
 
+        <FloatingActionButton></FloatingActionButton>
         <Pagination
           dotsLength={budgets.budgets[budgetIndex].costSnapShots.length}
           activeDotIndex={budgetIndex}
