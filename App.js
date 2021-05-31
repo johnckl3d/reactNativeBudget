@@ -17,7 +17,7 @@ import ReduxThunk from "redux-thunk";
 //import RootNavigator from "./navigation/RootNavigator";
 import BudgetStack from "./navigation/BudgetStack";
 import AuthStack from "./navigation/AuthStack";
-import DrawerItems from "./navigation/DrawerItems";
+import {DrawerContent} from "./navigation/DrawerContent";
 import budgetsReducer from "./store/reducers/budgets";
 import cartReducer from "./store/reducers/cart";
 import costCategoriesReducer from "./store/reducers/costCategories";
@@ -25,17 +25,18 @@ import ordersReducer from "./store/reducers/orders";
 import productsReducer from "./store/reducers/products";
 import SplashScreen from "./screens/SplashScreen";
 import { View, Text, StyleSheet, Button } from "react-native";
+import Colors from "@Styles/colors";
 
 const PERSISTENCE_KEY = "NAVIGATION_STATE";
 const PREFERENCES_KEY = "APP_PREFERENCES";
 
 const PreferencesContext = React.createContext(null);
 
-const DrawerContent = () => {
+const DrawerSetup = () => {
   return (
     <PreferencesContext.Consumer>
       {(preferences) => (
-        <DrawerItems
+        <DrawerContent
           toggleTheme={preferences.toggleTheme}
           isDarkTheme={preferences.theme === DarkTheme}
         />
@@ -50,8 +51,8 @@ const CustomDefaultTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: "#FFFFFF",
-    primary: "#5202FD",
+    background: Colors.background,
+    primary: Colors.primary,
   },
   fonts: {
     ...DefaultTheme.fonts,
@@ -194,7 +195,7 @@ export default function App() {
                 }
               >
                 {userToken ? (
-                    <Drawer.Navigator drawerContent={() => <DrawerContent />}>
+                    <Drawer.Navigator drawerContent={() => <DrawerSetup />}>
                       <Drawer.Screen name="Home" component={BudgetStack} />
                     </Drawer.Navigator>
                 ) : (

@@ -14,6 +14,7 @@ import {
 import * as Animatable from 'react-native-animatable';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
+import Colors from "@Styles/colors";
 
 const SignUpScreen = ({navigation}) => {
 
@@ -190,7 +191,7 @@ const SignUpScreen = ({navigation}) => {
                     onPress={() => {}}
                 >
                 <View
-                    colors={['#08d4c4', '#01ab9d']}
+                    colors={Colors.primary}
                     style={styles.signIn}
                 >
                     <Text style={[styles.textSign, {
@@ -202,13 +203,13 @@ const SignUpScreen = ({navigation}) => {
                 <TouchableOpacity
                     onPress={() => navigation.goBack()}
                     style={[styles.signIn, {
-                        borderColor: '#009387',
+                        borderColor: Colors.primary,
                         borderWidth: 1,
                         marginTop: 15
                     }]}
                 >
                     <Text style={[styles.textSign, {
-                        color: '#009387'
+                        color: Colors.primary,
                     }]}>Sign Up</Text>
                 </TouchableOpacity>
             </View>
@@ -223,7 +224,7 @@ export default SignUpScreen;
 const styles = StyleSheet.create({
     container: {
       flex: 1, 
-      backgroundColor: '#5202FD'
+      backgroundColor: Colors.primary,
     },
     header: {
         flex: 1,
@@ -282,6 +283,6 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
     color_textPrivate: {
-        color: 'grey'
+        color: Colors.accent
     }
   });

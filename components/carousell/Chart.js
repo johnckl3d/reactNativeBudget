@@ -194,15 +194,15 @@ export default class Chart extends Component {
                   y2="100%"
                   id="gradient"
                 >
-                  <Stop stopColor={Colors.s1} offset="0%" />
+                  <Stop stopColor={Colors.t3} offset="20%" />
                   <Stop stopColor={Colors.t1} offset="80%" />
-                  <Stop stopColor={Colors.t1} offset="100%" />
+                  <Stop stopColor={Colors.t2} offset="100%" />
                 </LinearGradient>
               </Defs>
               <Path
                 d={line}
                 fill="transparent"
-                stroke={Colors.p1}
+                stroke={Colors.t1}
                 strokeWidth={5}
               />
               <Path

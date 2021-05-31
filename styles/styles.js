@@ -96,7 +96,7 @@ export default StyleSheet.create({
     height: hp(10),
     margin: hp(0.5),
     padding: hp(0.5),
-    backgroundColor: Colors.b2,
+    backgroundColor: Colors.primary,
     ...centered,
   },
   paginationDot: {
@@ -104,6 +104,6 @@ export default StyleSheet.create({
   height: 10,
   borderRadius: 5,
   marginHorizontal: 8,
-  backgroundColor: Colors.p1,
+  backgroundColor: Colors.primary,
   },
 });

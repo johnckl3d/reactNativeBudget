@@ -11,7 +11,7 @@ export default colors = {
 
   s1: '#E86487', s2: '#FBBF56', s3: '#97CB5D', s4: '#46D3BD', s5: '#22A8DA', s6: '#9962D2',
 
-  t1: '#F6CCD7', t2: '#B8123E', t3: '#F9E1B8', t4: '#C36418', t5: '#C6EB9E', t6: '#65962E', 
+  t1: '#886F59', t2: '#BCAA99', t3: '#DFD6CE', t4: '#C36418', t5: '#C6EB9E', t6: '#65962E', 
   t7: '#A6E8DE', t8: '#158D7A', t9: '#A9DCEF', t10: '#0A6E93', t11: '#D7BFF0', t12: '#551893',
 
   b1: '#D4EDF1', b2: '#FAF9F3', b3: '#F0EEE1', b4: '#DBDAD4', b5: '#B3B1A8', b6: '#6F6E68',
@@ -22,6 +22,15 @@ export default colors = {
   u1: '#FF0000', u2: '#FF5500', u3: '#405B70', u4: '#769FAB',
 
   grey: '#DCDCDC',
+
+  background: '#FFFFFF',
+  primary: '#2A324B',
+  accent: '#BCAA99',
+  paper: '#FFFFFF',
+  text: '#F6CCD7',
+  disabled: '#DCDCDC',
+  placeholder: '#950740',
+  white: '#FFFFFF',
 
   
 

@@ -8,6 +8,8 @@ import CartScreen from '../screens/shop/CartScreen';
 import CostItemsScreen from '../screens/shop/CostItemsScreen';
 import EditCostCategoryScreen from '../screens/shop/EditCostCategoryScreen';
 import EditCostItemScreen from '../screens/shop/EditCostItemScreen';
+import { withTheme, useTheme, Button } from "react-native-paper";
+import Colors from "@Styles/colors";
 
 const Stack = createStackNavigator();
 
@@ -19,7 +21,7 @@ function Feed() {
   );
 }
 
-export default function BudgetStack() {
+function BudgetStack() {
   return (
   
     <Stack.Navigator
@@ -37,7 +39,7 @@ export default function BudgetStack() {
               }
             />
           ) : null}
-          <Appbar.Content title={scene.descriptor.options.title} />
+          <Appbar.Content title={scene.descriptor.options.title}/>
         </Appbar.Header>
       ),
     }}
@@ -51,6 +53,7 @@ export default function BudgetStack() {
   );
 }
 
+export default withTheme(BudgetStack);
 // CostCategory: CostCategoriesScreen,
 // ProductDetail: CostItemsScreen,
 // EditCostCategory: EditCostCategoryScreen,
