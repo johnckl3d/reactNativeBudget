@@ -30,8 +30,6 @@ export default class BudgetCarousel extends React.Component {
 
   render() {
     const  data  = this.props.data;
-    console.log("render::" + JSON.stringify(data));
-    console.log("render");
     return !data ? (
       <View></View>
     ) : (

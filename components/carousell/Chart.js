@@ -156,7 +156,6 @@ export default class Chart extends Component {
         testArr[index].y = parseInt(amount);
       }
     });
-    console.log("normalizeChartData::" + JSON.stringify(testArr));
     return testArr;
   }
 

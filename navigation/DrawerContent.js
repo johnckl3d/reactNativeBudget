@@ -20,11 +20,13 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import{ AuthContext } from '@Context/Context';
 
-export function DrawerContent(props) {
+export function DrawerContent({state, navigation, ...props}) {
 
     const paperTheme = useTheme();
 
     const { signOut, toggleTheme } = React.useContext(AuthContext);
+
+    //console.log("DrawerContent::" + JSON.stringify(props));
 
     return(
         <View style={{flex:1}}>
@@ -66,7 +68,7 @@ export function DrawerContent(props) {
                                 />
                             )}
                             label="Home"
-                            onPress={() => {props.navigation.navigate('Home')}}
+                            onPress={() => {navigation.navigate('Home')}}
                         />
                         <DrawerItem 
                             icon={({color, size}) => (
@@ -77,18 +79,7 @@ export function DrawerContent(props) {
                                 />
                             )}
                             label="Profile"
-                            onPress={() => {props.navigation.navigate('Profile')}}
-                        />
-                        <DrawerItem 
-                            icon={({color, size}) => (
-                                <Icon 
-                                name="bookmark-outline" 
-                                color={color}
-                                size={size}
-                                />
-                            )}
-                            label="Bookmarks"
-                            onPress={() => {props.navigation.navigate('BookmarkScreen')}}
+                            onPress={() => {navigation.navigate('Profile')}}
                         />
                         <DrawerItem 
                             icon={({color, size}) => (
@@ -99,7 +90,7 @@ export function DrawerContent(props) {
                                 />
                             )}
                             label="Settings"
-                            onPress={() => {props.navigation.navigate('SettingsScreen')}}
+                            onPress={() => {navigation.navigate('Settings')}}
                         />
                         <DrawerItem 
                             icon={({color, size}) => (
@@ -110,7 +101,7 @@ export function DrawerContent(props) {
                                 />
                             )}
                             label="Support"
-                            onPress={() => {props.navigation.navigate('SupportScreen')}}
+                            onPress={() => {navigation.navigate('Support')}}
                         />
                     </Drawer.Section>
                     <Drawer.Section title="Preferences">

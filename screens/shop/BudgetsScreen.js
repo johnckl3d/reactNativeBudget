@@ -138,7 +138,7 @@ const BudgetsScreen = (props) => {
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color={Colors.accent}></ActivityIndicator>
+        <ActivityIndicator size="large" color={Colors.primary}></ActivityIndicator>
       </View>
     );
   }

@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-community/async-storage";
-import  {AuthContext} from "@Context/Context";
+import  {AuthContext,PreferencesContext} from "@Context/Context";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import * as Font from "expo-font";
@@ -27,21 +27,30 @@ import SplashScreen from "./screens/SplashScreen";
 import { View, Text, StyleSheet, Button } from "react-native";
 import Colors from "@Styles/colors";
 
+
+import ProfileScreen from '@MiscScreens/ProfileScreen';
+import SupportScreen from '@MiscScreens/SupportScreen';
+import SettingsScreen from '@MiscScreens/SettingsScreen';
+
 const PERSISTENCE_KEY = "NAVIGATION_STATE";
 const PREFERENCES_KEY = "APP_PREFERENCES";
 
-const PreferencesContext = React.createContext(null);
-
-const DrawerSetup = () => {
+const DrawerSetup = (props) => {
+  // return (
+  //   <PreferencesContext.Consumer>
+  //     {(preferences) => (
+  //       <DrawerContent
+  //         toggleTheme={preferences.toggleTheme}
+  //         isDarkTheme={preferences.theme === DarkTheme}
+  //       />
+  //     )}
+  //   </PreferencesContext.Consumer>
+  // );
+  console.log("app::drawer::" + JSON.stringify(props));
   return (
-    <PreferencesContext.Consumer>
-      {(preferences) => (
-        <DrawerContent
-          toggleTheme={preferences.toggleTheme}
-          isDarkTheme={preferences.theme === DarkTheme}
+    <DrawerContent
+         {...props}
         />
-      )}
-    </PreferencesContext.Consumer>
   );
 };
 
@@ -195,8 +204,11 @@ export default function App() {
                 }
               >
                 {userToken ? (
-                    <Drawer.Navigator drawerContent={() => <DrawerSetup />}>
+                    <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
                       <Drawer.Screen name="Home" component={BudgetStack} />
+                      <Drawer.Screen name="Profile" component={ProfileScreen} />
+                      <Drawer.Screen name="Settings" component={SettingsScreen} />
+                      <Drawer.Screen name="Support" component={SupportScreen} />
                     </Drawer.Navigator>
                 ) : (
                   <AuthStack />

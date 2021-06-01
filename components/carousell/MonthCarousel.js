@@ -56,7 +56,6 @@ export default class MonthCarousel extends React.Component {
 
   render() {
     const data = this.props.data;
-    console.log("monthCarousel::" + JSON.stringify(data));
     return !data ? (
       <View></View>
     ) : (
