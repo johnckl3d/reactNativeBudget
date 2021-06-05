@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, Text, FlatList, Button, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-
-import Colors from '../../constants/Colors';
+import Colors from "@Styles/colors";
 import CartItem from '../../components/shop/CartItem';
 import Card from '@UIComponents/Card';
 import * as cartActions from '../../store/actions/cart';
