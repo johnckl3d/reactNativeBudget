@@ -80,3 +80,47 @@ export const fetchBudgetById = () => {
     }
   };
 };
+
+export const createBudget = (title, description, imageUrl, price) => {
+  return async (dispatch) => {
+    try {
+      // any async code you want!
+      const response = await fetch(
+        "https://meetup-api-app-john.azurewebsites.net/api/budget",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: title,
+          }),
+        }
+      );
+      if (response.status != 201) {
+        throw new Error("something went wrong!");
+      } else {
+      }
+    } catch (err) {
+      throw err;
+    }
+  };
+};
+
+export const deleteBudget = (budgetId) => {
+  return async (dispatch) => {
+    try {
+      const response = await fetch(
+        `https://meetup-api-app-john.azurewebsites.net/api/budget/${budgetId}`,
+        {
+          method: "DELETE",
+        }
+      );
+      if (response.status != 204) {
+        throw new Error("something went wrong!");
+      } else {
+      }
+    } catch (err) {
+    }
+  };
+};

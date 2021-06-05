@@ -59,6 +59,28 @@ const BudgetsScreen = (props) => {
   const monthsList = generateMonthArrayList();
   const theme = useTheme();
 
+  const FABActions = [
+    { icon: "plus", onPress: () => {} },
+    {
+      icon: "star",
+      label: "Delete",
+      onPress: () => {
+        deleteBudgetHandler(
+          budgets.budgets[budgetIndex].budgetId,
+          budgets.budgets[budgetIndex].name
+        );
+      },
+    },
+    { icon: "email", label: "Email", onPress: () => {} },
+    {
+      icon: "bell",
+      label: "Add",
+      onPress: () => {
+        addBudgetHandler(budgets.budgets[budgetIndex].budgetId);
+      },
+    },
+  ];
+
   const loadBudgets = useCallback(async () => {
     setError(null);
     setIsLoading(true);
@@ -99,31 +121,35 @@ const BudgetsScreen = (props) => {
     });
   };
 
-  const deleteItemHandler = (costCategoryId, name) => {
+  const addBudgetHandler = (budgetId) => {
+    props.navigation.navigate("EditBudgetScreen", { budgetId: budgetId });
+  };
+
+  const deleteBudgetHandler = (budgetId, name) => {
     Alert.alert("Are you sure?", `Do you really want to delete ${name}?`, [
       { text: "No", style: "default" },
       {
         text: "Yes",
         style: "destructive",
         onPress: () => {
-          deleteProducts(costCategoryId);
+          deleteBudget(budgetId);
         },
       },
     ]);
   };
 
-  const deleteProducts = useCallback(
-    async (costCategoryId) => {
+  const deleteBudget = useCallback(
+    async (budgetId) => {
       setError(null);
       setIsLoading(true);
       try {
-        await dispatch(costCategoriesActions.deleteProduct(costCategoryId));
+        await dispatch(budgetsActions.deleteBudget(budgetId));
       } catch (err) {
         setError(err.message);
       }
 
       setIsLoading(false);
-      loadCostCategories();
+      loadBudgets();
     },
     [dispatch, setIsLoading, setError]
   );
@@ -205,14 +231,19 @@ const BudgetsScreen = (props) => {
                 <IconButton
                   {...props}
                   icon="dots-vertical"
-                  onPress={() => {}}
+                  onPress={() => {
+                    deleteBudgetHandler(
+                      budgets.budgets[budgetIndex].budgetId,
+                      budgets.budgets[budgetIndex].name
+                    );
+                  }}
                 />
               )}
             />
             <Card.Content>
               <Paragraph>
-              {`Budget: ${budgets.budgets[budgetIndex].totalBudgetAmount} \n \n`}
-              {`Cost: ${budgets.budgets[budgetIndex].totalCostAmount}`}
+                {`Budget: ${budgets.budgets[budgetIndex].totalBudgetAmount} \n \n`}
+                {`Cost: ${budgets.budgets[budgetIndex].totalCostAmount}`}
               </Paragraph>
             </Card.Content>
           </Card>
@@ -235,7 +266,7 @@ const BudgetsScreen = (props) => {
           renderItem={renderCostSnapshotItem}
         />
 
-        <FloatingActionButton></FloatingActionButton>
+        <FloatingActionButton actions={FABActions}></FloatingActionButton>
         <Pagination
           dotsLength={budgets.budgets[budgetIndex].costSnapShots.length}
           activeDotIndex={budgetIndex}
@@ -246,36 +277,6 @@ const BudgetsScreen = (props) => {
       </View>
     </SafeAreaView>
   );
-};
-
-BudgetsScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: "Budget",
-    headerLeft: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButton}>
-        <Item
-          title="Menu"
-          iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
-          onPress={() => {
-            navData.navigation.toggleDrawer();
-          }}
-        />
-      </HeaderButtons>
-    ),
-    headerRight: () => (
-      <HeaderButtons HeaderButtonComponent={HeaderButton}>
-        <Item
-          title="Cart"
-          iconName={
-            Platform.OS === "android" ? "md-add-circle" : "ios-add-circle"
-          }
-          onPress={() => {
-            navData.navigation.navigate("EditCostCategory");
-          }}
-        />
-      </HeaderButtons>
-    ),
-  };
 };
 
 const styles = StyleSheet.create({

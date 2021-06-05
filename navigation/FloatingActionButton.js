@@ -3,7 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { Colors, Text, FAB, Portal, useTheme} from "react-native-paper";
 import { ThemeColors } from "react-navigation";
 
-const FloatingActionButton = () => {
+const FloatingActionButton = ({actions}) => {
   const theme = useTheme();
 
   const [state, setState] = useState({ open: false });
@@ -12,10 +12,22 @@ const FloatingActionButton = () => {
 
   const { open } = state;
 
+  console.log(actions);
   return (
     <Portal>
-     
-      <FAB.Group
+     <FAB.Group
+        open={open}
+        icon={open ? "calendar-today" : "plus"}
+        actions={actions}
+        onStateChange={onStateChange}
+        onPress={() => {
+          if (open) {
+            // do something if the speed dial is open
+          }
+        }}
+        visible={true}
+      />
+      {/* <FAB.Group
         open={open}
         icon={open ? "calendar-today" : "plus"}
         actions={[
@@ -31,7 +43,7 @@ const FloatingActionButton = () => {
           }
         }}
         visible={true}
-      />
+      /> */}
     </Portal>
   );
 };
