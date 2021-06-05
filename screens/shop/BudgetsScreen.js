@@ -32,8 +32,9 @@ import MonthCarousel from "../../components/carousell/MonthCarousel";
 import HeaderButton from "../../components/UI/HeaderButton";
 import * as budgetsActions from "../../store/actions/budgets";
 import * as costCategoriesActions from "../../store/actions/costCategories";
-
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '@Utils/scalingUtils';
 import FloatingActionButton from "../../navigation/FloatingActionButton";
+import moment from "moment";
 
 const SCREEN_WIDTH = Math.round(Dimensions.get("window").width);
 const SCREEN_HEIGHT = Math.round(Dimensions.get("window").height);
@@ -48,7 +49,6 @@ const BudgetsScreen = (props) => {
   const [monthIndex, setMonthsIndex] = useState(0);
   const budgets = useSelector((state) => state.budgets);
   const dispatch = useDispatch();
-  //const monthsList = moment.monthsShort();
   const monthsList = generateMonthArrayList();
   const theme = useTheme();
 
@@ -129,7 +129,7 @@ const BudgetsScreen = (props) => {
         <Button
           title="Try again"
           onPress={loadBudgets}
-          color={Colors.p1}
+          color={Colors.primary}
         ></Button>
       </View>
     );
@@ -155,12 +155,12 @@ const BudgetsScreen = (props) => {
     return <View />;
   }
 
-  const renderItem = ({ item }) => {
+  const renderCostSnapshotItem = ({ item }) => {
     return (
       <View>
         <Divider />
         <List.Section>
-          <List.Subheader>{item.dateTime}</List.Subheader>
+          <List.Subheader>{moment(item.dateTime).format('LL')}</List.Subheader>
           <List.Item
             left={() => (
               <IconButton icon="camera" size={24} onPress={() => {}} />
@@ -176,11 +176,12 @@ const BudgetsScreen = (props) => {
   };
 
   const costSnapShots = budgets.budgets[budgetIndex].costSnapShots;
+  console.log("budgetsScreen::costSnapShots::" + JSON.stringify(budgets));
   console.log("budgetsScreen::costSnapShots::" + JSON.stringify(costSnapShots));
   return (
     <SafeAreaView>
       <View style={styles.mainContent}>
-        <Card style={styles.card} mode="outlined">
+        <Card style={styles.card} mode={mode}>
           <BudgetCarousel
             data={budgets.budgets}
             parentCallback={handleBudgetSwipeCallback}
@@ -191,7 +192,7 @@ const BudgetsScreen = (props) => {
             data={monthsList}
             parentCallback={handleMonthsSwipeCallback}
             width={Dimensions.get("window").width}
-            height={100}
+            height={hp(10)}
           />
           <Card.Actions>
             <Button onPress={() => {}}>Share</Button>
@@ -212,7 +213,7 @@ const BudgetsScreen = (props) => {
         <FlatList
           data={budgets.budgets[budgetIndex].costSnapShots}
           keyExtractor={(item) => item.dateTime}
-          renderItem={renderItem}
+          renderItem={renderCostSnapshotItem}
         />
 
         <FloatingActionButton></FloatingActionButton>

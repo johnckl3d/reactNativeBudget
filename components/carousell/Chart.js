@@ -1,6 +1,6 @@
 import { scaleLinear, scaleQuantile, scaleTime } from "d3-scale";
 import * as shape from "d3-shape";
-import Moment from "moment";
+import moment from "moment";
 import React, { useEffect, Component } from "react";
 import {
   Animated,
@@ -56,7 +56,7 @@ export default class Chart extends Component {
   constructor(props) {
     super(props);
 
-    Moment.locale("en");
+    moment.locale("en");
 
     const x = new Animated.Value(0);
 
@@ -147,7 +147,7 @@ export default class Chart extends Component {
   }
 
   normalizeChartData(rawData) {
-    var testArr = generateMonthArrayFromMonth(Moment().month("January"));
+    var testArr = generateMonthArrayFromMonth(moment().month("January"));
     rawData.forEach((input) => {
       const day = new Date(input.x).getTime();
       const amount = Number(input.y);
@@ -249,7 +249,7 @@ export default class Chart extends Component {
           style={styles.xAxis}
           contentInset={{ left: 10, right: 25 }}
           //formatLabel={(value, index) => data[index].x}
-          formatLabel={(index) => Moment(index).format("D")}
+          formatLabel={(index) => moment(index).format("D")}
           //formatLabel={(index) => getDayOfMonthFromDate(index)}
         />
       </View>

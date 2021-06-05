@@ -204,7 +204,7 @@ export default function App() {
                 }
               >
                 {userToken ? (
-                    <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
+                    <Drawer.Navigator initialRouteName="Home" drawerContent={props => <DrawerContent {...props} />}>
                       <Drawer.Screen name="Home" component={BudgetStack} />
                       <Drawer.Screen name="Profile" component={ProfileScreen} />
                       <Drawer.Screen name="Settings" component={SettingsScreen} />
