@@ -220,7 +220,7 @@ const BudgetsScreen = (props) => {
             data={budgets.budgets}
             parentCallback={handleBudgetSwipeCallback}
             width={Dimensions.get("window").width}
-            height={Dimensions.get("window").height * 0.4}
+            height={Dimensions.get("window").height * 0.3}
           />
           <MonthCarousel
             data={monthsList}
