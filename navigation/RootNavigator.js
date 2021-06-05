@@ -5,15 +5,15 @@ import { createDrawerNavigator } from 'react-navigation-drawer';
 import { Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import BudgetsScreen from '../screens/shop/BudgetsScreen';
-import CostCategoriesScreen from '../screens/shop/CostCategoriesScreen';
-import CostItemsScreen from '../screens/shop/CostItemsScreen';
-import CartScreen from '../screens/shop/CartScreen';
-import OrdersScreen from '../screens/shop/OrdersScreen';
+import BudgetsScreen from '../screens/budget/BudgetsScreen';
+import CostCategoriesScreen from '../screens/budget/CostCategoriesScreen';
+import CostItemsScreen from '../screens/budget/CostItemsScreen';
+import CartScreen from '../screens/budget/CartScreen';
+import OrdersScreen from '../screens/budget/OrdersScreen';
 import UserProductsScreen from '../screens/user/UserProductsScreen';
 import EditProductScreen from '../screens/user/EditProductScreen';
-import EditCostCategoryScreen from '../screens/shop/EditCostCategoryScreen';
-import EditCostItemScreen from '../screens/shop/EditCostItemScreen';
+import EditCostCategoryScreen from '../screens/budget/EditCostCategoryScreen';
+import EditCostItemScreen from '../screens/budget/EditCostItemScreen';
 import Colors from '../constants/Colors';
 //import BudgetStack from './BudgetStack';
 

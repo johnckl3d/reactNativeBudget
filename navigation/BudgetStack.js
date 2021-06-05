@@ -3,11 +3,11 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 import { Text, View } from "react-native";
 import { Appbar } from 'react-native-paper';
-import BudgetsScreen from '../screens/shop/BudgetsScreen';
-import CartScreen from '../screens/shop/CartScreen';
-import CostItemsScreen from '../screens/shop/CostItemsScreen';
-import EditCostCategoryScreen from '../screens/shop/EditCostCategoryScreen';
-import EditCostItemScreen from '../screens/shop/EditCostItemScreen';
+import BudgetsScreen from '../screens/budget/BudgetsScreen';
+import CartScreen from '../screens/budget/CartScreen';
+import CostItemsScreen from '../screens/budget/CostItemsScreen';
+import EditCostCategoryScreen from '../screens/budget/EditCostCategoryScreen';
+import EditCostItemScreen from '../screens/budget/EditCostItemScreen';
 import { withTheme, useTheme, Button } from "react-native-paper";
 import Colors from "@Styles/colors";
 
