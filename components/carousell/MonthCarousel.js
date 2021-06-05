@@ -9,6 +9,10 @@ import CustomText from "@CustomText";
 import Colors from "@Styles/colors";
 import Fonts from "@Styles/fonts";
 
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "@Utils/scalingUtils";
 
 import {
   List,
@@ -26,14 +30,10 @@ import {
   Paragraph,
   Subheading,
   Title,
-  withTheme, 
+  withTheme,
 } from "react-native-paper";
 
-
-
 export default class MonthCarousel extends React.Component {
- 
-
   constructor(props) {
     super(props);
     this.state = {
@@ -44,13 +44,9 @@ export default class MonthCarousel extends React.Component {
 
   _renderItem({ item }) {
     return (
-      <View
-        style={styles.carouselItemContainer}
-        width={this.props.width}
-        height={this.props.height}
-      >
-        <Button onPress={() => {}}>{item}</Button>
-      </View>
+      <Card style={styles.carouselItemContainer}>
+        <Subheading>{item}</Subheading>
+      </Card>
     );
   }
 
@@ -66,7 +62,7 @@ export default class MonthCarousel extends React.Component {
           renderItem={this._renderItem}
           sliderWidth={this.props.width}
           itemWidth={this.props.width}
-          //contentContainerStyle={styles.carouselItemContainer}
+          contentContainerStyle={styles.carouselItemContainer}
           //containerCustomStyle={{flexGrow: 0}}
           inactiveSlideShift={0}
           onSnapToItem={(index) => this.props.parentCallback(index)}
@@ -85,5 +81,6 @@ const styles = StyleSheet.create({
   },
   carouselItemContainer: {
     ...centered,
+    height: hp(5),
   },
 });

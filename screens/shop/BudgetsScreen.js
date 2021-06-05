@@ -1,5 +1,4 @@
 import Colors from "@Styles/colors";
-//import Card from "@UIComponents/Card";
 import { centered } from "@Styles/presentation";
 import Styles from "@Styles/styles";
 import { generateMonthArrayList } from "@Utils/dates";
@@ -23,6 +22,11 @@ import {
   List,
   Text,
   useTheme,
+  Caption,
+  Headline,
+  Paragraph,
+  Subheading,
+  Title,
 } from "react-native-paper";
 import { Pagination } from "react-native-snap-carousel";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -32,7 +36,10 @@ import MonthCarousel from "../../components/carousell/MonthCarousel";
 import HeaderButton from "../../components/UI/HeaderButton";
 import * as budgetsActions from "../../store/actions/budgets";
 import * as costCategoriesActions from "../../store/actions/costCategories";
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '@Utils/scalingUtils';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "@Utils/scalingUtils";
 import FloatingActionButton from "../../navigation/FloatingActionButton";
 import moment from "moment";
 
@@ -138,7 +145,10 @@ const BudgetsScreen = (props) => {
   if (isLoading) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color={Colors.primary}></ActivityIndicator>
+        <ActivityIndicator
+          size="large"
+          color={Colors.primary}
+        ></ActivityIndicator>
       </View>
     );
   }
@@ -159,17 +169,21 @@ const BudgetsScreen = (props) => {
     return (
       <View>
         <Divider />
-        <List.Section>
-          <List.Subheader>{moment(item.dateTime).format('LL')}</List.Subheader>
-          <List.Item
-            left={() => (
-              <IconButton icon="camera" size={24} onPress={() => {}} />
-            )}
-            right={(props) => <List.Icon {...props} icon="information" />}
-            title={`Amount: ${item.amount.toFixed(2)}`}
-            //description="Describes item 1"
-          />
-        </List.Section>
+        <Card>
+          <List.Section>
+            <List.Subheader>
+              {moment(item.dateTime).format("LL")}
+            </List.Subheader>
+            <List.Item
+              left={() => (
+                <IconButton icon="camera" size={24} onPress={() => {}} />
+              )}
+              right={(props) => <List.Icon {...props} icon="information" />}
+              title={`Amount: ${item.amount.toFixed(2)}`}
+              //description="Describes item 1"
+            />
+          </List.Section>
+        </Card>
         <Divider />
       </View>
     );
@@ -181,7 +195,27 @@ const BudgetsScreen = (props) => {
   return (
     <SafeAreaView>
       <View style={styles.mainContent}>
-        <Card style={styles.card} mode={mode}>
+        <Card mode={mode}>
+          <Card mode={mode}>
+            <Card.Title
+              title={budgets.budgets[budgetIndex].name}
+              subtitle="Omega Ruby"
+              left={(props) => <Avatar.Icon {...props} icon="folder" />}
+              right={(props) => (
+                <IconButton
+                  {...props}
+                  icon="dots-vertical"
+                  onPress={() => {}}
+                />
+              )}
+            />
+            <Card.Content>
+              <Paragraph>
+              {`Budget: ${budgets.budgets[budgetIndex].totalBudgetAmount} \n \n`}
+              {`Cost: ${budgets.budgets[budgetIndex].totalCostAmount}`}
+              </Paragraph>
+            </Card.Content>
+          </Card>
           <BudgetCarousel
             data={budgets.budgets}
             parentCallback={handleBudgetSwipeCallback}
@@ -192,21 +226,6 @@ const BudgetsScreen = (props) => {
             data={monthsList}
             parentCallback={handleMonthsSwipeCallback}
             width={Dimensions.get("window").width}
-            height={hp(10)}
-          />
-          <Card.Actions>
-            <Button onPress={() => {}}>Share</Button>
-            <Button onPress={() => {}}>Explore</Button>
-          </Card.Actions>
-        </Card>
-        <Card style={styles.card} mode={mode}>
-          <Card.Title
-            title={budgets.budgets[budgetIndex].name}
-            subtitle="Omega Ruby"
-            left={(props) => <Avatar.Icon {...props} icon="folder" />}
-            right={(props) => (
-              <IconButton {...props} icon="dots-vertical" onPress={() => {}} />
-            )}
           />
         </Card>
 
@@ -278,6 +297,10 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
     margin: 8,
+  },
+  subHeading: {
+    marginHorizontal: wp(3),
+    marginVertical: wp(3),
   },
 });
 export default BudgetsScreen;
