@@ -78,6 +78,7 @@ const EditBudgetScreen = ({ route, navigation }) => {
   });
 
   const submitHandler = useCallback(async () => {
+    console.log("test");
     if (!formState.formIsValid) {
       Alert.alert("Wrong input!", "Please check the errors in the form.", [
         { text: "Okay" },
@@ -86,7 +87,7 @@ const EditBudgetScreen = ({ route, navigation }) => {
     }
     try {
       await dispatch(
-        budgetActions.createProduct(
+        budgetsActions.createBudget(
           formState.inputValues.title,
           formState.inputValues.description,
           0
@@ -166,23 +167,21 @@ const EditBudgetScreen = ({ route, navigation }) => {
             minLength={5}
           />
           <View style={styles.button}>
-          <Button
-            mode="contained"
-            onPress={() => {
-              submitHandler();
-            }}
-            style={styles.signIn}
-          >
-            Add
-          </Button>
-         
+            <Button
+              mode="contained"
+              onPress={() => {
+                submitHandler();
+              }}
+              style={styles.signIn}
+            >
+              Add
+            </Button>
           </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
 };
-
 
 const styles = StyleSheet.create({
   form: {

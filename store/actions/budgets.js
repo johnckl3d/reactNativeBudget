@@ -95,7 +95,8 @@ export const createBudget = (title, description, amount) => {
           body: JSON.stringify({
             name: title,
             description: description,
-            amount: amount
+            totalBudgetAmount: amount,
+            totalCostAmount: 0
           }),
         }
       );
