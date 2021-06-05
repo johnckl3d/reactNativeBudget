@@ -81,7 +81,7 @@ export const fetchBudgetById = () => {
   };
 };
 
-export const createBudget = (title, description, imageUrl, price) => {
+export const createBudget = (title, description, amount) => {
   return async (dispatch) => {
     try {
       // any async code you want!
@@ -94,6 +94,8 @@ export const createBudget = (title, description, imageUrl, price) => {
           },
           body: JSON.stringify({
             name: title,
+            description: description,
+            amount: amount
           }),
         }
       );
@@ -106,6 +108,7 @@ export const createBudget = (title, description, imageUrl, price) => {
     }
   };
 };
+
 
 export const deleteBudget = (budgetId) => {
   return async (dispatch) => {

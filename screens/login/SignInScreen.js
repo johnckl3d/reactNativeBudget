@@ -219,24 +219,17 @@ const SignInScreen = ({ navigation }) => {
           <Button
             mode="contained"
             onPress={() => {
-                signIn();
+              signIn();
               //loginHandle(data.username, data.password);
             }}
-            style={styles.signIn}
+            style={styles.signUp}
           >
             Log In
           </Button>
 
           <TouchableOpacity
             onPress={() => navigation.navigate("SignUp")}
-            style={[
-              styles.signIn,
-              {
-                borderColor: Colors.primary,
-                borderWidth: 1,
-                marginTop: 15,
-              },
-            ]}
+            style={styles.signUp}
           >
             <Text
               style={[
@@ -311,12 +304,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 50,
   },
-  signIn: {
-    width: "100%",
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
+  signUp: {
+    borderColor: Colors.primary,
+    borderWidth: 1,
+    marginTop: 15,
   },
   textSign: {
     fontSize: 18,

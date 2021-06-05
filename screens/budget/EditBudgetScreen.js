@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Platform,
   Alert,
-  Button,
   KeyboardAvoidingView,
 } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -16,6 +15,21 @@ import * as productsActions from "../../store/actions/products";
 import * as costCategoriesActions from "../../store/actions/costCategories";
 import * as budgetsActions from "../../store/actions/budgets";
 import Input from "../../components/UI/Input";
+import {
+  Avatar,
+  Button,
+  Card,
+  Divider,
+  IconButton,
+  List,
+  Text,
+  useTheme,
+  Caption,
+  Headline,
+  Paragraph,
+  Subheading,
+  Title,
+} from "react-native-paper";
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
@@ -72,7 +86,7 @@ const EditBudgetScreen = ({ route, navigation }) => {
     }
     try {
       await dispatch(
-        costCategoriesActions.createProduct(
+        budgetActions.createProduct(
           formState.inputValues.title,
           formState.inputValues.description,
           0
@@ -136,15 +150,32 @@ const EditBudgetScreen = ({ route, navigation }) => {
             required
             minLength={5}
           />
+          <Input
+            id="amount"
+            label="Amount"
+            errorText="Please enter a valid amount!"
+            keyboardType="numeric"
+            autoCapitalize="sentences"
+            autoCorrect
+            multiline
+            numberOfLines={3}
+            onInputChange={inputChangeHandler}
+            initialValue={editedProduct ? editedProduct.description : ""}
+            initiallyValid={!!editedProduct}
+            required
+            minLength={5}
+          />
           <View style={styles.button}>
-            <Button
-              style={styles.button}
-              color={Colors.primary}
-              title="Add"
-              onPress={() => {
-                submitHandler();
-              }}
-            />
+          <Button
+            mode="contained"
+            onPress={() => {
+              submitHandler();
+            }}
+            style={styles.signIn}
+          >
+            Add
+          </Button>
+         
           </View>
         </View>
       </ScrollView>
