@@ -223,7 +223,7 @@ const BudgetsScreen = (props) => {
           <Card mode={mode}>
             <Card.Title
               title={budgets.budgets[budgetIndex].name}
-              subtitle="Omega Ruby"
+              subtitle={budgets.budgets[budgetIndex].description}
               left={(props) => <Avatar.Icon {...props} icon="folder" />}
               right={(props) => (
                 <IconButton

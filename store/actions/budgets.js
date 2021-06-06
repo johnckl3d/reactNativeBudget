@@ -31,6 +31,7 @@ export const fetchBudgets = () => {
           new Budget(
             b.budgetId,
             b.name,
+            b.description,
             b.totalBudgetAmount,
             b.totalCostAmount,
             css
@@ -70,6 +71,7 @@ export const fetchBudgetById = () => {
         new Budget(
           resData.budgetId,
           resData.name,
+          resData.description,
           resData.totalBudgetAmount,
           resData.totalCostAmount,
           css
