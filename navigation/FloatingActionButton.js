@@ -12,7 +12,6 @@ const FloatingActionButton = ({actions}) => {
 
   const { open } = state;
 
-  console.log(actions);
   return (
     <Portal>
      <FAB.Group

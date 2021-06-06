@@ -18,7 +18,7 @@ export const fetchBudgets = () => {
         throw new Error("something went wrong!");
       }
       const resData = await response.json();
-      console.log("fetchBudgets::" + JSON.stringify(resData));
+      console.log("fetchBudgets::resData::" + JSON.stringify(resData));
       const loadedBudget = [];
 
       for (const b of resData) {
@@ -37,7 +37,7 @@ export const fetchBudgets = () => {
           )
         );
       }
-      //console.log("loadedBudget::" + JSON.stringify(loadedBudget));
+      console.log("fetchBudgets::loadedBudget::" + JSON.stringify(loadedBudget));
       dispatch({ type: SET_BUDGETS, budgets: loadedBudget });
     } catch (err) {
       throw err;
@@ -104,7 +104,8 @@ export const createBudget = (title, description, amount) => {
       if (response.status != 201) {
         throw new Error("something went wrong!");
       } else {
-         console.log("budgets::delete::" + JSON.stringify(resData));
+         console.log("budgets::createBudget::" + JSON.stringify(resData));
+         
       }
     } catch (err) {
       throw err;
@@ -114,6 +115,7 @@ export const createBudget = (title, description, amount) => {
 
 
 export const deleteBudget = (budgetId) => {
+  console.log("budgets::deleteBudget::budgetId::" + budgetId);
   return async (dispatch) => {
     try {
       const response = await fetch(
@@ -122,6 +124,7 @@ export const deleteBudget = (budgetId) => {
           method: "DELETE",
         }
       );
+      console.log("budgets::deleteBudget::" + JSON.stringify(response));
       if (response.status != 204) {
         throw new Error("something went wrong!");
       } else {

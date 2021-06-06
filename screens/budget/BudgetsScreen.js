@@ -82,6 +82,7 @@ const BudgetsScreen = (props) => {
   ];
 
   const loadBudgets = useCallback(async () => {
+    console.log("budgetscreen:loadbudget");
     setError(null);
     setIsLoading(true);
     try {
@@ -91,18 +92,17 @@ const BudgetsScreen = (props) => {
     }
     setIsLoading(false);
     setFocus(true);
+    if(budgetIndex >= budgets.budgets[budgetIndex].length - 1)
+    {
+      setBudgetIndex(0);
+    }
   }, [dispatch, setIsLoading, setError]);
 
   useEffect(() => {
     loadBudgets();
   }, [dispatch, loadBudgets]);
 
-  useEffect(() => {
-    const willFocusSub = props.navigation.addListener("willFocus", loadBudgets);
-    return () => {
-      willFocusSub.remove();
-    };
-  }, [loadBudgets]);
+  
 
   const handleBudgetSwipeCallback = (childData) => {
     setBudgetIndex(childData);
@@ -215,9 +215,7 @@ const BudgetsScreen = (props) => {
     );
   };
 
-  const costSnapShots = budgets.budgets[budgetIndex].costSnapShots;
-  console.log("budgetsScreen::costSnapShots::" + JSON.stringify(budgets));
-  console.log("budgetsScreen::costSnapShots::" + JSON.stringify(costSnapShots));
+  
   return (
     <SafeAreaView>
       <View style={styles.mainContent}>
