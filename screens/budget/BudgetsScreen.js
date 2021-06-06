@@ -97,12 +97,12 @@ const BudgetsScreen = (props) => {
     loadBudgets();
   }, [dispatch, loadBudgets]);
 
-  // useEffect(() => {
-  //   const willFocusSub = props.navigation.addListener("willFocus", loadBudgets);
-  //   return () => {
-  //     willFocusSub.remove();
-  //   };
-  // }, [loadBudgets]);
+  useEffect(() => {
+    const willFocusSub = props.navigation.addListener("willFocus", loadBudgets);
+    return () => {
+      willFocusSub.remove();
+    };
+  }, [loadBudgets]);
 
   const handleBudgetSwipeCallback = (childData) => {
     setBudgetIndex(childData);

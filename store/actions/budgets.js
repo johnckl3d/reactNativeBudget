@@ -1,13 +1,14 @@
 import CostSnapShot from "../../models/costSnapShot";
 import Budget from "../../models/budget";
-
+import { API_URL } from '@Constants/url';
 export const SET_BUDGETS = "SET_BUDGETS";
 
 export const fetchBudgets = () => {
+  console.log("fetchBudgets::" + API_URL.BUDGET_URL);
   return async (dispatch) => {
     try {
       const response = await fetch(
-        "https://meetup-api-app-john.azurewebsites.net/api/budget",
+        API_URL.BUDGET_URL,
         {
           method: "GET",
         }
@@ -17,7 +18,7 @@ export const fetchBudgets = () => {
         throw new Error("something went wrong!");
       }
       const resData = await response.json();
-      //console.log("fetchBudgets::" + JSON.stringify(resData));
+      console.log("fetchBudgets::" + JSON.stringify(resData));
       const loadedBudget = [];
 
       for (const b of resData) {
@@ -48,7 +49,7 @@ export const fetchBudgetById = () => {
   return async (dispatch) => {
     try {
       const response = await fetch(
-        "https://meetup-api-app-john.azurewebsites.net/api/budget/b4f10e4c-70cb-44ae-985b-32f13cf9429f",
+        API_URL.BUDGET_URL,
         {
           method: "GET",
         }
@@ -86,7 +87,7 @@ export const createBudget = (title, description, amount) => {
     try {
       // any async code you want!
       const response = await fetch(
-        "https://meetup-api-app-john.azurewebsites.net/api/budget",
+        API_URL.BUDGET_URL,
         {
           method: "POST",
           headers: {
@@ -103,6 +104,7 @@ export const createBudget = (title, description, amount) => {
       if (response.status != 201) {
         throw new Error("something went wrong!");
       } else {
+         console.log("budgets::delete::" + JSON.stringify(resData));
       }
     } catch (err) {
       throw err;
@@ -115,7 +117,7 @@ export const deleteBudget = (budgetId) => {
   return async (dispatch) => {
     try {
       const response = await fetch(
-        `https://meetup-api-app-john.azurewebsites.net/api/budget/${budgetId}`,
+        `${API_URL.BUDGET_URL}/${budgetId}`,
         {
           method: "DELETE",
         }
