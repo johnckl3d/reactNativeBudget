@@ -59,22 +59,23 @@ const formReducer = (state, action) => {
 const EditBudgetScreen = ({ route, navigation }) => {
   console.log("EditBudgetScreen::" + JSON.stringify(route.params));
   const budgetId = route.params.budgetId;
-  console.log("EditBudgetScreen::budgetId::" + budgetId);
-  const editedProduct = useSelector((state) =>
-    state.budgets.budgets.find((id) => budgetId === id)
+  
+  const editedBudget = useSelector((state) =>
+    state.budgets.budgets.find((b) => b.budgetId === budgetId)
   );
+  console.log("EditBudgetScreen::editedBudget::" + JSON.stringify(editedBudget));
   const dispatch = useDispatch();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
-      title: editedProduct ? editedProduct.title : "",
-      description: editedProduct ? editedProduct.description : "",
+      title: editedBudget ? editedBudget.title : "",
+      description: editedBudget ? editedBudget.description : "",
     },
     inputValidities: {
-      title: editedProduct ? true : false,
-      description: editedProduct ? true : false,
+      title: editedBudget ? true : false,
+      description: editedBudget ? true : false,
     },
-    formIsValid: editedProduct ? true : false,
+    formIsValid: editedBudget ? true : false,
   });
 
   const submitHandler = useCallback(async () => {
@@ -132,8 +133,8 @@ const EditBudgetScreen = ({ route, navigation }) => {
             autoCorrect
             returnKeyType="next"
             onInputChange={inputChangeHandler}
-            initialValue={editedProduct ? editedProduct.title : ""}
-            initiallyValid={!!editedProduct}
+            initialValue={editedBudget ? editedBudget.title : ""}
+            initiallyValid={!!editedBudget}
             required
           />
           <Input
@@ -146,8 +147,8 @@ const EditBudgetScreen = ({ route, navigation }) => {
             multiline
             numberOfLines={3}
             onInputChange={inputChangeHandler}
-            initialValue={editedProduct ? editedProduct.description : ""}
-            initiallyValid={!!editedProduct}
+            initialValue={editedBudget ? editedBudget.description : ""}
+            initiallyValid={!!editedBudget}
             required
             minLength={5}
           />
@@ -161,8 +162,8 @@ const EditBudgetScreen = ({ route, navigation }) => {
             multiline
             numberOfLines={3}
             onInputChange={inputChangeHandler}
-            initialValue={editedProduct ? editedProduct.description : ""}
-            initiallyValid={!!editedProduct}
+            initialValue={editedBudget ? editedBudget.description : ""}
+            initiallyValid={!!editedBudget}
             required
             minLength={5}
           />

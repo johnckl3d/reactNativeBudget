@@ -125,7 +125,7 @@ const BudgetsScreen = (props) => {
   };
 
   const addBudgetHandler = (budgetId) => {
-    props.navigation.navigate("EditBudgetScreen", { budgetId: budgetId });
+    props.navigation.navigate("EditBudgetScreen");
   };
 
   const deleteBudgetHandler = (budgetId, name) => {
@@ -236,7 +236,7 @@ const BudgetsScreen = (props) => {
                   {...props}
                   icon="dots-vertical"
                   onPress={() => {
-                    editBudgetHandler();
+                    editBudgetHandler(budgets.budgets[budgetIndex].budgetId);
                   }}
                 />
               )}
