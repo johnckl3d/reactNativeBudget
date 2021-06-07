@@ -33,6 +33,7 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useDispatch, useSelector } from "react-redux";
 import BudgetCarousel from "../../components/carousell/BudgetCarousel";
 import MonthCarousel from "../../components/carousell/MonthCarousel";
+import BudgetAccordion from "@Accordion/BudgetAccordion";
 import HeaderButton from "../../components/UI/HeaderButton";
 import * as budgetsActions from "../../store/actions/budgets";
 import * as costCategoriesActions from "../../store/actions/costCategories";
@@ -257,12 +258,12 @@ const BudgetsScreen = (props) => {
             width={Dimensions.get("window").width}
           />
         </Card>
-
-        <FlatList
+<BudgetAccordion></BudgetAccordion>
+        {/* <FlatList
           data={budgets.budgets[budgetIndex].costSnapShots}
           keyExtractor={(item) => item.dateTime}
           renderItem={renderCostSnapshotItem}
-        />
+        /> */}
 
         <FloatingActionButton actions={FABActions}></FloatingActionButton>
         <Pagination
