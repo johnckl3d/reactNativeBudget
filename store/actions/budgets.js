@@ -1,18 +1,17 @@
 import CostSnapShot from "../../models/costSnapShot";
+import CostCategory from "../../models/costCategory";
+import CostItem from "../../models/costItem";
 import Budget from "../../models/budget";
-import { API_URL } from '@Constants/url';
+import { API_URL } from "@Constants/url";
 export const SET_BUDGETS = "SET_BUDGETS";
 
 export const fetchBudgets = () => {
   console.log("fetchBudgets::" + API_URL.BUDGET_URL);
   return async (dispatch) => {
     try {
-      const response = await fetch(
-        API_URL.BUDGET_URL,
-        {
-          method: "GET",
-        }
-      );
+      const response = await fetch(API_URL.BUDGET_URL, {
+        method: "GET",
+      });
 
       if (!response.ok) {
         throw new Error("something went wrong!");
@@ -26,7 +25,17 @@ export const fetchBudgets = () => {
         for (const cs of b.costSnapShots) {
           css.push(new CostSnapShot(cs.dateTime, cs.amount));
         }
-
+        const ccs = [];
+        for (const cc of b.costCategories) {
+          const cis = [];
+          for (const ci of cc.costItems) {
+            cis.push(new CostItem(ci.name, ci.amount, ci.costItemId));
+          }
+          ccs.push(
+            new CostCategory(cc.costCategoryId, cc.name, cc.totalAmount, cis)
+          );
+        }
+        console.log("budgets::action::" + JSON.stringify(ccs));
         loadedBudget.push(
           new Budget(
             b.budgetId,
@@ -34,11 +43,14 @@ export const fetchBudgets = () => {
             b.description,
             b.totalBudgetAmount,
             b.totalCostAmount,
-            css
+            css,
+            ccs
           )
         );
       }
-      console.log("fetchBudgets::loadedBudget::" + JSON.stringify(loadedBudget));
+      console.log(
+        "fetchBudgets::loadedBudget::" + JSON.stringify(loadedBudget)
+      );
       dispatch({ type: SET_BUDGETS, budgets: loadedBudget });
     } catch (err) {
       throw err;
@@ -49,12 +61,9 @@ export const fetchBudgets = () => {
 export const fetchBudgetById = () => {
   return async (dispatch) => {
     try {
-      const response = await fetch(
-        API_URL.BUDGET_URL,
-        {
-          method: "GET",
-        }
-      );
+      const response = await fetch(API_URL.BUDGET_URL, {
+        method: "GET",
+      });
 
       if (!response.ok) {
         throw new Error("something went wrong!");
@@ -88,26 +97,22 @@ export const createBudget = (title, description, amount) => {
   return async (dispatch) => {
     try {
       // any async code you want!
-      const response = await fetch(
-        API_URL.BUDGET_URL,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: title,
-            description: description,
-            totalBudgetAmount: amount,
-            totalCostAmount: 0
-          }),
-        }
-      );
+      const response = await fetch(API_URL.BUDGET_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: title,
+          description: description,
+          totalBudgetAmount: amount,
+          totalCostAmount: 0,
+        }),
+      });
       if (response.status != 201) {
         throw new Error("something went wrong!");
       } else {
-         console.log("budgets::createBudget::" + JSON.stringify(resData));
-         
+        console.log("budgets::createBudget::" + JSON.stringify(resData));
       }
     } catch (err) {
       throw err;
@@ -115,23 +120,18 @@ export const createBudget = (title, description, amount) => {
   };
 };
 
-
 export const deleteBudget = (budgetId) => {
   console.log("budgets::deleteBudget::budgetId::" + budgetId);
   return async (dispatch) => {
     try {
-      const response = await fetch(
-        `${API_URL.BUDGET_URL}/${budgetId}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`${API_URL.BUDGET_URL}/${budgetId}`, {
+        method: "DELETE",
+      });
       console.log("budgets::deleteBudget::" + JSON.stringify(response));
       if (response.status != 204) {
         throw new Error("something went wrong!");
       } else {
       }
-    } catch (err) {
-    }
+    } catch (err) {}
   };
 };

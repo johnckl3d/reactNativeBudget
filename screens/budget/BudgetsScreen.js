@@ -216,7 +216,7 @@ const BudgetsScreen = (props) => {
     );
   };
 
-  
+  console.log("budgetsScreen::costCategories::" + JSON.stringify(budgets.budgets[budgetIndex]));
   return (
     <SafeAreaView>
       <View style={styles.mainContent}>
@@ -258,7 +258,7 @@ const BudgetsScreen = (props) => {
             width={Dimensions.get("window").width}
           />
         </Card>
-<BudgetAccordion></BudgetAccordion>
+<BudgetAccordion costCategories={budgets.budgets[budgetIndex].costCategories}></BudgetAccordion>
         {/* <FlatList
           data={budgets.budgets[budgetIndex].costSnapShots}
           keyExtractor={(item) => item.dateTime}
