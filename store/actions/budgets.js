@@ -17,7 +17,7 @@ export const fetchBudgets = () => {
         throw new Error("something went wrong!");
       }
       const resData = await response.json();
-      console.log("fetchBudgets::resData::" + JSON.stringify(resData));
+      //console.log("fetchBudgets::resData::" + JSON.stringify(resData));
       const loadedBudget = [];
 
       for (const b of resData) {
@@ -35,7 +35,7 @@ export const fetchBudgets = () => {
             new CostCategory(cc.costCategoryId, cc.name, cc.totalAmount, cis)
           );
         }
-        console.log("budgets::action::" + JSON.stringify(ccs));
+        //console.log("budgets::action::" + JSON.stringify(ccs));
         loadedBudget.push(
           new Budget(
             b.budgetId,

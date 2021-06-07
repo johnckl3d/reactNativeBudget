@@ -79,7 +79,6 @@ const EditBudgetScreen = ({ route, navigation }) => {
   });
 
   const submitHandler = useCallback(async () => {
-    console.log("test");
     if (!formState.formIsValid) {
       Alert.alert("Wrong input!", "Please check the errors in the form.", [
         { text: "Okay" },
@@ -133,7 +132,7 @@ const EditBudgetScreen = ({ route, navigation }) => {
             autoCorrect
             returnKeyType="next"
             onInputChange={inputChangeHandler}
-            initialValue={editedBudget ? editedBudget.title : ""}
+            initialValue={editedBudget ? editedBudget.name : ""}
             initiallyValid={!!editedBudget}
             required
           />
@@ -144,8 +143,6 @@ const EditBudgetScreen = ({ route, navigation }) => {
             keyboardType="default"
             autoCapitalize="sentences"
             autoCorrect
-            multiline
-            numberOfLines={3}
             onInputChange={inputChangeHandler}
             initialValue={editedBudget ? editedBudget.description : ""}
             initiallyValid={!!editedBudget}
@@ -154,7 +151,7 @@ const EditBudgetScreen = ({ route, navigation }) => {
           />
           <Input
             id="amount"
-            label="Amount"
+            label="Budget Amount"
             errorText="Please enter a valid amount!"
             keyboardType="numeric"
             autoCapitalize="sentences"
@@ -162,10 +159,10 @@ const EditBudgetScreen = ({ route, navigation }) => {
             multiline
             numberOfLines={3}
             onInputChange={inputChangeHandler}
-            initialValue={editedBudget ? editedBudget.description : ""}
+            initialValue={editedBudget ? editedBudget.totalBudgetAmount.toString() : ""}
             initiallyValid={!!editedBudget}
             required
-            minLength={5}
+            minLength={1}
           />
           <View style={styles.button}>
             <Button
@@ -173,7 +170,6 @@ const EditBudgetScreen = ({ route, navigation }) => {
               onPress={() => {
                 submitHandler();
               }}
-              style={styles.signIn}
             >
               Add
             </Button>

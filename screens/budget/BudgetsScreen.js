@@ -62,7 +62,13 @@ const BudgetsScreen = (props) => {
   const theme = useTheme();
 
   const FABActions = [
-    { icon: "plus", onPress: () => {} },
+    { icon: "plus", label: "Add Cost Item", onPress: () => {
+      addCostItemHandler(budgets.budgets[budgetIndex].budgetId);
+    } },
+    
+    { icon: "email", label: "Add Category", onPress: () => {
+      addCostCategoryHandler(budgets.budgets[budgetIndex].budgetId);
+    } },
     {
       icon: "star",
       label: "Delete",
@@ -73,12 +79,11 @@ const BudgetsScreen = (props) => {
         );
       },
     },
-    { icon: "email", label: "Email", onPress: () => {} },
     {
       icon: "bell",
-      label: "Add",
+      label: "Add Budget",
       onPress: () => {
-        addBudgetHandler(budgets.budgets[budgetIndex].budgetId);
+        addBudgetHandler();
       },
     },
   ];
@@ -118,6 +123,15 @@ const BudgetsScreen = (props) => {
       name: name,
       totalAmount: totalAmount,
     });
+  };
+
+  
+  const addCostItemHandler = (budgetId) => {
+    props.navigation.navigate("EditCostItemScreen", { budgetId: budgetId });
+  };
+
+  const addCostCategoryHandler = (budgetId) => {
+    props.navigation.navigate("EditCostCategoryScreen", { budgetId: budgetId });
   };
 
   const editBudgetHandler = (budgetId) => {

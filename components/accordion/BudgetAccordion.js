@@ -99,7 +99,7 @@ const BudgetAccordion = (props) => {
       </List.Section>
     );
   };
-  console.log("budgetAccordion::costCategories::" + JSON.stringify(props));
+  //console.log("budgetAccordion::costCategories::" + JSON.stringify(props));
   return (
     <ScreenWrapper withScrollView={withScrollView}>
       <FlatList

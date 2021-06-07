@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Platform,
   Alert,
-  Button,
   KeyboardAvoidingView,
 } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -14,7 +13,23 @@ import Colors from "@Styles/colors";
 import HeaderButton from "../../components/UI/HeaderButton";
 import * as productsActions from "../../store/actions/products";
 import * as costCategoriesActions from "../../store/actions/costCategories";
+import * as budgetsActions from "../../store/actions/budgets";
 import Input from "../../components/UI/Input";
+import {
+  Avatar,
+  Button,
+  Card,
+  Divider,
+  IconButton,
+  List,
+  Text,
+  useTheme,
+  Caption,
+  Headline,
+  Paragraph,
+  Subheading,
+  Title,
+} from "react-native-paper";
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
@@ -41,23 +56,36 @@ const formReducer = (state, action) => {
   return state;
 };
 
-const EditCostCategoryScreen = (props) => {
-  const prodId = props.navigation.getParam("productId");
-  const editedProduct = useSelector((state) =>
-    state.products.userProducts.find((prod) => prod.id === prodId)
+const EditCostCategoryScreen = ({ route, navigation }) => {
+  console.log("EditCostCategoryScreen::" + JSON.stringify(route.params));
+  const budgetId = route.params.budgetId;
+  const costCategoryId = route.params.costCategoryId;
+  const editedBudget = useSelector((state) =>
+    state.budgets.budgets.find((b) => b.budgetId === budgetId)
+  );
+  console.log(
+    "EditCostCategoryScreen::editedBudget::" +
+      JSON.stringify(editedBudget)
+  );
+  const editedCostCategory = editedBudget.costCategories.find(
+    (c) => c.costCategoryId === costCategoryId
+  );
+  console.log(
+    "EditCostCategoryScreen::editedCostCategory::" +
+      JSON.stringify(editedCostCategory)
   );
   const dispatch = useDispatch();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
-      title: editedProduct ? editedProduct.title : "",
-      description: editedProduct ? editedProduct.description : "",
+      title: editedCostCategory ? editedCostCategory.title : "",
+      description: editedCostCategory ? editedCostCategory.description : "",
     },
     inputValidities: {
-      title: editedProduct ? true : false,
-      description: editedProduct ? true : false,
+      title: editedCostCategory ? true : false,
+      description: editedCostCategory ? true : false,
     },
-    formIsValid: editedProduct ? true : false,
+    formIsValid: editedCostCategory ? true : false,
   });
 
   const submitHandler = useCallback(async () => {
@@ -69,7 +97,7 @@ const EditCostCategoryScreen = (props) => {
     }
     try {
       await dispatch(
-        costCategoriesActions.createProduct(
+        budgetsActions.createBudget(
           formState.inputValues.title,
           formState.inputValues.description,
           0
@@ -78,12 +106,12 @@ const EditCostCategoryScreen = (props) => {
     } catch (err) {
       throw err;
     }
-    props.navigation.goBack();
+    navigation.goBack();
   }, [dispatch, formState]);
 
-  useEffect(() => {
-    props.navigation.setParams({ submit: submitHandler });
-  }, [submitHandler]);
+  // useEffect(() => {
+  //   navigation.setParams({ submit: submitHandler });
+  // }, [submitHandler]);
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
@@ -114,8 +142,8 @@ const EditCostCategoryScreen = (props) => {
             autoCorrect
             returnKeyType="next"
             onInputChange={inputChangeHandler}
-            initialValue={editedProduct ? editedProduct.title : ""}
-            initiallyValid={!!editedProduct}
+            initialValue={editedCostCategory ? editedCostCategory.name : ""}
+            initiallyValid={!!editedCostCategory}
             required
           />
           <Input
@@ -125,34 +153,47 @@ const EditCostCategoryScreen = (props) => {
             keyboardType="default"
             autoCapitalize="sentences"
             autoCorrect
-            multiline
-            numberOfLines={3}
             onInputChange={inputChangeHandler}
-            initialValue={editedProduct ? editedProduct.description : ""}
-            initiallyValid={!!editedProduct}
+            initialValue={
+              editedCostCategory ? editedCostCategory.description : ""
+            }
+            initiallyValid={!!editedCostCategory}
             required
             minLength={5}
           />
+          <Input
+            id="amount"
+            label="Budget Amount"
+            errorText="Please enter a valid amount!"
+            keyboardType="numeric"
+            autoCapitalize="sentences"
+            autoCorrect
+            multiline
+            numberOfLines={3}
+            onInputChange={inputChangeHandler}
+            initialValue={
+              editedCostCategory
+                ? editedCostCategory.totalBudgetAmount.toString()
+                : ""
+            }
+            initiallyValid={!!editedCostCategory}
+            required
+            minLength={1}
+          />
           <View style={styles.button}>
             <Button
-              style={styles.button}
-              color={Colors.primary}
-              title="Add"
+              mode="contained"
               onPress={() => {
                 submitHandler();
               }}
-            />
+            >
+              Add
+            </Button>
           </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
-};
-
-EditCostCategoryScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: "Add Cost Category",
-  };
 };
 
 const styles = StyleSheet.create({
