@@ -43,6 +43,7 @@ import {
 } from "@Utils/scalingUtils";
 import FloatingActionButton from "../../navigation/FloatingActionButton";
 import moment from "moment";
+import { highlightRed } from "../../styles/presentation";
 
 const SCREEN_WIDTH = Math.round(Dimensions.get("window").width);
 const SCREEN_HEIGHT = Math.round(Dimensions.get("window").height);
@@ -93,8 +94,7 @@ const BudgetsScreen = (props) => {
     }
     setIsLoading(false);
     setFocus(true);
-    if(budgetIndex >= budgets.budgets[budgetIndex].length - 1)
-    {
+    if (budgetIndex >= budgets.budgets[budgetIndex].length - 1) {
       setBudgetIndex(0);
     }
   }, [dispatch, setIsLoading, setError]);
@@ -102,8 +102,6 @@ const BudgetsScreen = (props) => {
   useEffect(() => {
     loadBudgets();
   }, [dispatch, loadBudgets]);
-
-  
 
   const handleBudgetSwipeCallback = (childData) => {
     setBudgetIndex(childData);
@@ -120,6 +118,10 @@ const BudgetsScreen = (props) => {
       name: name,
       totalAmount: totalAmount,
     });
+  };
+
+  const editBudgetHandler = (budgetId) => {
+    props.navigation.navigate("EditBudgetScreen", { budgetId: budgetId });
   };
 
   const addBudgetHandler = (budgetId) => {
@@ -216,7 +218,10 @@ const BudgetsScreen = (props) => {
     );
   };
 
-  console.log("budgetsScreen::costCategories::" + JSON.stringify(budgets.budgets[budgetIndex]));
+  console.log(
+    "budgetsScreen::costCategories::" +
+      JSON.stringify(budgets.budgets[budgetIndex])
+  );
   return (
     <SafeAreaView>
       <View style={styles.mainContent}>
@@ -231,19 +236,30 @@ const BudgetsScreen = (props) => {
                   {...props}
                   icon="dots-vertical"
                   onPress={() => {
-                    deleteBudgetHandler(
-                      budgets.budgets[budgetIndex].budgetId,
-                      budgets.budgets[budgetIndex].name
-                    );
+                    editBudgetHandler();
                   }}
                 />
               )}
             />
-            <Card.Content>
-              <Paragraph>
-                {`Budget: ${budgets.budgets[budgetIndex].totalBudgetAmount} \n \n`}
-                {`Cost: ${budgets.budgets[budgetIndex].totalCostAmount}`}
-              </Paragraph>
+
+            <Card.Content style={styles.summary}>
+              <View style={styles.centered}>
+              <Subheading >
+                {budgets.budgets[budgetIndex].totalBudgetAmount.toFixed(2)}
+              </Subheading>
+              <Caption>
+               Budget
+              </Caption>
+              </View>
+              <View style={styles.centered}>
+              <Subheading >
+                {budgets.budgets[budgetIndex].totalCostAmount.toFixed(2)}
+              </Subheading>
+              <Caption>
+               Cost
+              </Caption>
+                </View>
+           
             </Card.Content>
           </Card>
           <BudgetCarousel
@@ -258,7 +274,9 @@ const BudgetsScreen = (props) => {
             width={Dimensions.get("window").width}
           />
         </Card>
-<BudgetAccordion costCategories={budgets.budgets[budgetIndex].costCategories}></BudgetAccordion>
+        <BudgetAccordion
+          costCategories={budgets.budgets[budgetIndex].costCategories}
+        ></BudgetAccordion>
         {/* <FlatList
           data={budgets.budgets[budgetIndex].costSnapShots}
           keyExtractor={(item) => item.dateTime}
@@ -280,6 +298,12 @@ const BudgetsScreen = (props) => {
 
 const styles = StyleSheet.create({
   centered: { ...centered, flex: 1 },
+  summary: {
+    flexDirection: "row",
+    height: hp(9),
+    alignItems: "stretch",
+    justifyContent: "space-around",
+  },
   mainContent: {
     width: SCREEN_WIDTH,
     height: SCREEN_HEIGHT - 100,
