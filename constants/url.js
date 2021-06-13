@@ -13,11 +13,22 @@ const UAT_API = 'https://localhost:5001/api';
 const PROD_API = 'https://savion-api-app.azurewebsites.net/api';
 
 let budgetBaseUrl = '/budget';
+let costCategoryBaseUrl = '/costCategory';
+let registerBaseUrl = '/account/register';
+let loginBaseUrl = '/account/login';
+
 let env = PROD;
 if (env == PROD) {
     budgetBaseUrl = PROD_API + budgetBaseUrl;
+    costCategoryBaseUrl = PROD_API + costCategoryBaseUrl;
+    registerBaseUrl = PROD_API + registerBaseUrl;
+    loginBaseUrl = PROD_API + loginBaseUrl;
+
 } else {
     budgetBaseUrl = UAT_API + budgetBaseUrl;
+    costCategoryBaseUrl = UAT_API + costCategoryBaseUrl;
+    registerBaseUrl = UAT_API + registerBaseUrl;
+    loginBaseUrl = UAT_API + loginBaseUrl;
 } 
 
 
@@ -25,6 +36,7 @@ export const API_URL = {
    
     //AEM URL
     BUDGET_URL: budgetBaseUrl,
-    AEM_VERIFY_CONTACT_URL:
-    budgetBaseUrl + '/insurance/verify-contact-details.app.html',
+    COSTCATEGORY_URL: costCategoryBaseUrl,
+    REGISTER_URL: registerBaseUrl,
+    LOGIN_URL: loginBaseUrl
 };

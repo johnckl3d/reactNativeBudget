@@ -17,6 +17,7 @@ import {
   Paragraph,
   Subheading,
   Title,
+  TouchableRipple,
 } from "react-native-paper";
 import ScreenWrapper from "@UIComponents/ScreenWrapper";
 import {
@@ -48,15 +49,6 @@ const BudgetAccordion = (props) => {
 
   const renderCostItem = ({ item }) => {
     return (
-      // <List.Section>
-      //   <List.Subheader>{moment(item.dateTime).format("LL")}</List.Subheader>
-      //   <List.Item
-      //     left={() => <IconButton icon="camera" size={24} onPress={() => {}} />}
-      //     right={(props) => <List.Icon {...props} icon="information" />}
-      //     title={item.name}
-      //     description={`Amount: ${item.amount.toFixed(2)}`}
-      //   />
-      // </List.Section>
       <List.Section>
         <List.Subheader>{moment(item.dateTime).format("LL")}</List.Subheader>
         <List.Item
@@ -73,9 +65,10 @@ const BudgetAccordion = (props) => {
   };
 
   const renderCostCategoriesItem = ({ item }) => {
-    return (
+    return item.costItems.length > 0 ? (
       <List.Section>
-         <Divider />
+        <Divider />
+
         <List.Accordion
           title={item.name}
           description={`Amount: ${item.totalAmount.toFixed(2)}`}
@@ -85,21 +78,27 @@ const BudgetAccordion = (props) => {
             keyExtractor={(item) => item.costItemId}
             renderItem={renderCostItem}
           />
-          {/* <List.Item
-          left={() => (
-            <IconButton icon="camera" size={24} onPress={() => {}} />
-          )}
-          right={(props) => <List.Icon {...props} icon="information" />}
-          title={`Amount: ${item.totalAmount.toFixed(2)}`}
-          description="Describes item 1"
-        /> */}
         </List.Accordion>
-         <Divider />
-        
+        <Divider />
       </List.Section>
+    ) : (
+      <List.Item
+        title={item.name}
+        description={item.totalAmount}
+        style={styles.centered}
+        right={() => (
+          <IconButton
+            icon="dots-vertical"
+            onPress={() => {
+              console.log("TouchableRipple::" + JSON.stringify(item));
+              props.deleteCallback(item.costCategoryId, item.name);
+            }}
+          />
+        )}
+      />
     );
   };
-  //console.log("budgetAccordion::costCategories::" + JSON.stringify(props));
+
   return (
     <ScreenWrapper withScrollView={withScrollView}>
       <FlatList
@@ -107,25 +106,10 @@ const BudgetAccordion = (props) => {
         keyExtractor={(item) => item.costCategoryId}
         renderItem={renderCostCategoriesItem}
       />
-      {/* <List.Accordion
-          left={(props) => <List.Icon {...props} icon="star" />}
-          title="Accordion item 1"
-          description="Describes the expandable list item"
-        >
-          <List.Item
-            left={(props) => <List.Icon {...props} icon="thumb-up" />}
-            title="List item 1"
-          />
-          <List.Item
-            left={(props) => <List.Icon {...props} icon="thumb-down" />}
-            title="List item 2"
-          />
-        </List.Accordion> */}
     </ScreenWrapper>
   );
 };
 
-// BudgetAccordion.title = "List.Accordion";
 const styles = StyleSheet.create({
   centered: { ...centered, height: hp(5), flex: 1 },
 });

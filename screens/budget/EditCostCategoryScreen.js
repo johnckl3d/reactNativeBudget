@@ -64,16 +64,18 @@ const EditCostCategoryScreen = ({ route, navigation }) => {
     state.budgets.budgets.find((b) => b.budgetId === budgetId)
   );
   console.log(
-    "EditCostCategoryScreen::editedBudget::" +
-      JSON.stringify(editedBudget)
+    "EditCostCategoryScreen::editedBudget::" + JSON.stringify(editedBudget)
   );
-  const editedCostCategory = editedBudget.costCategories.find(
-    (c) => c.costCategoryId === costCategoryId
-  );
-  console.log(
-    "EditCostCategoryScreen::editedCostCategory::" +
-      JSON.stringify(editedCostCategory)
-  );
+  let editedCostCategory = null;
+  if (editedBudget != null) {
+    editedCostCategory = editedBudget.costCategories.find(
+      (c) => c.costCategoryId === costCategoryId
+    );
+    console.log(
+      "EditCostCategoryScreen::editedCostCategory::" +
+        JSON.stringify(editedCostCategory)
+    );
+  }
   const dispatch = useDispatch();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -97,9 +99,9 @@ const EditCostCategoryScreen = ({ route, navigation }) => {
     }
     try {
       await dispatch(
-        budgetsActions.createBudget(
+        costCategoriesActions.createCostCategories(
           formState.inputValues.title,
-          formState.inputValues.description,
+          budgetId,
           0
         )
       );
@@ -160,25 +162,6 @@ const EditCostCategoryScreen = ({ route, navigation }) => {
             initiallyValid={!!editedCostCategory}
             required
             minLength={5}
-          />
-          <Input
-            id="amount"
-            label="Budget Amount"
-            errorText="Please enter a valid amount!"
-            keyboardType="numeric"
-            autoCapitalize="sentences"
-            autoCorrect
-            multiline
-            numberOfLines={3}
-            onInputChange={inputChangeHandler}
-            initialValue={
-              editedCostCategory
-                ? editedCostCategory.totalBudgetAmount.toString()
-                : ""
-            }
-            initiallyValid={!!editedCostCategory}
-            required
-            minLength={1}
           />
           <View style={styles.button}>
             <Button

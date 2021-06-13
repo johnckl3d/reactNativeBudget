@@ -32,7 +32,7 @@ export const fetchBudgets = () => {
             cis.push(new CostItem(ci.name, ci.amount, ci.costItemId));
           }
           ccs.push(
-            new CostCategory(cc.costCategoryId, cc.name, cc.totalAmount, cis)
+            new CostCategory(cc.budgetId, cc.costCategoryId, cc.name, cc.totalAmount, cis)
           );
         }
         //console.log("budgets::action::" + JSON.stringify(ccs));

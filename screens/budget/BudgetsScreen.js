@@ -62,16 +62,23 @@ const BudgetsScreen = (props) => {
   const theme = useTheme();
 
   const FABActions = [
-    { icon: "plus", label: "Add Cost Item", onPress: () => {
-      addCostItemHandler(budgets.budgets[budgetIndex].budgetId);
-    } },
-    
-    { icon: "email", label: "Add Category", onPress: () => {
-      addCostCategoryHandler(budgets.budgets[budgetIndex].budgetId);
-    } },
+    {
+      icon: "plus",
+      label: "Add Cost Item",
+      onPress: () => {
+        addCostItemHandler(budgets.budgets[budgetIndex].budgetId);
+      },
+    },
+    {
+      icon: "email",
+      label: "Add Category",
+      onPress: () => {
+        addCostCategoryHandler(budgets.budgets[budgetIndex].budgetId);
+      },
+    },
     {
       icon: "star",
-      label: "Delete",
+      label: "Delete Budget",
       onPress: () => {
         deleteBudgetHandler(
           budgets.budgets[budgetIndex].budgetId,
@@ -125,7 +132,6 @@ const BudgetsScreen = (props) => {
     });
   };
 
-  
   const addCostItemHandler = (budgetId) => {
     props.navigation.navigate("EditCostItemScreen", { budgetId: budgetId });
   };
@@ -133,6 +139,35 @@ const BudgetsScreen = (props) => {
   const addCostCategoryHandler = (budgetId) => {
     props.navigation.navigate("EditCostCategoryScreen", { budgetId: budgetId });
   };
+
+  const deleteCostCategoryHandler= (costCategoryId, name) => {
+    Alert.alert("Are you sure?", `Do you really want to delete ${name}?`, [
+      { text: "No", style: "default" },
+      {
+        text: "Yes",
+        style: "destructive",
+        onPress: () => {
+          deleteCostCategory(costCategoryId);
+        },
+      },
+    ]);
+  };
+
+  const deleteCostCategory = useCallback(
+    async (budgetId) => {
+      setError(null);
+      setIsLoading(true);
+      try {
+        await dispatch(costCategoriesActions.deleteCostCategory(budgetId));
+      } catch (err) {
+        setError(err.message);
+      }
+
+      setIsLoading(false);
+      loadBudgets();
+    },
+    [dispatch, setIsLoading, setError]
+  );
 
   const editBudgetHandler = (budgetId) => {
     props.navigation.navigate("EditBudgetScreen", { budgetId: budgetId });
@@ -258,22 +293,17 @@ const BudgetsScreen = (props) => {
 
             <Card.Content style={styles.summary}>
               <View style={styles.centered}>
-              <Subheading >
-                {budgets.budgets[budgetIndex].totalBudgetAmount.toFixed(2)}
-              </Subheading>
-              <Caption>
-               Budget
-              </Caption>
+                <Subheading>
+                  {budgets.budgets[budgetIndex].totalBudgetAmount.toFixed(2)}
+                </Subheading>
+                <Caption>Budget</Caption>
               </View>
               <View style={styles.centered}>
-              <Subheading >
-                {budgets.budgets[budgetIndex].totalCostAmount.toFixed(2)}
-              </Subheading>
-              <Caption>
-               Cost
-              </Caption>
-                </View>
-           
+                <Subheading>
+                  {budgets.budgets[budgetIndex].totalCostAmount.toFixed(2)}
+                </Subheading>
+                <Caption>Cost</Caption>
+              </View>
             </Card.Content>
           </Card>
           <BudgetCarousel
@@ -290,6 +320,7 @@ const BudgetsScreen = (props) => {
         </Card>
         <BudgetAccordion
           costCategories={budgets.budgets[budgetIndex].costCategories}
+          deleteCallback={deleteCostCategoryHandler}
         ></BudgetAccordion>
         {/* <FlatList
           data={budgets.budgets[budgetIndex].costSnapShots}

@@ -23,11 +23,14 @@ import cartReducer from "./store/reducers/cart";
 import costCategoriesReducer from "./store/reducers/costCategories";
 import ordersReducer from "./store/reducers/orders";
 import productsReducer from "./store/reducers/products";
+
 import SplashScreen from "./screens/SplashScreen";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet, Button, ActivityIndicator } from "react-native";
 import Colors from "@Styles/colors";
-
-
+import { centered } from "@Styles/presentation";
+import * as loginActions from "@Actions/login";
+import loginReducer from "@Reducers/login";
+import { useDispatch, useSelector } from "react-redux";
 import ProfileScreen from '@MiscScreens/ProfileScreen';
 import SupportScreen from '@MiscScreens/SupportScreen';
 import SettingsScreen from '@MiscScreens/SettingsScreen';
@@ -80,6 +83,7 @@ const rootReducer = combineReducers({
   orders: ordersReducer,
   budgets: budgetsReducer,
   costCategories: costCategoriesReducer,
+  login: loginReducer
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -93,16 +97,20 @@ export default function App() {
   const [isStateLoaded, setStateLoaded] = useState(false);
   const [initialState, setInitialState] = useState();
   const [isLoading, setIsLoading] = React.useState(true);
-
+  const [error, setError] = useState();
   const [theme, setTheme] = useState(CustomDefaultTheme);
 
   const [userToken, setUserToken] = useState(null);
 
+  const loginState = useSelector((state) => state.login);
+  const dispatch = useDispatch();
+
   const authContext = React.useMemo(() => {
     return {
-      signIn: () => {
-        setIsLoading(false);
-        setUserToken("asdf");
+      signIn: (userId, password) => {
+        let accessToken;
+        accessToken = null;
+
       },
       signUp: () => {
         setIsLoading(false);
@@ -187,8 +195,21 @@ export default function App() {
     [theme]
   );
 
+
+
   if (!isFontLoaded || !isStateLoaded) {
     return <SplashScreen />;
+  }
+
+  if (loginState.isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator
+          size="large"
+          color={Colors.primary}
+        ></ActivityIndicator>
+      </View>
+    );
   }
   return (
     <Provider store={store}>
@@ -203,7 +224,7 @@ export default function App() {
                   AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state))
                 }
               >
-                {userToken ? (
+                {loginState.userToken ? (
                     <Drawer.Navigator initialRouteName="Home" drawerContent={props => <DrawerContent {...props} />}>
                       <Drawer.Screen name="Home" component={BudgetStack} />
                       <Drawer.Screen name="Profile" component={ProfileScreen} />
@@ -222,3 +243,7 @@ export default function App() {
     </Provider>
   );
 }
+
+const styles = StyleSheet.create({
+  centered: { ...centered, flex: 1 },
+});

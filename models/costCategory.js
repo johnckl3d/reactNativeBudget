@@ -1,5 +1,6 @@
 class CostCategory {
-    constructor(costCategoryId, name, totalAmount, costItems) {
+    constructor(budgetId, costCategoryId, name, totalAmount, costItems) {
+      this.budgetId = budgetId;
       this.costCategoryId = costCategoryId;
       this.name = name;
       this.totalAmount = totalAmount;

@@ -13,7 +13,9 @@ import * as Animatable from "react-native-animatable";
 //import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
-
+import * as loginActions from "@Actions/login";
+import loginReducer from "@Reducers/login";
+import { useDispatch, useSelector } from "react-redux";
 import { withTheme, useTheme, Button } from "react-native-paper";
 
 import { AuthContext } from "@Context/Context";
@@ -111,8 +113,21 @@ const SignInScreen = ({ navigation }) => {
       ]);
       return;
     }
-    signIn(foundUser);
+    signInHandler(data.username, data.password);
   };
+
+
+  const signInHandler = useCallback(
+    async (userId, password) => {
+      setError(null);
+      try {
+        await dispatch(loginActions.login(userId, password));
+      } catch (err) {
+        setError(err.message);
+      }
+    },
+    [dispatch, setError]
+  );
 
   return (
     <View style={styles.container}>
@@ -219,8 +234,7 @@ const SignInScreen = ({ navigation }) => {
           <Button
             mode="contained"
             onPress={() => {
-              signIn();
-              //loginHandle(data.username, data.password);
+              loginHandle(data.username, data.password);
             }}
             style={styles.signUp}
           >

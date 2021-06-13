@@ -1,6 +1,6 @@
 import CostCategory from "../../models/costCategory";
 import CostItem from "../../models/costItem";
-
+import { API_URL } from "@Constants/url";
 export const SET_PRODUCTS = "SET_PRODUCTS";
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const SET_COSTITEMS = "SET_COSTITEMS";
@@ -44,58 +44,24 @@ export const fetchCostCategories = () => {
   };
 };
 
-export const fetchCostItems = (costCategoryId) => {
+export const createCostCategories = (name, budgetId) => {
   return async (dispatch) => {
-    // any async code you want!
     try {
-      const response = await fetch(
-        `https://meetup-api-app-john.azurewebsites.net/api/costCategory/${costCategoryId}/costItem`,
-        {
-          method: "GET",
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("something went wrong!");
-      }
-      const resData = await response.json();
-      const loadedCostItems = [];
-
-      for (const item of resData) {
-        loadedCostItems.push(
-          new CostItem(item.name, item.amount, item.costItemId)
-        );
-      }
-      dispatch({
-        type: SET_COSTITEMS,
-        costCategoryId: costCategoryId,
-        costItems: loadedCostItems,
+      // any async code you want!
+      const response = await fetch(API_URL.COSTCATEGORY_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name,
+          budgetId: budgetId,
+        }),
       });
-    } catch (err) {
-      throw err;
-    }
-  };
-};
-
-export const createProduct = (title, description, imageUrl, price) => {
-  return async (dispatch) => {
-    try {
-      // any async code you want!
-      const response = await fetch(
-        "https://meetup-api-app-john.azurewebsites.net/api/costCategory",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: title,
-          }),
-        }
-      );
       if (response.status != 201) {
         throw new Error("something went wrong!");
       } else {
+        console.log("costCategories::createCostCategory::" + JSON.stringify(response));
       }
     } catch (err) {
       throw err;
@@ -103,101 +69,17 @@ export const createProduct = (title, description, imageUrl, price) => {
   };
 };
 
-export const createCostItem = (costCategoryId, name, description, amount) => {
-
+export const deleteCostCategory = (costCategoryId) => {
   return async (dispatch) => {
     try {
-      // any async code you want!
-      const response = await fetch(
-        `https://meetup-api-app-john.azurewebsites.net/api/costCategory/${costCategoryId}/costItem`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: name,
-            amount: amount,
-          }),
-        }
-      );
-      if (response.status != 201) {
-        throw new Error("something went wrong!");
-      } else {
-      }
-    } catch (err) {
-      throw err;
-    }
-  };
-};
-
-export const deleteProduct = (productId) => {
-  return async (dispatch) => {
-    try {
-      const response = await fetch(
-        `https://meetup-api-app-john.azurewebsites.net/api/costCategory/${productId}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`${API_URL.COSTCATEGORY_URL}/${costCategoryId}`, {
+        method: "DELETE",
+      });
+      console.log("costCategories::deleteCostCategory::" + JSON.stringify(response));
       if (response.status != 204) {
         throw new Error("something went wrong!");
       } else {
       }
-    } catch (err) {
-    }
-  };
-};
-
-export const deleteCostItem = (costCategoryId, costItemId) => {
-  return async (dispatch) => {
-    try {
-      const response = await fetch(
-        `https://meetup-api-app-john.azurewebsites.net/api/costCategory/${costCategoryId}/costItem/${costItemId}`,
-        {
-          method: "DELETE",
-        }
-      );
-      if (response.status != 204) {
-        throw new Error("something went wrong!");
-      } else {
-      }
-    } catch (err) {
-    }
-  };
-};
-
-export const updateProduct = (id, title, description, imageUrl) => {
-  return async (dispatch) => {
-    try {
-      // any async code you want!
-      const response = await fetch(
-        "https://meetup-api-app-john.azurewebsites.net/api/costCategory",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: "Petrol2",
-          }),
-        }
-      );
-
-      const resData = await response.json();
-      
-      // dispatch({
-      //   type: CREATE_PRODUCT,
-      //   productData: {
-      //     id: resData.name,
-      //     title,
-      //     description,
-      //     imageUrl,
-      //     price
-      //   }
-      // });
-    } catch (err) {
-      throw err;
-    }
+    } catch (err) {}
   };
 };
