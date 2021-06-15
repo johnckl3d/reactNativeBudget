@@ -40,6 +40,7 @@ import * as loginActions from "@Actions/login";
 import ProfileScreen from "@MiscScreens/ProfileScreen";
 import SupportScreen from "@MiscScreens/SupportScreen";
 import SettingsScreen from "@MiscScreens/SettingsScreen";
+import { AuthProvider } from "@Context/AuthContext"
 
 const PERSISTENCE_KEY = "NAVIGATION_STATE";
 const PREFERENCES_KEY = "APP_PREFERENCES";
@@ -115,22 +116,7 @@ const App = () => {
   const loginState = useSelector((state) => state.login);
   const dispatch = useDispatch();
 
-  const authContext = React.useMemo(() => {
-    return {
-      signIn: (userId, password) => {
-        let accessToken;
-        accessToken = null;
-      },
-      signUp: () => {
-        setIsLoading(false);
-        setUserToken("asdf");
-      },
-      signOut: () => {
-        setIsLoading(false);
-        setUserToken(null);
-      },
-    };
-  }, []);
+  
 
   useEffect(() => {
     const restoreState = async () => {
@@ -208,23 +194,13 @@ const App = () => {
     return <SplashScreen />;
   }
 
-  if (loginState.isLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator
-          size="large"
-          color={Colors.primary}
-        ></ActivityIndicator>
-      </View>
-    );
-  }
   return (
     <Provider store={store}>
       <PaperProvider theme={theme}>
         <SafeAreaProvider>
           <PreferencesContext.Provider value={preferences}>
+          <AuthProvider>
             <React.Fragment>
-              <AuthContext.Provider value={authContext}>
                 <NavigationContainer
                   initialState={initialState}
                   onStateChange={(state) =>
@@ -248,8 +224,8 @@ const App = () => {
                     <AuthStack />
                   )}
                 </NavigationContainer>
-              </AuthContext.Provider>
             </React.Fragment>
+            </AuthProvider>
           </PreferencesContext.Provider>
         </SafeAreaProvider>
       </PaperProvider>

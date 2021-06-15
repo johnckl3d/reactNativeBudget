@@ -1,7 +1,6 @@
 import { LOGIN, RETRIEVE_TOKEN, LOGOUT, REGISTER } from "@Actions/login";
 
 const initialState = {
-  isLoading: false,
   refreshToken: null,
   accessToken: null,
 };
@@ -12,13 +11,11 @@ export default (state = initialState, action) => {
       return {
         refreshToken: action.refreshToken,
         accessToken: action.refreshToken,
-        isLoading: false,
       };
     case LOGOUT:
       return {
         refreshToken: null,
         accessToken: null,
-        isLoading: false,
       };
   }
   return state;

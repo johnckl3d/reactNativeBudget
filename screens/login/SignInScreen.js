@@ -17,9 +17,6 @@ import * as loginActions from "@Actions/login";
 import loginReducer from "@Reducers/login";
 import { useDispatch, useSelector } from "react-redux";
 import { withTheme, useTheme, Button } from "react-native-paper";
-
-import { AuthContext } from "@Context/Context";
-
 import Users from "../../models/users";
 import Colors from "@Styles/colors";
 //import colors from '../../styles/colors';
@@ -37,8 +34,6 @@ const SignInScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const { theme } = useTheme();
-
-  const { signIn } = React.useContext(AuthContext);
 
   const textInputChange = (val) => {
     if (val.trim().length >= 4) {
@@ -311,6 +306,7 @@ const styles = StyleSheet.create({
   button: {
     alignItems: "center",
     marginTop: 50,
+    flex: 1
   },
   signUp: {
     borderColor: Colors.primary,
