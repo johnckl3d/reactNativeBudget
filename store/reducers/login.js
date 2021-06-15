@@ -1,7 +1,7 @@
 import { LOGIN, RETRIEVE_TOKEN, LOGOUT, REGISTER } from "@Actions/login";
 
 const initialState = {
-  isLoading: true,
+  isLoading: false,
   refreshToken: null,
   accessToken: null,
 };

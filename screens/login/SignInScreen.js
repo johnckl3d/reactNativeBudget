@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -33,6 +33,8 @@ const SignInScreen = ({ navigation }) => {
     isValidUser: true,
     isValidPassword: true,
   });
+  const [error, setError] = useState("")
+  const dispatch = useDispatch();
 
   const { theme } = useTheme();
 
@@ -94,9 +96,7 @@ const SignInScreen = ({ navigation }) => {
   };
 
   const loginHandle = (userName, password) => {
-    const foundUser = Users.filter((item) => {
-      return userName == item.username && password == item.password;
-    });
+    
 
     if (data.username.length == 0 || data.password.length == 0) {
       Alert.alert(
@@ -107,12 +107,6 @@ const SignInScreen = ({ navigation }) => {
       return;
     }
 
-    if (foundUser.length == 0) {
-      Alert.alert("Invalid User!", "Username or password is incorrect.", [
-        { text: "Okay" },
-      ]);
-      return;
-    }
     signInHandler(data.username, data.password);
   };
 

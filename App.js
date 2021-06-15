@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-community/async-storage";
-import  {AuthContext,PreferencesContext} from "@Context/Context";
+import { AuthContext, PreferencesContext } from "@Context/Context";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import * as Font from "expo-font";
@@ -17,23 +17,29 @@ import ReduxThunk from "redux-thunk";
 //import RootNavigator from "./navigation/RootNavigator";
 import BudgetStack from "./navigation/BudgetStack";
 import AuthStack from "./navigation/AuthStack";
-import {DrawerContent} from "./navigation/DrawerContent";
+import { DrawerContent } from "./navigation/DrawerContent";
 import budgetsReducer from "./store/reducers/budgets";
 import cartReducer from "./store/reducers/cart";
 import costCategoriesReducer from "./store/reducers/costCategories";
 import ordersReducer from "./store/reducers/orders";
 import productsReducer from "./store/reducers/products";
 
+import loginReducer from "@Reducers/login";
+import { useDispatch, useSelector } from "react-redux";
 import SplashScreen from "./screens/SplashScreen";
-import { View, Text, StyleSheet, Button, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Button,
+  ActivityIndicator,
+} from "react-native";
 import Colors from "@Styles/colors";
 import { centered } from "@Styles/presentation";
 import * as loginActions from "@Actions/login";
-import loginReducer from "@Reducers/login";
-import { useDispatch, useSelector } from "react-redux";
-import ProfileScreen from '@MiscScreens/ProfileScreen';
-import SupportScreen from '@MiscScreens/SupportScreen';
-import SettingsScreen from '@MiscScreens/SettingsScreen';
+import ProfileScreen from "@MiscScreens/ProfileScreen";
+import SupportScreen from "@MiscScreens/SupportScreen";
+import SettingsScreen from "@MiscScreens/SettingsScreen";
 
 const PERSISTENCE_KEY = "NAVIGATION_STATE";
 const PREFERENCES_KEY = "APP_PREFERENCES";
@@ -50,11 +56,7 @@ const DrawerSetup = (props) => {
   //   </PreferencesContext.Consumer>
   // );
   console.log("app::drawer::" + JSON.stringify(props));
-  return (
-    <DrawerContent
-         {...props}
-        />
-  );
+  return <DrawerContent {...props} />;
 };
 
 const Drawer = createDrawerNavigator();
@@ -83,7 +85,7 @@ const rootReducer = combineReducers({
   orders: ordersReducer,
   budgets: budgetsReducer,
   costCategories: costCategoriesReducer,
-  login: loginReducer
+  login: loginReducer,
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -92,7 +94,15 @@ const store = createStore(
   composeEnhancers(applyMiddleware(ReduxThunk))
 );
 
-export default function App() {
+const AppWrapper = () => {
+  return (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
+};
+
+const App = () => {
   const [isFontLoaded, setFontLoaded] = useState(false);
   const [isStateLoaded, setStateLoaded] = useState(false);
   const [initialState, setInitialState] = useState();
@@ -110,7 +120,6 @@ export default function App() {
       signIn: (userId, password) => {
         let accessToken;
         accessToken = null;
-
       },
       signUp: () => {
         setIsLoading(false);
@@ -119,7 +128,7 @@ export default function App() {
       signOut: () => {
         setIsLoading(false);
         setUserToken(null);
-      }
+      },
     };
   }, []);
 
@@ -195,8 +204,6 @@ export default function App() {
     [theme]
   );
 
-
-
   if (!isFontLoaded || !isStateLoaded) {
     return <SplashScreen />;
   }
@@ -217,24 +224,30 @@ export default function App() {
         <SafeAreaProvider>
           <PreferencesContext.Provider value={preferences}>
             <React.Fragment>
-            <AuthContext.Provider value={authContext}>
-              <NavigationContainer
-                initialState={initialState}
-                onStateChange={(state) =>
-                  AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state))
-                }
-              >
-                {loginState.userToken ? (
-                    <Drawer.Navigator initialRouteName="Home" drawerContent={props => <DrawerContent {...props} />}>
+              <AuthContext.Provider value={authContext}>
+                <NavigationContainer
+                  initialState={initialState}
+                  onStateChange={(state) =>
+                    AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state))
+                  }
+                >
+                  {loginState.accessToken ? (
+                    <Drawer.Navigator
+                      initialRouteName="Home"
+                      drawerContent={(props) => <DrawerContent {...props} />}
+                    >
                       <Drawer.Screen name="Home" component={BudgetStack} />
                       <Drawer.Screen name="Profile" component={ProfileScreen} />
-                      <Drawer.Screen name="Settings" component={SettingsScreen} />
+                      <Drawer.Screen
+                        name="Settings"
+                        component={SettingsScreen}
+                      />
                       <Drawer.Screen name="Support" component={SupportScreen} />
                     </Drawer.Navigator>
-                ) : (
-                  <AuthStack />
-                )}
-              </NavigationContainer>
+                  ) : (
+                    <AuthStack />
+                  )}
+                </NavigationContainer>
               </AuthContext.Provider>
             </React.Fragment>
           </PreferencesContext.Provider>
@@ -242,8 +255,10 @@ export default function App() {
       </PaperProvider>
     </Provider>
   );
-}
+};
 
 const styles = StyleSheet.create({
   centered: { ...centered, flex: 1 },
 });
+
+export default AppWrapper;
