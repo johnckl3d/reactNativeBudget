@@ -3,14 +3,22 @@ import CostCategory from "../../models/costCategory";
 import CostItem from "../../models/costItem";
 import Budget from "../../models/budget";
 import { API_URL } from "@Constants/url";
+import { STORAGE } from "@Constants/storage";
+import { getStringData } from "@Utils/storageUtils";
+
 export const SET_BUDGETS = "SET_BUDGETS";
 
 export const fetchBudgets = () => {
-  console.log("fetchBudgets::" + API_URL.BUDGET_URL);
   return async (dispatch) => {
     try {
+      var token = await getStringData(STORAGE.ACCESS_TOKEN);
+      console.log("fetchBudgets::" + token);
       const response = await fetch(API_URL.BUDGET_URL, {
         method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
       });
 
       if (!response.ok) {
@@ -32,7 +40,13 @@ export const fetchBudgets = () => {
             cis.push(new CostItem(ci.name, ci.amount, ci.costItemId));
           }
           ccs.push(
-            new CostCategory(cc.budgetId, cc.costCategoryId, cc.name, cc.totalAmount, cis)
+            new CostCategory(
+              cc.budgetId,
+              cc.costCategoryId,
+              cc.name,
+              cc.totalAmount,
+              cis
+            )
           );
         }
         //console.log("budgets::action::" + JSON.stringify(ccs));

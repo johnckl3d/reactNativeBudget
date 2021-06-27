@@ -41,6 +41,7 @@ import ProfileScreen from "@MiscScreens/ProfileScreen";
 import SupportScreen from "@MiscScreens/SupportScreen";
 import SettingsScreen from "@MiscScreens/SettingsScreen";
 import { AuthProvider } from "@Context/AuthContext"
+import axios from "axios";
 
 const PERSISTENCE_KEY = "NAVIGATION_STATE";
 const PREFERENCES_KEY = "APP_PREFERENCES";

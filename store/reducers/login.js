@@ -1,4 +1,6 @@
 import { LOGIN, RETRIEVE_TOKEN, LOGOUT, REGISTER } from "@Actions/login";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {STORAGE} from "@Constants/storage";
 
 const initialState = {
   refreshToken: null,

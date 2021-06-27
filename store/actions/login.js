@@ -7,6 +7,8 @@ export const LOGIN = "LOGIN";
 export const RETRIEVE_TOKEN = "RETRIEVE_TOKEN";
 export const LOGOUT = "LOGOUT";
 export const REGISTER = "REGISTER";
+import {STORAGE} from "@Constants/storage";
+import { getStringData } from "@Utils/storageUtils";
 
 export const login = (userId, password) => {
   return async (dispatch) => {
@@ -25,9 +27,12 @@ export const login = (userId, password) => {
       if (!response.ok) {
         throw new Error("something went wrong!");
       }
-      const resData = await response;
+      console.log("login");
+      const resData = await response.text();
       console.log(JSON.stringify(resData));
-      dispatch({ type: LOGIN, refreshToken: resData,  accessToken: resData});
+      storeStringData(STORAGE.ACCESS_TOKEN, resData);
+      //await AsyncStorage.setItem(STORAGE.ACCESS_TOKEN, selectedValue);
+      //dispatch({ type: LOGIN, refreshToken: resData,  accessToken: resData});
     } catch (err) {
       throw err;
     }
