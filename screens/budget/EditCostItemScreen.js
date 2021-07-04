@@ -1,20 +1,14 @@
-import React, { useEffect, useCallback, useReducer } from "react";
+import Colors from "@Styles/colors";
+import React, { useCallback, useEffect, useReducer } from "react";
 import {
-  View,
-  ScrollView,
-  StyleSheet,
-  Platform,
   Alert,
   Button,
-  KeyboardAvoidingView,
+  KeyboardAvoidingView, ScrollView,
+  StyleSheet, View
 } from "react-native";
-import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import { useSelector, useDispatch } from "react-redux";
-import Colors from "@Styles/colors";
-import HeaderButton from "../../components/UI/HeaderButton";
-import * as productsActions from "../../store/actions/products";
-import * as costCategoriesActions from "../../store/actions/costCategories";
+import { useDispatch, useSelector } from "react-redux";
 import Input from "../../components/UI/Input";
+import * as costCategoriesActions from "../../store/actions/costCategories";
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 

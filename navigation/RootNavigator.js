@@ -8,8 +8,6 @@ import { Ionicons } from '@expo/vector-icons';
 import BudgetsScreen from '../screens/budget/BudgetsScreen';
 import CostCategoriesScreen from '../screens/budget/CostCategoriesScreen';
 import CostItemsScreen from '../screens/budget/CostItemsScreen';
-import CartScreen from '../screens/budget/CartScreen';
-import OrdersScreen from '../screens/budget/OrdersScreen';
 import UserProductsScreen from '../screens/user/UserProductsScreen';
 import EditProductScreen from '../screens/user/EditProductScreen';
 import EditCostCategoryScreen from '../screens/budget/EditCostCategoryScreen';
@@ -37,7 +35,6 @@ const ProductsNavigator = createStackNavigator(
     ProductDetail: CostItemsScreen,
     EditCostCategory: EditCostCategoryScreen,
     EditCostItem: EditCostItemScreen,
-    Cart: CartScreen,
   },
   {
     navigationOptions: {

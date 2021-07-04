@@ -111,9 +111,7 @@ const BudgetsScreen = (props) => {
     }
   }, [dispatch, setIsLoading, setError]);
 
-  useEffect(() => {
-    loadBudgets();
-  }, [dispatch, loadBudgets]);
+
 
   const handleBudgetSwipeCallback = (childData) => {
     setBudgetIndex(childData);

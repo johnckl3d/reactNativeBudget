@@ -4,7 +4,6 @@ import * as React from "react";
 import { Text, View } from "react-native";
 import { Appbar } from 'react-native-paper';
 import BudgetsScreen from '../screens/budget/BudgetsScreen';
-import CartScreen from '../screens/budget/CartScreen';
 import CostItemsScreen from '../screens/budget/CostItemsScreen';
 import EditCostCategoryScreen from '../screens/budget/EditCostCategoryScreen';
 import EditCostItemScreen from '../screens/budget/EditCostItemScreen';
@@ -51,14 +50,8 @@ function BudgetStack() {
       <Stack.Screen name="EditBudgetScreen" component={EditBudgetScreen}  options={{ title: 'EditBudgetScreen' }}/>
       <Stack.Screen name="EditCostCategoryScreen" component={EditCostCategoryScreen}  options={{ title: 'EditCostCategoryScreen' }}/>
       <Stack.Screen name="EditCostItemScreen" component={EditCostItemScreen}  options={{ title: 'EditCostItemScreen' }}/>
-      <Stack.Screen name="CartScreen" component={CartScreen}  options={{ title: 'CartScreen' }}/>
     </Stack.Navigator>
   );
 }
 
 export default withTheme(BudgetStack);
-// CostCategory: CostCategoriesScreen,
-// ProductDetail: CostItemsScreen,
-// EditCostCategory: EditCostCategoryScreen,
-// EditCostItem: EditCostItemScreen,
-// Cart: CartScreen,
