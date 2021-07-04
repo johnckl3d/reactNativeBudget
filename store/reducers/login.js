@@ -10,6 +10,7 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case LOGIN:
+      console.log("loginreducer::" + action.refreshToken);
       return {
         refreshToken: action.refreshToken,
         accessToken: action.refreshToken,

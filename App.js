@@ -36,12 +36,10 @@ import {
 } from "react-native";
 import Colors from "@Styles/colors";
 import { centered } from "@Styles/presentation";
-import * as loginActions from "@Actions/login";
 import ProfileScreen from "@MiscScreens/ProfileScreen";
 import SupportScreen from "@MiscScreens/SupportScreen";
 import SettingsScreen from "@MiscScreens/SettingsScreen";
 import { AuthProvider } from "@Context/AuthContext"
-import axios from "axios";
 
 const PERSISTENCE_KEY = "NAVIGATION_STATE";
 const PREFERENCES_KEY = "APP_PREFERENCES";
@@ -113,8 +111,6 @@ const App = () => {
   const [theme, setTheme] = useState(CustomDefaultTheme);
 
   const [userToken, setUserToken] = useState(null);
-
-  const loginState = useSelector((state) => state.login);
   const dispatch = useDispatch();
 
   
