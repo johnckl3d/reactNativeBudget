@@ -28,3 +28,5 @@ const getStringData = async (id) => {
     // error reading value
   }
 }
+
+export {storeStringData, storeObjectData, getStringData};

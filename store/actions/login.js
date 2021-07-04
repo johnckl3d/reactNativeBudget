@@ -8,7 +8,7 @@ export const RETRIEVE_TOKEN = "RETRIEVE_TOKEN";
 export const LOGOUT = "LOGOUT";
 export const REGISTER = "REGISTER";
 import {STORAGE} from "@Constants/storage";
-import { getStringData } from "@Utils/storageUtils";
+import { storeStringData } from "@Utils/storageUtils";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const login = (userId, password) => {
@@ -31,9 +31,9 @@ export const login = (userId, password) => {
       console.log("login");
       const resData = await response.text();
       console.log(resData);
-      //storeStringData(STORAGE.ACCESS_TOKEN, resData);
-      await AsyncStorage.setItem(STORAGE.ACCESS_TOKEN, resData);
-      console.log("stored in async");
+       storeStringData(STORAGE.ACCESS_TOKEN, resData);
+      // await AsyncStorage.setItem(STORAGE.ACCESS_TOKEN, resData);
+      // console.log("stored in async");
       dispatch({ type: LOGIN, refreshToken: resData,  accessToken: resData});
     } catch (err) {
       throw err;
