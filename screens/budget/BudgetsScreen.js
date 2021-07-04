@@ -66,14 +66,14 @@ const BudgetsScreen = (props) => {
       icon: "plus",
       label: "Add Cost Item",
       onPress: () => {
-        addCostItemHandler(budgets.budgets[budgetIndex].budgetId);
+        addCostItemHandler(budgets[budgetIndex].budgetId);
       },
     },
     {
       icon: "email",
       label: "Add Category",
       onPress: () => {
-        addCostCategoryHandler(budgets.budgets[budgetIndex].budgetId);
+        addCostCategoryHandler(budgets[budgetIndex].budgetId);
       },
     },
     {
@@ -81,8 +81,8 @@ const BudgetsScreen = (props) => {
       label: "Delete Budget",
       onPress: () => {
         deleteBudgetHandler(
-          budgets.budgets[budgetIndex].budgetId,
-          budgets.budgets[budgetIndex].name
+          budgets[budgetIndex].budgetId,
+          budgets[budgetIndex].name
         );
       },
     },
@@ -106,7 +106,7 @@ const BudgetsScreen = (props) => {
     }
     setIsLoading(false);
     setFocus(true);
-    if (budgetIndex >= budgets.budgets[budgetIndex].length - 1) {
+    if (budgetIndex >= budgets[budgetIndex].length - 1) {
       setBudgetIndex(0);
     }
   }, [dispatch, setIsLoading, setError]);
@@ -140,7 +140,7 @@ const BudgetsScreen = (props) => {
     props.navigation.navigate("EditCostCategoryScreen", { budgetId: budgetId });
   };
 
-  const deleteCostCategoryHandler= (costCategoryId, name) => {
+  const deleteCostCategoryHandler = (costCategoryId, name) => {
     Alert.alert("Are you sure?", `Do you really want to delete ${name}?`, [
       { text: "No", style: "default" },
       {
@@ -231,7 +231,7 @@ const BudgetsScreen = (props) => {
     );
   }
 
-  if (!isLoading && budgets.budgets.length == 0) {
+  if (!isLoading && budgets.length == 0) {
     return (
       <View style={styles.centered}>
         <Text> No budgets found. Maybe start adding some!</Text>
@@ -243,49 +243,21 @@ const BudgetsScreen = (props) => {
     return <View />;
   }
 
-  const renderCostSnapshotItem = ({ item }) => {
-    return (
-      <View>
-        <Divider />
-        <Card>
-          <List.Section>
-            <List.Subheader>
-              {moment(item.dateTime).format("LL")}
-            </List.Subheader>
-            <List.Item
-              left={() => (
-                <IconButton icon="camera" size={24} onPress={() => {}} />
-              )}
-              right={(props) => <List.Icon {...props} icon="information" />}
-              title={`Amount: ${item.amount.toFixed(2)}`}
-              //description="Describes item 1"
-            />
-          </List.Section>
-        </Card>
-        <Divider />
-      </View>
-    );
-  };
-
-  console.log(
-    "budgetsScreen::costCategories::" +
-      JSON.stringify(budgets.budgets[budgetIndex])
-  );
   return (
     <SafeAreaView>
       <View style={styles.mainContent}>
         <Card mode={mode}>
           <Card mode={mode}>
             <Card.Title
-              title={budgets.budgets[budgetIndex].name}
-              subtitle={budgets.budgets[budgetIndex].description}
+              title={budgets[budgetIndex].name}
+              subtitle={budgets[budgetIndex].description}
               left={(props) => <Avatar.Icon {...props} icon="folder" />}
               right={(props) => (
                 <IconButton
                   {...props}
                   icon="dots-vertical"
                   onPress={() => {
-                    editBudgetHandler(budgets.budgets[budgetIndex].budgetId);
+                    editBudgetHandler(budgets[budgetIndex].budgetId);
                   }}
                 />
               )}
@@ -294,20 +266,20 @@ const BudgetsScreen = (props) => {
             <Card.Content style={styles.summary}>
               <View style={styles.centered}>
                 <Subheading>
-                  {budgets.budgets[budgetIndex].totalBudgetAmount.toFixed(2)}
+                  {budgets[budgetIndex].totalBudgetAmount.toFixed(2)}
                 </Subheading>
                 <Caption>Budget</Caption>
               </View>
               <View style={styles.centered}>
                 <Subheading>
-                  {budgets.budgets[budgetIndex].totalCostAmount.toFixed(2)}
+                  {budgets[budgetIndex].totalCostAmount.toFixed(2)}
                 </Subheading>
                 <Caption>Cost</Caption>
               </View>
             </Card.Content>
           </Card>
           <BudgetCarousel
-            data={budgets.budgets}
+            data={budgets}
             parentCallback={handleBudgetSwipeCallback}
             width={Dimensions.get("window").width}
             height={Dimensions.get("window").height * 0.3}
@@ -319,18 +291,13 @@ const BudgetsScreen = (props) => {
           />
         </Card>
         <BudgetAccordion
-          costCategories={budgets.budgets[budgetIndex].costCategories}
+          costCategories={budgets[budgetIndex].costCategories}
           deleteCallback={deleteCostCategoryHandler}
         ></BudgetAccordion>
-        {/* <FlatList
-          data={budgets.budgets[budgetIndex].costSnapShots}
-          keyExtractor={(item) => item.dateTime}
-          renderItem={renderCostSnapshotItem}
-        /> */}
 
         <FloatingActionButton actions={FABActions}></FloatingActionButton>
         <Pagination
-          dotsLength={budgets.budgets[budgetIndex].costSnapShots.length}
+          dotsLength={budgets.length}
           activeDotIndex={budgetIndex}
           dotStyle={styles.paginationDot}
           inactiveDotOpacity={0.4}

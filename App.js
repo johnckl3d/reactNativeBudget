@@ -18,13 +18,7 @@ import ReduxThunk from "redux-thunk";
 import BudgetStack from "./navigation/BudgetStack";
 import AuthStack from "./navigation/AuthStack";
 import { DrawerContent } from "./navigation/DrawerContent";
-import budgetsReducer from "./store/reducers/budgets";
-import cartReducer from "./store/reducers/cart";
-import costCategoriesReducer from "./store/reducers/costCategories";
-import ordersReducer from "./store/reducers/orders";
-import productsReducer from "./store/reducers/products";
-
-import loginReducer from "@Reducers/login";
+import reducer from "@Reducers/index";
 import { useDispatch, useSelector } from "react-redux";
 import SplashScreen from "./screens/SplashScreen";
 import {
@@ -82,18 +76,9 @@ const CustomDefaultTheme = {
   },
 };
 
-const rootReducer = combineReducers({
-  products: productsReducer,
-  cart: cartReducer,
-  orders: ordersReducer,
-  budgets: budgetsReducer,
-  costCategories: costCategoriesReducer,
-  login: loginReducer,
-});
-
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
-  rootReducer,
+  reducer,
   composeEnhancers(applyMiddleware(ReduxThunk))
 );
 
