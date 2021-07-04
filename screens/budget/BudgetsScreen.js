@@ -51,12 +51,11 @@ const isOutlined = false;
 const mode = isOutlined ? "outlined" : "elevated";
 
 const BudgetsScreen = (props) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState();
   const [isFocus, setFocus] = useState(true);
   const [budgetIndex, setBudgetIndex] = useState(0);
   const [monthIndex, setMonthsIndex] = useState(0);
   const budgets = useSelector((state) => state.budgets);
+  const FSM = useSelector((state) => state.FSM);
   const dispatch = useDispatch();
   const monthsList = generateMonthArrayList();
   const theme = useTheme();
@@ -95,25 +94,24 @@ const BudgetsScreen = (props) => {
     },
   ];
 
+
+  useEffect(() => {
+    loadBudgets();
+  }, [dispatch, loadBudgets]);
+
+
   const loadBudgets = useCallback(async () => {
     console.log("budgetscreen:loadbudget");
-    setError(null);
-    setIsLoading(true);
-    try {
-      await dispatch(budgetsActions.fetchBudgets());
-    } catch (err) {
-      setError(err.message);
-    }
-    setIsLoading(false);
+    dispatch(budgetsActions.fetchBudgets());
     setFocus(true);
-    if (budgetIndex >= budgets[budgetIndex].length - 1) {
-      setBudgetIndex(0);
-    }
-  }, [dispatch, setIsLoading, setError]);
+  }, [dispatch]);
 
 
 
   const handleBudgetSwipeCallback = (childData) => {
+    if (childData >= budgets[budgetIndex].length - 1) {
+      setBudgetIndex(0);
+    }
     setBudgetIndex(childData);
   };
 
@@ -153,25 +151,17 @@ const BudgetsScreen = (props) => {
 
   const deleteCostCategory = useCallback(
     async (budgetId) => {
-      setError(null);
-      setIsLoading(true);
-      try {
-        await dispatch(costCategoriesActions.deleteCostCategory(budgetId));
-      } catch (err) {
-        setError(err.message);
-      }
-
-      setIsLoading(false);
+      dispatch(costCategoriesActions.deleteCostCategory(budgetId));
       loadBudgets();
     },
-    [dispatch, setIsLoading, setError]
+    [dispatch]
   );
 
   const editBudgetHandler = (budgetId) => {
     props.navigation.navigate("EditBudgetScreen", { budgetId: budgetId });
   };
 
-  const addBudgetHandler = (budgetId) => {
+  const addBudgetHandler = () => {
     props.navigation.navigate("EditBudgetScreen");
   };
 
@@ -190,22 +180,13 @@ const BudgetsScreen = (props) => {
 
   const deleteBudget = useCallback(
     async (budgetId) => {
-      setError(null);
-      setIsLoading(true);
-      try {
-        await dispatch(budgetsActions.deleteBudget(budgetId));
-      } catch (err) {
-        setError(err.message);
-      }
-
-      setIsLoading(false);
+      dispatch(budgetsActions.deleteBudget(budgetId));
       loadBudgets();
     },
-    [dispatch, setIsLoading, setError]
+    [dispatch]
   );
 
-  if (error) {
-    console.log(error);
+  if (FSM.error) {
     return (
       <View style={styles.centered}>
         <Text> An error occured!</Text>
@@ -218,7 +199,7 @@ const BudgetsScreen = (props) => {
     );
   }
 
-  if (isLoading) {
+  if (FSM.isLoading) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator
@@ -229,7 +210,7 @@ const BudgetsScreen = (props) => {
     );
   }
 
-  if (!isLoading && budgets.length == 0) {
+  if (budgets.length == 0) {
     return (
       <View style={styles.centered}>
         <Text> No budgets found. Maybe start adding some!</Text>

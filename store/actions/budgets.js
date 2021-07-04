@@ -5,6 +5,7 @@ import Budget from "../../models/budget";
 import { API_URL } from "@Constants/url";
 import { STORAGE } from "@Constants/storage";
 import { getStringData } from "@Utils/storageUtils";
+import { SET_ERROR, SET_LOADING } from "@Actions/FSM";
 
 export const SET_BUDGETS = "SET_BUDGETS";
 export const DELETE_BUDGETS = "DELETE_BUDGETS";
@@ -12,6 +13,8 @@ export const DELETE_BUDGETS = "DELETE_BUDGETS";
 export const fetchBudgets = () => {
   return async (dispatch) => {
     try {
+      dispatch({ type: SET_LOADING, isLoading: true });
+      dispatch({ type: SET_ERROR, hasError: false });
       var token = await getStringData(STORAGE.ACCESS_TOKEN);
       const response = await fetch(API_URL.BUDGET_URL, {
         method: "GET",
@@ -25,7 +28,7 @@ export const fetchBudgets = () => {
         throw new Error("something went wrong!");
       }
       const resData = await response.json();
-      //console.log("fetchBudgets::resData::" + JSON.stringify(resData));
+      console.log("fetchBudgets::resData::" + JSON.stringify(resData));
       const loadedBudget = [];
 
       for (const b of resData) {
@@ -67,7 +70,9 @@ export const fetchBudgets = () => {
       );
       dispatch({ type: SET_BUDGETS, budgets: loadedBudget });
     } catch (err) {
-      throw err;
+      dispatch({ type: SET_ERROR, hasError: true });
+    } finally {
+      dispatch({ type: SET_LOADING, isLoading: false });
     }
   };
 };
