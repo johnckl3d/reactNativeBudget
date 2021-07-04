@@ -13,7 +13,7 @@ import { getStringData } from "@Utils/storageUtils";
 export const login = (userId, password) => {
   return async (dispatch) => {
     try {
-     
+     console.log("login request::" + API_URL.LOGIN_URL);
       const response = await fetch(API_URL.LOGIN_URL, {
         method: "POST",
         headers: {
@@ -24,13 +24,13 @@ export const login = (userId, password) => {
           password: password,
         }),
       });
-      if (!response.ok) {
-        throw new Error("something went wrong!");
-      }
+      // if (!response.ok) {
+      //   throw new Error("something went wrong!");
+      // }
       console.log("login");
       const resData = await response.text();
-      console.log(JSON.stringify(resData));
-      storeStringData(STORAGE.ACCESS_TOKEN, resData);
+      console.log(resData);
+      //storeStringData(STORAGE.ACCESS_TOKEN, resData);
       //await AsyncStorage.setItem(STORAGE.ACCESS_TOKEN, selectedValue);
       //dispatch({ type: LOGIN, refreshToken: resData,  accessToken: resData});
     } catch (err) {

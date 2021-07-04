@@ -102,6 +102,7 @@ const SignInScreen = ({ navigation }) => {
       return;
     }
 
+    console.log("signinscreen::loginHandle");
     signInHandler(data.username, data.password);
   };
 
@@ -110,6 +111,7 @@ const SignInScreen = ({ navigation }) => {
     async (userId, password) => {
       setError(null);
       try {
+        console.log("signinscreen::signInHandler");
         await dispatch(loginActions.login(userId, password));
       } catch (err) {
         setError(err.message);
@@ -223,6 +225,7 @@ const SignInScreen = ({ navigation }) => {
           <Button
             mode="contained"
             onPress={() => {
+              console.log("button pressed");
               loginHandle(data.username, data.password);
             }}
             style={styles.signUp}
