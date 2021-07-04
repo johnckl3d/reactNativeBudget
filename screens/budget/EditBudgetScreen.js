@@ -1,12 +1,12 @@
 import React, { useCallback, useReducer } from "react";
 import {
   Alert,
-  KeyboardAvoidingView, ScrollView,
-  StyleSheet, View
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
+  View,
 } from "react-native";
-import {
-  Button
-} from "react-native-paper";
+import { Button } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import Input from "../../components/UI/Input";
 import * as budgetsActions from "../../store/actions/budgets";
@@ -64,17 +64,13 @@ const EditBudgetScreen = ({ route, navigation }) => {
       ]);
       return;
     }
-    try {
-      await dispatch(
-        budgetsActions.createBudget(
-          formState.inputValues.title,
-          formState.inputValues.description,
-          0
-        )
-      );
-    } catch (err) {
-      throw err;
-    }
+    dispatch(
+      budgetsActions.createBudget(
+        formState.inputValues.title,
+        formState.inputValues.description,
+        0
+      )
+    );
     navigation.goBack();
   }, [dispatch, formState]);
 

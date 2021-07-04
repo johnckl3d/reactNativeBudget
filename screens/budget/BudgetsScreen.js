@@ -44,6 +44,7 @@ import {
 import FloatingActionButton from "../../navigation/FloatingActionButton";
 import moment from "moment";
 import { highlightRed } from "../../styles/presentation";
+import { connect } from "react-redux";
 
 const SCREEN_WIDTH = Math.round(Dimensions.get("window").width);
 const SCREEN_HEIGHT = Math.round(Dimensions.get("window").height);
@@ -55,7 +56,6 @@ const BudgetsScreen = (props) => {
   const [budgetIndex, setBudgetIndex] = useState(0);
   const [monthIndex, setMonthsIndex] = useState(0);
   const budgets = useSelector((state) => state.budgets);
-  const FSM = useSelector((state) => state.FSM);
   const dispatch = useDispatch();
   const monthsList = generateMonthArrayList();
   const theme = useTheme();
@@ -94,19 +94,15 @@ const BudgetsScreen = (props) => {
     },
   ];
 
-
   useEffect(() => {
     loadBudgets();
   }, [dispatch, loadBudgets]);
-
 
   const loadBudgets = useCallback(async () => {
     console.log("budgetscreen:loadbudget");
     dispatch(budgetsActions.fetchBudgets());
     setFocus(true);
-  }, [dispatch,budgets, FSM]);
-
-
+  }, [dispatch]);
 
   const handleBudgetSwipeCallback = (childData) => {
     if (childData >= budgets[budgetIndex].length - 1) {
@@ -181,12 +177,11 @@ const BudgetsScreen = (props) => {
   const deleteBudget = useCallback(
     async (budgetId) => {
       dispatch(budgetsActions.deleteBudget(budgetId));
-      loadBudgets();
     },
     [dispatch]
   );
 
-  if (FSM.error) {
+  if (props.hasError) {
     return (
       <View style={styles.centered}>
         <Text> An error occured!</Text>
@@ -198,8 +193,8 @@ const BudgetsScreen = (props) => {
       </View>
     );
   }
-
-  if (FSM.isLoading) {
+  console.log(props.isLoading);
+  if (props.isLoading) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator
@@ -318,4 +313,7 @@ const styles = StyleSheet.create({
     marginVertical: wp(3),
   },
 });
-export default BudgetsScreen;
+export default connect((state) => ({
+  isLoading: state.FSM.isLoading,
+  hasError: state.FSM.hasError,
+}))(BudgetsScreen);

@@ -10,12 +10,12 @@ export default (state = initialState, action) => {
     case SET_ERROR:
       return {
         ...state,
-        hasError: state.hasError,
+        hasError: action.hasError,
       };
     case SET_LOADING:
       return {
         ...state,
-        isLoading: state.isLoading,
+        isLoading: action.isLoading,
       };
   }
   return state;

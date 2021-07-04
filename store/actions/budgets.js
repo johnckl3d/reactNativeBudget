@@ -186,6 +186,8 @@ export const createBudget = (title, description, amount) => {
       }
     } catch (err) {
       dispatch({ type: SET_ERROR, hasError: err });
+    }finally {
+      dispatch({ type: SET_LOADING, isLoading: false });
     }
   };
 };
