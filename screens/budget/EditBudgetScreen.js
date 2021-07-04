@@ -57,13 +57,12 @@ const formReducer = (state, action) => {
 };
 
 const EditBudgetScreen = ({ route, navigation }) => {
-  console.log("EditBudgetScreen::" + JSON.stringify(route.params));
-  const budgetId = route.params.budgetId;
-  
-  const editedBudget = useSelector((state) =>
-    state.budgets.budgets.find((b) => b.budgetId === budgetId)
-  );
-  console.log("EditBudgetScreen::editedBudget::" + JSON.stringify(editedBudget));
+  let editedBudget;
+  if (route.params) {
+    editedBudget = useSelector((state) =>
+      state.budgets.budgets.find((b) => b.budgetId === budgetId)
+    );
+  }
   const dispatch = useDispatch();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -159,7 +158,9 @@ const EditBudgetScreen = ({ route, navigation }) => {
             multiline
             numberOfLines={3}
             onInputChange={inputChangeHandler}
-            initialValue={editedBudget ? editedBudget.totalBudgetAmount.toString() : ""}
+            initialValue={
+              editedBudget ? editedBudget.totalBudgetAmount.toString() : ""
+            }
             initiallyValid={!!editedBudget}
             required
             minLength={1}
