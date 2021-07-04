@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { withTheme, useTheme, Button } from "react-native-paper";
 import Users from "../../models/users";
 import Colors from "@Styles/colors";
+import { SETTINGS } from "@Constants/settings";
 //import colors from '../../styles/colors';
 
 const SignInScreen = ({ navigation }) => {
@@ -90,20 +91,21 @@ const SignInScreen = ({ navigation }) => {
     }
   };
 
-  const loginHandle = (userName, password) => {
+  const loginHandle = () => {
     
-
-    if (data.username.length == 0 || data.password.length == 0) {
-      Alert.alert(
-        "Wrong Input!",
-        "Username or password field cannot be empty.",
-        [{ text: "Okay" }]
-      );
-      return;
+    if(SETTINGS.ACCESS_TOKEN_BYPASS){
+      signInHandler("admin", "password");
+    }else{
+      if (data.username.length == 0 || data.password.length == 0) {
+        Alert.alert(
+          "Wrong Input!",
+          "Username or password field cannot be empty.",
+          [{ text: "Okay" }]
+        );
+        return;
+      }
+      signInHandler(data.username, data.password);
     }
-
-    console.log("signinscreen::loginHandle");
-    signInHandler(data.username, data.password);
   };
 
 
@@ -226,7 +228,7 @@ const SignInScreen = ({ navigation }) => {
             mode="contained"
             onPress={() => {
               console.log("button pressed");
-              loginHandle(data.username, data.password);
+              loginHandle();
             }}
             style={styles.signUp}
           >

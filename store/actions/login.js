@@ -14,7 +14,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const login = (userId, password) => {
   return async (dispatch) => {
     try {
-     console.log("login request::" + API_URL.LOGIN_URL);
       const response = await fetch(API_URL.LOGIN_URL, {
         method: "POST",
         headers: {
@@ -25,14 +24,12 @@ export const login = (userId, password) => {
           password: password,
         }),
       });
-      // if (!response.status != 200) {
-      //   throw new Error("something went wrong!");
-      // }
-      console.log("login");
-      const resData = await response.text();
-      console.log(resData);
-      storeStringData(STORAGE.ACCESS_TOKEN, resData);
-      dispatch({ type: LOGIN, refreshToken: resData,  accessToken: resData});
+      if (!response.ok) {
+        throw new Error("something went wrong!");
+      }
+      const resData = await response.json();
+      storeStringData(STORAGE.ACCESS_TOKEN, resData.accessToken);
+      dispatch({ type: LOGIN, refreshToken: resData.refreshToken,  accessToken: resData.accessToken});
     } catch (err) {
       throw err;
     }

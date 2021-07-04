@@ -112,17 +112,20 @@ const App = () => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = useState();
   const [theme, setTheme] = useState(CustomDefaultTheme);
+  const dispatch = useDispatch();
+
 
   useEffect(() => {
     const restoreState = async () => {
       try {
-        const savedStateString = await AsyncStorage.getItem(PERSISTENCE_KEY);
-        const state = JSON.parse(savedStateString || "");
-
-        //const state = savedStateString ? savedStateString : null;
-
-        if (state !== null) {
-          setInitialState(state);
+        const accessToken = await getStringData(STORAGE.ACCESS_TOKEN);
+        console.log("App.js::getasyncstorage::accessToken::" + accessToken);
+        if (accessToken) {
+          dispatch({
+            type: LOGIN,
+            refreshToken: accessToken,
+            accessToken: accessToken,
+          });
         }
       } catch (e) {
         // ignore error
@@ -130,7 +133,6 @@ const App = () => {
         setStateLoaded(true);
       }
     };
-
     if (!isStateLoaded) {
       restoreState();
     }
@@ -174,25 +176,6 @@ const App = () => {
     restorePrefs();
   }, []);
 
-  useEffect(() => {
-    console.log("App.js::getasyncstorage");
-    const restoreToken = async () => {
-      try {
-        const accessToken = await getStringData(STORAGE.ACCESS_TOKEN);
-        console.log("App.js::" + accessToken);
-        if (accessToken) {
-          dispatch({
-            type: LOGIN,
-            refreshToken: accessToken,
-            accessToken: accessToken,
-          });
-        }
-      } catch (e) {
-        // ignore error
-      }
-    };
-    restoreToken();
-  }, []);
 
   const preferences = React.useMemo(
     () => ({
