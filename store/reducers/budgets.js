@@ -7,6 +7,11 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case SET_BUDGETS:
+      // return {
+      //   ...state,
+      //   availableProducts: state.availableProducts.concat(newProduct),
+      //   userProducts: state.userProducts.concat(newProduct)
+      // };
       return {
         budgets: action.budgets,
       };
