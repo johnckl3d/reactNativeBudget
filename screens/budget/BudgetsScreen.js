@@ -104,7 +104,7 @@ const BudgetsScreen = (props) => {
     console.log("budgetscreen:loadbudget");
     dispatch(budgetsActions.fetchBudgets());
     setFocus(true);
-  }, [dispatch]);
+  }, [dispatch,budgets, FSM]);
 
 
 

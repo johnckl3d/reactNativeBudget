@@ -1,7 +1,7 @@
 import { SET_ERROR, SET_LOADING } from "@Actions/FSM";
 
 const initialState = {
-  hasError: false,
+  hasError: null,
   isLoading: false,
 };
 
