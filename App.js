@@ -39,7 +39,10 @@ import { centered } from "@Styles/presentation";
 import ProfileScreen from "@MiscScreens/ProfileScreen";
 import SupportScreen from "@MiscScreens/SupportScreen";
 import SettingsScreen from "@MiscScreens/SettingsScreen";
-import { AuthProvider } from "@Context/AuthContext"
+import { AuthProvider } from "@Context/AuthContext";
+import { STORAGE } from "@Constants/storage";
+import { getStringData } from "@Utils/storageUtils";
+import { LOGIN, RETRIEVE_TOKEN, LOGOUT, REGISTER } from "@Actions/login";
 
 const PERSISTENCE_KEY = "NAVIGATION_STATE";
 const PREFERENCES_KEY = "APP_PREFERENCES";
@@ -110,11 +113,6 @@ const App = () => {
   const [error, setError] = useState();
   const [theme, setTheme] = useState(CustomDefaultTheme);
 
-  const [userToken, setUserToken] = useState(null);
-  const dispatch = useDispatch();
-
-  
-
   useEffect(() => {
     const restoreState = async () => {
       try {
@@ -176,6 +174,26 @@ const App = () => {
     restorePrefs();
   }, []);
 
+  useEffect(() => {
+    console.log("App.js::getasyncstorage");
+    const restoreToken = async () => {
+      try {
+        const accessToken = await getStringData(STORAGE.ACCESS_TOKEN);
+        console.log("App.js::" + accessToken);
+        if (accessToken) {
+          dispatch({
+            type: LOGIN,
+            refreshToken: accessToken,
+            accessToken: accessToken,
+          });
+        }
+      } catch (e) {
+        // ignore error
+      }
+    };
+    restoreToken();
+  }, []);
+
   const preferences = React.useMemo(
     () => ({
       toggleTheme: () =>
@@ -188,7 +206,7 @@ const App = () => {
   );
 
   const accessToken = useSelector((state) => state.login.accessToken); // will Work!
-console.log("app::accesstoken::" + accessToken);
+  console.log("app::accesstoken::" + accessToken);
   if (!isFontLoaded || !isStateLoaded) {
     return <SplashScreen />;
   }
@@ -198,8 +216,8 @@ console.log("app::accesstoken::" + accessToken);
       <PaperProvider theme={theme}>
         <SafeAreaProvider>
           <PreferencesContext.Provider value={preferences}>
-          <AuthProvider>
-            <React.Fragment>
+            <AuthProvider>
+              <React.Fragment>
                 <NavigationContainer
                   initialState={initialState}
                   onStateChange={(state) =>
@@ -223,7 +241,7 @@ console.log("app::accesstoken::" + accessToken);
                     <AuthStack />
                   )}
                 </NavigationContainer>
-            </React.Fragment>
+              </React.Fragment>
             </AuthProvider>
           </PreferencesContext.Provider>
         </SafeAreaProvider>

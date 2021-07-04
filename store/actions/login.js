@@ -31,9 +31,7 @@ export const login = (userId, password) => {
       console.log("login");
       const resData = await response.text();
       console.log(resData);
-       storeStringData(STORAGE.ACCESS_TOKEN, resData);
-      // await AsyncStorage.setItem(STORAGE.ACCESS_TOKEN, resData);
-      // console.log("stored in async");
+      storeStringData(STORAGE.ACCESS_TOKEN, resData);
       dispatch({ type: LOGIN, refreshToken: resData,  accessToken: resData});
     } catch (err) {
       throw err;
