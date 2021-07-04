@@ -55,7 +55,6 @@ const BudgetsScreen = (props) => {
   const [isFocus, setFocus] = useState(true);
   const [budgetIndex, setBudgetIndex] = useState(0);
   const [monthIndex, setMonthsIndex] = useState(0);
-  const budgets = useSelector((state) => state.budgets);
   const dispatch = useDispatch();
   const monthsList = generateMonthArrayList();
   const theme = useTheme();
@@ -65,14 +64,14 @@ const BudgetsScreen = (props) => {
       icon: "plus",
       label: "Add Cost Item",
       onPress: () => {
-        addCostItemHandler(budgets[budgetIndex].budgetId);
+        addCostItemHandler(props.budgets[budgetIndex].budgetId);
       },
     },
     {
       icon: "email",
       label: "Add Category",
       onPress: () => {
-        addCostCategoryHandler(budgets[budgetIndex].budgetId);
+        addCostCategoryHandler(props.budgets[budgetIndex].budgetId);
       },
     },
     {
@@ -80,8 +79,8 @@ const BudgetsScreen = (props) => {
       label: "Delete Budget",
       onPress: () => {
         deleteBudgetHandler(
-          budgets[budgetIndex].budgetId,
-          budgets[budgetIndex].name
+          props.budgets[budgetIndex].budgetId,
+          props.budgets[budgetIndex].name
         );
       },
     },
@@ -99,13 +98,12 @@ const BudgetsScreen = (props) => {
   }, [dispatch, loadBudgets]);
 
   const loadBudgets = useCallback(async () => {
-    console.log("budgetscreen:loadbudget");
     dispatch(budgetsActions.fetchBudgets());
     setFocus(true);
   }, [dispatch]);
 
   const handleBudgetSwipeCallback = (childData) => {
-    if (childData >= budgets[budgetIndex].length - 1) {
+    if (childData >= props.budgets[budgetIndex].length - 1) {
       setBudgetIndex(0);
     }
     setBudgetIndex(childData);
@@ -148,7 +146,6 @@ const BudgetsScreen = (props) => {
   const deleteCostCategory = useCallback(
     async (budgetId) => {
       dispatch(costCategoriesActions.deleteCostCategory(budgetId));
-      loadBudgets();
     },
     [dispatch]
   );
@@ -205,7 +202,7 @@ const BudgetsScreen = (props) => {
     );
   }
 
-  if (budgets.length == 0) {
+  if (props.budgets.length == 0) {
     return (
       <View style={styles.centered}>
         <Text> No budgets found. Maybe start adding some!</Text>
@@ -223,15 +220,15 @@ const BudgetsScreen = (props) => {
         <Card mode={mode}>
           <Card mode={mode}>
             <Card.Title
-              title={budgets[budgetIndex].name}
-              subtitle={budgets[budgetIndex].description}
+              title={props.budgets[budgetIndex].name}
+              subtitle={props.budgets[budgetIndex].description}
               left={(props) => <Avatar.Icon {...props} icon="folder" />}
               right={(props) => (
                 <IconButton
                   {...props}
                   icon="dots-vertical"
                   onPress={() => {
-                    editBudgetHandler(budgets[budgetIndex].budgetId);
+                    editBudgetHandler(props.budgets[budgetIndex].budgetId);
                   }}
                 />
               )}
@@ -240,20 +237,20 @@ const BudgetsScreen = (props) => {
             <Card.Content style={styles.summary}>
               <View style={styles.centered}>
                 <Subheading>
-                  {budgets[budgetIndex].totalBudgetAmount.toFixed(2)}
+                  {props.budgets[budgetIndex].totalBudgetAmount.toFixed(2)}
                 </Subheading>
                 <Caption>Budget</Caption>
               </View>
               <View style={styles.centered}>
                 <Subheading>
-                  {budgets[budgetIndex].totalCostAmount.toFixed(2)}
+                  {props.budgets[budgetIndex].totalCostAmount.toFixed(2)}
                 </Subheading>
                 <Caption>Cost</Caption>
               </View>
             </Card.Content>
           </Card>
           <BudgetCarousel
-            data={budgets}
+            data={props.budgets}
             parentCallback={handleBudgetSwipeCallback}
             width={Dimensions.get("window").width}
             height={Dimensions.get("window").height * 0.3}
@@ -265,13 +262,13 @@ const BudgetsScreen = (props) => {
           />
         </Card>
         <BudgetAccordion
-          costCategories={budgets[budgetIndex].costCategories}
+          costCategories={props.budgets[budgetIndex].costCategories}
           deleteCallback={deleteCostCategoryHandler}
         ></BudgetAccordion>
 
         <FloatingActionButton actions={FABActions}></FloatingActionButton>
         <Pagination
-          dotsLength={budgets.length}
+          dotsLength={props.budgets.length}
           activeDotIndex={budgetIndex}
           dotStyle={styles.paginationDot}
           inactiveDotOpacity={0.4}
@@ -316,4 +313,5 @@ const styles = StyleSheet.create({
 export default connect((state) => ({
   isLoading: state.FSM.isLoading,
   hasError: state.FSM.hasError,
+  budgets: state.budgets,
 }))(BudgetsScreen);
