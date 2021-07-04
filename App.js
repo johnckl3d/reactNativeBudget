@@ -187,6 +187,8 @@ const App = () => {
     [theme]
   );
 
+  const accessToken = useSelector((state) => state.login.accessToken); // will Work!
+console.log("app::accesstoken::" + accessToken);
   if (!isFontLoaded || !isStateLoaded) {
     return <SplashScreen />;
   }
@@ -204,10 +206,10 @@ const App = () => {
                     AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state))
                   }
                 >
-                  {loginState.accessToken ? (
+                  {accessToken ? (
                     <Drawer.Navigator
                       initialRouteName="Home"
-                      drawerContent={(props) => <DrawerContent {...props} />}
+                      //drawerContent={(props) => <DrawerContent {...props} />}
                     >
                       <Drawer.Screen name="Home" component={BudgetStack} />
                       <Drawer.Screen name="Profile" component={ProfileScreen} />
