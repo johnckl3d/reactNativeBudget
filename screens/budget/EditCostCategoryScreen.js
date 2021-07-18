@@ -41,7 +41,7 @@ const EditCostCategoryScreen = ({ route, navigation }) => {
   const budgetId = route.params.budgetId;
   const costCategoryId = route.params.costCategoryId;
   const editedBudget = useSelector((state) =>
-    state.budgets.budgets.find((b) => b.budgetId === budgetId)
+    state.budgets.find((b) => b.budgetId === budgetId)
   );
   console.log(
     "EditCostCategoryScreen::editedBudget::" + JSON.stringify(editedBudget)
@@ -88,6 +88,7 @@ const EditCostCategoryScreen = ({ route, navigation }) => {
     } catch (err) {
       throw err;
     }
+    route.params.onComplete();
     navigation.goBack();
   }, [dispatch, formState]);
 

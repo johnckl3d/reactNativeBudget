@@ -98,6 +98,7 @@ const BudgetsScreen = (props) => {
   }, [dispatch, loadBudgets]);
 
   const loadBudgets = useCallback(async () => {
+    console.log("BudgetsScreen::loadBudgets");
     dispatch(budgetsActions.fetchBudgets());
     setFocus(true);
   }, [dispatch]);
@@ -127,7 +128,7 @@ const BudgetsScreen = (props) => {
   };
 
   const addCostCategoryHandler = (budgetId) => {
-    props.navigation.navigate("EditCostCategoryScreen", { budgetId: budgetId });
+    props.navigation.navigate("EditCostCategoryScreen", { budgetId: budgetId, onComplete:loadBudgets });
   };
 
   const deleteCostCategoryHandler = (costCategoryId, name) => {
@@ -146,8 +147,9 @@ const BudgetsScreen = (props) => {
   const deleteCostCategory = useCallback(
     async (budgetId) => {
       dispatch(costCategoriesActions.deleteCostCategory(budgetId));
+      loadBudgets();
     },
-    [dispatch]
+    [dispatch,loadBudgets]
   );
 
   const editBudgetHandler = (budgetId) => {
