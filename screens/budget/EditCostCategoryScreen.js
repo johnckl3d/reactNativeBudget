@@ -43,19 +43,11 @@ const EditCostCategoryScreen = ({ route, navigation }) => {
   const editedBudget = useSelector((state) =>
     state.budgets.find((b) => b.budgetId === budgetId)
   );
-  console.log(
-    "EditCostCategoryScreen::editedBudget::" + JSON.stringify(editedBudget)
-  );
   let editedCostCategory = null;
-  if (editedBudget != null) {
-    editedCostCategory = editedBudget.costCategories.find(
-      (c) => c.costCategoryId === costCategoryId
-    );
-    console.log(
-      "EditCostCategoryScreen::editedCostCategory::" +
-        JSON.stringify(editedCostCategory)
-    );
-  }
+  editedCostCategory = editedBudget.costCategories.find(
+    (c) => c.costCategoryId === costCategoryId
+  );
+
   const dispatch = useDispatch();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -91,10 +83,6 @@ const EditCostCategoryScreen = ({ route, navigation }) => {
     route.params.onComplete();
     navigation.goBack();
   }, [dispatch, formState]);
-
-  // useEffect(() => {
-  //   navigation.setParams({ submit: submitHandler });
-  // }, [submitHandler]);
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {

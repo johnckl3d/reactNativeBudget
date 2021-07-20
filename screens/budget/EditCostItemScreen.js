@@ -3,8 +3,10 @@ import React, { useCallback, useEffect, useReducer } from "react";
 import {
   Alert,
   Button,
-  KeyboardAvoidingView, ScrollView,
-  StyleSheet, View
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
+  View,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import Input from "../../components/UI/Input";
@@ -35,16 +37,37 @@ const formReducer = (state, action) => {
   return state;
 };
 
-const EditCostItemScreen = (props) => {
-  const costCategoryId = props.navigation.getParam("costCategoryId");
-  const costItemId = props.navigation.getParam("costItemId");
-  const editedCostCategory = useSelector((state) =>
-    state.costCategories.costCategories.find(
-      (cc) => cc.costCategoryId === costCategoryId
-    )
+const EditCostItemScreen = ({ route, navigation }) => {
+  console.log("EditCostItemScreen::" + JSON.stringify(route.params));
+  const budgetId = route.params.budgetId;
+  let costCategoryId = null;
+  let costItemId = null;
+  let editedBudget;
+  let editedCostCategory;
+  let editedCostItem;
+  editedBudget = useSelector((state) =>
+    state.budgets.find((b) => b.budgetId === budgetId)
   );
-  const costItems = [...editedCostCategory.costItems];
-  const editedCostItem = costItems.find((ci) => ci.costItemId === costItemId);
+  if (editedBudget != null && route.params.costCategoryId != null) {
+    editedCostCategory = editedBudget.find(
+      (cc) => cc.costCategoryId === costCategoryId
+    );
+
+    if (editedCostCategory != null && route.params.costItemId != null) {
+      editedCostItem = editedCostCategory.find(
+        (ci) => ci.costItemId === costItemId
+      );
+    }
+  }
+  // const costCategoryId = props.navigation.getParam("costCategoryId");
+  // const costItemId = props.navigation.getParam("costItemId");
+  // const editedCostCategory = useSelector((state) =>
+  //   state.costCategories.costCategories.find(
+  //     (cc) => cc.costCategoryId === costCategoryId
+  //   )
+  // );
+  // const costItems = [...editedCostCategory.costItems];
+  // const editedCostItem = costItems.find((ci) => ci.costItemId === costItemId);
   const dispatch = useDispatch();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -80,11 +103,12 @@ const EditCostItemScreen = (props) => {
     } catch (err) {
       throw err;
     }
-    props.navigation.goBack();
+    route.params.onComplete();
+    navigation.goBack();
   }, [dispatch, formState]);
 
   useEffect(() => {
-    props.navigation.setParams({ submit: submitHandler });
+    navigation.setParams({ submit: submitHandler });
   }, [submitHandler]);
 
   const inputChangeHandler = useCallback(
@@ -120,19 +144,6 @@ const EditCostItemScreen = (props) => {
             initiallyValid={!!editedCostItem}
             required
           />
-
-          <Input
-            id="amount"
-            label="Amount"
-            errorText="Please enter a valid amount!"
-            keyboardType="decimal-pad"
-            returnKeyType="next"
-            onInputChange={inputChangeHandler}
-            initialValue={editedCostItem ? editedCostItem.amount.toString() : ""}
-            initiallyValid={!!editedCostItem}
-            required
-            min={0.1}
-          />
           <Input
             id="description"
             label="Description"
@@ -148,6 +159,20 @@ const EditCostItemScreen = (props) => {
             required
             minLength={5}
           />
+          <Input
+            id="amount"
+            label="Amount"
+            errorText="Please enter a valid amount!"
+            keyboardType="decimal-pad"
+            returnKeyType="next"
+            onInputChange={inputChangeHandler}
+            initialValue={
+              editedCostItem ? editedCostItem.amount.toString() : ""
+            }
+            initiallyValid={!!editedCostItem}
+            required
+            min={0.1}
+          />
           <View style={styles.button}>
             <Button
               style={styles.button}
@@ -155,8 +180,6 @@ const EditCostItemScreen = (props) => {
               title="Add"
               onPress={() => {
                 submitHandler();
-                //navData.navigation.getParam("submit");
-                //addItemHandler(itemData.item.name);
               }}
             />
           </View>
