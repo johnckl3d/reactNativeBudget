@@ -23,9 +23,10 @@ export const fetchBudgets = () => {
           Authorization: "Bearer " + token,
         },
       });
-
+      console.log("fetchBudgets::response::" + response);
       if (!response.ok) {
         dispatch({ type: SET_ERROR, hasError: response.status });
+        dispatch({ type: LOGOUT});
       }
       const resData = await response.json();
       console.log("fetchBudgets::resData::" + JSON.stringify(resData));
