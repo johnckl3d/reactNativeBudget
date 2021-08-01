@@ -1,0 +1,18 @@
+{
+    "budget": {
+        "addCostItem": "Add Cost Item",
+        "addCategory": "Add Category",
+        "deleteBudget": "Delete Budget",
+        "addBudget": "Add Budget"
+    },
+    "common": {
+        "currency": "RM",
+        "actions": {
+            "toggleToGerman": "Deutsch",
+            "toggleToEnglish": "English",
+            "toggleToArabic": "Arabic",
+            "goToPage2": "Open page 2"
+        },
+        "infoText": "<0><0>Zero </O><1>One </1><2>Two </2><3>Three </3><4>Four</4></O>"
+    }
+}

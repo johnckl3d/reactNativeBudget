@@ -23,7 +23,6 @@ export const fetchBudgets = () => {
           Authorization: "Bearer " + token,
         },
       });
-      console.log("fetchBudgets::response::" + response);
       if (!response.ok) {
         dispatch({ type: SET_ERROR, hasError: response.status });
         dispatch({ type: LOGOUT});

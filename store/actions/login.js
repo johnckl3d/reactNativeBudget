@@ -28,7 +28,9 @@ export const login = (userId, password) => {
         throw new Error("something went wrong!");
       }
       const resData = await response.json();
+      console.log("login::resData::" + JSON.stringify(resData));
       storeStringData(STORAGE.ACCESS_TOKEN, resData.accessToken);
+      storeStringData(STORAGE.REFRESH_TOKEN, resData.refresh_token);
       dispatch({ type: LOGIN, refreshToken: resData.refreshToken,  accessToken: resData.accessToken});
     } catch (err) {
       throw err;

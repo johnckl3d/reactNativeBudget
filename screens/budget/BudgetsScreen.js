@@ -45,6 +45,7 @@ import FloatingActionButton from "../../navigation/FloatingActionButton";
 import moment from "moment";
 import { highlightRed } from "../../styles/presentation";
 import { connect } from "react-redux";
+import i18n from '@I18N/i18n';
 
 const SCREEN_WIDTH = Math.round(Dimensions.get("window").width);
 const SCREEN_HEIGHT = Math.round(Dimensions.get("window").height);
@@ -62,21 +63,21 @@ const BudgetsScreen = (props) => {
   const FABActions = [
     {
       icon: "plus",
-      label: "Add Cost Item",
+      label: i18n.t('budget.addCostItem'),
       onPress: () => {
         addCostItemHandler(props.budgets[budgetIndex].budgetId);
       },
     },
     {
       icon: "email",
-      label: "Add Category",
+      label: i18n.t('budget.addCategory'),
       onPress: () => {
         addCostCategoryHandler(props.budgets[budgetIndex].budgetId);
       },
     },
     {
       icon: "star",
-      label: "Delete Budget",
+      label: i18n.t("budget.deleteBudget"),
       onPress: () => {
         deleteBudgetHandler(
           props.budgets[budgetIndex].budgetId,
@@ -86,7 +87,7 @@ const BudgetsScreen = (props) => {
     },
     {
       icon: "bell",
-      label: "Add Budget",
+      label: i18n.t("budget.addBudget"),
       onPress: () => {
         addBudgetHandler();
       },
@@ -128,7 +129,10 @@ const BudgetsScreen = (props) => {
   };
 
   const addCostCategoryHandler = (budgetId) => {
-    props.navigation.navigate("EditCostCategoryScreen", { budgetId: budgetId, onComplete:loadBudgets });
+    props.navigation.navigate("EditCostCategoryScreen", {
+      budgetId: budgetId,
+      onComplete: loadBudgets,
+    });
   };
 
   const deleteCostCategoryHandler = (costCategoryId, name) => {
@@ -149,7 +153,7 @@ const BudgetsScreen = (props) => {
       dispatch(costCategoriesActions.deleteCostCategory(budgetId));
       loadBudgets();
     },
-    [dispatch,loadBudgets]
+    [dispatch, loadBudgets]
   );
 
   const editBudgetHandler = (budgetId) => {
@@ -239,13 +243,13 @@ const BudgetsScreen = (props) => {
             <Card.Content style={styles.summary}>
               <View style={styles.centered}>
                 <Subheading>
-                  {props.budgets[budgetIndex].totalBudgetAmount.toFixed(2)}
+                  {i18n.t("common.currency") + props.budgets[budgetIndex].totalBudgetAmount.toFixed(2)}
                 </Subheading>
                 <Caption>Budget</Caption>
               </View>
               <View style={styles.centered}>
                 <Subheading>
-                  {props.budgets[budgetIndex].totalCostAmount.toFixed(2)}
+                  {i18n.t("common.currency") + props.budgets[budgetIndex].totalCostAmount.toFixed(2)}
                 </Subheading>
                 <Caption>Cost</Caption>
               </View>
