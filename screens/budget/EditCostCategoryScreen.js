@@ -10,6 +10,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import Input from "../../components/UI/Input";
 import * as costCategoriesActions from "../../store/actions/costCategories";
+import i18n from '@I18N/i18n';
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
@@ -106,7 +107,7 @@ const EditCostCategoryScreen = ({ route, navigation }) => {
         <View style={styles.form}>
           <Input
             id="title"
-            label="Name"
+            label={i18n.t("editCostCategory.name")}
             errorText="Please enter a valid name!"
             keyboardType="default"
             autoCapitalize="sentences"
@@ -119,7 +120,7 @@ const EditCostCategoryScreen = ({ route, navigation }) => {
           />
           <Input
             id="description"
-            label="Description"
+            label={i18n.t("editCostCategory.description")}
             errorText="Please enter a valid description!"
             keyboardType="default"
             autoCapitalize="sentences"
@@ -139,7 +140,7 @@ const EditCostCategoryScreen = ({ route, navigation }) => {
                 submitHandler();
               }}
             >
-              Add
+              {i18n.t("editCostCategory.add")}
             </Button>
           </View>
         </View>

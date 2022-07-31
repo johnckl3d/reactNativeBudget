@@ -11,7 +11,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import Input from "../../components/UI/Input";
 import * as costCategoriesActions from "../../store/actions/costCategories";
-
+import i18n from '@I18N/i18n';
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
 const formReducer = (state, action) => {
@@ -133,7 +133,7 @@ const EditCostItemScreen = ({ route, navigation }) => {
         <View style={styles.form}>
           <Input
             id="title"
-            label="Name"
+            label={i18n.t("editCostItem.name")}
             errorText="Please enter a valid name!"
             keyboardType="default"
             autoCapitalize="sentences"
@@ -146,7 +146,7 @@ const EditCostItemScreen = ({ route, navigation }) => {
           />
           <Input
             id="description"
-            label="Description"
+            label={i18n.t("editCostItem.description")}
             errorText="Please enter a valid description!"
             keyboardType="default"
             autoCapitalize="sentences"
@@ -161,7 +161,7 @@ const EditCostItemScreen = ({ route, navigation }) => {
           />
           <Input
             id="amount"
-            label="Amount"
+            label={i18n.t("editCostItem.amount")}
             errorText="Please enter a valid amount!"
             keyboardType="decimal-pad"
             returnKeyType="next"
@@ -177,7 +177,7 @@ const EditCostItemScreen = ({ route, navigation }) => {
             <Button
               style={styles.button}
               color={Colors.primary}
-              title="Add"
+              title={i18n.t("editCostItem.add")}
               onPress={() => {
                 submitHandler();
               }}
@@ -189,11 +189,11 @@ const EditCostItemScreen = ({ route, navigation }) => {
   );
 };
 
-EditCostItemScreen.navigationOptions = (navData) => {
-  return {
-    headerTitle: "Add Cost Item",
-  };
-};
+// EditCostItemScreen.navigationOptions = (navData) => {
+//   return {
+//     headerTitle: "Add Cost Item",
+//   };
+// };
 
 const styles = StyleSheet.create({
   form: {

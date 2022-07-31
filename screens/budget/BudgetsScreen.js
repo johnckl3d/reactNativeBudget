@@ -45,7 +45,8 @@ import FloatingActionButton from "../../navigation/FloatingActionButton";
 import moment from "moment";
 import { highlightRed } from "../../styles/presentation";
 import { connect } from "react-redux";
-import i18n from '@I18N/i18n';
+import i18n from "@I18N/i18n";
+import { useIsFocused } from '@react-navigation/native';
 
 const SCREEN_WIDTH = Math.round(Dimensions.get("window").width);
 const SCREEN_HEIGHT = Math.round(Dimensions.get("window").height);
@@ -59,18 +60,19 @@ const BudgetsScreen = (props) => {
   const dispatch = useDispatch();
   const monthsList = generateMonthArrayList();
   const theme = useTheme();
+  const isFocused = useIsFocused();
 
   const FABActions = [
     {
       icon: "plus",
-      label: i18n.t('budget.addCostItem'),
+      label: i18n.t("budget.addCostItem"),
       onPress: () => {
         addCostItemHandler(props.budgets[budgetIndex].budgetId);
       },
     },
     {
       icon: "email",
-      label: i18n.t('budget.addCategory'),
+      label: i18n.t("budget.addCategory"),
       onPress: () => {
         addCostCategoryHandler(props.budgets[budgetIndex].budgetId);
       },
@@ -99,7 +101,6 @@ const BudgetsScreen = (props) => {
   }, [dispatch, loadBudgets]);
 
   const loadBudgets = useCallback(async () => {
-    console.log("BudgetsScreen::loadBudgets");
     dispatch(budgetsActions.fetchBudgets());
     setFocus(true);
   }, [dispatch]);
@@ -196,7 +197,6 @@ const BudgetsScreen = (props) => {
       </View>
     );
   }
-  console.log(props.isLoading);
   if (props.isLoading) {
     return (
       <View style={styles.centered}>
@@ -243,13 +243,15 @@ const BudgetsScreen = (props) => {
             <Card.Content style={styles.summary}>
               <View style={styles.centered}>
                 <Subheading>
-                  {i18n.t("common.currency") + props.budgets[budgetIndex].totalBudgetAmount.toFixed(2)}
+                  {i18n.t("common.currency") +
+                    props.budgets[budgetIndex].totalBudgetAmount.toFixed(2)}
                 </Subheading>
                 <Caption>Budget</Caption>
               </View>
               <View style={styles.centered}>
                 <Subheading>
-                  {i18n.t("common.currency") + props.budgets[budgetIndex].totalCostAmount.toFixed(2)}
+                  {i18n.t("common.currency") +
+                    props.budgets[budgetIndex].totalCostAmount.toFixed(2)}
                 </Subheading>
                 <Caption>Cost</Caption>
               </View>
@@ -272,7 +274,10 @@ const BudgetsScreen = (props) => {
           deleteCallback={deleteCostCategoryHandler}
         ></BudgetAccordion>
 
-        <FloatingActionButton actions={FABActions}></FloatingActionButton>
+        <FloatingActionButton
+          visible={isFocused}
+          actions={FABActions}
+        ></FloatingActionButton>
         <Pagination
           dotsLength={props.budgets.length}
           activeDotIndex={budgetIndex}

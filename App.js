@@ -37,6 +37,7 @@ import { AuthProvider } from "@Context/AuthContext";
 import { STORAGE } from "@Constants/storage";
 import { getStringData } from "@Utils/storageUtils";
 import { LOGIN, RETRIEVE_TOKEN, LOGOUT, REGISTER } from "@Actions/login";
+import { validateJwtExpiryDateIsExpired } from "@Utils/tokenUtils";
 
 const PERSISTENCE_KEY = "NAVIGATION_STATE";
 const PREFERENCES_KEY = "APP_PREFERENCES";
@@ -106,11 +107,14 @@ const App = () => {
         const accessToken = await getStringData(STORAGE.ACCESS_TOKEN);
         console.log("App.js::getasyncstorage::accessToken::" + accessToken);
         if (accessToken) {
-          dispatch({
-            type: LOGIN,
-            refreshToken: accessToken,
-            accessToken: accessToken,
-          });
+          console.log("app::validateJwtExpiryDate::" + validateJwtExpiryDateIsExpired(accessToken));
+          if(!validateJwtExpiryDateIsExpired(accessToken)){
+            dispatch({
+              type: LOGIN,
+              refreshToken: accessToken,
+              accessToken: accessToken,
+            });
+          }
         }
       } catch (e) {
         // ignore error

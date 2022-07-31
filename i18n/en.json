@@ -1,18 +1,42 @@
 {
-    "budget": {
-        "addCostItem": "Add Cost Item",
-        "addCategory": "Add Category",
-        "deleteBudget": "Delete Budget",
-        "addBudget": "Add Budget"
+  "budget": {
+    "title": "Edit Budget",
+    "addCostItem": "Add Cost Item",
+    "addCategory": "Add Category",
+    "deleteBudget": "Delete Budget",
+    "addBudget": "Add Budget",
+    "editCostCategoryScreen": "Edit Cost Category",
+    "editCostItemScreen": "Edit Cost Item"
+  },
+  "editBudget": {
+    "title": "Edit Budget",
+    "name": "Name",
+    "description": "Description",
+    "amount": "Amount",
+    "add": "Add"
+  },
+  "editCostItem": {
+    "title": "Edit Cost Item",
+    "name": "Name",
+    "description": "Description",
+    "amount": "Amount",
+    "add": "Add"
+  },
+  "editCostCategory": {
+    "title": "Edit Cost Category",
+    "name": "Name",
+    "description": "Description",
+    "amount": "Amount",
+    "add": "Add"
+  },
+  "common": {
+    "currency": "RM",
+    "actions": {
+      "toggleToGerman": "Deutsch",
+      "toggleToEnglish": "English",
+      "toggleToArabic": "Arabic",
+      "goToPage2": "Open page 2"
     },
-    "common": {
-        "currency": "RM",
-        "actions": {
-            "toggleToGerman": "Deutsch",
-            "toggleToEnglish": "English",
-            "toggleToArabic": "Arabic",
-            "goToPage2": "Open page 2"
-        },
-        "infoText": "<0><0>Zero </O><1>One </1><2>Two </2><3>Three </3><4>Four</4></O>"
-    }
+    "infoText": "<0><0>Zero </O><1>One </1><2>Two </2><3>Three </3><4>Four</4></O>"
+  }
 }
