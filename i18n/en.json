@@ -32,7 +32,7 @@
   "common": {
     "currency": "RM",
     "actions": {
-      "toggleToGerman": "Deutsch",
+      "toggleToGerman": "German",
       "toggleToEnglish": "English",
       "toggleToArabic": "Arabic",
       "goToPage2": "Open page 2"
