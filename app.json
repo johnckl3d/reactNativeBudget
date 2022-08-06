@@ -1,15 +1,12 @@
 {
   "expo": {
-    "name": "RN Guide",
-    "slug": "rn-complete-guide",
+    "name": "Budget Tracker",
+    "slug": "budget-tracker",
     "privacy": "public",
-    "sdkVersion": "34.0.0",
     "platforms": [
-      "ios",
-      "android",
-      "web"
+      "ios"
     ],
-    "version": "1.0.0",
+    "version": "^45.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -24,7 +21,9 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.johncheang.budget",
+      "buildNumber": "1.0.0"
     }
   }
 }
