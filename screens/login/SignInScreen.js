@@ -227,7 +227,6 @@ const SignInScreen = ({ navigation }) => {
           <Button
             mode="contained"
             onPress={() => {
-              console.log("button pressed");
               loginHandle();
             }}
             style={styles.signUp}
