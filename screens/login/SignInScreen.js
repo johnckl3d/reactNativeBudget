@@ -94,7 +94,7 @@ const SignInScreen = ({ navigation }) => {
   const loginHandle = () => {
     
     if(SETTINGS.ACCESS_TOKEN_BYPASS){
-      signInHandler("admin", "password");
+      signInHandler("admin", "Aia@13579");
     }else{
       if (data.username.length == 0 || data.password.length == 0) {
         Alert.alert(
