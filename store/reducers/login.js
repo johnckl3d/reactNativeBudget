@@ -8,6 +8,7 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
+  console.log();
   switch (action.type) {
     case LOGIN:
       return {
@@ -20,5 +21,7 @@ export default (state = initialState, action) => {
         accessToken: null,
       };
   }
+  console.log("loginreducer::action::" + action.accessToken);
+  console.log("loginreducer::action::" + action.refreshToken);
   return state;
 };

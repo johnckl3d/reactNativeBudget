@@ -3,6 +3,7 @@ import { AuthContext, PreferencesContext } from "@Context/Context";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import * as Font from "expo-font";
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import React, { useEffect, useState } from "react";
 //import BudgetStack from "./navigation/BudgetStack";
 import {
@@ -53,7 +54,7 @@ const DrawerSetup = (props) => {
   //     )}
   //   </PreferencesContext.Consumer>
   // );
-  console.log("app::drawer::" + JSON.stringify(props));
+  //console.log("app::drawer::" + JSON.stringify(props));
   return <DrawerContent {...props} />;
 };
 
@@ -128,24 +129,38 @@ const App = () => {
   }, [isStateLoaded]);
 
   useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        "open-sans": require("./assets/fonts/OpenSans-Regular.ttf"),
-        "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
-        "open-sans-boldItalic": require("./assets/fonts/OpenSans-BoldItalic.ttf"),
-        "open-sans-extraBold": require("./assets/fonts/OpenSans-ExtraBold.ttf"),
-        "open-sans-extraBoldItalic": require("./assets/fonts/OpenSans-ExtraBoldItalic.ttf"),
-        "open-sans-italic": require("./assets/fonts/OpenSans-Italic.ttf"),
-        "open-sans-light": require("./assets/fonts/OpenSans-Light.ttf"),
-        "open-sans-lightItalic": require("./assets/fonts/OpenSans-LightItalic.ttf"),
-        "open-sans-regular": require("./assets/fonts/OpenSans-Regular.ttf"),
-        "open-sans-semiBold": require("./assets/fonts/OpenSans-SemiBold.ttf"),
-        "open-sans-semiBoldItalic": require("./assets/fonts/OpenSans-SemiBoldItalic.ttf"),
-      });
-      setFontLoaded(true);
-    };
-    loadFonts();
-  }, [isFontLoaded]);
+    const loadResourcesAndDataAsync = async () => {
+      try {
+        const openSansFonts = async () => {
+          await Font.loadAsync({
+            "open-sans": require("./assets/fonts/OpenSans-Regular.ttf"),
+            "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
+            "open-sans-boldItalic": require("./assets/fonts/OpenSans-BoldItalic.ttf"),
+            "open-sans-extraBold": require("./assets/fonts/OpenSans-ExtraBold.ttf"),
+            "open-sans-extraBoldItalic": require("./assets/fonts/OpenSans-ExtraBoldItalic.ttf"),
+            "open-sans-italic": require("./assets/fonts/OpenSans-Italic.ttf"),
+            "open-sans-light": require("./assets/fonts/OpenSans-Light.ttf"),
+            "open-sans-lightItalic": require("./assets/fonts/OpenSans-LightItalic.ttf"),
+            "open-sans-regular": require("./assets/fonts/OpenSans-Regular.ttf"),
+            "open-sans-semiBold": require("./assets/fonts/OpenSans-SemiBold.ttf"),
+            "open-sans-semiBoldItalic": require("./assets/fonts/OpenSans-SemiBoldItalic.ttf"),
+          });
+        };
+        const fontAwesome = (fonts) => {
+          return fonts.map(font => Font.loadAsync(font));
+        };
+        openSansFonts();
+        fontAwesome([FontAwesome.font]);
+        await Promise.all([...openSansFonts, ...fontAwesome]);
+      }catch (e){
+
+      }finally {
+        setFontLoaded(true);
+      }
+    }
+
+    loadResourcesAndDataAsync();
+  },[isFontLoaded]);
 
   useEffect(() => {
     const restorePrefs = async () => {
@@ -177,8 +192,10 @@ const App = () => {
     [theme]
   );
 
+
   const accessToken = useSelector((state) => state.login.accessToken); // will Work!
   console.log("app::accesstoken::" + accessToken);
+  console.log("app::isFontLoaded::" + isFontLoaded);
   if (!isFontLoaded || !isStateLoaded) {
     return <SplashScreen />;
   }
