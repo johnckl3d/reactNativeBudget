@@ -12,9 +12,6 @@ import { storeStringData } from "@Utils/storageUtils";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const login = (userId, password) => {
-  console.log("login::resData::1::" + userId);
-  console.log("login::resData::1::" + password);
-  console.log("login::resData::2::" + API_URL.LOGIN_URL);
   return async (dispatch) => {
     try {
       const response = await fetch(API_URL.LOGIN_URL, {
@@ -28,16 +25,17 @@ export const login = (userId, password) => {
           ipAddress: "10.100.100.100"
         }),
       });
-      // if (!response.ok) {
-      //   console.log("login::resData::3" + JSON.stringify(response.json()));
-      //   throw new Error("something went wrong!");
-      // }
+      if (!response.ok) {
+        dispatch({ type: SET_ERROR, hasError: response.status });
+      }
       const resData = await response.json();
-      console.log("login::resData::" + JSON.stringify(resData));
+      console.log("action::login::resData::" + JSON.stringify(resData));
       storeStringData(STORAGE.ACCESS_TOKEN, resData.accessToken);
       storeStringData(STORAGE.REFRESH_TOKEN, resData.refresh_token);
+      //dispatch({ type: SET_ERROR, hasError: response.status });
       dispatch({ type: LOGIN, refreshToken: resData.refreshToken,  accessToken: resData.accessToken});
     } catch (err) {
+      console.log("action::login::err::" + err);
       throw err;
     }
   };
