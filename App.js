@@ -196,6 +196,7 @@ const App = () => {
   const accessToken = useSelector((state) => state.login.accessToken); // will Work!
   console.log("app::accesstoken::" + accessToken);
   console.log("app::isFontLoaded::" + isFontLoaded);
+  console.log("app::isStateLoaded::" + isStateLoaded);
   if (!isFontLoaded || !isStateLoaded) {
     return <SplashScreen />;
   }
