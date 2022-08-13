@@ -193,10 +193,7 @@ const App = () => {
   );
 
 
-  const accessToken = useSelector((state) => state.login.accessToken); // will Work!
-  console.log("app::accesstoken::" + accessToken);
-  console.log("app::isFontLoaded::" + isFontLoaded);
-  console.log("app::isStateLoaded::" + isStateLoaded);
+  const accessToken = useSelector((state) => state.login.accessToken); 
   if (!isFontLoaded || !isStateLoaded) {
     return <SplashScreen />;
   }
@@ -220,12 +217,12 @@ const App = () => {
                       //drawerContent={(props) => <DrawerContent {...props} />}
                     >
                       <Drawer.Screen name="Home" component={BudgetStack} />
-                      <Drawer.Screen name="Profile" component={ProfileScreen} />
+                      {/* <Drawer.Screen name="Profile" component={ProfileScreen} />
                       <Drawer.Screen
                         name="Settings"
                         component={SettingsScreen}
                       />
-                      <Drawer.Screen name="Support" component={SupportScreen} />
+                      <Drawer.Screen name="Support" component={SupportScreen} /> */}
                     </Drawer.Navigator>
                   ) : (
                     <AuthStack />

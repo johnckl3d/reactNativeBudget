@@ -14,13 +14,13 @@ import Colors from "@Styles/colors";
 
 const Stack = createStackNavigator();
 
-function Feed() {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Feed Screen</Text>
-    </View>
-  );
-}
+// function Feed() {
+//   return (
+//     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+//       <Text>Feed Screen</Text>
+//     </View>
+//   );
+// }
 
 function BudgetStack() {
   return (

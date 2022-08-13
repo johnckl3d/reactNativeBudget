@@ -10,6 +10,7 @@ export const REGISTER = "REGISTER";
 import {STORAGE} from "@Constants/storage";
 import { storeStringData } from "@Utils/storageUtils";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SET_ERROR, SET_LOADING } from "@Actions/FSM";
 
 export const login = (userId, password) => {
   return async (dispatch) => {

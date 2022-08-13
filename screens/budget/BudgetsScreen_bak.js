@@ -53,7 +53,7 @@ const SCREEN_HEIGHT = Math.round(Dimensions.get("window").height);
 const isOutlined = false;
 const mode = isOutlined ? "outlined" : "elevated";
 
-const BudgetsScreen = (props) => {
+const BudgetsScreen_bak = (props) => {
   const [isFocus, setFocus] = useState(true);
   const [budgetIndex, setBudgetIndex] = useState(0);
   const [monthIndex, setMonthsIndex] = useState(0);
@@ -62,8 +62,6 @@ const BudgetsScreen = (props) => {
   const theme = useTheme();
   const isFocused = useIsFocused();
 
-  const budgets = useSelector((store) => store.budgets);
-console.log("BudgetScreen::budgets::" + JSON.stringify(budgets));
   const FABActions = [
     {
       icon: "plus",
@@ -187,61 +185,108 @@ console.log("BudgetScreen::budgets::" + JSON.stringify(budgets));
     [dispatch]
   );
 
-  console.log("budgets screen1::"+ JSON.stringify(props)); 
-  // if (props.hasError) {
-  //   return (
-  //     <View style={styles.centered}>
-  //       <Text> An error occured!</Text>
-  //       <Button
-  //         title="Try again"
-  //         onPress={loadBudgets}
-  //         color={Colors.primary}
-  //       ></Button>
-  //     </View>
-  //   );
-  // }
-  // if (props.isLoading) {
-  //   console.log("props.isLoading");
-  //   return (
-  //     <View style={styles.centered}>
-  //       <ActivityIndicator
-  //         size="large"
-  //         color={Colors.primary}
-  //       ></ActivityIndicator>
-  //     </View>
-  //   );
-  // }
-
-  return (
-    <View style={{ flex: 1, backgroundColor: "red" }}>
-      <Text> No budgets found. Maybe start adding some!</Text>
-    </View>
-  );
-  
-  if (budgets.length == 0) {
-    console.log("BudgetScreen::budgets.length = 0");
+   console.log("budgets screen"); 
+  if (props.hasError) {
     return (
-      <View style={{ flex: 1, backgroundColor: "red" }}>
+      <View style={styles.centered}>
+        <Text> An error occured!</Text>
+        <Button
+          title="Try again"
+          onPress={loadBudgets}
+          color={Colors.primary}
+        ></Button>
+      </View>
+    );
+  }
+  if (props.isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator
+          size="large"
+          color={Colors.primary}
+        ></ActivityIndicator>
+      </View>
+    );
+  }
+
+  if (props.budgets.length == 0) {
+    return (
+      <View style={styles.centered}>
         <Text> No budgets found. Maybe start adding some!</Text>
       </View>
     );
   }
 
-  // if (!isFocus) {
-  //   return <View />;
-  // }
-  console.log("budgets screen2"); 
+  if (!isFocus) {
+    return <View />;
+  }
+
   return (
     <SafeAreaView>
-      <View
-      style={{
-        flex: 1
-      }}
-    >
-      <View style={{ backgroundColor: "blue", flex: 0.3 }} />
-      <View style={{ backgroundColor: "red", flex: 0.5 }} />
-      <Text>Hello World!</Text>
-    </View>
+      <View style={styles.mainContent}>
+        <Card mode={mode}>
+          <Card mode={mode}>
+            <Card.Title
+              title={props.budgets[budgetIndex].name}
+              subtitle={props.budgets[budgetIndex].description}
+              left={(props) => <Avatar.Icon {...props} icon="folder" />}
+              right={(props) => (
+                <IconButton
+                  {...props}
+                  icon="dots-vertical"
+                  onPress={() => {
+                    editBudgetHandler(props.budgets[budgetIndex].budgetId);
+                  }}
+                />
+              )}
+            />
+
+            <Card.Content style={styles.summary}>
+              <View style={styles.centered}>
+                <Subheading>
+                  {i18n.t("common.currency") +
+                    props.budgets[budgetIndex].totalBudgetAmount.toFixed(2)}
+                </Subheading>
+                <Caption>Budget</Caption>
+              </View>
+              <View style={styles.centered}>
+                <Subheading>
+                  {i18n.t("common.currency") +
+                    props.budgets[budgetIndex].totalCostAmount.toFixed(2)}
+                </Subheading>
+                <Caption>Cost</Caption>
+              </View>
+            </Card.Content>
+          </Card>
+          <BudgetCarousel
+            data={props.budgets}
+            parentCallback={handleBudgetSwipeCallback}
+            width={Dimensions.get("window").width}
+            height={Dimensions.get("window").height * 0.3}
+          />
+          <MonthCarousel
+            data={monthsList}
+            parentCallback={handleMonthsSwipeCallback}
+            width={Dimensions.get("window").width}
+          />
+        </Card>
+        <BudgetAccordion
+          costCategories={props.budgets[budgetIndex].costCategories}
+          deleteCallback={deleteCostCategoryHandler}
+        ></BudgetAccordion>
+
+        <FloatingActionButton
+          visible={isFocused}
+          actions={FABActions}
+        ></FloatingActionButton>
+        <Pagination
+          dotsLength={props.budgets.length}
+          activeDotIndex={budgetIndex}
+          dotStyle={styles.paginationDot}
+          inactiveDotOpacity={0.4}
+          inactiveDotScale={0.6}
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -277,4 +322,8 @@ const styles = StyleSheet.create({
     marginVertical: wp(3),
   },
 });
-export default BudgetsScreen;
+export default connect((state) => ({
+  isLoading: state.FSM.isLoading,
+  hasError: state.FSM.hasError,
+  budgets: state.budgets,
+}))(BudgetsScreen_bak);
