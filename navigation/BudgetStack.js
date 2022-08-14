@@ -24,12 +24,6 @@ const Stack = createStackNavigator();
 
 function BudgetStack() {
   return (
-    <View style={{ flex: 1, backgroundColor: "red" }}>
-    <Text> No budgets found. Maybe start adding some!</Text>
-  </View>
-  );
-
-  return (
   
     <Stack.Navigator
     headerMode="screen"

@@ -69,14 +69,14 @@ console.log("BudgetScreen::budgets::" + JSON.stringify(budgets));
       icon: "plus",
       label: i18n.t("budget.addCostItem"),
       onPress: () => {
-        addCostItemHandler(props.budgets[budgetIndex].budgetId);
+        addCostItemHandler(budgets[budgetIndex].budgetId);
       },
     },
     {
       icon: "email",
       label: i18n.t("budget.addCategory"),
       onPress: () => {
-        addCostCategoryHandler(props.budgets[budgetIndex].budgetId);
+        addCostCategoryHandler(budgets[budgetIndex].budgetId);
       },
     },
     {
@@ -84,8 +84,8 @@ console.log("BudgetScreen::budgets::" + JSON.stringify(budgets));
       label: i18n.t("budget.deleteBudget"),
       onPress: () => {
         deleteBudgetHandler(
-          props.budgets[budgetIndex].budgetId,
-          props.budgets[budgetIndex].name
+          budgets[budgetIndex].budgetId,
+          budgets[budgetIndex].name
         );
       },
     },
@@ -108,7 +108,7 @@ console.log("BudgetScreen::budgets::" + JSON.stringify(budgets));
   }, [dispatch]);
 
   const handleBudgetSwipeCallback = (childData) => {
-    if (childData >= props.budgets[budgetIndex].length - 1) {
+    if (childData >= budgets[budgetIndex].length - 1) {
       setBudgetIndex(0);
     }
     setBudgetIndex(childData);
@@ -187,7 +187,7 @@ console.log("BudgetScreen::budgets::" + JSON.stringify(budgets));
     [dispatch]
   );
 
-  console.log("budgets screen1::"+ JSON.stringify(props)); 
+  // console.log("budgets screen1::"+ JSON.stringify(props)); 
   // if (props.hasError) {
   //   return (
   //     <View style={styles.centered}>
@@ -212,11 +212,7 @@ console.log("BudgetScreen::budgets::" + JSON.stringify(budgets));
   //   );
   // }
 
-  return (
-    <View style={{ flex: 1, backgroundColor: "red" }}>
-      <Text> No budgets found. Maybe start adding some!</Text>
-    </View>
-  );
+  
   
   if (budgets.length == 0) {
     console.log("BudgetScreen::budgets.length = 0");
@@ -233,15 +229,70 @@ console.log("BudgetScreen::budgets::" + JSON.stringify(budgets));
   console.log("budgets screen2"); 
   return (
     <SafeAreaView>
-      <View
-      style={{
-        flex: 1
-      }}
-    >
-      <View style={{ backgroundColor: "blue", flex: 0.3 }} />
-      <View style={{ backgroundColor: "red", flex: 0.5 }} />
-      <Text>Hello World!</Text>
-    </View>
+      <View style={styles.mainContent}>
+        <Card mode={mode}>
+          <Card mode={mode}>
+            <Card.Title
+              title={budgets[budgetIndex].name}
+              subtitle={budgets[budgetIndex].description}
+              left={(props) => <Avatar.Icon {...props} icon="folder" />}
+              right={(props) => (
+                <IconButton
+                  {...props}
+                  icon="dots-vertical"
+                  onPress={() => {
+                    editBudgetHandler(props.budgets[budgetIndex].budgetId);
+                  }}
+                />
+              )}
+            />
+
+            <Card.Content style={styles.summary}>
+              <View style={styles.centered}>
+                <Subheading>
+                  {i18n.t("common.currency") +
+                    budgets[budgetIndex].totalBudgetAmount.toFixed(2)}
+                </Subheading>
+                <Caption>Budget</Caption>
+              </View>
+              <View style={styles.centered}>
+                <Subheading>
+                  {i18n.t("common.currency") +
+                    budgets[budgetIndex].totalCostAmount.toFixed(2)}
+                </Subheading>
+                <Caption>Cost</Caption>
+              </View>
+            </Card.Content>
+          </Card>
+          <BudgetCarousel
+            data={budgets}
+            parentCallback={handleBudgetSwipeCallback}
+            width={Dimensions.get("window").width}
+            height={Dimensions.get("window").height * 0.3}
+          />
+          <MonthCarousel
+            data={monthsList}
+            parentCallback={handleMonthsSwipeCallback}
+            width={Dimensions.get("window").width}
+          />
+        </Card>
+        <BudgetAccordion
+          costCategories={budgets[budgetIndex].costCategories}
+          deleteCallback={deleteCostCategoryHandler}
+        ></BudgetAccordion>
+
+        <FloatingActionButton
+          visible={isFocused}
+          actions={FABActions}
+        ></FloatingActionButton>
+        <Pagination
+          dotsLength={budgets.length}
+          activeDotIndex={budgetIndex}
+          dotStyle={styles.paginationDot}
+          inactiveDotOpacity={0.4}
+          inactiveDotScale={0.6}
+        />
+      </View>
     </SafeAreaView>
   );
 };
