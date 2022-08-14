@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthContext, PreferencesContext } from "@Context/Context";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -212,19 +213,20 @@ const App = () => {
                   }
                 >
                   {accessToken ? (
+                  
+                  
+                    <Drawer.Navigator
+                      initialRouteName="Home"
+                      drawerContent={(props) => <DrawerContent {...props} />}
+                    >
                     <Drawer.Screen name="Home" component={BudgetStack} />
-                    // <Drawer.Navigator
-                    //   initialRouteName="Home"
-                    //   //drawerContent={(props) => <DrawerContent {...props} />}
-                    // >
-                      
                     //   {/* <Drawer.Screen name="Profile" component={ProfileScreen} />
                     //   <Drawer.Screen
                     //     name="Settings"
                     //     component={SettingsScreen}
                     //   />
                     //   <Drawer.Screen name="Support" component={SupportScreen} /> */}
-                    // </Drawer.Navigator>
+                     </Drawer.Navigator>
                   ) : (
                     <AuthStack />
                   )}
