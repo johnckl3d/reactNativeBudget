@@ -24,6 +24,9 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.johncheang.budget",
       "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.johncheang.budget"
     }
   }
 }
