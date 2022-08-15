@@ -22,6 +22,8 @@ import Colors from "@Styles/colors";
 import { SETTINGS } from "@Constants/settings";
 //import colors from '../../styles/colors';
 
+const FSM = useSelector((store) => store.FSM);
+console.log("SignInScreen::FSM::" + JSON.stringify(FSM));
 const SignInScreen = ({ navigation }) => {
   const [data, setData] = React.useState({
     username: "",
@@ -31,7 +33,7 @@ const SignInScreen = ({ navigation }) => {
     isValidUser: true,
     isValidPassword: true,
   });
-  const [error, setError] = useState("")
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
 
   const { theme } = useTheme();
@@ -92,10 +94,9 @@ const SignInScreen = ({ navigation }) => {
   };
 
   const loginHandle = () => {
-    
-    if(SETTINGS.ACCESS_TOKEN_BYPASS){
+    if (SETTINGS.ACCESS_TOKEN_BYPASS) {
       signInHandler("admin", "Aia@13579");
-    }else{
+    } else {
       if (data.username.length == 0 || data.password.length == 0) {
         Alert.alert(
           "Wrong Input!",
@@ -107,7 +108,6 @@ const SignInScreen = ({ navigation }) => {
       signInHandler(data.username, data.password);
     }
   };
-
 
   const signInHandler = useCallback(
     async (userId, password) => {
@@ -121,6 +121,17 @@ const SignInScreen = ({ navigation }) => {
     },
     [dispatch, setError]
   );
+
+  // if (FSM.isLoading) {
+  //   return (
+  //     <View style={styles.centered}>
+  //       <ActivityIndicator
+  //         size="large"
+  //         color={Colors.primary}
+  //       ></ActivityIndicator>
+  //     </View>
+  //   );
+  // }
 
   return (
     <View style={styles.container}>
@@ -310,7 +321,7 @@ const styles = StyleSheet.create({
   button: {
     alignItems: "center",
     marginTop: 50,
-    flex: 1
+    flex: 1,
   },
   signUp: {
     borderColor: Colors.primary,
