@@ -1,11 +1,11 @@
-import 'react-native-gesture-handler';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import "react-native-gesture-handler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext, PreferencesContext } from "@Context/Context";
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer, StackActions } from "@react-navigation/native";
 import * as Font from "expo-font";
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import React, { useEffect, useState } from "react";
 //import BudgetStack from "./navigation/BudgetStack";
 import {
@@ -103,15 +103,17 @@ const App = () => {
   const [theme, setTheme] = useState(CustomDefaultTheme);
   const dispatch = useDispatch();
 
-
   useEffect(() => {
     const restoreState = async () => {
       try {
         const accessToken = await getStringData(STORAGE.ACCESS_TOKEN);
         console.log("App.js::getasyncstorage::accessToken::" + accessToken);
         if (accessToken) {
-          console.log("app::validateJwtExpiryDate::" + validateJwtExpiryDateIsExpired(accessToken));
-          if(!validateJwtExpiryDateIsExpired(accessToken)){
+          console.log(
+            "app::validateJwtExpiryDate::" +
+              validateJwtExpiryDateIsExpired(accessToken)
+          );
+          if (!validateJwtExpiryDateIsExpired(accessToken)) {
             dispatch({
               type: LOGIN,
               refreshToken: accessToken,
@@ -149,20 +151,19 @@ const App = () => {
           });
         };
         const fontAwesome = (fonts) => {
-          return fonts.map(font => Font.loadAsync(font));
+          return fonts.map((font) => Font.loadAsync(font));
         };
         openSansFonts();
         fontAwesome([FontAwesome.font]);
         await Promise.all([...openSansFonts, ...fontAwesome]);
-      }catch (e){
-
-      }finally {
+      } catch (e) {
+      } finally {
         setFontLoaded(true);
       }
-    }
+    };
 
     loadResourcesAndDataAsync();
-  },[isFontLoaded]);
+  }, [isFontLoaded]);
 
   useEffect(() => {
     const restorePrefs = async () => {
@@ -182,7 +183,6 @@ const App = () => {
     restorePrefs();
   }, []);
 
-
   const preferences = React.useMemo(
     () => ({
       toggleTheme: () =>
@@ -194,8 +194,7 @@ const App = () => {
     [theme]
   );
 
-
-  const accessToken = useSelector((state) => state.login.accessToken); 
+  const accessToken = useSelector((state) => state.login.accessToken);
   if (!isFontLoaded || !isStateLoaded) {
     return <SplashScreen />;
   }
@@ -214,24 +213,10 @@ const App = () => {
                   }
                 >
                   {accessToken ? (
-                  <Stack.Navigator>
-{/* <Stack.Screen
-          name="Drawer"
-          component={DrawerContent}
-          options={{ headerShown: false }}
-        /> */}
-                    {/* <Drawer.Navigator
-                      initialRouteName="Home"
-                      drawerContent={(props) => <DrawerContent {...props} />}
-                    /> */}
-                    <Stack.Screen name="Home" component={BudgetStack} />
-                       {/* <Drawer.Screen name="Profile" component={ProfileScreen} />
-                    //   <Drawer.Screen
-                    //     name="Settings"
-                    //     component={SettingsScreen}
-                    //   />
-                    //   <Drawer.Screen name="Support" component={SupportScreen} /> */}
-                  </Stack.Navigator>
+                    <Stack.Navigator>
+                      <Stack.Screen name="Drawer" component={DrawerContent} />
+                      <Stack.Screen name="Home" component={BudgetStack} />
+                    </Stack.Navigator>
                   ) : (
                     <AuthStack />
                   )}
