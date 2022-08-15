@@ -4586,6 +4586,11 @@
   dependencies:
     "loose-envify" "^1.0.0"
 
+"ios-deploy@^1.11.4":
+  "integrity" "sha512-NZ96/s7klyWySKTI8rTU+vXEIxIMrv6K+7j5VMcqUVShaAUdDX+Ov4nVdSStYOAGFVpl8q56SpAwjEDIvBrswQ=="
+  "resolved" "https://registry.npmjs.org/ios-deploy/-/ios-deploy-1.11.4.tgz"
+  "version" "1.11.4"
+
 "ip-regex@^2.1.0":
   "integrity" "sha512-58yWmlHpp7VYfcdTwMTvwMmqx/Elfxjd9RXTDyMsbL7lLWmhMylLEqiYVLKuLzOZqVgiWXD9MfR62Vv89VRxkw=="
   "resolved" "https://registry.npmjs.org/ip-regex/-/ip-regex-2.1.0.tgz"
