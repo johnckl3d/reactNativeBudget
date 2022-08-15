@@ -22,8 +22,6 @@ import Colors from "@Styles/colors";
 import { SETTINGS } from "@Constants/settings";
 //import colors from '../../styles/colors';
 
-const FSM = useSelector((store) => store.FSM);
-console.log("SignInScreen::FSM::" + JSON.stringify(FSM));
 const SignInScreen = ({ navigation }) => {
   const [data, setData] = React.useState({
     username: "",
@@ -35,7 +33,8 @@ const SignInScreen = ({ navigation }) => {
   });
   const [error, setError] = useState("");
   const dispatch = useDispatch();
-
+  const FSM = useSelector((store) => store.FSM);
+  console.log("SignInScreen::FSM::" + JSON.stringify(FSM));
   const { theme } = useTheme();
 
   const textInputChange = (val) => {

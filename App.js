@@ -21,7 +21,7 @@ import ReduxThunk from "redux-thunk";
 import BudgetStack from "@Navigation/BudgetStack";
 import AuthStack from "@Navigation/AuthStack";
 import DrawerStack from "@Navigation/DrawerStack";
-import reducer from "@Reducers/index";
+import configureAppStore from "@Store/configureAppStore";
 import { useDispatch, useSelector } from "react-redux";
 import SplashScreen from "./screens/SplashScreen";
 import {
@@ -80,15 +80,15 @@ const CustomDefaultTheme = {
   },
 };
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(
-  reducer,
-  composeEnhancers(applyMiddleware(ReduxThunk))
-);
+//const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+// const store = createStore(
+//   reducer,
+//   composeEnhancers(applyMiddleware(ReduxThunk))
+// );
 
 const AppWrapper = () => {
   return (
-    <Provider store={store}>
+    <Provider store={configureAppStore()}>
       <App />
     </Provider>
   );
@@ -200,33 +200,33 @@ const App = () => {
   }
   const Stack = createStackNavigator();
   return (
-    <Provider store={store}>
-      <PaperProvider theme={theme}>
-        <SafeAreaProvider>
-          <PreferencesContext.Provider value={preferences}>
-            <AuthProvider>
-              <React.Fragment>
-                <NavigationContainer
-                  initialState={initialState}
-                  onStateChange={(state) =>
-                    AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state))
-                  }
-                >
-                  {accessToken ? (
-                    <Stack.Navigator>
-                      <Stack.Screen name="Drawer" component={DrawerStack} />
-                      <Stack.Screen name="Home" component={BudgetStack} />
-                    </Stack.Navigator>
-                  ) : (
-                    <AuthStack />
-                  )}
-                </NavigationContainer>
-              </React.Fragment>
-            </AuthProvider>
-          </PreferencesContext.Provider>
-        </SafeAreaProvider>
-      </PaperProvider>
-    </Provider>
+    // <Provider store={store}>
+    <PaperProvider theme={theme}>
+      <SafeAreaProvider>
+        <PreferencesContext.Provider value={preferences}>
+          <AuthProvider>
+            <React.Fragment>
+              <NavigationContainer
+                initialState={initialState}
+                onStateChange={(state) =>
+                  AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state))
+                }
+              >
+                {accessToken ? (
+                  <Stack.Navigator>
+                    <Stack.Screen name="Drawer" component={DrawerStack} />
+                    <Stack.Screen name="Home" component={BudgetStack} />
+                  </Stack.Navigator>
+                ) : (
+                  <AuthStack />
+                )}
+              </NavigationContainer>
+            </React.Fragment>
+          </AuthProvider>
+        </PreferencesContext.Provider>
+      </SafeAreaProvider>
+    </PaperProvider>
+    // </Provider>
   );
 };
 
