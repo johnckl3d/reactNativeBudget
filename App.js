@@ -20,7 +20,7 @@ import ReduxThunk from "redux-thunk";
 //import RootNavigator from "./navigation/RootNavigator";
 import BudgetStack from "./navigation/BudgetStack";
 import AuthStack from "./navigation/AuthStack";
-import { DrawerContent } from "./navigation/DrawerContent";
+import DrawerStack from "./navigation/DrawerStack";
 import reducer from "@Reducers/index";
 import { useDispatch, useSelector } from "react-redux";
 import SplashScreen from "./screens/SplashScreen";
@@ -214,7 +214,7 @@ const App = () => {
                 >
                   {accessToken ? (
                     <Stack.Navigator>
-                      <Stack.Screen name="Drawer" component={DrawerContent} />
+                      <Stack.Screen name="Drawer" component={DrawerStack} />
                       <Stack.Screen name="Home" component={BudgetStack} />
                     </Stack.Navigator>
                   ) : (

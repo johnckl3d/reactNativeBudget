@@ -1,28 +1,22 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
-import {
-  useTheme,
-  Avatar,
-  Title,
-  Caption,
-  Paragraph,
-  Drawer,
-  Text,
-  TouchableRipple,
-  Switch,
-} from "react-native-paper";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import {
+  Avatar,
+  Caption,
+  Drawer,
+  Paragraph,
+  Switch,
+  Text,
+  Title,
+  TouchableRipple,
+  useTheme,
+  withTheme,
+} from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-import { AuthContext } from "@Context/Context";
-
-export function DrawerContent() {
+function DrawerStack() {
   const paperTheme = useTheme();
-
-  //const { signOut, toggleTheme } = React.useContext(AuthContext);
-
-  //console.log("DrawerContent::" + JSON.stringify(props));
 
   return (
     <View style={{ flex: 1 }}>
@@ -176,3 +170,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
 });
+
+export default withTheme(DrawerStack);
