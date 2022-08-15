@@ -16,7 +16,7 @@ import Feather from "react-native-vector-icons/Feather";
 import * as loginActions from "@Actions/login";
 import loginReducer from "@Reducers/login";
 import { useDispatch, useSelector } from "react-redux";
-import { withTheme, useTheme, Button } from "react-native-paper";
+import { ActivityIndicator, Button } from "react-native-paper";
 import Users from "../../models/users";
 import Colors from "@Styles/colors";
 import { SETTINGS } from "@Constants/settings";
@@ -31,11 +31,8 @@ const SignInScreen = ({ navigation }) => {
     isValidUser: true,
     isValidPassword: true,
   });
-  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const FSM = useSelector((store) => store.FSM);
-  console.log("SignInScreen::FSM::" + JSON.stringify(FSM));
-  const { theme } = useTheme();
 
   const textInputChange = (val) => {
     if (val.trim().length >= 4) {
@@ -110,27 +107,28 @@ const SignInScreen = ({ navigation }) => {
 
   const signInHandler = useCallback(
     async (userId, password) => {
-      setError(null);
       try {
         console.log("signinscreen::signInHandler");
         await dispatch(loginActions.login(userId, password));
-      } catch (err) {
-        setError(err.message);
-      }
+      } catch (err) {}
     },
-    [dispatch, setError]
+    [dispatch]
   );
 
-  // if (FSM.isLoading) {
-  //   return (
-  //     <View style={styles.centered}>
-  //       <ActivityIndicator
-  //         size="large"
-  //         color={Colors.primary}
-  //       ></ActivityIndicator>
-  //     </View>
-  //   );
-  // }
+  if (FSM.isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator
+          size="large"
+          color={Colors.primary}
+        ></ActivityIndicator>
+      </View>
+    );
+  }
+
+  if (FSM.hasError) {
+    Alert.alert("Error!", FSM.hasError, [{ text: "Okay" }]);
+  }
 
   return (
     <View style={styles.container}>
