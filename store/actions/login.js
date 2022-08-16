@@ -11,15 +11,20 @@ import { STORAGE } from "@Constants/storage";
 import { storeStringData } from "@Utils/storageUtils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SET_ERROR, SET_LOADING } from "@Actions/FSM";
+import moment from "moment";
+import uuid from "react-native-uuid";
 
 export const login = (userId, password) => {
   return async (dispatch) => {
     try {
       dispatch({ type: SET_LOADING, isLoading: true });
+      const transactionID = moment().format() + uuid.v4();
+      console.log("action::login::transactionID::" + transactionID);
       const response = await fetch(API_URL.LOGIN_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json-patch+json",
+          TransactionID: transactionID,
         },
         body: JSON.stringify({
           userId: userId,
@@ -32,6 +37,9 @@ export const login = (userId, password) => {
         dispatch({ type: SET_ERROR, hasError: response.status });
       }
       const resData = await response.json();
+      console.log(
+        "action::login::headers::" + JSON.stringify(response.headers)
+      );
       console.log("action::login::resData::" + JSON.stringify(resData));
       storeStringData(STORAGE.ACCESS_TOKEN, resData.accessToken);
       storeStringData(STORAGE.REFRESH_TOKEN, resData.refresh_token);

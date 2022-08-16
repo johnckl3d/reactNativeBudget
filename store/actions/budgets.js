@@ -21,11 +21,12 @@ export const fetchBudgets = () => {
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
+          TransactionID: moment().format(),
         },
       });
       if (!response.ok) {
         dispatch({ type: SET_ERROR, hasError: response.status });
-        dispatch({ type: LOGOUT});
+        dispatch({ type: LOGOUT });
       }
       const resData = await response.json();
       console.log("fetchBudgets::resData::" + JSON.stringify(resData));
@@ -186,7 +187,7 @@ export const createBudget = (title, description, amount) => {
       }
     } catch (err) {
       dispatch({ type: SET_ERROR, hasError: err });
-    }finally {
+    } finally {
       dispatch({ type: SET_LOADING, isLoading: false });
     }
   };

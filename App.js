@@ -214,7 +214,7 @@ const App = () => {
               >
                 {accessToken ? (
                   <Stack.Navigator>
-                    <Stack.Screen name="Drawer" component={DrawerStack} />
+                    {/* <Stack.Screen name="Drawer" component={DrawerStack} /> */}
                     <Stack.Screen name="Home" component={BudgetStack} />
                   </Stack.Navigator>
                 ) : (
