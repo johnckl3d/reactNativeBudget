@@ -1,25 +1,24 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  Platform,
-  StyleSheet,
-  StatusBar,
   Alert,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
 //import LinearGradient from 'react-native-linear-gradient';
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Feather from "react-native-vector-icons/Feather";
 import * as loginActions from "@Actions/login";
-import loginReducer from "@Reducers/login";
-import { useDispatch, useSelector } from "react-redux";
-import { ActivityIndicator, Button } from "react-native-paper";
-import Users from "../../models/users";
-import Colors from "@Styles/colors";
 import { SETTINGS } from "@Constants/settings";
+import Colors from "@Styles/colors";
+import { ActivityIndicator, Button } from "react-native-paper";
+import Feather from "react-native-vector-icons/Feather";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useDispatch, useSelector } from "react-redux";
+import { SET_ERROR, SET_LOADING } from "@Actions/FSM";
 //import colors from '../../styles/colors';
 
 const SignInScreen = ({ navigation }) => {
@@ -108,12 +107,16 @@ const SignInScreen = ({ navigation }) => {
   const signInHandler = useCallback(
     async (userId, password) => {
       try {
-        console.log("signinscreen::signInHandler");
         await dispatch(loginActions.login(userId, password));
       } catch (err) {}
     },
     [dispatch]
   );
+
+  const handleCloseError = () => {
+    console.log("SignInScreen::handleCloseError");
+    dispatch({ type: SET_ERROR, hasError: "" });
+  };
 
   if (FSM.isLoading) {
     return (
@@ -127,7 +130,9 @@ const SignInScreen = ({ navigation }) => {
   }
 
   if (FSM.hasError) {
-    Alert.alert("Error!", FSM.hasError, [{ text: "Okay" }]);
+    Alert.alert("Error!", FSM.hasError, [
+      { text: "Okay", onPress: () => handleCloseError() },
+    ]);
   }
 
   return (

@@ -47,3 +47,36 @@ export const login = (userId, password) => {
     }
   };
 };
+
+export const logout = (accessToken) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: SET_LOADING, isLoading: true });
+      const response = await fetch(API_URL.LOGOUT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json-patch+json",
+        },
+        body: JSON.stringify({
+          accessToken: accessToken,
+          ipAddress: "10.100.100.100",
+        }),
+      });
+      dispatch({ type: SET_LOADING, isLoading: false });
+      const resData = await response.json();
+      if (!response.ok) {
+        dispatch({ type: SET_ERROR, hasError: resData.message });
+      }
+      console.log("action::logout::resData::" + JSON.stringify(resData));
+      storeStringData(STORAGE.ACCESS_TOKEN, "");
+      storeStringData(STORAGE.REFRESH_TOKEN, "");
+
+      dispatch({
+        type: LOGOUT,
+      });
+    } catch (err) {
+      dispatch({ type: SET_ERROR, hasError: response.message });
+      throw err;
+    }
+  };
+};

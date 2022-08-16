@@ -1,3 +1,3 @@
 export const SETTINGS = {
-    ACCESS_TOKEN_BYPASS: true,
+  ACCESS_TOKEN_BYPASS: false,
 };

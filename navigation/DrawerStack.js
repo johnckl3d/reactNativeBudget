@@ -1,5 +1,6 @@
+import * as loginActions from "@Actions/login";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import React from "react";
+import React, { useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 import {
   Avatar,
@@ -14,9 +15,20 @@ import {
   withTheme,
 } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useDispatch, useSelector } from "react-redux";
 
 function DrawerStack() {
   const paperTheme = useTheme();
+  const dispatch = useDispatch();
+  const login = useSelector((store) => store.login);
+  const signOutHandler = useCallback(
+    async (accessToken) => {
+      try {
+        await dispatch(loginActions.logout(accessToken));
+      } catch (err) {}
+    },
+    [dispatch]
+  );
 
   return (
     <View style={{ flex: 1 }}>
@@ -117,7 +129,7 @@ function DrawerStack() {
           )}
           label="Sign Out"
           onPress={() => {
-            //TODO
+            signOutHandler(login.accessToken);
           }}
         />
       </Drawer.Section>
