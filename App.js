@@ -198,7 +198,8 @@ const App = () => {
   if (!isFontLoaded || !isStateLoaded) {
     return <SplashScreen />;
   }
-  const Stack = createStackNavigator();
+  //const Stack = createStackNavigator();
+  const Drawer = createDrawerNavigator();
   return (
     // <Provider store={store}>
     <PaperProvider theme={theme}>
@@ -213,10 +214,12 @@ const App = () => {
                 }
               >
                 {accessToken ? (
-                  <Stack.Navigator>
-                    {/* <Stack.Screen name="Drawer" component={DrawerStack} /> */}
-                    <Stack.Screen name="Home" component={BudgetStack} />
-                  </Stack.Navigator>
+                  <Drawer.Navigator
+                    drawerContent={(props) => <DrawerStack {...props} />}
+                  >
+                    {/* <Drawer.Screen name="Drawer" component={DrawerStack} /> */}
+                    <Drawer.Screen name="Home" component={BudgetStack} />
+                  </Drawer.Navigator>
                 ) : (
                   <AuthStack />
                 )}

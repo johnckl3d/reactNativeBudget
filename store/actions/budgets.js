@@ -6,22 +6,27 @@ import { API_URL } from "@Constants/url";
 import { STORAGE } from "@Constants/storage";
 import { getStringData } from "@Utils/storageUtils";
 import { SET_ERROR, SET_LOADING } from "@Actions/FSM";
-
+import moment from "moment";
+import uuid from "react-native-uuid";
+import { useSelector } from "react-redux";
 export const SET_BUDGETS = "SET_BUDGETS";
 export const DELETE_BUDGETS = "DELETE_BUDGETS";
 
 export const fetchBudgets = () => {
+  const login = useSelector((store) => store.login);
   return async (dispatch) => {
     try {
       dispatch({ type: SET_LOADING, isLoading: true });
-      dispatch({ type: SET_ERROR, hasError: null });
-      var token = await getStringData(STORAGE.ACCESS_TOKEN);
+      const transactionID = moment().format() + uuid.v4();
+      console.log("action::fetchBudgets::transactionID::" + transactionID);
+      var token = login;
+      console.log("action::fetchBudgets::token::" + token);
       const response = await fetch(API_URL.BUDGET_URL, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token,
-          TransactionID: moment().format(),
+          TransactionID: transactionID,
         },
       });
       if (!response.ok) {

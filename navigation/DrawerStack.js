@@ -17,7 +17,7 @@ import {
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch, useSelector } from "react-redux";
 
-function DrawerStack() {
+function DrawerStack(props) {
   const paperTheme = useTheme();
   const dispatch = useDispatch();
   const login = useSelector((store) => store.login);
@@ -32,7 +32,7 @@ function DrawerStack() {
 
   return (
     <View style={{ flex: 1 }}>
-      <DrawerContentScrollView>
+      <DrawerContentScrollView {...props}>
         <View style={styles.drawerContent}>
           <View style={styles.userInfoSection}>
             <View style={{ flexDirection: "row", marginTop: 15 }}>

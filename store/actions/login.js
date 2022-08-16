@@ -32,15 +32,17 @@ export const login = (userId, password) => {
           ipAddress: "10.100.100.100",
         }),
       });
+      console.log("action::login::resData::1");
       dispatch({ type: SET_LOADING, isLoading: false });
-      if (!response.ok) {
-        dispatch({ type: SET_ERROR, hasError: response.status });
-      }
+      console.log("action::login::resData::2");
+      console.log("action::login::resData::3::" + JSON.stringify(response));
       const resData = await response.json();
-      console.log(
-        "action::login::headers::" + JSON.stringify(response.headers)
-      );
+
       console.log("action::login::resData::" + JSON.stringify(resData));
+
+      if (!response.ok) {
+        dispatch({ type: SET_ERROR, hasError: resData.message });
+      }
       storeStringData(STORAGE.ACCESS_TOKEN, resData.accessToken);
       storeStringData(STORAGE.REFRESH_TOKEN, resData.refresh_token);
 
@@ -50,7 +52,7 @@ export const login = (userId, password) => {
         accessToken: resData.accessToken,
       });
     } catch (err) {
-      dispatch({ type: SET_ERROR, hasError: response.status });
+      dispatch({ type: SET_ERROR, hasError: resData.message });
       throw err;
     }
   };
