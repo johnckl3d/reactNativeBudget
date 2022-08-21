@@ -35,8 +35,8 @@ import BudgetCarousel from "../../components/carousell/BudgetCarousel";
 import MonthCarousel from "../../components/carousell/MonthCarousel";
 import BudgetAccordion from "@Accordion/BudgetAccordion";
 import HeaderButton from "../../components/UI/HeaderButton";
-import * as budgetsActions from "../../store/actions/budgets";
-import * as costCategoriesActions from "../../store/actions/costCategories";
+import * as budgetsActions from "@Actions/budgets";
+import * as costCategoriesActions from "@Actions/costCategories";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -46,7 +46,8 @@ import moment from "moment";
 import { highlightRed } from "../../styles/presentation";
 import { connect } from "react-redux";
 import i18n from "@I18N/i18n";
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused } from "@react-navigation/native";
+import { SET_ERROR, SET_LOADING } from "@Actions/FSM";
 
 const SCREEN_WIDTH = Math.round(Dimensions.get("window").width);
 const SCREEN_HEIGHT = Math.round(Dimensions.get("window").height);
@@ -54,6 +55,7 @@ const isOutlined = false;
 const mode = isOutlined ? "outlined" : "elevated";
 
 const BudgetsScreen = (props) => {
+  const token = useSelector((store) => store.login.accessToken);
   const [isFocus, setFocus] = useState(true);
   const [budgetIndex, setBudgetIndex] = useState(0);
   const [monthIndex, setMonthsIndex] = useState(0);
@@ -63,7 +65,7 @@ const BudgetsScreen = (props) => {
   const isFocused = useIsFocused();
 
   const budgets = useSelector((store) => store.budgets);
-console.log("BudgetScreen::budgets::" + JSON.stringify(budgets));
+  console.log("BudgetScreen::budgets::" + JSON.stringify(budgets));
   const FABActions = [
     {
       icon: "plus",
@@ -99,12 +101,26 @@ console.log("BudgetScreen::budgets::" + JSON.stringify(budgets));
   ];
 
   useEffect(() => {
+    console.log("BudgetsScreen:1");
     loadBudgets();
   }, [dispatch, loadBudgets]);
 
+  // const signInHandler = useCallback(
+  //   async (userId, password) => {
+  //     try {
+  //       await dispatch(loginActions.login(userId, password));
+  //     } catch (err) {}
+  //   },
+  //   [dispatch]
+  // );
+
   const loadBudgets = useCallback(async () => {
-    dispatch(budgetsActions.fetchBudgets());
-    setFocus(true);
+    try {
+      await dispatch(budgetsActions.fetchBudgets(token));
+      setFocus(true);
+    } catch (err) {
+      console.log("BudgetsScreen:3::" + err);
+    }
   }, [dispatch]);
 
   const handleBudgetSwipeCallback = (childData) => {
@@ -187,7 +203,7 @@ console.log("BudgetScreen::budgets::" + JSON.stringify(budgets));
     [dispatch]
   );
 
-  // console.log("budgets screen1::"+ JSON.stringify(props)); 
+  // console.log("budgets screen1::"+ JSON.stringify(props));
   // if (props.hasError) {
   //   return (
   //     <View style={styles.centered}>
@@ -212,8 +228,6 @@ console.log("BudgetScreen::budgets::" + JSON.stringify(budgets));
   //   );
   // }
 
-  
-  
   if (budgets.length == 0) {
     console.log("BudgetScreen::budgets.length = 0");
     return (
@@ -223,10 +237,28 @@ console.log("BudgetScreen::budgets::" + JSON.stringify(budgets));
     );
   }
 
-  // if (!isFocus) {
-  //   return <View />;
-  // }
-  console.log("budgets screen2"); 
+  const handleCloseError = () => {
+    console.log("SignInScreen::handleCloseError");
+    dispatch({ type: SET_ERROR, hasError: "" });
+  };
+
+  if (FSM.isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator
+          size="large"
+          color={Colors.primary}
+        ></ActivityIndicator>
+      </View>
+    );
+  }
+
+  if (FSM.hasError) {
+    Alert.alert("Error!", FSM.hasError, [
+      { text: "Okay", onPress: () => handleCloseError() },
+    ]);
+  }
+
   return (
     <SafeAreaView>
       <View style={styles.mainContent}>

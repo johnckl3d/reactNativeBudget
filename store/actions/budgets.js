@@ -8,80 +8,116 @@ import { getStringData } from "@Utils/storageUtils";
 import { SET_ERROR, SET_LOADING } from "@Actions/FSM";
 import moment from "moment";
 import uuid from "react-native-uuid";
-import { useSelector } from "react-redux";
 export const SET_BUDGETS = "SET_BUDGETS";
 export const DELETE_BUDGETS = "DELETE_BUDGETS";
 
-export const fetchBudgets = () => {
-  const login = useSelector((store) => store.login);
+export const fetchBudgets = (token) => {
   return async (dispatch) => {
-    try {
-      dispatch({ type: SET_LOADING, isLoading: true });
+    //dispatch({ type: SET_LOADING, isLoading: true });
       const transactionID = moment().format() + uuid.v4();
-      console.log("action::fetchBudgets::transactionID::" + transactionID);
-      var token = login;
-      console.log("action::fetchBudgets::token::" + token);
-      const response = await fetch(API_URL.BUDGET_URL, {
-        method: "GET",
+      // console.log("action::fetchBudgets::transactionID::" + transactionID);
+      // console.log("action::fetchBudgets::token::" + token);
+      // console.log("action::fetchBudgets::url::" + API_URL.BUDGET_URL);
+      const requestOptions = {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
+          'Content-Type': 'application/json-patch+json',
+          Authorization: 'Bearer ' + token,
           TransactionID: transactionID,
-        },
-      });
-      if (!response.ok) {
-        dispatch({ type: SET_ERROR, hasError: response.status });
-        dispatch({ type: LOGOUT });
-      }
-      const resData = await response.json();
-      console.log("fetchBudgets::resData::" + JSON.stringify(resData));
-      const loadedBudget = [];
+        }
+    };
+    fetch(API_URL.BUDGET_URL, requestOptions)
+        .then(response => response.json())
+        .then(data => dispatch({ type: SET_ERROR, hasError: data }))
+        .catch(err => dispatch({ type: SET_ERROR, hasError: err }))
+        ;};}
+        
+    // try {
+    //   dispatch({ type: SET_LOADING, isLoading: true });
+    //   const transactionID = moment().format() + uuid.v4();
+    //   console.log("action::fetchBudgets::transactionID::" + transactionID);
+    //   console.log("action::fetchBudgets::token::" + token);
+    //   console.log("action::fetchBudgets::url::" + API_URL.BUDGET_URL);
+    //   return(fetch(API_URL.BUDGET_URL, {
+    //       method: 'GET',
+    //       headers: {
+    //         Accept: 'application/json',
+    //         'Content-Type': 'application/json-patch+json',
+    //         Authorization: 'Bearer ' + token,
+    //         TransactionID: transactionID,
+    //       },
+    //     }))
+    //   .then(res => res.json())
+    //   .then(json => {
+    //     console.log("fetchBudgets::1::");
+    //       return(dispatch({ type: SET_ERROR, hasError: json }));
+    //   })
+    //   .catch(err => dispatch({ type: SET_ERROR, hasError: err }))
+      // const response = await fetch(API_URL.LOGIN_URL, {
+      //   method: 'GET',
+      //   headers: {
+      //     Accept: 'application/json',
+      //     'Content-Type': 'application/json-patch+json',
+      //     Authorization: 'Bearer ' + token,
+      //     TransactionID: transactionID,
+      //   },
+      // })
+      // console.log("fetchBudgets::1::");
+      // const resData = await response.json();
+      // console.log("fetchBudgets::resData::" + JSON.stringify(resData));
+      // if (!response.ok) {
+      //   dispatch({ type: SET_ERROR, hasError: resData.message });
+      //   dispatch({ type: LOGOUT });
+      // }
 
-      for (const b of resData) {
-        const css = [];
-        for (const cs of b.costSnapShots) {
-          css.push(new CostSnapShot(cs.dateTime, cs.amount));
-        }
-        const ccs = [];
-        for (const cc of b.costCategories) {
-          const cis = [];
-          for (const ci of cc.costItems) {
-            cis.push(new CostItem(ci.name, ci.amount, ci.costItemId));
-          }
-          ccs.push(
-            new CostCategory(
-              cc.budgetId,
-              cc.costCategoryId,
-              cc.name,
-              cc.totalAmount,
-              cis
-            )
-          );
-        }
-        //console.log("budgets::action::" + JSON.stringify(ccs));
-        loadedBudget.push(
-          new Budget(
-            b.budgetId,
-            b.name,
-            b.description,
-            b.totalBudgetAmount,
-            b.totalCostAmount,
-            css,
-            ccs
-          )
-        );
-      }
-      console.log(
-        "fetchBudgets::loadedBudget::" + JSON.stringify(loadedBudget)
-      );
-      dispatch({ type: SET_BUDGETS, budgets: loadedBudget });
-    } catch (err) {
-      dispatch({ type: SET_ERROR, hasError: err });
-    } finally {
-      dispatch({ type: SET_LOADING, isLoading: false });
-    }
-  };
-};
+      // const loadedBudget = [];
+
+      // for (const b of resData) {
+      //   const css = [];
+      //   for (const cs of b.costSnapShots) {
+      //     css.push(new CostSnapShot(cs.dateTime, cs.amount));
+      //   }
+      //   const ccs = [];
+      //   for (const cc of b.costCategories) {
+      //     const cis = [];
+      //     for (const ci of cc.costItems) {
+      //       cis.push(new CostItem(ci.name, ci.amount, ci.costItemId));
+      //     }
+      //     ccs.push(
+      //       new CostCategory(
+      //         cc.budgetId,
+      //         cc.costCategoryId,
+      //         cc.name,
+      //         cc.totalAmount,
+      //         cis
+      //       )
+      //     );
+      //   }
+      //   //console.log("budgets::action::" + JSON.stringify(ccs));
+      //   loadedBudget.push(
+      //     new Budget(
+      //       b.budgetId,
+      //       b.name,
+      //       b.description,
+      //       b.totalBudgetAmount,
+      //       b.totalCostAmount,
+      //       css,
+      //       ccs
+      //     )
+      //   );
+      // }
+      // console.log(
+      //   "fetchBudgets::loadedBudget::" + JSON.stringify(loadedBudget)
+      // );
+      // dispatch({ type: SET_BUDGETS, budgets: loadedBudget });
+    // } catch (err) {
+    //   console.log("fetchBudgets::err::" + err);
+    //   dispatch({ type: SET_ERROR, hasError: err });
+    // } finally {
+    //   dispatch({ type: SET_LOADING, isLoading: false });
+    // }
+//   };
+// };
 
 export const fetchBudgetById = () => {
   return async (dispatch) => {
