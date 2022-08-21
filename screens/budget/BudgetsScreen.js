@@ -101,9 +101,9 @@ const BudgetsScreen = (props) => {
   ];
 
   useEffect(() => {
-    console.log("BudgetsScreen:1");
-    loadBudgets();
-  }, [dispatch, loadBudgets]);
+    //loadBudgets();
+    dispatch(budgetsActions.fetchBudgets(token));
+  }, []);
 
   // const signInHandler = useCallback(
   //   async (userId, password) => {
@@ -117,6 +117,7 @@ const BudgetsScreen = (props) => {
   const loadBudgets = useCallback(async () => {
     try {
       await dispatch(budgetsActions.fetchBudgets(token));
+      console.log("BudgetsScreen:1::");
       setFocus(true);
     } catch (err) {
       console.log("BudgetsScreen:3::" + err);

@@ -10,112 +10,128 @@ import moment from "moment";
 import uuid from "react-native-uuid";
 export const SET_BUDGETS = "SET_BUDGETS";
 export const DELETE_BUDGETS = "DELETE_BUDGETS";
+import axios from "axios";
 
 export const fetchBudgets = (token) => {
-  return async (dispatch) => {
-    //dispatch({ type: SET_LOADING, isLoading: true });
-      const transactionID = moment().format() + uuid.v4();
-      // console.log("action::fetchBudgets::transactionID::" + transactionID);
-      // console.log("action::fetchBudgets::token::" + token);
-      // console.log("action::fetchBudgets::url::" + API_URL.BUDGET_URL);
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json-patch+json',
-          Authorization: 'Bearer ' + token,
-          TransactionID: transactionID,
-        }
+  //dispatch({ type: SET_LOADING, isLoading: true });
+  return (dispatch) => {
+    const transactionID = moment().format() + uuid.v4();
+    // console.log("action::fetchBudgets::transactionID::" + transactionID);
+    // console.log("action::fetchBudgets::token::" + token);
+    console.log("action::fetchBudgets::url::" + API_URL.BUDGET_URL);
+    const requestOptions = {
+      url: API_URL.BUDGET_URL,
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+        TransactionID: transactionID,
+      },
     };
-    fetch(API_URL.BUDGET_URL, requestOptions)
-        .then(response => response.json())
-        .then(data => dispatch({ type: SET_ERROR, hasError: data }))
-        .catch(err => dispatch({ type: SET_ERROR, hasError: err }))
-        ;};}
-        
-    // try {
-    //   dispatch({ type: SET_LOADING, isLoading: true });
-    //   const transactionID = moment().format() + uuid.v4();
-    //   console.log("action::fetchBudgets::transactionID::" + transactionID);
-    //   console.log("action::fetchBudgets::token::" + token);
-    //   console.log("action::fetchBudgets::url::" + API_URL.BUDGET_URL);
-    //   return(fetch(API_URL.BUDGET_URL, {
-    //       method: 'GET',
-    //       headers: {
-    //         Accept: 'application/json',
-    //         'Content-Type': 'application/json-patch+json',
-    //         Authorization: 'Bearer ' + token,
-    //         TransactionID: transactionID,
-    //       },
-    //     }))
-    //   .then(res => res.json())
-    //   .then(json => {
-    //     console.log("fetchBudgets::1::");
-    //       return(dispatch({ type: SET_ERROR, hasError: json }));
-    //   })
-    //   .catch(err => dispatch({ type: SET_ERROR, hasError: err }))
-      // const response = await fetch(API_URL.LOGIN_URL, {
-      //   method: 'GET',
-      //   headers: {
-      //     Accept: 'application/json',
-      //     'Content-Type': 'application/json-patch+json',
-      //     Authorization: 'Bearer ' + token,
-      //     TransactionID: transactionID,
-      //   },
-      // })
-      // console.log("fetchBudgets::1::");
-      // const resData = await response.json();
-      // console.log("fetchBudgets::resData::" + JSON.stringify(resData));
-      // if (!response.ok) {
-      //   dispatch({ type: SET_ERROR, hasError: resData.message });
-      //   dispatch({ type: LOGOUT });
-      // }
 
-      // const loadedBudget = [];
+    try {
+      console.log("action::fetchBudgets::opt");
+      const response = axios(requestOptions);
+      console.log("action::fetchBudgets::opt2");
+      dispatch({ type: SET_ERROR, hasError: response.data });
+    } catch {
+      console.log("action::fetchBudgets::opt3");
+      dispatch({ type: SET_ERROR, hasError: response.data });
+    }
+  };
+  // console.log(response.data);
+  // axios
+  //   .get(API_URL.BUDGET_URL, requestOptions)
+  //   .then((response) => {
+  //     console.log("3. received ", response);
+  //     dispatch({ type: SET_ERROR, hasError: response });
+  //   })
+  //   .catch((err) => dispatch({ type: SET_ERROR, hasError: err }));
+};
 
-      // for (const b of resData) {
-      //   const css = [];
-      //   for (const cs of b.costSnapShots) {
-      //     css.push(new CostSnapShot(cs.dateTime, cs.amount));
-      //   }
-      //   const ccs = [];
-      //   for (const cc of b.costCategories) {
-      //     const cis = [];
-      //     for (const ci of cc.costItems) {
-      //       cis.push(new CostItem(ci.name, ci.amount, ci.costItemId));
-      //     }
-      //     ccs.push(
-      //       new CostCategory(
-      //         cc.budgetId,
-      //         cc.costCategoryId,
-      //         cc.name,
-      //         cc.totalAmount,
-      //         cis
-      //       )
-      //     );
-      //   }
-      //   //console.log("budgets::action::" + JSON.stringify(ccs));
-      //   loadedBudget.push(
-      //     new Budget(
-      //       b.budgetId,
-      //       b.name,
-      //       b.description,
-      //       b.totalBudgetAmount,
-      //       b.totalCostAmount,
-      //       css,
-      //       ccs
-      //     )
-      //   );
-      // }
-      // console.log(
-      //   "fetchBudgets::loadedBudget::" + JSON.stringify(loadedBudget)
-      // );
-      // dispatch({ type: SET_BUDGETS, budgets: loadedBudget });
-    // } catch (err) {
-    //   console.log("fetchBudgets::err::" + err);
-    //   dispatch({ type: SET_ERROR, hasError: err });
-    // } finally {
-    //   dispatch({ type: SET_LOADING, isLoading: false });
-    // }
+// try {
+//   dispatch({ type: SET_LOADING, isLoading: true });
+//   const transactionID = moment().format() + uuid.v4();
+//   console.log("action::fetchBudgets::transactionID::" + transactionID);
+//   console.log("action::fetchBudgets::token::" + token);
+//   console.log("action::fetchBudgets::url::" + API_URL.BUDGET_URL);
+//   return(fetch(API_URL.BUDGET_URL, {
+//       method: 'GET',
+//       headers: {
+//         Accept: 'application/json',
+//         'Content-Type': 'application/json-patch+json',
+//         Authorization: 'Bearer ' + token,
+//         TransactionID: transactionID,
+//       },
+//     }))
+//   .then(res => res.json())
+//   .then(json => {
+//     console.log("fetchBudgets::1::");
+//       return(dispatch({ type: SET_ERROR, hasError: json }));
+//   })
+//   .catch(err => dispatch({ type: SET_ERROR, hasError: err }))
+// const response = await fetch(API_URL.LOGIN_URL, {
+//   method: 'GET',
+//   headers: {
+//     Accept: 'application/json',
+//     'Content-Type': 'application/json-patch+json',
+//     Authorization: 'Bearer ' + token,
+//     TransactionID: transactionID,
+//   },
+// })
+// console.log("fetchBudgets::1::");
+// const resData = await response.json();
+// console.log("fetchBudgets::resData::" + JSON.stringify(resData));
+// if (!response.ok) {
+//   dispatch({ type: SET_ERROR, hasError: resData.message });
+//   dispatch({ type: LOGOUT });
+// }
+
+// const loadedBudget = [];
+
+// for (const b of resData) {
+//   const css = [];
+//   for (const cs of b.costSnapShots) {
+//     css.push(new CostSnapShot(cs.dateTime, cs.amount));
+//   }
+//   const ccs = [];
+//   for (const cc of b.costCategories) {
+//     const cis = [];
+//     for (const ci of cc.costItems) {
+//       cis.push(new CostItem(ci.name, ci.amount, ci.costItemId));
+//     }
+//     ccs.push(
+//       new CostCategory(
+//         cc.budgetId,
+//         cc.costCategoryId,
+//         cc.name,
+//         cc.totalAmount,
+//         cis
+//       )
+//     );
+//   }
+//   //console.log("budgets::action::" + JSON.stringify(ccs));
+//   loadedBudget.push(
+//     new Budget(
+//       b.budgetId,
+//       b.name,
+//       b.description,
+//       b.totalBudgetAmount,
+//       b.totalCostAmount,
+//       css,
+//       ccs
+//     )
+//   );
+// }
+// console.log(
+//   "fetchBudgets::loadedBudget::" + JSON.stringify(loadedBudget)
+// );
+// dispatch({ type: SET_BUDGETS, budgets: loadedBudget });
+// } catch (err) {
+//   console.log("fetchBudgets::err::" + err);
+//   dispatch({ type: SET_ERROR, hasError: err });
+// } finally {
+//   dispatch({ type: SET_LOADING, isLoading: false });
+// }
 //   };
 // };
 
