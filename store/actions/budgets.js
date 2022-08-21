@@ -13,11 +13,11 @@ export const DELETE_BUDGETS = "DELETE_BUDGETS";
 import axios from "axios";
 
 export const fetchBudgets = (token) => {
-  //dispatch({ type: SET_LOADING, isLoading: true });
-  return (dispatch) => {
+  return async (dispatch) => {
+    //dispatch({ type: SET_LOADING, isLoading: true });
     const transactionID = moment().format() + uuid.v4();
     // console.log("action::fetchBudgets::transactionID::" + transactionID);
-    // console.log("action::fetchBudgets::token::" + token);
+    console.log("action::fetchBudgets::token::" + token);
     console.log("action::fetchBudgets::url::" + API_URL.BUDGET_URL);
     const requestOptions = {
       url: API_URL.BUDGET_URL,
@@ -27,25 +27,16 @@ export const fetchBudgets = (token) => {
         TransactionID: transactionID,
       },
     };
-
-    try {
-      console.log("action::fetchBudgets::opt");
-      const response = axios(requestOptions);
-      console.log("action::fetchBudgets::opt2");
-      dispatch({ type: SET_ERROR, hasError: response.data });
-    } catch {
-      console.log("action::fetchBudgets::opt3");
-      dispatch({ type: SET_ERROR, hasError: response.data });
-    }
+    axios(requestOptions)
+      .then((res) => {
+        console.log("here1");
+        dispatch({ type: SET_ERROR, hasError: res.data });
+      })
+      .catch((err) => {
+        console.log("here2");
+        dispatch({ type: SET_ERROR, hasError: err });
+      });
   };
-  // console.log(response.data);
-  // axios
-  //   .get(API_URL.BUDGET_URL, requestOptions)
-  //   .then((response) => {
-  //     console.log("3. received ", response);
-  //     dispatch({ type: SET_ERROR, hasError: response });
-  //   })
-  //   .catch((err) => dispatch({ type: SET_ERROR, hasError: err }));
 };
 
 // try {

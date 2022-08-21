@@ -105,15 +105,6 @@ const BudgetsScreen = (props) => {
     dispatch(budgetsActions.fetchBudgets(token));
   }, []);
 
-  // const signInHandler = useCallback(
-  //   async (userId, password) => {
-  //     try {
-  //       await dispatch(loginActions.login(userId, password));
-  //     } catch (err) {}
-  //   },
-  //   [dispatch]
-  // );
-
   const loadBudgets = useCallback(async () => {
     try {
       await dispatch(budgetsActions.fetchBudgets(token));
