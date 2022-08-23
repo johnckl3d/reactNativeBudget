@@ -12,7 +12,7 @@ const PROD = "PROD";
 const UAT_API = "https://localhost:5001/api";
 const PROD_API = "https://savion-api-app.azurewebsites.net/api";
 
-let budgetBaseUrl = "/budget";
+let budgetBaseUrl = "/budget/retrieveList";
 let costCategoryBaseUrl = "/costCategory";
 let registerBaseUrl = "/account/register";
 let loginBaseUrl = "/account/login";

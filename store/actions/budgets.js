@@ -9,75 +9,80 @@ import { SET_ERROR, SET_LOADING } from "@Actions/FSM";
 import moment from "moment";
 import uuid from "react-native-uuid";
 import { useSelector } from "react-redux";
+import axios from "axios";
+
 export const SET_BUDGETS = "SET_BUDGETS";
 export const DELETE_BUDGETS = "DELETE_BUDGETS";
 
-export const fetchBudgets = () => {
-  const login = useSelector((store) => store.login);
+export const fetchBudgets = (token) => {
   return async (dispatch) => {
     try {
       dispatch({ type: SET_LOADING, isLoading: true });
       const transactionID = moment().format() + uuid.v4();
+      const url = JSON.stringify(API_URL.BUDGET_URL);
       console.log("action::fetchBudgets::transactionID::" + transactionID);
-      var token = login;
       console.log("action::fetchBudgets::token::" + token);
-      const response = await fetch(API_URL.BUDGET_URL, {
-        method: "GET",
+      console.log("action::fetchBudgets::url::" + url);
+      await axios({
+        url: API_URL.BUDGET_URL,
+        method: "get",
         headers: {
-          "Content-Type": "application/json",
+          Accept: "application/json, text/plain, */*",
           Authorization: "Bearer " + token,
           TransactionID: transactionID,
         },
-      });
-      if (!response.ok) {
-        dispatch({ type: SET_ERROR, hasError: response.status });
-        dispatch({ type: LOGOUT });
-      }
-      const resData = await response.json();
-      console.log("fetchBudgets::resData::" + JSON.stringify(resData));
-      const loadedBudget = [];
-
-      for (const b of resData) {
-        const css = [];
-        for (const cs of b.costSnapShots) {
-          css.push(new CostSnapShot(cs.dateTime, cs.amount));
-        }
-        const ccs = [];
-        for (const cc of b.costCategories) {
-          const cis = [];
-          for (const ci of cc.costItems) {
-            cis.push(new CostItem(ci.name, ci.amount, ci.costItemId));
+      })
+        .then((response) => {
+          const loadedBudget = [];
+          const resData = response.data;
+          for (const b of resData) {
+            const css = [];
+            for (const cs of b.costSnapShots) {
+              css.push(new CostSnapShot(cs.dateTime, cs.amount));
+            }
+            const ccs = [];
+            for (const cc of b.costCategories) {
+              const cis = [];
+              for (const ci of cc.costItems) {
+                cis.push(new CostItem(ci.name, ci.amount, ci.costItemId));
+              }
+              ccs.push(
+                new CostCategory(
+                  cc.budgetId,
+                  cc.costCategoryId,
+                  cc.name,
+                  cc.totalAmount,
+                  cis
+                )
+              );
+            }
+            loadedBudget.push(
+              new Budget(
+                b.budgetId,
+                b.name,
+                b.description,
+                b.totalBudgetAmount,
+                b.totalCostAmount,
+                css,
+                ccs
+              )
+            );
           }
-          ccs.push(
-            new CostCategory(
-              cc.budgetId,
-              cc.costCategoryId,
-              cc.name,
-              cc.totalAmount,
-              cis
-            )
+          console.log(
+            "fetchBudgets::loadedBudget::" + JSON.stringify(loadedBudget)
           );
-        }
-        //console.log("budgets::action::" + JSON.stringify(ccs));
-        loadedBudget.push(
-          new Budget(
-            b.budgetId,
-            b.name,
-            b.description,
-            b.totalBudgetAmount,
-            b.totalCostAmount,
-            css,
-            ccs
-          )
-        );
-      }
-      console.log(
-        "fetchBudgets::loadedBudget::" + JSON.stringify(loadedBudget)
-      );
-      dispatch({ type: SET_BUDGETS, budgets: loadedBudget });
+          dispatch({ type: SET_BUDGETS, budgets: loadedBudget });
+        })
+        .catch((error) => {
+          console.log(error);
+          dispatch({ type: SET_ERROR, hasError: response.data });
+          dispatch({ type: LOGOUT });
+        });
     } catch (err) {
+      console.log("fetchBudgets::loadedBudget::err");
       dispatch({ type: SET_ERROR, hasError: err });
     } finally {
+      console.log("fetchBudgets::loadedBudget::finally");
       dispatch({ type: SET_LOADING, isLoading: false });
     }
   };

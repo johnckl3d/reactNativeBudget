@@ -61,6 +61,7 @@ const DrawerSetup = (props) => {
 };
 
 const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
 
 const CustomDefaultTheme = {
   ...DefaultTheme,
@@ -214,12 +215,12 @@ const App = () => {
                 }
               >
                 {accessToken ? (
-                  <Drawer.Navigator
+                  <Stack.Navigator
                     drawerContent={(props) => <DrawerStack {...props} />}
                   >
                     {/* <Drawer.Screen name="Drawer" component={DrawerStack} /> */}
-                    <Drawer.Screen name="Home" component={BudgetStack} />
-                  </Drawer.Navigator>
+                    <Stack.Screen name="Home" component={BudgetStack} />
+                  </Stack.Navigator>
                 ) : (
                   <AuthStack />
                 )}

@@ -46,7 +46,7 @@ import moment from "moment";
 import { highlightRed } from "../../styles/presentation";
 import { connect } from "react-redux";
 import i18n from "@I18N/i18n";
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused } from "@react-navigation/native";
 
 const SCREEN_WIDTH = Math.round(Dimensions.get("window").width);
 const SCREEN_HEIGHT = Math.round(Dimensions.get("window").height);
@@ -62,8 +62,9 @@ const BudgetsScreen = (props) => {
   const theme = useTheme();
   const isFocused = useIsFocused();
 
+  const token = useSelector((store) => store.login.accessToken);
   const budgets = useSelector((store) => store.budgets);
-console.log("BudgetScreen::budgets::" + JSON.stringify(budgets));
+
   const FABActions = [
     {
       icon: "plus",
@@ -99,8 +100,9 @@ console.log("BudgetScreen::budgets::" + JSON.stringify(budgets));
   ];
 
   useEffect(() => {
-    loadBudgets();
-  }, [dispatch, loadBudgets]);
+    dispatch(budgetsActions.fetchBudgets(token));
+    //loadBudgets();
+  }, [dispatch]);
 
   const loadBudgets = useCallback(async () => {
     dispatch(budgetsActions.fetchBudgets());
@@ -187,7 +189,7 @@ console.log("BudgetScreen::budgets::" + JSON.stringify(budgets));
     [dispatch]
   );
 
-  // console.log("budgets screen1::"+ JSON.stringify(props)); 
+  // console.log("budgets screen1::"+ JSON.stringify(props));
   // if (props.hasError) {
   //   return (
   //     <View style={styles.centered}>
@@ -212,10 +214,7 @@ console.log("BudgetScreen::budgets::" + JSON.stringify(budgets));
   //   );
   // }
 
-  
-  
   if (budgets.length == 0) {
-    console.log("BudgetScreen::budgets.length = 0");
     return (
       <View style={{ flex: 1, backgroundColor: "red" }}>
         <Text> No budgets found. Maybe start adding some!</Text>
@@ -226,7 +225,6 @@ console.log("BudgetScreen::budgets::" + JSON.stringify(budgets));
   // if (!isFocus) {
   //   return <View />;
   // }
-  console.log("budgets screen2"); 
   return (
     <SafeAreaView>
       <View style={styles.mainContent}>
