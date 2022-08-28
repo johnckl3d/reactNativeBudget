@@ -16,8 +16,11 @@ import {
 } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch, useSelector } from "react-redux";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 
-function DrawerStack(props) {
+const DrawerScreen = (props) => {
+  console.log("DrawerScreen::" + JSON.stringify(props));
+  //const Drawer = createDrawerNavigator();
   const paperTheme = useTheme();
   const dispatch = useDispatch();
   const login = useSelector((store) => store.login);
@@ -71,7 +74,7 @@ function DrawerStack(props) {
               )}
               label="Home"
               onPress={() => {
-                navigation.navigate("Home");
+                props.navigation.navigate("Budget");
               }}
             />
             <DrawerItem
@@ -80,7 +83,7 @@ function DrawerStack(props) {
               )}
               label="Profile"
               onPress={() => {
-                navigation.navigate("Profile");
+                props.navigation.navigate("Profile");
               }}
             />
             <DrawerItem
@@ -93,7 +96,7 @@ function DrawerStack(props) {
               )}
               label="Settings"
               onPress={() => {
-                navigation.navigate("Settings");
+                props.navigation.navigate("Settings");
               }}
             />
             <DrawerItem
@@ -102,7 +105,7 @@ function DrawerStack(props) {
               )}
               label="Support"
               onPress={() => {
-                navigation.navigate("Support");
+                props.navigation.navigate("Support");
               }}
             />
           </Drawer.Section>
@@ -135,7 +138,7 @@ function DrawerStack(props) {
       </Drawer.Section>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   drawerContent: {
@@ -183,4 +186,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withTheme(DrawerStack);
+export default withTheme(DrawerScreen);
+//export default DrawerScreen;

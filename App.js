@@ -3,7 +3,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext, PreferencesContext } from "@Context/Context";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import { NavigationContainer, StackActions } from "@react-navigation/native";
 import * as Font from "expo-font";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import React, { useEffect, useState } from "react";
@@ -17,10 +16,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
 import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import ReduxThunk from "redux-thunk";
-//import RootNavigator from "./navigation/RootNavigator";
-import BudgetStack from "@Navigation/BudgetStack";
-import AuthStack from "@Navigation/AuthStack";
-import DrawerStack from "@Navigation/DrawerStack";
+import Main from "@Navigation/Main";
 import configureAppStore from "@Store/configureAppStore";
 import { useDispatch, useSelector } from "react-redux";
 import SplashScreen from "./screens/SplashScreen";
@@ -41,6 +37,7 @@ import { STORAGE } from "@Constants/storage";
 import { getStringData } from "@Utils/storageUtils";
 import { LOGIN, RETRIEVE_TOKEN, LOGOUT, REGISTER } from "@Actions/login";
 import { validateJwtExpiryDateIsExpired } from "@Utils/tokenUtils";
+import "react-native-gesture-handler";
 
 const PERSISTENCE_KEY = "NAVIGATION_STATE";
 const PREFERENCES_KEY = "APP_PREFERENCES";
@@ -195,12 +192,11 @@ const App = () => {
     [theme]
   );
 
-  const accessToken = useSelector((state) => state.login.accessToken);
   if (!isFontLoaded || !isStateLoaded) {
     return <SplashScreen />;
   }
   //const Stack = createStackNavigator();
-  const Drawer = createDrawerNavigator();
+  //const Drawer = createDrawerNavigator();
   return (
     // <Provider store={store}>
     <PaperProvider theme={theme}>
@@ -208,23 +204,7 @@ const App = () => {
         <PreferencesContext.Provider value={preferences}>
           <AuthProvider>
             <React.Fragment>
-              <NavigationContainer
-                initialState={initialState}
-                onStateChange={(state) =>
-                  AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state))
-                }
-              >
-                {accessToken ? (
-                  <Stack.Navigator
-                    drawerContent={(props) => <DrawerStack {...props} />}
-                  >
-                    {/* <Drawer.Screen name="Drawer" component={DrawerStack} /> */}
-                    <Stack.Screen name="Home" component={BudgetStack} />
-                  </Stack.Navigator>
-                ) : (
-                  <AuthStack />
-                )}
-              </NavigationContainer>
+              <Main />
             </React.Fragment>
           </AuthProvider>
         </PreferencesContext.Provider>

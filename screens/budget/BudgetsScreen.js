@@ -27,6 +27,7 @@ import {
   Paragraph,
   Subheading,
   Title,
+  withTheme,
 } from "react-native-paper";
 import { Pagination } from "react-native-snap-carousel";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -54,6 +55,7 @@ const isOutlined = false;
 const mode = isOutlined ? "outlined" : "elevated";
 
 const BudgetsScreen = (props) => {
+  console.log("BudgetsScreen::" + JSON.stringify(props));
   const [isFocus, setFocus] = useState(true);
   const [budgetIndex, setBudgetIndex] = useState(0);
   const [monthIndex, setMonthsIndex] = useState(0);
@@ -189,30 +191,30 @@ const BudgetsScreen = (props) => {
     [dispatch]
   );
 
-  // console.log("budgets screen1::"+ JSON.stringify(props));
-  // if (props.hasError) {
-  //   return (
-  //     <View style={styles.centered}>
-  //       <Text> An error occured!</Text>
-  //       <Button
-  //         title="Try again"
-  //         onPress={loadBudgets}
-  //         color={Colors.primary}
-  //       ></Button>
-  //     </View>
-  //   );
-  // }
-  // if (props.isLoading) {
-  //   console.log("props.isLoading");
-  //   return (
-  //     <View style={styles.centered}>
-  //       <ActivityIndicator
-  //         size="large"
-  //         color={Colors.primary}
-  //       ></ActivityIndicator>
-  //     </View>
-  //   );
-  // }
+  console.log("budgets screen1::" + JSON.stringify(props));
+  if (props.hasError) {
+    return (
+      <View style={styles.centered}>
+        <Text> An error occured!</Text>
+        <Button
+          title="Try again"
+          onPress={loadBudgets}
+          color={Colors.primary}
+        ></Button>
+      </View>
+    );
+  }
+  if (props.isLoading) {
+    console.log("props.isLoading");
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator
+          size="large"
+          color={Colors.primary}
+        ></ActivityIndicator>
+      </View>
+    );
+  }
 
   if (budgets.length == 0) {
     return (
@@ -326,4 +328,4 @@ const styles = StyleSheet.create({
     marginVertical: wp(3),
   },
 });
-export default BudgetsScreen;
+export default withTheme(BudgetsScreen);
