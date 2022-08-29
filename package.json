@@ -22,7 +22,6 @@
     "expo": "^46.0.2",
     "expo-font": "~10.2.0",
     "expo-splash-screen": "~0.16.1",
-    "expo-status-bar": "~1.4.0",
     "galio-framework": "^0.8.0",
     "i18n-js": "^3.8.0",
     "i18next": "^20.3.5",

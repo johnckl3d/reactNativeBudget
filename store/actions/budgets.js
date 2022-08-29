@@ -74,7 +74,7 @@ export const fetchBudgets = (token) => {
         .catch((error) => {
           console.log(error);
           dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: response.data });
-          dispatch({ type: LOGOUT });
+          dispatch({ type: ACTION_TYPES.SET_LOGOUT });
         });
     } catch (err) {
       console.log("fetchBudgets::loadedBudget::err" + err);

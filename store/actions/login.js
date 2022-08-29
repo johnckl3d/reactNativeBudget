@@ -4,10 +4,9 @@ import CostItem from "../../models/costItem";
 import Budget from "../../models/budget";
 import { API_URL } from "@Constants/url";
 import { SETTINGS } from "@Constants/settings";
-export const LOGIN = "LOGIN";
-export const RETRIEVE_TOKEN = "RETRIEVE_TOKEN";
-export const LOGOUT = "LOGOUT";
-export const REGISTER = "REGISTER";
+
+//export const RETRIEVE_TOKEN = "RETRIEVE_TOKEN";
+//export const REGISTER = "REGISTER";
 import { STORAGE } from "@Constants/storage";
 import { storeStringData } from "@Utils/storageUtils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -49,55 +48,72 @@ export const login = (userId, password) => {
           storeStringData(STORAGE.ACCESS_TOKEN, response.data.accessToken);
           storeStringData(STORAGE.REFRESH_TOKEN, response.data.refresh_token);
           dispatch({
-            type: LOGIN,
+            type: ACTION_TYPES.SET_LOGIN,
             refreshToken: response.data.refreshToken,
             accessToken: response.data.accessToken,
             userId: response.data.userId,
             emailAdd: response.data.emailAdd,
           });
-
-          dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: false });
         })
         .catch((error) => {
           dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: error });
-          dispatch({ type: LOGOUT });
+          dispatch({ type: ACTION_TYPES.SET_LOGOUT });
         });
     } catch (err) {
       dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: err });
       throw err;
+    } finally {
+      dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: false });
     }
   };
 };
 
-export const logout = (accessToken) => {
+export const logout = (refreshToken) => {
   return async (dispatch) => {
     try {
       dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: true });
-      const response = await fetch(API_URL.LOGOUT_URL, {
-        method: "POST",
+      const transactionID = moment().format() + uuid.v4();
+      const ip = "";
+      console.log("action::login::refreshToken::" + refreshToken);
+      console.log("action::login::transactionID::" + transactionID);
+      console.log("action::login::ip::" + ip);
+      console.log("action::login::url::" + API_URL.LOGOUT_URL);
+      await axios({
+        url: API_URL.LOGOUT_URL,
+        method: "post",
+        timeout: SETTINGS.TIMEOUT,
         headers: {
           "Content-Type": "application/json-patch+json",
+          TransactionID: transactionID,
         },
-        body: JSON.stringify({
-          accessToken: accessToken,
-          ipAddress: "10.100.100.100",
+        data: JSON.stringify({
+          refreshToken: refreshToken,
+          ipAddress: ip,
         }),
-      });
-      dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: false });
-      const resData = await response.json();
-      if (!response.ok) {
-        dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: resData.message });
-      }
-      console.log("action::logout::resData::" + JSON.stringify(resData));
-      storeStringData(STORAGE.ACCESS_TOKEN, "");
-      storeStringData(STORAGE.REFRESH_TOKEN, "");
-
-      dispatch({
-        type: LOGOUT,
-      });
+      })
+        .then((response) => {
+          console.log("login::logout::" + response);
+          storeStringData(STORAGE.ACCESS_TOKEN, "");
+          storeStringData(STORAGE.REFRESH_TOKEN, "");
+          dispatch({
+            type: ACTION_TYPES.SET_LOGOUT,
+          });
+        })
+        .catch((error) => {
+          console.log("login::logout::" + error);
+          dispatch({
+            type: ACTION_TYPES.SET_ERROR,
+            hasError: "there is something wrong!",
+          });
+        });
     } catch (err) {
-      dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: response.message });
+      dispatch({
+        type: ACTION_TYPES.SET_ERROR,
+        hasError: "there is something wrong!",
+      });
       throw err;
+    } finally {
+      dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: false });
     }
   };
 };

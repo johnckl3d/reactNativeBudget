@@ -33,7 +33,6 @@ import { centered } from "@Styles/presentation";
 import { AuthProvider } from "@Context/AuthContext";
 import { STORAGE } from "@Constants/storage";
 import { getStringData } from "@Utils/storageUtils";
-import { LOGIN, RETRIEVE_TOKEN, LOGOUT, REGISTER } from "@Actions/login";
 import { validateJwtExpiryDateIsExpired } from "@Utils/tokenUtils";
 import "react-native-gesture-handler";
 
@@ -109,7 +108,7 @@ const App = () => {
           );
           if (!validateJwtExpiryDateIsExpired(accessToken)) {
             dispatch({
-              type: LOGIN,
+              type: ACTION_TYPES.SET_LOGIN,
               refreshToken: accessToken,
               accessToken: accessToken,
             });

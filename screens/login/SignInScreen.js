@@ -19,6 +19,7 @@ import Feather from "react-native-vector-icons/Feather";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useDispatch, useSelector } from "react-redux";
 import ACTION_TYPES from "@Actions/actionTypes";
+import { centered } from "@Styles/presentation";
 //import colors from '../../styles/colors';
 
 const SignInScreen = ({ navigation }) => {
@@ -268,6 +269,7 @@ const SignInScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  centered: { ...centered, flex: 1 },
   container: {
     flex: 1,
     backgroundColor: Colors.primary,

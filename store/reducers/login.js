@@ -1,6 +1,6 @@
-import { LOGIN, RETRIEVE_TOKEN, LOGOUT, REGISTER } from "@Actions/login";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { STORAGE } from "@Constants/storage";
+import ACTION_TYPES from "@Actions/actionTypes";
 
 const initialState = {
   refreshToken: null,
@@ -11,14 +11,14 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case LOGIN:
+    case ACTION_TYPES.SET_LOGIN:
       return {
         refreshToken: action.refreshToken,
         accessToken: action.accessToken,
         userId: action.userId,
         emailAdd: action.emailAdd,
       };
-    case LOGOUT:
+    case ACTION_TYPES.SET_LOGOUT:
       return {
         refreshToken: null,
         accessToken: null,

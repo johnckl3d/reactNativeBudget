@@ -29,6 +29,7 @@ const DrawerScreen = (props) => {
   const signOutHandler = useCallback(
     async (accessToken) => {
       try {
+        console.log("signout");
         await dispatch(loginActions.logout(accessToken));
       } catch (err) {}
     },
@@ -134,7 +135,7 @@ const DrawerScreen = (props) => {
           )}
           label="Sign Out"
           onPress={() => {
-            signOutHandler(login.accessToken);
+            signOutHandler(login.refreshToken);
           }}
         />
       </Drawer.Section>

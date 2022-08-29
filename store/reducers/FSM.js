@@ -6,6 +6,7 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
+  console.log("loginreducer::action.type::" + JSON.stringify(action));
   switch (action.type) {
     case ACTION_TYPES.SET_ERROR:
       return {
