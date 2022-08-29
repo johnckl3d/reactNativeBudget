@@ -64,7 +64,7 @@ const BudgetsScreen = (props) => {
   const theme = useTheme();
   const isFocused = useIsFocused();
 
-  const token = useSelector((store) => store.login.accessToken);
+  const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
 
   const FABActions = [
@@ -102,7 +102,7 @@ const BudgetsScreen = (props) => {
   ];
 
   useEffect(() => {
-    dispatch(budgetsActions.fetchBudgets(token));
+    dispatch(budgetsActions.fetchBudgets(login.accessToken));
     //loadBudgets();
   }, [dispatch]);
 

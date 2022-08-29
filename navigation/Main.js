@@ -68,7 +68,7 @@ const Main = (props) => {
                     }}
                   />
                 ) : null}
-                <Appbar.Content title={"johntest"} />
+                <Appbar.Content title={"Welcome, " + login.userId} />
               </Appbar.Header>
             ),
           }}

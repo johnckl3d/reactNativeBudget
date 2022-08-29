@@ -32,9 +32,7 @@ export const login = (userId, password) => {
           ipAddress: "10.100.100.100",
         }),
       });
-      console.log("action::login::resData::1");
       dispatch({ type: SET_LOADING, isLoading: false });
-      console.log("action::login::resData::2");
       console.log("action::login::resData::3::" + JSON.stringify(response));
       const resData = await response.json();
 
@@ -50,6 +48,8 @@ export const login = (userId, password) => {
         type: LOGIN,
         refreshToken: resData.refreshToken,
         accessToken: resData.accessToken,
+        userId: resData.userId,
+        emailAdd: resData.emailAdd,
       });
     } catch (err) {
       dispatch({ type: SET_ERROR, hasError: resData.message });
