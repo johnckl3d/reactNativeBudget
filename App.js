@@ -29,9 +29,7 @@ import {
 } from "react-native";
 import Colors from "@Styles/colors";
 import { centered } from "@Styles/presentation";
-import ProfileScreen from "@MiscScreens/ProfileScreen";
-import SupportScreen from "@MiscScreens/SupportScreen";
-import SettingsScreen from "@MiscScreens/SettingsScreen";
+
 import { AuthProvider } from "@Context/AuthContext";
 import { STORAGE } from "@Constants/storage";
 import { getStringData } from "@Utils/storageUtils";
@@ -96,8 +94,6 @@ const App = () => {
   const [isFontLoaded, setFontLoaded] = useState(false);
   const [isStateLoaded, setStateLoaded] = useState(false);
   const [initialState, setInitialState] = useState();
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [error, setError] = useState();
   const [theme, setTheme] = useState(CustomDefaultTheme);
   const dispatch = useDispatch();
 

@@ -4,7 +4,6 @@ import Styles from "@Styles/styles";
 import { generateMonthArrayList } from "@Utils/dates";
 import React, { useCallback, useEffect, useState } from "react";
 import {
-  ActivityIndicator,
   Alert,
   Dimensions,
   FlatList,
@@ -14,6 +13,7 @@ import {
   View,
 } from "react-native";
 import {
+  ActivityIndicator,
   Avatar,
   Button,
   Card,

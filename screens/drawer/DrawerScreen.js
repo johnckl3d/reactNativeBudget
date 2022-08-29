@@ -14,6 +14,9 @@ import {
   useTheme,
   withTheme,
 } from "react-native-paper";
+import ProfileScreen from "@MiscScreens/ProfileScreen";
+import SupportScreen from "@MiscScreens/SupportScreen";
+import SettingsScreen from "@MiscScreens/SettingsScreen";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -45,8 +48,8 @@ const DrawerScreen = (props) => {
                 size={50}
               />
               <View style={{ marginLeft: 15, flexDirection: "column" }}>
-                <Title style={styles.title}>John Doe</Title>
-                <Caption style={styles.caption}>@j_doe</Caption>
+                <Title style={styles.title}>{login.userId}</Title>
+                <Caption style={styles.caption}>{login.emailAdd}</Caption>
               </View>
             </View>
 

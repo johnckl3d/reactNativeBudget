@@ -22,6 +22,9 @@ import DrawerScreen from "@DrawerScreen/DrawerScreen";
 import { NavigationContainer, StackActions } from "@react-navigation/native";
 import BudgetStack from "@Navigation/BudgetStack";
 import AuthStack from "@Navigation/AuthStack";
+import ProfileScreen from "@MiscScreens/ProfileScreen";
+import SupportScreen from "@MiscScreens/SupportScreen";
+import SettingsScreen from "@MiscScreens/SettingsScreen";
 
 const Main = (props) => {
   //console.log("DrawerStack::" + JSON.stringify(props));
@@ -70,6 +73,9 @@ const Main = (props) => {
           }}
         >
           <Drawer.Screen name="Budget" component={BudgetStack} />
+          <Drawer.Screen name="Profile" component={ProfileScreen} />
+          <Drawer.Screen name="Support" component={SupportScreen} />
+          <Drawer.Screen name="Settings" component={SettingsScreen} />
         </Drawer.Navigator>
       ) : (
         <AuthStack />
