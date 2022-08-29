@@ -48,6 +48,7 @@ import { highlightRed } from "../../styles/presentation";
 import { connect } from "react-redux";
 import i18n from "@I18N/i18n";
 import { useIsFocused } from "@react-navigation/native";
+import ACTION_TYPES from "@Actions/actionTypes";
 
 const SCREEN_WIDTH = Math.round(Dimensions.get("window").width);
 const SCREEN_HEIGHT = Math.round(Dimensions.get("window").height);
@@ -55,15 +56,14 @@ const isOutlined = false;
 const mode = isOutlined ? "outlined" : "elevated";
 
 const BudgetsScreen = (props) => {
-  console.log("BudgetsScreen::" + JSON.stringify(props));
   const [isFocus, setFocus] = useState(true);
   const [budgetIndex, setBudgetIndex] = useState(0);
   const [monthIndex, setMonthsIndex] = useState(0);
   const dispatch = useDispatch();
   const monthsList = generateMonthArrayList();
-  const theme = useTheme();
   const isFocused = useIsFocused();
 
+  const FSM = useSelector((store) => store.FSM);
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
 
@@ -122,6 +122,10 @@ const BudgetsScreen = (props) => {
     setMonthsIndex(childData);
   };
 
+  const handleCloseError = () => {
+    dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: "" });
+  };
+
   const selectItemHandler = (costCategoryId, name, totalAmount) => {
     setFocus(false);
     props.navigation.navigate("CostCategory", {
@@ -143,16 +147,20 @@ const BudgetsScreen = (props) => {
   };
 
   const deleteCostCategoryHandler = (costCategoryId, name) => {
-    Alert.alert("Are you sure?", `Do you really want to delete ${name}?`, [
-      { text: "No", style: "default" },
-      {
-        text: "Yes",
-        style: "destructive",
-        onPress: () => {
-          deleteCostCategory(costCategoryId);
+    Alert.alert(
+      i18n.t("budget.deleteBudgetHeader"),
+      `Do you really want to delete ${name}?`,
+      [
+        { text: i18n.t("common.no"), style: "default" },
+        {
+          text: i18n.t("common.yes"),
+          style: "destructive",
+          onPress: () => {
+            deleteCostCategory(costCategoryId);
+          },
         },
-      },
-    ]);
+      ]
+    );
   };
 
   const deleteCostCategory = useCallback(
@@ -191,21 +199,26 @@ const BudgetsScreen = (props) => {
     [dispatch]
   );
 
-  console.log("budgets screen1::" + JSON.stringify(props));
-  if (props.hasError) {
-    return (
-      <View style={styles.centered}>
-        <Text> An error occured!</Text>
-        <Button
-          title="Try again"
-          onPress={loadBudgets}
-          color={Colors.primary}
-        ></Button>
-      </View>
-    );
+  // if (props.hasError || props.hasError == "") {
+  //   return (
+  //     <View style={styles.centered}>
+  //       <Text> An error occured!</Text>
+  //       <Button
+  //         title="Try again"
+  //         onPress={loadBudgets}
+  //         color={Colors.primary}
+  //       ></Button>
+  //     </View>
+  //   );
+  // }
+
+  if (FSM.hasError && FSM.hasError != "") {
+    Alert.alert("Error!", FSM.hasError, [
+      { text: "Okay", onPress: () => handleCloseError() },
+    ]);
   }
-  if (props.isLoading) {
-    console.log("props.isLoading");
+
+  if (FSM.isLoading) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator
@@ -218,15 +231,12 @@ const BudgetsScreen = (props) => {
 
   if (budgets.length == 0) {
     return (
-      <View style={{ flex: 1, backgroundColor: "red" }}>
+      <View style={{ flex: 1 }}>
         <Text> No budgets found. Maybe start adding some!</Text>
       </View>
     );
   }
 
-  // if (!isFocus) {
-  //   return <View />;
-  // }
   return (
     <SafeAreaView>
       <View style={styles.mainContent}>

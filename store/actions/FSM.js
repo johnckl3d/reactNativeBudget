@@ -1,17 +1,14 @@
-export const SET_ERROR = "SET_ERROR";
-export const SET_LOADING = "SET_LOADING";
-//export const SET_FETCH_DATA_STATUS = "SET_LOADING";
+import ACTION_TYPES from "@Actions/actionTypes";
 
-
-  export function hasError(bool) {
-    return {
-        type: SET_ERROR,
-        hasErrored: bool
-    };
+export function hasError(bool) {
+  return {
+    type: ACTION_TYPES.SET_ERROR,
+    hasErrored: bool,
+  };
 }
 export function isLoading(bool) {
-    return {
-        type: SET_LOADING,
-        isLoading: bool
-    };
+  return {
+    type: ACTION_TYPES.SET_LOADING,
+    isLoading: bool,
+  };
 }

@@ -1,4 +1,4 @@
-import { SET_ERROR, SET_LOADING } from "@Actions/FSM";
+import ACTION_TYPES from "@Actions/actionTypes";
 
 const initialState = {
   hasError: null,
@@ -7,12 +7,12 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case SET_ERROR:
+    case ACTION_TYPES.SET_ERROR:
       return {
         ...state,
         hasError: action.hasError,
       };
-    case SET_LOADING:
+    case ACTION_TYPES.SET_LOADING:
       return {
         ...state,
         isLoading: action.isLoading,

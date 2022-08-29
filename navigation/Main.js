@@ -19,18 +19,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Appbar } from "react-native-paper";
 import DrawerScreen from "@DrawerScreen/DrawerScreen";
-import { useNavigation } from "@react-navigation/native";
 import { NavigationContainer, StackActions } from "@react-navigation/native";
 import BudgetStack from "@Navigation/BudgetStack";
 import AuthStack from "@Navigation/AuthStack";
 
 const Main = (props) => {
-  console.log("DrawerStack::" + JSON.stringify(props));
+  //console.log("DrawerStack::" + JSON.stringify(props));
   const Drawer = createDrawerNavigator();
-  //const navigation = useNavigation();
   const dispatch = useDispatch();
   const login = useSelector((store) => store.login);
-  //const accessToken = useSelector((state) => state.login.accessToken);
+  console.log("Main::" + login.accessToken);
   const signOutHandler = useCallback(
     async (accessToken) => {
       try {
@@ -50,8 +48,6 @@ const Main = (props) => {
       {login.accessToken ? (
         <Drawer.Navigator
           initialRouteName="Budget"
-          //useLegacyImplementation={true}
-          //headerMode="screen"
           drawerContent={(props) => <DrawerScreen {...props} />}
           screenOptions={{
             header: ({ navigation, scene, previous }) => (

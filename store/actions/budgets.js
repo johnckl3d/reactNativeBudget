@@ -3,21 +3,18 @@ import CostCategory from "../../models/costCategory";
 import CostItem from "../../models/costItem";
 import Budget from "../../models/budget";
 import { API_URL } from "@Constants/url";
+import { SETTINGS } from "@Constants/settings";
 import { STORAGE } from "@Constants/storage";
 import { getStringData } from "@Utils/storageUtils";
-import { SET_ERROR, SET_LOADING } from "@Actions/FSM";
 import moment from "moment";
 import uuid from "react-native-uuid";
-import { useSelector } from "react-redux";
 import axios from "axios";
-
-export const SET_BUDGETS = "SET_BUDGETS";
-export const DELETE_BUDGETS = "DELETE_BUDGETS";
+import ACTION_TYPES from "@Actions/actionTypes";
 
 export const fetchBudgets = (token) => {
   return async (dispatch) => {
     try {
-      dispatch({ type: SET_LOADING, isLoading: true });
+      dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: true });
       const transactionID = moment().format() + uuid.v4();
       const url = JSON.stringify(API_URL.BUDGET_URL);
       console.log("action::fetchBudgets::transactionID::" + transactionID);
@@ -26,6 +23,7 @@ export const fetchBudgets = (token) => {
       await axios({
         url: API_URL.BUDGET_URL,
         method: "get",
+        timeout: SETTINGS.TIMEOUT,
         headers: {
           Accept: "application/json, text/plain, */*",
           Authorization: "Bearer " + token,
@@ -71,27 +69,27 @@ export const fetchBudgets = (token) => {
           console.log(
             "fetchBudgets::loadedBudget::" + JSON.stringify(loadedBudget)
           );
-          dispatch({ type: SET_BUDGETS, budgets: loadedBudget });
+          dispatch({ type: ACTION_TYPES.SET_BUDGETS, budgets: loadedBudget });
         })
         .catch((error) => {
           console.log(error);
-          dispatch({ type: SET_ERROR, hasError: response.data });
+          dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: response.data });
           dispatch({ type: LOGOUT });
         });
     } catch (err) {
-      console.log("fetchBudgets::loadedBudget::err");
-      dispatch({ type: SET_ERROR, hasError: err });
+      console.log("fetchBudgets::loadedBudget::err" + err);
+      dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: err });
     } finally {
       console.log("fetchBudgets::loadedBudget::finally");
-      dispatch({ type: SET_LOADING, isLoading: false });
+      dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: false });
     }
   };
 };
 
 export const fetchBudgetById = () => {
   return async (dispatch) => {
-    dispatch({ type: SET_LOADING, isLoading: true });
-    dispatch({ type: SET_ERROR, hasError: null });
+    dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: true });
+    dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: null });
     var token = await getStringData(STORAGE.ACCESS_TOKEN);
     try {
       const response = await fetch(API_URL.BUDGET_URL, {
@@ -103,7 +101,7 @@ export const fetchBudgetById = () => {
       });
 
       if (!response.ok) {
-        dispatch({ type: SET_ERROR, hasError: response.status });
+        dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: response.status });
       }
       const resData = await response.json();
       //console.log("fetchBudgets::" + JSON.stringify(resData));
@@ -123,9 +121,9 @@ export const fetchBudgetById = () => {
           css
         )
       );
-      dispatch({ type: SET_BUDGETS, budgets: loadedBudget });
+      dispatch({ type: ACTION_TYPES.SET_BUDGETS, budgets: loadedBudget });
     } catch (err) {
-      dispatch({ type: SET_ERROR, hasError: response.status });
+      dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: response.status });
     }
   };
 };
@@ -133,8 +131,8 @@ export const fetchBudgetById = () => {
 export const createBudget = (title, description, amount) => {
   return async (dispatch) => {
     try {
-      dispatch({ type: SET_LOADING, isLoading: true });
-      dispatch({ type: SET_ERROR, hasError: null });
+      dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: true });
+      dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: null });
       var token = await getStringData(STORAGE.ACCESS_TOKEN);
       const response = await fetch(API_URL.BUDGET_URL, {
         method: "POST",
@@ -150,7 +148,7 @@ export const createBudget = (title, description, amount) => {
         }),
       });
       if (response.status != 200) {
-        dispatch({ type: SET_ERROR, hasError: response.status });
+        dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: response.status });
       } else {
         const resData = await response.json();
         //console.log("fetchBudgets::resData::" + JSON.stringify(resData));
@@ -193,12 +191,12 @@ export const createBudget = (title, description, amount) => {
         console.log(
           "fetchBudgets::createBudget::" + JSON.stringify(loadedBudget)
         );
-        dispatch({ type: SET_BUDGETS, budgets: loadedBudget });
+        dispatch({ type: ACTION_TYPES.SET_BUDGETS, budgets: loadedBudget });
       }
     } catch (err) {
-      dispatch({ type: SET_ERROR, hasError: err });
+      dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: err });
     } finally {
-      dispatch({ type: SET_LOADING, isLoading: false });
+      dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: false });
     }
   };
 };
@@ -207,8 +205,8 @@ export const deleteBudget = (budgetId) => {
   console.log("budgets::deleteBudget::budgetId::" + budgetId);
   return async (dispatch) => {
     try {
-      dispatch({ type: SET_LOADING, isLoading: true });
-      dispatch({ type: SET_ERROR, hasError: null });
+      dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: true });
+      dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: null });
       var token = await getStringData(STORAGE.ACCESS_TOKEN);
       const response = await fetch(`${API_URL.BUDGET_URL}/${budgetId}`, {
         method: "DELETE",
@@ -219,7 +217,7 @@ export const deleteBudget = (budgetId) => {
       });
       console.log("budgets::deleteBudget::" + JSON.stringify(response));
       if (response.status != 200) {
-        dispatch({ type: SET_ERROR, hasError: response.status });
+        dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: response.status });
       } else {
         const resData = await response.json();
         //console.log("fetchBudgets::resData::" + JSON.stringify(resData));
@@ -262,12 +260,12 @@ export const deleteBudget = (budgetId) => {
         console.log(
           "fetchBudgets::deleteBudget::" + JSON.stringify(loadedBudget)
         );
-        dispatch({ type: SET_BUDGETS, budgets: loadedBudget });
+        dispatch({ type: ACTION_TYPES.SET_BUDGETS, budgets: loadedBudget });
       }
     } catch (err) {
-      dispatch({ type: SET_ERROR, hasError: err });
+      dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: err });
     } finally {
-      dispatch({ type: SET_LOADING, isLoading: false });
+      dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: false });
     }
   };
 };

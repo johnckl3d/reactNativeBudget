@@ -18,7 +18,7 @@ import { ActivityIndicator, Button } from "react-native-paper";
 import Feather from "react-native-vector-icons/Feather";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useDispatch, useSelector } from "react-redux";
-import { SET_ERROR, SET_LOADING } from "@Actions/FSM";
+import ACTION_TYPES from "@Actions/actionTypes";
 //import colors from '../../styles/colors';
 
 const SignInScreen = ({ navigation }) => {
@@ -114,8 +114,7 @@ const SignInScreen = ({ navigation }) => {
   );
 
   const handleCloseError = () => {
-    console.log("SignInScreen::handleCloseError");
-    dispatch({ type: SET_ERROR, hasError: "" });
+    dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: "" });
   };
 
   if (FSM.isLoading) {
@@ -129,7 +128,7 @@ const SignInScreen = ({ navigation }) => {
     );
   }
 
-  if (FSM.hasError) {
+  if (FSM.hasError && FSM.hasError != "") {
     Alert.alert("Error!", FSM.hasError, [
       { text: "Okay", onPress: () => handleCloseError() },
     ]);

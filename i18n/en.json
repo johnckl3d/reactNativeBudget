@@ -6,7 +6,8 @@
     "deleteBudget": "Delete Budget",
     "addBudget": "Add Budget",
     "editCostCategoryScreen": "Edit Cost Category",
-    "editCostItemScreen": "Edit Cost Item"
+    "editCostItemScreen": "Edit Cost Item",
+    "deleteBudgetHeader": "Are you sure?"
   },
   "editBudget": {
     "title": "Edit Budget",
@@ -31,6 +32,8 @@
   },
   "common": {
     "currency": "RM",
+    "yes": "yes",
+    "no": "no",
     "actions": {
       "toggleToGerman": "German",
       "toggleToEnglish": "English",

@@ -16,14 +16,13 @@ import {
 } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch, useSelector } from "react-redux";
-import { createDrawerNavigator } from "@react-navigation/drawer";
 
 const DrawerScreen = (props) => {
-  console.log("DrawerScreen::" + JSON.stringify(props));
-  //const Drawer = createDrawerNavigator();
+  //console.log("DrawerScreen::" + JSON.stringify(props));
   const paperTheme = useTheme();
   const dispatch = useDispatch();
   const login = useSelector((store) => store.login);
+
   const signOutHandler = useCallback(
     async (accessToken) => {
       try {
@@ -187,4 +186,3 @@ const styles = StyleSheet.create({
 });
 
 export default withTheme(DrawerScreen);
-//export default DrawerScreen;
