@@ -1,10 +1,9 @@
 {
   "scripts": {
-    "start": "expo start --dev-client",
-    "android": "expo run:android",
-    "web": "expo start --web",
-    "eject": "expo eject",
-    "debug": "open 'rndebugger://set-debugger-loc?host=localhost&port=19000' && expo start"
+    "start": "react-native start",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "debug": "open 'rndebugger://set-debugger-loc?host=localhost&port=19000' && react-native start"
   },
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
@@ -19,15 +18,14 @@
     "d3": "^6.2.0",
     "date-fns": "^2.16.1",
     "deprecated-react-native-prop-types": "^2.2.0",
-    "expo": "^46.0.2",
     "expo-font": "~10.2.0",
-    "expo-splash-screen": "~0.16.1",
     "galio-framework": "^0.8.0",
     "i18n-js": "^3.8.0",
     "i18next": "^20.3.5",
     "internal-ip": "^7.0.0",
     "ios-deploy": "^1.11.4",
     "jwt-decode": "^3.1.2",
+    "metro-react-native-babel-preset": "^0.72.1",
     "moment": "^2.29.1",
     "react": "18.0.0",
     "react-dom": "18.0.0",
@@ -47,6 +45,7 @@
     "react-native-svg": "12.3.0",
     "react-native-svg-charts": "^5.4.0",
     "react-native-uuid": "^2.0.1",
+    "react-native-vector-icons": "^9.2.0",
     "react-native-web": "~0.18.7",
     "react-navigation": "^4.0.10",
     "react-navigation-drawer": "^2.6.0",
