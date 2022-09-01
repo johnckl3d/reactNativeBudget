@@ -3,11 +3,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext, PreferencesContext } from "@Context/Context";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import * as Font from "expo-font";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+//import * as Font from "expo-font";
+//import FontAwesome from "@expo/vector-icons/FontAwesome";
+import AwesomeIcon from "react-native-vector-icons/FontAwesome";
 import React, { useEffect, useState } from "react";
 //import BudgetStack from "./navigation/BudgetStack";
 import {
+  configureFonts,
   DarkTheme,
   DefaultTheme,
   Provider as PaperProvider,
@@ -29,7 +31,6 @@ import {
 } from "react-native";
 import Colors from "@Styles/colors";
 import { centered } from "@Styles/presentation";
-
 import { AuthProvider } from "@Context/AuthContext";
 import { STORAGE } from "@Constants/storage";
 import { getStringData } from "@Utils/storageUtils";
@@ -54,6 +55,63 @@ const DrawerSetup = (props) => {
   return <DrawerContent {...props} />;
 };
 
+const fontConfig = {
+  web: {
+    regular: {
+      fontFamily: "OpenSans-Regular",
+      fontWeight: "normal",
+    },
+    medium: {
+      fontFamily: "OpenSans-Bold",
+      fontWeight: "normal",
+    },
+    light: {
+      fontFamily: "OpenSans-Light",
+      fontWeight: "normal",
+    },
+    thin: {
+      fontFamily: "OpenSans-Light",
+      fontWeight: "normal",
+    },
+  },
+  ios: {
+    regular: {
+      fontFamily: "OpenSans-Regular",
+      fontWeight: "normal",
+    },
+    medium: {
+      fontFamily: "OpenSans-Bold",
+      fontWeight: "normal",
+    },
+    light: {
+      fontFamily: "OpenSans-Light",
+      fontWeight: "normal",
+    },
+    thin: {
+      fontFamily: "OpenSans-Light",
+      fontWeight: "normal",
+    },
+  },
+  android: {
+    regular: {
+      fontFamily: "OpenSans-Regular",
+      fontWeight: "normal",
+    },
+    medium: {
+      fontFamily: "OpenSans-Bold",
+      fontWeight: "normal",
+    },
+    light: {
+      fontFamily: "OpenSans-Light",
+      fontWeight: "normal",
+    },
+    thin: {
+      fontFamily: "OpenSans-Light",
+      fontWeight: "normal",
+    },
+  },
+};
+
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
@@ -64,10 +122,7 @@ const CustomDefaultTheme = {
     background: Colors.background,
     primary: Colors.primary,
   },
-  fonts: {
-    ...DefaultTheme.fonts,
-    superLight: { ...DefaultTheme.fonts["light"] },
-  },
+  fonts: configureFonts(fontConfig),
   userDefinedThemeProperty: "",
   animation: {
     ...DefaultTheme.animation,
@@ -128,27 +183,27 @@ const App = () => {
   useEffect(() => {
     const loadResourcesAndDataAsync = async () => {
       try {
-        const openSansFonts = async () => {
-          await Font.loadAsync({
-            "open-sans": require("./assets/fonts/OpenSans-Regular.ttf"),
-            "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
-            "open-sans-boldItalic": require("./assets/fonts/OpenSans-BoldItalic.ttf"),
-            "open-sans-extraBold": require("./assets/fonts/OpenSans-ExtraBold.ttf"),
-            "open-sans-extraBoldItalic": require("./assets/fonts/OpenSans-ExtraBoldItalic.ttf"),
-            "open-sans-italic": require("./assets/fonts/OpenSans-Italic.ttf"),
-            "open-sans-light": require("./assets/fonts/OpenSans-Light.ttf"),
-            "open-sans-lightItalic": require("./assets/fonts/OpenSans-LightItalic.ttf"),
-            "open-sans-regular": require("./assets/fonts/OpenSans-Regular.ttf"),
-            "open-sans-semiBold": require("./assets/fonts/OpenSans-SemiBold.ttf"),
-            "open-sans-semiBoldItalic": require("./assets/fonts/OpenSans-SemiBoldItalic.ttf"),
-          });
-        };
-        const fontAwesome = (fonts) => {
-          return fonts.map((font) => Font.loadAsync(font));
-        };
-        openSansFonts();
-        fontAwesome([FontAwesome.font]);
-        await Promise.all([...openSansFonts, ...fontAwesome]);
+        // const openSansFonts = async () => {
+        //   await Font.loadAsync({
+        //     "open-sans": require("./assets/fonts/OpenSans-Regular.ttf"),
+        //     "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
+        //     "open-sans-boldItalic": require("./assets/fonts/OpenSans-BoldItalic.ttf"),
+        //     "open-sans-extraBold": require("./assets/fonts/OpenSans-ExtraBold.ttf"),
+        //     "open-sans-extraBoldItalic": require("./assets/fonts/OpenSans-ExtraBoldItalic.ttf"),
+        //     "open-sans-italic": require("./assets/fonts/OpenSans-Italic.ttf"),
+        //     "open-sans-light": require("./assets/fonts/OpenSans-Light.ttf"),
+        //     "open-sans-lightItalic": require("./assets/fonts/OpenSans-LightItalic.ttf"),
+        //     "open-sans-regular": require("./assets/fonts/OpenSans-Regular.ttf"),
+        //     "open-sans-semiBold": require("./assets/fonts/OpenSans-SemiBold.ttf"),
+        //     "open-sans-semiBoldItalic": require("./assets/fonts/OpenSans-SemiBoldItalic.ttf"),
+        //   });
+        // };
+        // const fontAwesome = (fonts) => {
+        //   return fonts.map((font) => Font.loadAsync(font));
+        // };
+        //openSansFonts();
+        //fontAwesome([FontAwesome.font]);
+        //await Promise.all([...openSansFonts, ...fontAwesome]);
       } catch (e) {
       } finally {
         setFontLoaded(true);
@@ -194,7 +249,12 @@ const App = () => {
   //const Drawer = createDrawerNavigator();
   return (
     // <Provider store={store}>
-    <PaperProvider theme={theme}>
+    <PaperProvider
+      theme={theme}
+      settings={{
+        icon: (props) => <AwesomeIcon {...props} />,
+      }}
+    >
       <SafeAreaProvider>
         <PreferencesContext.Provider value={preferences}>
           <AuthProvider>
