@@ -55,7 +55,7 @@ const DrawerSetup = (props) => {
 const fontConfig = {
   web: {
     regular: {
-      fontFamily: "OpenSans-Regular",
+      fontFamily: "OpenSans",
       fontWeight: "normal",
     },
     medium: {
@@ -73,7 +73,7 @@ const fontConfig = {
   },
   ios: {
     regular: {
-      fontFamily: "OpenSans-Regular",
+      fontFamily: "OpenSans",
       fontWeight: "normal",
     },
     medium: {
@@ -91,7 +91,7 @@ const fontConfig = {
   },
   android: {
     regular: {
-      fontFamily: "OpenSans-Regular",
+      fontFamily: "OpenSans",
       fontWeight: "normal",
     },
     medium: {
