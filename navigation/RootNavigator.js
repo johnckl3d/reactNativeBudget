@@ -4,7 +4,7 @@ import { createAppContainer } from "react-navigation";
 import { createDrawerNavigator } from "react-navigation-drawer";
 import { Platform } from "react-native";
 //import { Ionicons } from '@expo/vector-icons';
-import AwesomeIcon from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/FontAwesome";
 import BudgetsScreen from "../screens/budget/BudgetsScreen";
 import CostCategoriesScreen from "../screens/budget/CostCategoriesScreen";
 import CostItemsScreen from "../screens/budget/CostItemsScreen";
@@ -39,7 +39,7 @@ const ProductsNavigator = createStackNavigator(
   {
     navigationOptions: {
       drawerIcon: (drawerConfig) => (
-        <AwesomeIcon
+        <Icon
           name={Platform.OS === "android" ? "md-cart" : "ios-cart"}
           size={23}
           color={drawerConfig.tintColor}
@@ -57,7 +57,7 @@ const DrawerNavigator = createStackNavigator(
   {
     navigationOptions: {
       drawerIcon: (drawerConfig) => (
-        <AwesomeIcon
+        <Icon
           name={Platform.OS === "android" ? "md-list" : "ios-list"}
           size={23}
           color={drawerConfig.tintColor}
@@ -76,7 +76,7 @@ const AdminNavigator = createStackNavigator(
   {
     navigationOptions: {
       drawerIcon: (drawerConfig) => (
-        <AwesomeIcon
+        <Icon
           name={Platform.OS === "android" ? "md-create" : "ios-create"}
           size={23}
           color={drawerConfig.tintColor}

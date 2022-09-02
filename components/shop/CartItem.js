@@ -7,7 +7,7 @@ import {
   Platform,
 } from "react-native";
 //import { Ionicons } from '@expo/vector-icons';
-import AwesomeIcon from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const CartItem = (props) => {
   return (
@@ -23,7 +23,7 @@ const CartItem = (props) => {
             onPress={props.onRemove}
             style={styles.deleteButton}
           >
-            <AwesomeIcon
+            <Icon
               name={Platform.OS === "android" ? "md-trash" : "ios-trash"}
               size={23}
               color="red"

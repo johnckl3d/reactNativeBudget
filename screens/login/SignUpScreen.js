@@ -12,7 +12,7 @@ import {
   StatusBar,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
-import AwesomeIcon from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/FontAwesome";
 import Feather from "react-native-vector-icons/Feather";
 import Colors from "@Styles/colors";
 
@@ -80,7 +80,7 @@ const SignUpScreen = ({ navigation }) => {
         <ScrollView>
           <Text style={styles.text_footer}>Username</Text>
           <View style={styles.action}>
-            <AwesomeIcon name="user-o" color="#05375a" size={20} />
+            <Icon name="user-o" color="#05375a" size={20} />
             <TextInput
               placeholder="Your Username"
               style={styles.textInput}

@@ -9,7 +9,6 @@ const TOUCH_SIZE = 200;
 const { width } = Dimensions.get("window");
 const white = "white";
 
-
 const Cursor = (props) => {
   const radius = r + borderWidth / 2;
   const translationX = new Value(0);
@@ -20,15 +19,15 @@ const Cursor = (props) => {
       nativeEvent: {
         translationX,
         velocityX,
-        state
-      }
-    }
+        state,
+      },
+    },
   ]);
   const cx = clamp(decay(translationX, state, velocityX), 0, width);
   const path = parsePath(d);
   const length = interpolate(cx, {
     inputRange: [0, width],
-    outputRange: [0, path.totalLength]
+    outputRange: [0, path.totalLength],
   });
   const { y, x } = getPointAtLength(path, length);
   const translateX = sub(x, TOUCH_SIZE / 2);
@@ -45,7 +44,7 @@ const Cursor = (props) => {
             width: TOUCH_SIZE,
             height: TOUCH_SIZE,
             justifyContent: "center",
-            alignItems: "center"
+            alignItems: "center",
           }}
         >
           <View
@@ -55,7 +54,7 @@ const Cursor = (props) => {
               borderRadius: radius,
               borderColor,
               borderWidth,
-              backgroundColor: white
+              backgroundColor: white,
             }}
           />
         </Animated.View>

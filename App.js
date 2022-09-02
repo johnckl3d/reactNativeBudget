@@ -3,11 +3,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthContext, PreferencesContext } from "@Context/Context";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-//import * as Font from "expo-font";
-//import FontAwesome from "@expo/vector-icons/FontAwesome";
-import AwesomeIcon from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/FontAwesome";
 import React, { useEffect, useState } from "react";
-//import BudgetStack from "./navigation/BudgetStack";
 import {
   configureFonts,
   DarkTheme,
@@ -112,9 +109,6 @@ const fontConfig = {
   },
 };
 
-const Drawer = createDrawerNavigator();
-const Stack = createStackNavigator();
-
 const CustomDefaultTheme = {
   ...DefaultTheme,
   colors: {
@@ -145,7 +139,6 @@ const AppWrapper = () => {
 };
 
 const App = () => {
-  const [isFontLoaded, setFontLoaded] = useState(false);
   const [isStateLoaded, setStateLoaded] = useState(false);
   const [initialState, setInitialState] = useState();
   const [theme, setTheme] = useState(CustomDefaultTheme);
@@ -181,39 +174,6 @@ const App = () => {
   }, [isStateLoaded]);
 
   useEffect(() => {
-    const loadResourcesAndDataAsync = async () => {
-      try {
-        // const openSansFonts = async () => {
-        //   await Font.loadAsync({
-        //     "open-sans": require("./assets/fonts/OpenSans-Regular.ttf"),
-        //     "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
-        //     "open-sans-boldItalic": require("./assets/fonts/OpenSans-BoldItalic.ttf"),
-        //     "open-sans-extraBold": require("./assets/fonts/OpenSans-ExtraBold.ttf"),
-        //     "open-sans-extraBoldItalic": require("./assets/fonts/OpenSans-ExtraBoldItalic.ttf"),
-        //     "open-sans-italic": require("./assets/fonts/OpenSans-Italic.ttf"),
-        //     "open-sans-light": require("./assets/fonts/OpenSans-Light.ttf"),
-        //     "open-sans-lightItalic": require("./assets/fonts/OpenSans-LightItalic.ttf"),
-        //     "open-sans-regular": require("./assets/fonts/OpenSans-Regular.ttf"),
-        //     "open-sans-semiBold": require("./assets/fonts/OpenSans-SemiBold.ttf"),
-        //     "open-sans-semiBoldItalic": require("./assets/fonts/OpenSans-SemiBoldItalic.ttf"),
-        //   });
-        // };
-        // const fontAwesome = (fonts) => {
-        //   return fonts.map((font) => Font.loadAsync(font));
-        // };
-        //openSansFonts();
-        //fontAwesome([FontAwesome.font]);
-        //await Promise.all([...openSansFonts, ...fontAwesome]);
-      } catch (e) {
-      } finally {
-        setFontLoaded(true);
-      }
-    };
-
-    loadResourcesAndDataAsync();
-  }, [isFontLoaded]);
-
-  useEffect(() => {
     const restorePrefs = async () => {
       try {
         const prefString = await AsyncStorage.getItem(PREFERENCES_KEY);
@@ -242,17 +202,17 @@ const App = () => {
     [theme]
   );
 
-  if (!isFontLoaded || !isStateLoaded) {
+  Icon.loadFont();
+
+  if (!isStateLoaded) {
     return <SplashScreen />;
   }
-  //const Stack = createStackNavigator();
-  //const Drawer = createDrawerNavigator();
+
   return (
-    // <Provider store={store}>
     <PaperProvider
       theme={theme}
       settings={{
-        icon: (props) => <AwesomeIcon {...props} />,
+        icon: (props) => <Icon {...props} />,
       }}
     >
       <SafeAreaProvider>
@@ -265,7 +225,6 @@ const App = () => {
         </PreferencesContext.Provider>
       </SafeAreaProvider>
     </PaperProvider>
-    // </Provider>
   );
 };
 
