@@ -1,4 +1,8 @@
 {
+  "signUp": {
+    "thanksTitle": "Thank you for registering",
+    "thanksMessage": "Thank you for registering"
+  },
   "accountDeletion": {
     "title": "Are you sure you want to delete your account?"
   },
@@ -35,8 +39,11 @@
   },
   "common": {
     "currency": "RM",
+    "ok": "Ok",
     "yes": "Yes",
     "no": "No",
+    "errorTitle": "Error",
+    "errorMessage": "An unexpected error occurred. Please try again",
     "click": "Click Here",
     "actions": {
       "toggleToGerman": "German",

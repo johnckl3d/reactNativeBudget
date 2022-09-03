@@ -4,7 +4,7 @@ import CostItem from "../../models/costItem";
 import Budget from "../../models/budget";
 import { API_URL } from "@Constants/url";
 import { SETTINGS } from "@Constants/settings";
-
+import i18n from "@I18N/i18n";
 //export const RETRIEVE_TOKEN = "RETRIEVE_TOKEN";
 //export const REGISTER = "REGISTER";
 import { STORAGE } from "@Constants/storage";
@@ -157,6 +157,70 @@ export const deleteAccount = (accessToken) => {
       dispatch({
         type: ACTION_TYPES.SET_ERROR,
         hasError: "there is something wrong!",
+      });
+      throw err;
+    } finally {
+      dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: false });
+    }
+  };
+};
+
+export const register = (
+  userId,
+  email,
+  firstName,
+  lastName,
+  password,
+  confirmPassword,
+  roleId,
+  registerCallback
+) => {
+  console.log(userId);
+  return async (dispatch) => {
+    try {
+      dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: true });
+      const transactionID = moment().format() + uuid.v4();
+      console.log("action::deleteAccount::transactionID::" + transactionID);
+      console.log("action::register::userId::" + userId);
+      console.log("action::register::email::" + email);
+      console.log("action::register::firstname::" + firstName);
+      console.log("action::register::lastname::" + lastName);
+      console.log("action::register::password::" + password);
+      console.log("action::register::confirm_password::" + confirmPassword);
+      console.log("action::register::url::" + API_URL.REGISTER_URL);
+      await axios({
+        url: API_URL.REGISTER_URL,
+        method: "post",
+        timeout: SETTINGS.TIMEOUT,
+        headers: {
+          "Content-Type": "application/json-patch+json",
+          TransactionID: transactionID,
+        },
+        data: JSON.stringify({
+          userId: userId,
+          email: email,
+          firstname: firstName,
+          lastname: lastName,
+          password: password,
+          confirmPassword: confirmPassword,
+        }),
+      })
+        .then((response) => {
+          console.log("action::register::response::" + response);
+          registerCallback();
+        })
+        .catch((error) => {
+          console.log("action::register::error::" + error);
+          dispatch({
+            type: ACTION_TYPES.SET_ERROR,
+            hasError: i18n.t("common.errorMessage"),
+          });
+        });
+    } catch (err) {
+      console.log("action::register::error::" + error);
+      dispatch({
+        type: ACTION_TYPES.SET_ERROR,
+        hasError: i18n.t("common.errorMessage"),
       });
       throw err;
     } finally {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,15 +10,22 @@ import {
   StyleSheet,
   ScrollView,
   StatusBar,
+  Alert,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import * as Animatable from "react-native-animatable";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Feather from "react-native-vector-icons/Feather";
 import Colors from "@Styles/colors";
+import { SETTINGS } from "@Constants/settings";
+import * as loginActions from "@Actions/login";
+import i18n from "@I18N/i18n";
 
 const SignUpScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+
   const [data, setData] = React.useState({
-    username: "",
+    userId: "",
     password: "",
     confirm_password: "",
     email: "",
@@ -32,13 +39,13 @@ const SignUpScreen = ({ navigation }) => {
     if (val.length !== 0) {
       setData({
         ...data,
-        username: val,
+        userId: val,
         check_userIdInputChange: true,
       });
     } else {
       setData({
         ...data,
-        username: val,
+        userId: val,
         check_userIdInputChange: false,
       });
     }
@@ -48,13 +55,13 @@ const SignUpScreen = ({ navigation }) => {
     if (val.length !== 0) {
       setData({
         ...data,
-        username: val,
+        userId: val,
         check_emailInputChange: true,
       });
     } else {
       setData({
         ...data,
-        username: val,
+        userId: val,
         check_emailInputChange: false,
       });
     }
@@ -86,6 +93,57 @@ const SignUpScreen = ({ navigation }) => {
       ...data,
       confirm_secureTextEntry: !data.confirm_secureTextEntry,
     });
+  };
+
+  const register = useCallback(async () => {
+    console.log("register");
+    var userId = "";
+    var email = "";
+    var firstName = "";
+    var lastName = "";
+    var password = "";
+    var confirmPassword = "";
+    var roleId = 0;
+
+    const registerCallback = () => {
+      navigation.goBack();
+      Alert.alert(i18n.t("signUp.thanksTitle"), "", [
+        { text: i18n.t("common.ok"), onPress: () => {} },
+      ]);
+    };
+
+    if (SETTINGS.ACCESS_TOKEN_BYPASS) {
+      userId = "admin5";
+      email = "johnckl3d5@gmail.com";
+      firstName = "John";
+      lastName = "Cheang";
+      password = "Aia@13579";
+      confirmPassword = "Aia@13579";
+      roleId = 1;
+    }
+    try {
+      await dispatch(
+        loginActions.register(
+          userId,
+          email,
+          firstName,
+          lastName,
+          password,
+          confirmPassword,
+          roleId,
+          registerCallback
+        )
+      );
+    } catch (err) {
+      console.log("register::err::" + err);
+      Alert.alert(i18n.t("common.errorTitle"), i18n.t("common.errorMessage"), [
+        { text: i18n.t("common.ok"), onPress: () => handleCloseError() },
+      ]);
+    }
+  }, [dispatch]);
+
+  const handleCloseError = () => {
+    dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: "" });
   };
 
   return (
@@ -211,13 +269,25 @@ const SignUpScreen = ({ navigation }) => {
             </Text>
           </View>
           <View style={styles.button}>
-            <TouchableOpacity style={styles.signIn} onPress={() => {}}>
+            <TouchableOpacity
+              style={[
+                styles.signIn,
+                {
+                  borderColor: Colors.primary,
+                  borderWidth: 1,
+                  marginTop: 15,
+                },
+              ]}
+              onPress={() => {
+                register();
+              }}
+            >
               <View colors={Colors.primary} style={styles.signIn}>
                 <Text
                   style={[
                     styles.textSign,
                     {
-                      color: "#fff",
+                      color: Colors.primary,
                     },
                   ]}
                 >
@@ -226,7 +296,7 @@ const SignUpScreen = ({ navigation }) => {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => navigation.goBack()}
               style={[
                 styles.signIn,
@@ -247,7 +317,7 @@ const SignUpScreen = ({ navigation }) => {
               >
                 Sign Up
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </ScrollView>
       </Animatable.View>

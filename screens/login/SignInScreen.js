@@ -20,6 +20,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch, useSelector } from "react-redux";
 import ACTION_TYPES from "@Actions/actionTypes";
 import { centered } from "@Styles/presentation";
+import i18n from "@I18N/i18n";
 //import colors from '../../styles/colors';
 
 const SignInScreen = ({ navigation }) => {
