@@ -12,7 +12,7 @@ import {
   StatusBar,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Feather from "react-native-vector-icons/Feather";
 import Colors from "@Styles/colors";
 
@@ -21,23 +21,41 @@ const SignUpScreen = ({ navigation }) => {
     username: "",
     password: "",
     confirm_password: "",
-    check_textInputChange: false,
+    email: "",
+    check_userIdInputChange: false,
+    check_emailInputChange: false,
     secureTextEntry: true,
     confirm_secureTextEntry: true,
   });
 
-  const textInputChange = (val) => {
+  const userIDInputChange = (val) => {
     if (val.length !== 0) {
       setData({
         ...data,
         username: val,
-        check_textInputChange: true,
+        check_userIdInputChange: true,
       });
     } else {
       setData({
         ...data,
         username: val,
-        check_textInputChange: false,
+        check_userIdInputChange: false,
+      });
+    }
+  };
+
+  const emailInputChange = (val) => {
+    if (val.length !== 0) {
+      setData({
+        ...data,
+        username: val,
+        check_emailInputChange: true,
+      });
+    } else {
+      setData({
+        ...data,
+        username: val,
+        check_emailInputChange: false,
       });
     }
   };
@@ -80,14 +98,43 @@ const SignUpScreen = ({ navigation }) => {
         <ScrollView>
           <Text style={styles.text_footer}>Username</Text>
           <View style={styles.action}>
-            <Icon name="user-o" color="#05375a" size={20} />
+            <Icon
+              name="account-edit-outline"
+              color={Colors.primary}
+              size={20}
+            />
             <TextInput
               placeholder="Your Username"
               style={styles.textInput}
               autoCapitalize="none"
-              onChangeText={(val) => textInputChange(val)}
+              onChangeText={(val) => userIDInputChange(val)}
             />
-            {data.check_textInputChange ? (
+            {data.check_userIdInputChange ? (
+              <Animatable.View animation="bounceIn">
+                <Feather name="check-circle" color="green" size={20} />
+              </Animatable.View>
+            ) : null}
+          </View>
+
+          <Text
+            style={[
+              styles.text_footer,
+              {
+                marginTop: 35,
+              },
+            ]}
+          >
+            Email
+          </Text>
+          <View style={styles.action}>
+            <Icon name="email-outline" color={Colors.primary} size={20} />
+            <TextInput
+              placeholder="Your Email Address"
+              style={styles.textInput}
+              autoCapitalize="none"
+              onChangeText={(val) => emailInputChange(val)}
+            />
+            {data.check_emailInputChange ? (
               <Animatable.View animation="bounceIn">
                 <Feather name="check-circle" color="green" size={20} />
               </Animatable.View>
@@ -105,7 +152,7 @@ const SignUpScreen = ({ navigation }) => {
             Password
           </Text>
           <View style={styles.action}>
-            <Feather name="lock" color="#05375a" size={20} />
+            <Feather name="lock" color={Colors.primary} size={20} />
             <TextInput
               placeholder="Your Password"
               secureTextEntry={data.secureTextEntry ? true : false}
@@ -133,7 +180,7 @@ const SignUpScreen = ({ navigation }) => {
             Confirm Password
           </Text>
           <View style={styles.action}>
-            <Feather name="lock" color="#05375a" size={20} />
+            <Feather name="lock" color={Colors.primary} size={20} />
             <TextInput
               placeholder="Confirm Your Password"
               secureTextEntry={data.confirm_secureTextEntry ? true : false}

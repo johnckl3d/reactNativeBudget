@@ -16,8 +16,7 @@ import { SETTINGS } from "@Constants/settings";
 import Colors from "@Styles/colors";
 import { ActivityIndicator, Button } from "react-native-paper";
 import Feather from "react-native-vector-icons/Feather";
-//import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch, useSelector } from "react-redux";
 import ACTION_TYPES from "@Actions/actionTypes";
 import { centered } from "@Styles/presentation";
@@ -162,7 +161,7 @@ const SignInScreen = ({ navigation }) => {
           Username
         </Text>
         <View style={styles.action}>
-          <Icon name="user-o" color={Colors.primary} size={20} />
+          <Icon name="account-edit-outline" color={Colors.primary} size={20} />
           <TextInput
             placeholder="Your Username"
             placeholderTextColor="#666666"

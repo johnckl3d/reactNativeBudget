@@ -1,4 +1,7 @@
 {
+  "accountDeletion": {
+    "title": "Are you sure you want to delete your account?"
+  },
   "budget": {
     "title": "Edit Budget",
     "addCostItem": "Add Cost Item",
@@ -32,8 +35,9 @@
   },
   "common": {
     "currency": "RM",
-    "yes": "yes",
-    "no": "no",
+    "yes": "Yes",
+    "no": "No",
+    "click": "Click Here",
     "actions": {
       "toggleToGerman": "German",
       "toggleToEnglish": "English",

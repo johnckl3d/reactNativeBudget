@@ -6,8 +6,7 @@ import {
   TouchableOpacity,
   Platform,
 } from "react-native";
-//import { Ionicons } from '@expo/vector-icons';
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const CartItem = (props) => {
   return (

@@ -21,7 +21,6 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch, useSelector } from "react-redux";
 
 const DrawerScreen = (props) => {
-  //console.log("DrawerScreen::" + JSON.stringify(props));
   const paperTheme = useTheme();
   const dispatch = useDispatch();
   const login = useSelector((store) => store.login);
@@ -109,6 +108,15 @@ const DrawerScreen = (props) => {
               label="Support"
               onPress={() => {
                 props.navigation.navigate("Support");
+              }}
+            />
+            <DrawerItem
+              icon={({ color, size }) => (
+                <Icon name="trash-can-outline" color={color} size={size} />
+              )}
+              label="Account Deletion"
+              onPress={() => {
+                props.navigation.navigate("AccountDeletion");
               }}
             />
           </Drawer.Section>

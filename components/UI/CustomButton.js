@@ -1,18 +1,21 @@
 import React from "react";
 import { Platform } from "react-native";
-import { HeaderButton } from "react-navigation-header-buttons";
-//import { Ionicons } from "@expo/vector-icons";
-import Icon from "react-native-vector-icons/FontAwesome";
+import { Button, Text, withTheme } from "react-native-paper";
 import Colors from "@Styles/colors";
 
 const CustomButton = (props) => {
   return (
-    <Icon
-      name={props.iconName}
+    <Button
+      {...props}
+      icon={props.iconName}
+      mode="contained"
       size={50}
+      labelStyle={{ color: "white", fontSize: 18 }}
       color={Platform.OS === "android" ? "white" : Colors.primary}
-    />
+    >
+      <Text style={{ color: Colors.white }}>{props.text}</Text>
+    </Button>
   );
 };
 
-export default CustomButton;
+export default withTheme(CustomButton);

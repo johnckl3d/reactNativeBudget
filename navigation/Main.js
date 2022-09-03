@@ -25,6 +25,7 @@ import AuthStack from "@Navigation/AuthStack";
 import ProfileScreen from "@MiscScreens/ProfileScreen";
 import SupportScreen from "@MiscScreens/SupportScreen";
 import SettingsScreen from "@MiscScreens/SettingsScreen";
+import AccountDeletionScreen from "@MiscScreens/AccountDeletionScreen";
 
 const Main = (props) => {
   //console.log("DrawerStack::" + JSON.stringify(props));
@@ -76,6 +77,10 @@ const Main = (props) => {
           <Drawer.Screen name="Profile" component={ProfileScreen} />
           <Drawer.Screen name="Support" component={SupportScreen} />
           <Drawer.Screen name="Settings" component={SettingsScreen} />
+          <Drawer.Screen
+            name="AccountDeletion"
+            component={AccountDeletionScreen}
+          />
         </Drawer.Navigator>
       ) : (
         <AuthStack />

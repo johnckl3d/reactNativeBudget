@@ -117,3 +117,50 @@ export const logout = (refreshToken) => {
     }
   };
 };
+
+export const deleteAccount = (accessToken) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: true });
+      const transactionID = moment().format() + uuid.v4();
+      const ip = "";
+      console.log("action::deleteAccount::accessToken::" + accessToken);
+      console.log("action::deleteAccount::transactionID::" + transactionID);
+      console.log("action::deleteAccount::ip::" + ip);
+      console.log("action::deleteAccount::url::" + API_URL.ACCOUNT_DELETE_URL);
+      await axios({
+        url: API_URL.ACCOUNT_DELETE_URL,
+        method: "delete",
+        timeout: SETTINGS.TIMEOUT,
+        headers: {
+          "Content-Type": "application/json-patch+json",
+          Authorization: "Bearer " + accessToken,
+          TransactionID: transactionID,
+        },
+      })
+        .then((response) => {
+          console.log("action::deleteAccount::response::" + response);
+          storeStringData(STORAGE.ACCESS_TOKEN, "");
+          storeStringData(STORAGE.REFRESH_TOKEN, "");
+          dispatch({
+            type: ACTION_TYPES.SET_LOGOUT,
+          });
+        })
+        .catch((error) => {
+          console.log("action::deleteAccount::error::" + error);
+          dispatch({
+            type: ACTION_TYPES.SET_ERROR,
+            hasError: "there is something wrong!",
+          });
+        });
+    } catch (err) {
+      dispatch({
+        type: ACTION_TYPES.SET_ERROR,
+        hasError: "there is something wrong!",
+      });
+      throw err;
+    } finally {
+      dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: false });
+    }
+  };
+};
