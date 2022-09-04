@@ -1,6 +1,6 @@
 import * as loginActions from "@Actions/login";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import React, { useCallback } from "react";
+import React, { useCallback, useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import {
   Avatar,
@@ -19,12 +19,13 @@ import SupportScreen from "@MiscScreens/SupportScreen";
 import SettingsScreen from "@MiscScreens/SettingsScreen";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch, useSelector } from "react-redux";
+import { PreferencesContext } from "@Context/Context";
 
 const DrawerScreen = (props) => {
   console.log("DrawerScreen::" + JSON.stringify(props));
-  const paperTheme = useTheme();
   const dispatch = useDispatch();
   const login = useSelector((store) => store.login);
+  const { toggleTheme, isThemeDark } = useContext(PreferencesContext);
 
   const signOutHandler = useCallback(
     async (accessToken) => {
@@ -124,13 +125,13 @@ const DrawerScreen = (props) => {
           <Drawer.Section title="Preferences">
             <TouchableRipple
               onPress={() => {
-                props.toggleTheme();
+                toggleTheme();
               }}
             >
               <View style={styles.preference}>
                 <Text>Dark Theme</Text>
                 <View pointerEvents="none">
-                  <Switch value={paperTheme.dark} />
+                  <Switch value={isThemeDark} />
                 </View>
               </View>
             </TouchableRipple>

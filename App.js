@@ -4,6 +4,7 @@ import { AuthContext, PreferencesContext } from "@Context/Context";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { NavigationContainer, StackActions } from "@react-navigation/native";
 import React, { useEffect, useState, useMemo } from "react";
 import {
   configureFonts,
@@ -32,22 +33,7 @@ import { AuthProvider } from "@Context/AuthContext";
 import { STORAGE } from "@Constants/storage";
 import { getStringData } from "@Utils/storageUtils";
 import { validateJwtExpiryDateIsExpired } from "@Utils/tokenUtils";
-import "react-native-gesture-handler";
-
-const DrawerSetup = (props) => {
-  // return (
-  //   <PreferencesContext.Consumer>
-  //     {(preferences) => (
-  //       <DrawerContent
-  //         toggleTheme={preferences.toggleTheme}
-  //         isDarkTheme={preferences.theme === DarkTheme}
-  //       />
-  //     )}
-  //   </PreferencesContext.Consumer>
-  // );
-  //console.log("app::drawer::" + JSON.stringify(props));
-  return <DrawerContent {...props} />;
-};
+import AuthStack from "@Navigation/AuthStack";
 
 const fontConfig = {
   web: {
@@ -138,8 +124,9 @@ const AppWrapper = () => {
 
 const App = () => {
   const [isStateLoaded, setStateLoaded] = useState(false);
-  const [initialState, setInitialState] = useState();
+  const [isThemeDark, setIsThemeDark] = useState(false);
   const [theme, setTheme] = useState(CustomDefaultTheme);
+  const login = useSelector((store) => store.login);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -189,26 +176,16 @@ const App = () => {
     restorePrefs();
   }, []);
 
-  // const preferences = useMemo(
-  //   () => ({
-  //     toggleTheme: () =>
-  //       setTheme((theme) =>
-  //         theme === DefaultTheme ? DarkTheme : DefaultTheme
-  //       ),
-  //     theme,
-  //   }),
-  //   [theme]
-  // );
+  const toggleTheme = React.useCallback(() => {
+    return setIsThemeDark(!isThemeDark);
+  }, [isThemeDark]);
 
-  const preferences = useMemo(
+  const preferences = React.useMemo(
     () => ({
-      toggleTheme: () =>
-        setTheme((theme) =>
-          theme === DefaultTheme ? DarkTheme : DefaultTheme
-        ),
-      theme,
+      toggleTheme,
+      isThemeDark,
     }),
-    [theme]
+    [toggleTheme, isThemeDark]
   );
 
   Icon.loadFont();
@@ -218,22 +195,29 @@ const App = () => {
   }
 
   return (
-    <PaperProvider
-      theme={theme}
-      settings={{
-        icon: (props) => <Icon {...props} />,
-      }}
-    >
-      <SafeAreaProvider>
-        <PreferencesContext.Provider value={preferences}>
+    <PreferencesContext.Provider value={preferences}>
+      <PaperProvider
+        theme={theme}
+        settings={{
+          icon: (props) => <Icon {...props} />,
+        }}
+      >
+        <SafeAreaProvider>
           <AuthProvider>
             <React.Fragment>
-              <Main />
+              <NavigationContainer
+              // initialState={initialState}
+              // onStateChange={(state) =>
+              //   AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state))
+              // }
+              >
+                {login.accessToken ? <Main /> : <AuthStack />}
+              </NavigationContainer>
             </React.Fragment>
           </AuthProvider>
-        </PreferencesContext.Provider>
-      </SafeAreaProvider>
-    </PaperProvider>
+        </SafeAreaProvider>
+      </PaperProvider>
+    </PreferencesContext.Provider>
   );
 };
 

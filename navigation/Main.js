@@ -1,6 +1,6 @@
 import * as loginActions from "@Actions/login";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import React, { useCallback } from "react";
+import React, { useCallback, useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import {
   Avatar,
@@ -21,63 +21,57 @@ import { Appbar } from "react-native-paper";
 import DrawerScreen from "@DrawerScreen/DrawerScreen";
 import { NavigationContainer, StackActions } from "@react-navigation/native";
 import BudgetStack from "@Navigation/BudgetStack";
-import AuthStack from "@Navigation/AuthStack";
+import { PreferencesContext } from "@Context/Context";
 import ProfileScreen from "@MiscScreens/ProfileScreen";
 import SupportScreen from "@MiscScreens/SupportScreen";
 import SettingsScreen from "@MiscScreens/SettingsScreen";
 import AccountDeletionScreen from "@MiscScreens/AccountDeletionScreen";
 
 const Main = (props) => {
-  console.log("Main::" + JSON.stringify(props));
   const Drawer = createDrawerNavigator();
   const dispatch = useDispatch();
   const login = useSelector((store) => store.login);
-  console.log("Main::" + login.accessToken);
+  const { isThemeDark } = useContext(PreferencesContext);
+  const theme = useTheme();
 
   return (
-    <NavigationContainer
-    // initialState={initialState}
-    // onStateChange={(state) =>
-    //   AsyncStorage.setItem(PERSISTENCE_KEY, JSON.stringify(state))
-    // }
+    <Drawer.Navigator
+      initialRouteName="Budget"
+      drawerContent={(props) => <DrawerScreen {...props} />}
+      screenOptions={{
+        header: ({ navigation, scene, previous }) => (
+          <Appbar.Header
+            theme={{
+              colors: {
+                primary: isThemeDark
+                  ? theme?.colors.primary
+                  : theme?.colors.surface,
+              },
+            }}
+          >
+            {previous ? (
+              <Appbar.BackAction onPress={() => navigation.goBack()} />
+            ) : navigation.openDrawer ? (
+              <Appbar.Action
+                icon="menu"
+                onPress={() => {
+                  console.log("pressed");
+                  navigation.openDrawer();
+                }}
+              />
+            ) : null}
+            {/* <Appbar.Content title={scene?.route?.name} /> */}
+            <Appbar.Content title={"Welcome, " + login.userId} />
+          </Appbar.Header>
+        ),
+      }}
     >
-      {login.accessToken ? (
-        <Drawer.Navigator
-          initialRouteName="Budget"
-          drawerContent={(props) => <DrawerScreen {...props} />}
-          screenOptions={{
-            header: ({ navigation, scene, previous }) => (
-              <Appbar.Header>
-                {previous ? (
-                  <Appbar.BackAction onPress={() => navigation.goBack()} />
-                ) : navigation.openDrawer ? (
-                  <Appbar.Action
-                    icon="menu"
-                    onPress={() => {
-                      console.log("pressed");
-                      console.log(JSON.stringify(navigation));
-                      navigation.openDrawer();
-                    }}
-                  />
-                ) : null}
-                <Appbar.Content title={"Welcome, " + login.userId} />
-              </Appbar.Header>
-            ),
-          }}
-        >
-          <Drawer.Screen name="Budget" component={BudgetStack} />
-          <Drawer.Screen name="Profile" component={ProfileScreen} />
-          <Drawer.Screen name="Support" component={SupportScreen} />
-          <Drawer.Screen name="Settings" component={SettingsScreen} />
-          <Drawer.Screen
-            name="AccountDeletion"
-            component={AccountDeletionScreen}
-          />
-        </Drawer.Navigator>
-      ) : (
-        <AuthStack />
-      )}
-    </NavigationContainer>
+      <Drawer.Screen name="Budget" component={BudgetStack} />
+      <Drawer.Screen name="Profile" component={ProfileScreen} />
+      <Drawer.Screen name="Support" component={SupportScreen} />
+      <Drawer.Screen name="Settings" component={SettingsScreen} />
+      <Drawer.Screen name="AccountDeletion" component={AccountDeletionScreen} />
+    </Drawer.Navigator>
   );
 };
 
