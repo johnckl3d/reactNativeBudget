@@ -4,7 +4,7 @@ import { AuthContext, PreferencesContext } from "@Context/Context";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import {
   configureFonts,
   DarkTheme,
@@ -33,9 +33,6 @@ import { STORAGE } from "@Constants/storage";
 import { getStringData } from "@Utils/storageUtils";
 import { validateJwtExpiryDateIsExpired } from "@Utils/tokenUtils";
 import "react-native-gesture-handler";
-
-const PERSISTENCE_KEY = "NAVIGATION_STATE";
-const PREFERENCES_KEY = "APP_PREFERENCES";
 
 const DrawerSetup = (props) => {
   // return (
@@ -115,6 +112,7 @@ const CustomDefaultTheme = {
     ...DefaultTheme.colors,
     background: Colors.background,
     primary: Colors.primary,
+    accent: Colors.accent,
   },
   fonts: configureFonts(fontConfig),
   userDefinedThemeProperty: "",
@@ -176,7 +174,7 @@ const App = () => {
   useEffect(() => {
     const restorePrefs = async () => {
       try {
-        const prefString = await AsyncStorage.getItem(PREFERENCES_KEY);
+        const prefString = await AsyncStorage.getItem(KEY.PREFERENCES_KEY);
         const preferences = JSON.parse(prefString || "");
 
         if (preferences) {
@@ -191,7 +189,18 @@ const App = () => {
     restorePrefs();
   }, []);
 
-  const preferences = React.useMemo(
+  // const preferences = useMemo(
+  //   () => ({
+  //     toggleTheme: () =>
+  //       setTheme((theme) =>
+  //         theme === DefaultTheme ? DarkTheme : DefaultTheme
+  //       ),
+  //     theme,
+  //   }),
+  //   [theme]
+  // );
+
+  const preferences = useMemo(
     () => ({
       toggleTheme: () =>
         setTheme((theme) =>

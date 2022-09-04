@@ -28,19 +28,11 @@ import SettingsScreen from "@MiscScreens/SettingsScreen";
 import AccountDeletionScreen from "@MiscScreens/AccountDeletionScreen";
 
 const Main = (props) => {
-  //console.log("DrawerStack::" + JSON.stringify(props));
+  console.log("Main::" + JSON.stringify(props));
   const Drawer = createDrawerNavigator();
   const dispatch = useDispatch();
   const login = useSelector((store) => store.login);
   console.log("Main::" + login.accessToken);
-  const signOutHandler = useCallback(
-    async (accessToken) => {
-      try {
-        await dispatch(loginActions.logout(accessToken));
-      } catch (err) {}
-    },
-    [dispatch]
-  );
 
   return (
     <NavigationContainer
