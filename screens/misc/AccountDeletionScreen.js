@@ -26,7 +26,7 @@ const AccountDeletionScreen = () => {
   const login = useSelector((store) => store.login);
   const dispatch = useDispatch();
 
-  const onPress = useCallback(async () => {
+  const deleteAccount = useCallback(async () => {
     console.log("deleteAccount");
     dispatch(loginActions.deleteAccount(login.accessToken));
   }, [dispatch]);
@@ -36,7 +36,9 @@ const AccountDeletionScreen = () => {
       <Text>{i18n.t("accountDeletion.title")}</Text>
       <CustomLargeOutlineButton
         text={i18n.t("common.yes")}
-        onPress={() => onPress}
+        onPress={() => {
+          deleteAccount();
+        }}
       />
     </View>
   );
