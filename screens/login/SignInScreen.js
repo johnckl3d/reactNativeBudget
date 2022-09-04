@@ -4,17 +4,32 @@ import {
   Platform,
   StatusBar,
   StyleSheet,
-  Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import {
+  ActivityIndicator,
+  Avatar,
+  Button,
+  Card,
+  Divider,
+  IconButton,
+  List,
+  Text,
+  useTheme,
+  Caption,
+  Headline,
+  Paragraph,
+  Subheading,
+  Title,
+  withTheme,
+} from "react-native-paper";
 import * as Animatable from "react-native-animatable";
 //import LinearGradient from 'react-native-linear-gradient';
 import * as loginActions from "@Actions/login";
 import { SETTINGS } from "@Constants/settings";
 import Colors from "@Styles/colors";
-import { ActivityIndicator, Button } from "react-native-paper";
 import Feather from "react-native-vector-icons/Feather";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch, useSelector } from "react-redux";
@@ -338,4 +353,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignInScreen;
+export default withTheme(SignInScreen);

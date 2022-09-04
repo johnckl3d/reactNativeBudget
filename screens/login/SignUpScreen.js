@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
-  Text,
-  Button,
   TouchableOpacity,
   Dimensions,
   TextInput,
@@ -12,6 +10,23 @@ import {
   StatusBar,
   Alert,
 } from "react-native";
+import {
+  ActivityIndicator,
+  Avatar,
+  Button,
+  Card,
+  Divider,
+  IconButton,
+  List,
+  Text,
+  useTheme,
+  Caption,
+  Headline,
+  Paragraph,
+  Subheading,
+  Title,
+  withTheme,
+} from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import * as Animatable from "react-native-animatable";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -20,6 +35,7 @@ import Colors from "@Styles/colors";
 import { SETTINGS } from "@Constants/settings";
 import * as loginActions from "@Actions/login";
 import i18n from "@I18N/i18n";
+import CustomLargeOutlineButton from "@UIComponents/CustomLargeOutlineButton";
 
 const SignUpScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -268,64 +284,20 @@ const SignUpScreen = ({ navigation }) => {
               Privacy policy
             </Text>
           </View>
-          <View style={styles.button}>
-            <TouchableOpacity
-              style={[
-                styles.signIn,
-                {
-                  borderColor: Colors.primary,
-                  borderWidth: 1,
-                  marginTop: 15,
-                },
-              ]}
+          <View style={{ justifyContent: "center", marginTop: 35 }}>
+            <CustomLargeOutlineButton
+              style={{ flex: 1 }}
+              text={i18n.t("signUp.signUp")}
               onPress={() => {
                 register();
               }}
-            >
-              <View colors={Colors.primary} style={styles.signIn}>
-                <Text
-                  style={[
-                    styles.textSign,
-                    {
-                      color: Colors.primary,
-                    },
-                  ]}
-                >
-                  Sign Up
-                </Text>
-              </View>
-            </TouchableOpacity>
-
-            {/* <TouchableOpacity
-              onPress={() => navigation.goBack()}
-              style={[
-                styles.signIn,
-                {
-                  borderColor: Colors.primary,
-                  borderWidth: 1,
-                  marginTop: 15,
-                },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.textSign,
-                  {
-                    color: Colors.primary,
-                  },
-                ]}
-              >
-                Sign Up
-              </Text>
-            </TouchableOpacity> */}
+            />
           </View>
         </ScrollView>
       </Animatable.View>
     </View>
   );
 };
-
-export default SignUpScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -372,13 +344,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 50,
   },
-  signIn: {
-    width: "100%",
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
-  },
   textSign: {
     fontSize: 18,
     fontWeight: "bold",
@@ -392,3 +357,5 @@ const styles = StyleSheet.create({
     color: Colors.accent,
   },
 });
+
+export default withTheme(SignUpScreen);

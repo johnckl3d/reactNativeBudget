@@ -1,6 +1,9 @@
-import { StyleSheet } from 'react-native';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '@Utils/scalingUtils';
-import Colors from '@Styles/colors'
+import { StyleSheet } from "react-native";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "@Utils/scalingUtils";
+import Colors from "@Styles/colors";
 import {
   column,
   row,
@@ -22,34 +25,34 @@ export default StyleSheet.create({
     flex: 1,
     paddingHorizontal: wp(5),
     paddingVertical: wp(5),
-    backgroundColor: Colors.b2
+    backgroundColor: Colors.b2,
   },
   paddingHorizontal: {
-    paddingHorizontal: wp(5)
+    paddingHorizontal: wp(5),
   },
   headerLeftContainer: {
     paddingLeft: wp(3),
     paddingBottom: hp(1),
-    flexDirection: 'row',
-    alignItems: 'center'
+    flexDirection: "row",
+    alignItems: "center",
   },
   headerRightContainer: {
     paddingRight: wp(3),
     paddingBottom: hp(1),
-    flexDirection: 'row',
-    alignItems: 'center'
+    flexDirection: "row",
+    alignItems: "center",
   },
   headerLeftIcon: {
     width: wp(8),
-    height: wp(8)
+    height: wp(8),
   },
   headerRightIcon: {
     width: wp(8),
-    height: wp(8)
+    height: wp(8),
   },
   //For Full Screen Modal
   modal: {
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
     margin: 0,
   },
   modalContainer: {
@@ -64,8 +67,8 @@ export default StyleSheet.create({
   modalTitleContainer: {
     padding: wp(5),
     paddingVertical: hp(1.5),
-    flexDirection: 'row',
-    backgroundColor: Colors.w
+    flexDirection: "row",
+    backgroundColor: Colors.w,
   },
   modalTitleText: {
     flex: 1,
@@ -75,13 +78,13 @@ export default StyleSheet.create({
   modalCloseIcon: {
     width: wp(8),
     height: wp(8),
-    marginBottom: hp(0.5)
+    marginBottom: hp(0.5),
   },
   modalContentContainer: {
     flex: 1,
     backgroundColor: Colors.b2,
     paddingHorizontal: wp(5),
-    paddingVertical: hp(2)
+    paddingVertical: hp(2),
   },
   modalContainer: {
     // height: hp(35),
@@ -100,10 +103,25 @@ export default StyleSheet.create({
     ...centered,
   },
   paginationDot: {
-  width: 10,
-  height: 10,
-  borderRadius: 5,
-  marginHorizontal: 8,
-  backgroundColor: Colors.primary,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    marginHorizontal: 8,
+    backgroundColor: Colors.primary,
+  },
+  buttonLarge: {
+    height: hp(6),
+    width: wp(80),
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: Colors.primary,
+    borderWidth: 1,
+    borderRadius: hp(2),
+    margin: hp(1),
+  },
+  buttonText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: Colors.primary,
   },
 });
