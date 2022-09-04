@@ -1,9 +1,9 @@
 import Styles from "@Styles/styles";
 import React from "react";
 import { StyleSheet } from "react-native";
-import { Button, Text, withTheme } from "react-native-paper";
+import { Button, Colors, Text, withTheme } from "react-native-paper";
 
-const CustomLargeOutlineButton = (props) => {
+const CustomLargeButton = (props) => {
   return (
     //iconName
     //onPress
@@ -11,9 +11,10 @@ const CustomLargeOutlineButton = (props) => {
 
     <Button
       {...props}
+      mode="contained"
       icon={props.iconName}
       onPress={props.onPress}
-      style={styles.buttonLargeOutline}
+      style={styles.buttonLarge}
     >
       <Text style={styles.buttonText}>{props.text}</Text>
     </Button>
@@ -21,12 +22,13 @@ const CustomLargeOutlineButton = (props) => {
 };
 
 const styles = StyleSheet.create({
-  buttonLargeOutline: {
-    ...Styles.buttonLargeOutline,
+  buttonLarge: {
+    ...Styles.buttonLarge,
   },
   buttonText: {
     ...Styles.buttonText,
+    color: Colors.white,
   },
 });
 
-export default withTheme(CustomLargeOutlineButton);
+export default withTheme(CustomLargeButton);

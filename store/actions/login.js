@@ -56,11 +56,17 @@ export const login = (userId, password) => {
           });
         })
         .catch((error) => {
-          dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: error });
+          dispatch({
+            type: ACTION_TYPES.SET_ERROR,
+            hasError: i18n.t("common.errorMessage"),
+          });
           dispatch({ type: ACTION_TYPES.SET_LOGOUT });
         });
     } catch (err) {
-      dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: err });
+      dispatch({
+        type: ACTION_TYPES.SET_ERROR,
+        hasError: i18n.t("common.errorMessage"),
+      });
       throw err;
     } finally {
       dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: false });

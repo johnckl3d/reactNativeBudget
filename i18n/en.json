@@ -4,6 +4,15 @@
     "thanksMessage": "Thank you for registering",
     "signUp": "Sign Up"
   },
+  "login": {
+    "username": "Username",
+    "usernamePlaceholder": "Your Username",
+    "password": "Password",
+    "passwordPlaceholder": "Your Password",
+    "forgotPassword": "Forgot password?",
+    "login": "LOG IN",
+    "signUp": "Sign up if you don't have account"
+  },
   "accountDeletion": {
     "title": "Are you sure you want to delete your account?"
   },

@@ -36,7 +36,9 @@ import { useDispatch, useSelector } from "react-redux";
 import ACTION_TYPES from "@Actions/actionTypes";
 import { centered } from "@Styles/presentation";
 import i18n from "@I18N/i18n";
-//import colors from '../../styles/colors';
+import Styles from "@Styles/styles";
+import CustomLargeOutlineButton from "@UIComponents/CustomLargeOutlineButton";
+import CustomLargeButton from "@UIComponents/CustomLargeButton";
 
 const SignInScreen = ({ navigation }) => {
   const [data, setData] = React.useState({
@@ -155,7 +157,7 @@ const SignInScreen = ({ navigation }) => {
     <View style={styles.container}>
       <StatusBar backgroundColor="#009387" barStyle="light-content" />
       <View style={styles.header}>
-        <Text style={styles.text_header}>Welcome!</Text>
+        <Text style={styles.textTitle}>Welcome!</Text>
       </View>
       <Animatable.View
         animation="fadeInUpBig"
@@ -166,21 +168,12 @@ const SignInScreen = ({ navigation }) => {
           },
         ]}
       >
-        <Text
-          style={[
-            styles.text_footer,
-            {
-              color: Colors.primary,
-            },
-          ]}
-        >
-          Username
-        </Text>
+        <Text style={styles.textHeading1}>{i18n.t("login.username")}</Text>
         <View style={styles.action}>
           <Icon name="account-edit-outline" color={Colors.primary} size={20} />
           <TextInput
-            placeholder="Your Username"
-            placeholderTextColor="#666666"
+            placeholder={i18n.t("login.usernamePlaceholder")}
+            placeholderTextColor={Colors.placeholder}
             style={[
               styles.textInput,
               {
@@ -207,20 +200,19 @@ const SignInScreen = ({ navigation }) => {
 
         <Text
           style={[
-            styles.text_footer,
+            styles.textHeading1,
             {
-              color: Colors.primary,
               marginTop: 35,
             },
           ]}
         >
-          Password
+          {i18n.t("login.password")}
         </Text>
         <View style={styles.action}>
           <Feather name="lock" color={Colors.primary} size={20} />
           <TextInput
-            placeholder="Your Password"
-            placeholderTextColor="#666666"
+            placeholder={i18n.t("login.passwordPlaceholder")}
+            placeholderTextColor={Colors.placeholder}
             secureTextEntry={data.secureTextEntry ? true : false}
             style={[
               styles.textInput,
@@ -249,35 +241,25 @@ const SignInScreen = ({ navigation }) => {
 
         <TouchableOpacity>
           <Text style={{ color: Colors.accent, marginTop: 15 }}>
-            Forgot password?
+            {i18n.t("login.forgotPassword")}
           </Text>
         </TouchableOpacity>
         <View style={styles.button}>
-          <Button
-            mode="contained"
+          <CustomLargeButton
+            text={i18n.t("login.login")}
             onPress={() => {
               loginHandle();
             }}
-            style={styles.signUp}
-          >
-            Log In
-          </Button>
-
-          <TouchableOpacity
-            onPress={() => navigation.navigate("SignUp")}
-            style={styles.signUp}
-          >
-            <Text
-              style={[
-                styles.textSign,
-                {
-                  color: Colors.primary,
-                },
-              ]}
-            >
-              Sign Up
-            </Text>
-          </TouchableOpacity>
+          />
+          <Text style={{ color: Colors.accent, marginTop: 35 }}>
+            {i18n.t("login.signUp")}
+          </Text>
+          <CustomLargeOutlineButton
+            text={i18n.t("signUp.signUp")}
+            onPress={() => {
+              navigation.navigate("SignUp");
+            }}
+          />
         </View>
       </Animatable.View>
     </View>
@@ -298,20 +280,17 @@ const styles = StyleSheet.create({
   },
   footer: {
     flex: 3,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.white,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingHorizontal: 20,
     paddingVertical: 30,
   },
-  text_header: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 30,
+  textTitle: {
+    ...Styles.textTitle,
   },
-  text_footer: {
-    color: "#05375a",
-    fontSize: 18,
+  textHeading1: {
+    ...Styles.textHeading1,
   },
   action: {
     flexDirection: "row",
@@ -331,7 +310,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: Platform.OS === "ios" ? 0 : -12,
     paddingLeft: 10,
-    color: "#05375a",
+    color: Colors.primary,
   },
   errorMsg: {
     color: "#FF0000",

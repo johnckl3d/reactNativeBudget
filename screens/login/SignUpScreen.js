@@ -10,6 +10,7 @@ import {
   StatusBar,
   Alert,
 } from "react-native";
+import Styles from "@Styles/styles";
 import {
   ActivityIndicator,
   Avatar,
@@ -166,11 +167,11 @@ const SignUpScreen = ({ navigation }) => {
     <View style={styles.container}>
       <StatusBar backgroundColor="#009387" barStyle="light-content" />
       <View style={styles.header}>
-        <Text style={styles.text_header}>Register Now!</Text>
+        <Text style={styles.textTitle}>Register Now!</Text>
       </View>
       <Animatable.View animation="fadeInUpBig" style={styles.footer}>
         <ScrollView>
-          <Text style={styles.text_footer}>Username</Text>
+          <Text style={styles.textHeading1}>Username</Text>
           <View style={styles.action}>
             <Icon
               name="account-edit-outline"
@@ -192,7 +193,7 @@ const SignUpScreen = ({ navigation }) => {
 
           <Text
             style={[
-              styles.text_footer,
+              styles.textHeading1,
               {
                 marginTop: 35,
               },
@@ -217,7 +218,7 @@ const SignUpScreen = ({ navigation }) => {
 
           <Text
             style={[
-              styles.text_footer,
+              styles.textHeading1,
               {
                 marginTop: 35,
               },
@@ -245,7 +246,7 @@ const SignUpScreen = ({ navigation }) => {
 
           <Text
             style={[
-              styles.text_footer,
+              styles.textHeading1,
               {
                 marginTop: 35,
               },
@@ -318,14 +319,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 30,
   },
-  text_header: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 30,
+  textTitle: {
+    ...Styles.textTitle,
   },
-  text_footer: {
-    color: "#05375a",
-    fontSize: 18,
+  textHeading1: {
+    ...Styles.textHeading1,
   },
   action: {
     flexDirection: "row",
@@ -335,10 +333,7 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
   textInput: {
-    flex: 1,
-    marginTop: Platform.OS === "ios" ? 0 : -12,
-    paddingLeft: 10,
-    color: "#05375a",
+    ...Styles.textInput,
   },
   button: {
     alignItems: "center",

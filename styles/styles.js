@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -109,7 +109,7 @@ export default StyleSheet.create({
     marginHorizontal: 8,
     backgroundColor: Colors.primary,
   },
-  buttonLarge: {
+  buttonLargeOutline: {
     height: hp(6),
     width: wp(80),
     justifyContent: "center",
@@ -119,9 +119,32 @@ export default StyleSheet.create({
     borderRadius: hp(2),
     margin: hp(1),
   },
+  buttonLarge: {
+    height: hp(6),
+    width: wp(80),
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: hp(2),
+    margin: hp(1),
+  },
   buttonText: {
     fontSize: 18,
     fontWeight: "bold",
     color: Colors.primary,
+  },
+  textInput: {
+    flex: 1,
+    marginTop: Platform.OS === "ios" ? 0 : -12,
+    paddingLeft: 10,
+    color: Colors.primary,
+  },
+  textTitle: {
+    color: Colors.white,
+    fontWeight: "bold",
+    fontSize: 30,
+  },
+  textHeading1: {
+    color: Colors.primary,
+    fontSize: 18,
   },
 });
