@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import {
   Alert,
   Platform,
@@ -39,9 +39,10 @@ import i18n from "@I18N/i18n";
 import Styles from "@Styles/styles";
 import CustomLargeOutlineButton from "@UIComponents/CustomLargeOutlineButton";
 import CustomLargeButton from "@UIComponents/CustomLargeButton";
+import { isConnected } from "@Utils/internetUtils";
 
 const SignInScreen = ({ navigation }) => {
-  const [data, setData] = React.useState({
+  const [data, setData] = useState({
     username: "",
     password: "",
     check_textInputChange: false,
@@ -49,6 +50,7 @@ const SignInScreen = ({ navigation }) => {
     isValidUser: true,
     isValidPassword: true,
   });
+  const [isInternetOn, setIsInternetOn] = useState(true);
   const dispatch = useDispatch();
   const FSM = useSelector((store) => store.FSM);
 
@@ -135,6 +137,23 @@ const SignInScreen = ({ navigation }) => {
   const handleCloseError = () => {
     dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: "" });
   };
+
+  useEffect(() => {
+    checkConnectivity();
+  }, []);
+
+  const checkConnectivity = async () => {
+    var result = await isConnected();
+    console.log("signinscreen::checkConnectivity::" + result);
+    setIsInternetOn(isInternetOn);
+  };
+
+  if (!isInternetOn) {
+    console.log("signinscreen::isInternetOn::" + isInternetOn);
+    Alert.alert("Error!", "Please check your internet connection", [
+      { text: "Okay", onPress: () => {} },
+    ]);
+  }
 
   if (FSM.isLoading) {
     return (
