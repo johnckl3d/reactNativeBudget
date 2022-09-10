@@ -57,7 +57,6 @@ const isOutlined = false;
 const mode = isOutlined ? "outlined" : "elevated";
 
 const BudgetsScreen = (props) => {
-  const [isFocus, setFocus] = useState(true);
   const [budgetIndex, setBudgetIndex] = useState(0);
   const [monthIndex, setMonthsIndex] = useState(0);
   const [isShowFAB, setIsShowFAB] = useState(true);
@@ -237,8 +236,8 @@ const BudgetsScreen = (props) => {
 
   if (budgets.length == 0) {
     return (
-      <View style={{ flex: 1 }}>
-        <Text> No budgets found. Maybe start adding some!</Text>
+      <View style={[styles.centered, { flex: 1 }]}>
+        <Text>{i18n.t("budget.noBudget")}</Text>
       </View>
     );
   }
@@ -257,7 +256,7 @@ const BudgetsScreen = (props) => {
                   {...props}
                   icon="dots-vertical"
                   onPress={() => {
-                    editBudgetHandler(props.budgets[budgetIndex].budgetId);
+                    editBudgetHandler(budgets[budgetIndex].budgetId);
                   }}
                 />
               )}

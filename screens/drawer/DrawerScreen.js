@@ -23,7 +23,6 @@ import { PreferencesContext } from "@Context/Context";
 import i18n from "@I18N/i18n";
 
 const DrawerScreen = (props) => {
-  console.log("DrawerScreen::" + JSON.stringify(props));
   const dispatch = useDispatch();
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);

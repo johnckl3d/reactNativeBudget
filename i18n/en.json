@@ -20,7 +20,8 @@
     "budgetCount": "Budgets"
   },
   "budget": {
-    "title": "Edit Budget",
+    "title": "",
+    "noBudget": "No budgets found. Maybe start adding some!",
     "addCostItem": "Add Cost Item",
     "addCategory": "Add Category",
     "deleteBudget": "Delete Budget",

@@ -24,10 +24,11 @@ const CostItemsScreen = (props) => {
       (prod) => prod.costCategoryId === costCategoryId
     )
   );
-  const costItems = useSelector((state) =>
-    state.costCategories.costCategories.find(
-      (prod) => prod.costCategoryId === costCategoryId
-    ).costItems
+  const costItems = useSelector(
+    (state) =>
+      state.costCategories.costCategories.find(
+        (prod) => prod.costCategoryId === costCategoryId
+      ).costItems
   );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
@@ -66,7 +67,7 @@ const CostItemsScreen = (props) => {
       costCategoryId: costCategoryId,
       costItemId: costItemId,
       name: name,
-      amount: amount
+      amount: amount,
     });
   };
 
@@ -205,10 +206,10 @@ const styles = StyleSheet.create({
     color: "#888",
     textAlign: "center",
     marginVertical: 20,
-    fontFamily: "open-sans-bold",
+    fontFamily: "OpenSans-Bold",
   },
   description: {
-    fontFamily: "open-sans",
+    fontFamily: "OpenSans",
     fontSize: 14,
     textAlign: "center",
     marginHorizontal: 20,

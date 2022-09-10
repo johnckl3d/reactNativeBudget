@@ -109,6 +109,15 @@ export default StyleSheet.create({
     marginHorizontal: 8,
     backgroundColor: Colors.primary,
   },
+  buttonBottom: {
+    height: hp(7),
+    right: 10,
+    left: 10,
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+    bottom: 50,
+  },
   buttonLargeOutline: {
     height: hp(6),
     width: wp(80),
@@ -146,5 +155,13 @@ export default StyleSheet.create({
   textHeading1: {
     color: Colors.primary,
     fontSize: 18,
+  },
+  footer: {
+    flex: 3,
+    backgroundColor: Colors.white,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    // paddingHorizontal: 20,
+    // paddingVertical: 30,
   },
 });

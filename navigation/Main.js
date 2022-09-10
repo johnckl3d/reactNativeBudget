@@ -45,7 +45,7 @@ const Main = (props) => {
               colors: {
                 primary: isThemeDark
                   ? theme?.colors.primary
-                  : theme?.colors.surface,
+                  : theme?.colors.primary,
               },
             }}
           >
@@ -55,7 +55,6 @@ const Main = (props) => {
               <Appbar.Action
                 icon="menu"
                 onPress={() => {
-                  console.log("pressed");
                   navigation.openDrawer();
                 }}
               />

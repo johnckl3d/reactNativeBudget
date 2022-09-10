@@ -23,7 +23,12 @@ const Stack = createStackNavigator();
 
 const BudgetStack = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: true,
+        headerStyle: { backgroundColor: Colors.white },
+      }}
+    >
       <Stack.Screen
         name="BudgetsScreen"
         component={BudgetsScreen}

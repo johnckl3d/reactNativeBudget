@@ -1,22 +1,27 @@
 import React from "react";
 import {
   View,
-  Text,
+  //Text,
   StyleSheet,
   TouchableOpacity,
   Platform,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { Text } from "react-native-paper";
 
 const CartItem = (props) => {
   return (
     <View style={styles.cartItem}>
       <View style={styles.itemData}>
-        <Text style={styles.quantity}>{props.quantity} </Text>
+        <Text variant="titleMedium" style={styles.quantity}>
+          {props.quantity}{" "}
+        </Text>
         <Text style={styles.mainText}>{props.title}</Text>
       </View>
       <View style={styles.itemData}>
-        <Text style={styles.mainText}>${props.amount.toFixed(2)}</Text>
+        <Text variant="titleMedium" style={styles.mainText}>
+          ${props.amount.toFixed(2)}
+        </Text>
         {props.deletable && (
           <TouchableOpacity
             onPress={props.onRemove}
@@ -47,12 +52,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   quantity: {
-    fontFamily: "open-sans",
     color: "#888",
     fontSize: 16,
   },
   mainText: {
-    fontFamily: "open-sans-bold",
     fontSize: 16,
   },
   deleteButton: {
