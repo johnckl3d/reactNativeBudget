@@ -289,11 +289,6 @@ const BudgetsScreen = (props) => {
           costCategories={budgets[budgetIndex].costCategories}
           deleteCallback={deleteCostCategoryHandler}
         ></BudgetAccordion>
-        <FloatingActionButton
-          style={styles.fab}
-          actions={FABActions}
-          visible={isShowFAB}
-        ></FloatingActionButton>
         <Pagination
           dotsLength={budgets.length}
           activeDotIndex={budgetIndex}
@@ -301,6 +296,11 @@ const BudgetsScreen = (props) => {
           inactiveDotOpacity={0.4}
           inactiveDotScale={0.6}
         />
+        <FloatingActionButton
+          style={styles.fab}
+          actions={FABActions}
+          visible={isShowFAB}
+        ></FloatingActionButton>
       </View>
     </SafeAreaView>
   );

@@ -19,7 +19,7 @@ import {
   getWeekOfDayWithOffset,
   generateMonthArrayFromMonth,
   getDayOfMonthFromDate,
-  generateMonthArrayList
+  generateMonthArrayList,
 } from "@Utils/dates";
 import {
   highlightYellow,
@@ -31,7 +31,7 @@ import {
 import CustomText from "@CustomText";
 import Colors from "@Styles/colors";
 import Fonts from "@Styles/fonts";
-import Styles from '@Styles/styles';
+import Styles from "@Styles/styles";
 
 const verticalPadding = 0;
 const cursorRadius = 10;
@@ -185,7 +185,7 @@ export default class Chart extends Component {
           </View>
           <View>
             <Svg width={width} height={height}>
-              <Defs>
+              {/* <Defs>
                 <LinearGradient
                   x1="50%"
                   y1="0%"
@@ -193,15 +193,15 @@ export default class Chart extends Component {
                   y2="100%"
                   id="gradient"
                 >
-                  <Stop stopColor={Colors.t3} offset="20%" />
-                  <Stop stopColor={Colors.t1} offset="80%" />
-                  <Stop stopColor={Colors.t2} offset="100%" />
+                  <Stop stopColor={Colors.graphLine} offset="20%" />
+                  <Stop stopColor={Colors.graphLine} offset="80%" />
+                  <Stop stopColor={Colors.graphLine} offset="100%" />
                 </LinearGradient>
-              </Defs>
+              </Defs> */}
               <Path
                 d={line}
                 fill="transparent"
-                stroke={Colors.t1}
+                stroke={Colors.graphLine}
                 strokeWidth={5}
               />
               <Path
@@ -259,13 +259,13 @@ export default class Chart extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    //...highlightGreen,
+    ...highlightGreen,
   },
   cursor: {
     width: cursorRadius * 2,
     height: cursorRadius * 2,
     borderRadius: cursorRadius,
-    borderColor: Colors.p1,
+    borderColor: Colors.primary,
     borderWidth: 3,
     backgroundColor: "white",
   },

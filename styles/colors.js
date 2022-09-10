@@ -7,30 +7,12 @@
  * 1. Added Color code
  */
 export default colors = {
-  p1: "#D31145",
-  p2: "#596C80",
-  p3: "#554344",
-  p4: "#363E3F",
-
   s1: "#E86487",
   s2: "#FBBF56",
   s3: "#97CB5D",
   s4: "#46D3BD",
   s5: "#22A8DA",
   s6: "#9962D2",
-
-  t1: "#886F59",
-  t2: "#BCAA99",
-  t3: "#DFD6CE",
-  t4: "#C36418",
-  t5: "#C6EB9E",
-  t6: "#65962E",
-  t7: "#A6E8DE",
-  t8: "#158D7A",
-  t9: "#A9DCEF",
-  t10: "#0A6E93",
-  t11: "#D7BFF0",
-  t12: "#551893",
 
   b1: "#D4EDF1",
   b2: "#FAF9F3",
@@ -60,6 +42,7 @@ export default colors = {
   disabled: "#DCDCDC",
   placeholder: "#666666",
   white: "#FFFFFF",
+  graphLine: "#00C9FF",
 
   //Vitality Status Color
   g2: ["#F15A22", "#FBC49D"],
