@@ -294,8 +294,6 @@ const BudgetsScreen = (props) => {
           actions={FABActions}
           visible={isShowFAB}
         ></FloatingActionButton>
-        {/* {isShowFAB ? (
-        ) : null} */}
         <Pagination
           dotsLength={budgets.length}
           activeDotIndex={budgetIndex}
