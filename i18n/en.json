@@ -16,6 +16,9 @@
   "accountDeletion": {
     "title": "Are you sure you want to delete your account?"
   },
+  "drawer": {
+    "budgetCount": "Budgets"
+  },
   "budget": {
     "title": "Edit Budget",
     "addCostItem": "Add Cost Item",

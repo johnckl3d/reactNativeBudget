@@ -20,12 +20,29 @@ import SettingsScreen from "@MiscScreens/SettingsScreen";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useDispatch, useSelector } from "react-redux";
 import { PreferencesContext } from "@Context/Context";
+import i18n from "@I18N/i18n";
 
 const DrawerScreen = (props) => {
   console.log("DrawerScreen::" + JSON.stringify(props));
   const dispatch = useDispatch();
   const login = useSelector((store) => store.login);
+  const budgets = useSelector((store) => store.budgets);
   const { toggleTheme, isThemeDark } = useContext(PreferencesContext);
+
+  const calculateGainLoss = () => {
+    var gain = 0;
+    var loss = 0;
+    var result = 0;
+
+    budgets.forEach((budget) => {
+      gain += budget.totalBudgetAmount;
+      loss += Math.abs(budget.totalCostAmount);
+    });
+
+    result = gain - loss;
+
+    return result;
+  };
 
   const signOutHandler = useCallback(
     async (accessToken) => {
@@ -36,7 +53,7 @@ const DrawerScreen = (props) => {
     },
     [dispatch]
   );
-
+  console.log("budgets::count::" + budgets.count);
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
@@ -58,15 +75,26 @@ const DrawerScreen = (props) => {
             <View style={styles.row}>
               <View style={styles.section}>
                 <Paragraph style={[styles.paragraph, styles.caption]}>
-                  80
+                  {budgets.length}
                 </Paragraph>
-                <Caption style={styles.caption}>Following</Caption>
+                <Caption style={styles.caption}>
+                  {i18n.t("drawer.budgetCount")}
+                </Caption>
               </View>
               <View style={styles.section}>
-                <Paragraph style={[styles.paragraph, styles.caption]}>
-                  100
+                <Paragraph
+                  style={[
+                    {
+                      color:
+                        Math.sign(calculateGainLoss()) === -1 ? "red" : "green",
+                    },
+                    styles.paragraph,
+                    styles.caption,
+                  ]}
+                >
+                  {calculateGainLoss()}
                 </Paragraph>
-                <Caption style={styles.caption}>Followers</Caption>
+                <Caption style={styles.caption}>Gain/Loss</Caption>
               </View>
             </View>
           </View>

@@ -47,7 +47,8 @@ import moment from "moment";
 import { highlightRed } from "../../styles/presentation";
 import { connect } from "react-redux";
 import i18n from "@I18N/i18n";
-import { useIsFocused } from "@react-navigation/native";
+import { useDrawerStatus } from "@react-navigation/drawer";
+
 import ACTION_TYPES from "@Actions/actionTypes";
 
 const SCREEN_WIDTH = Math.round(Dimensions.get("window").width);
@@ -59,13 +60,18 @@ const BudgetsScreen = (props) => {
   const [isFocus, setFocus] = useState(true);
   const [budgetIndex, setBudgetIndex] = useState(0);
   const [monthIndex, setMonthsIndex] = useState(0);
+  const [isShowFAB, setIsShowFAB] = useState(true);
   const dispatch = useDispatch();
   const monthsList = generateMonthArrayList();
-  const isFocused = useIsFocused();
+  const isDrawerOpen = useDrawerStatus() === "open";
 
   const FSM = useSelector((store) => store.FSM);
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
+
+  useEffect(() => {
+    setIsShowFAB(!isDrawerOpen);
+  }, [isDrawerOpen]);
 
   const FABActions = [
     {
@@ -290,11 +296,14 @@ const BudgetsScreen = (props) => {
           costCategories={budgets[budgetIndex].costCategories}
           deleteCallback={deleteCostCategoryHandler}
         ></BudgetAccordion>
-
-        <FloatingActionButton
-          visible={isFocused}
-          actions={FABActions}
-        ></FloatingActionButton>
+        {isDrawerOpen ? (
+          <View />
+        ) : (
+          <FloatingActionButton
+            visible={isShowFAB}
+            actions={FABActions}
+          ></FloatingActionButton>
+        )}
         <Pagination
           dotsLength={budgets.length}
           activeDotIndex={budgetIndex}
