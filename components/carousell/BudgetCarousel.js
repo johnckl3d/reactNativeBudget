@@ -26,12 +26,14 @@ import {
 
 const BudgetCarousel = (props) => {
   const _renderItem = ({ item }) => {
+    console.log("_renderItem");
     return (
-      <Chart
-        snapshots={item.costSnapShots}
-        width={props.width}
-        height={props.height}
-      />
+      <Chart />
+      // <Chart
+      //   snapshots={item.costSnapShots}
+      //   width={props.width}
+      //   height={props.height}
+      // />
       // <View
       //   style={styles.carouselItemContainer}
       //   width={props.width}
@@ -41,6 +43,7 @@ const BudgetCarousel = (props) => {
       // </View>
     );
   };
+  console.log("BudgetCarousel");
 
   return !props.data ? (
     <View></View>
