@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
-import { Colors, Text, FAB, Portal, useTheme} from "react-native-paper";
-import { ThemeColors } from "react-navigation";
+import { withTheme, Colors, Text, FAB, Portal } from "react-native-paper";
 
-const FloatingActionButton = ({actions}) => {
-  const theme = useTheme();
-
+const FloatingActionButton = ({ visible, actions }) => {
   const [state, setState] = useState({ open: false });
 
   const onStateChange = ({ open }) => setState({ open });
@@ -14,7 +11,7 @@ const FloatingActionButton = ({actions}) => {
 
   return (
     <Portal>
-     <FAB.Group
+      <FAB.Group
         open={open}
         icon={open ? "calendar-today" : "plus"}
         actions={actions}
@@ -24,25 +21,8 @@ const FloatingActionButton = ({actions}) => {
             // do something if the speed dial is open
           }
         }}
-        visible={true}
+        visible={visible}
       />
-      {/* <FAB.Group
-        open={open}
-        icon={open ? "calendar-today" : "plus"}
-        actions={[
-          { icon: "plus", onPress: () => {} },
-          { icon: "star", label: "Star", onPress: () => {} },
-          { icon: "email", label: "Email", onPress: () => {} },
-          { icon: "bell", label: "Remind", onPress: () => {} },
-        ]}
-        onStateChange={onStateChange}
-        onPress={() => {
-          if (open) {
-            // do something if the speed dial is open
-          }
-        }}
-        visible={true}
-      /> */}
     </Portal>
   );
 };
@@ -64,4 +44,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FloatingActionButton;
+export default withTheme(FloatingActionButton);

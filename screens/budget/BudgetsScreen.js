@@ -28,6 +28,7 @@ import {
   Subheading,
   Title,
   withTheme,
+  FAB,
 } from "react-native-paper";
 import { Pagination } from "react-native-snap-carousel";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -48,7 +49,7 @@ import { highlightRed } from "../../styles/presentation";
 import { connect } from "react-redux";
 import i18n from "@I18N/i18n";
 import { useDrawerStatus } from "@react-navigation/drawer";
-
+import { useIsFocused } from "@react-navigation/native";
 import ACTION_TYPES from "@Actions/actionTypes";
 
 const SCREEN_WIDTH = Math.round(Dimensions.get("window").width);
@@ -63,14 +64,20 @@ const BudgetsScreen = (props) => {
   const dispatch = useDispatch();
   const monthsList = generateMonthArrayList();
   const isDrawerOpen = useDrawerStatus() === "open";
-
+  const isFocused = useIsFocused() === true;
+  console.log("BudgetsScreen::FAB::isDrawerOpen0::" + useDrawerStatus());
+  console.log("BudgetsScreen::FAB::isFocused0::" + useIsFocused());
   const FSM = useSelector((store) => store.FSM);
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
 
   useEffect(() => {
-    setIsShowFAB(!isDrawerOpen);
-  }, [isDrawerOpen]);
+    if (isDrawerOpen || !isFocused) {
+      setIsShowFAB(false);
+    } else {
+      setIsShowFAB(true);
+    }
+  }, [isDrawerOpen, isFocused]);
 
   const FABActions = [
     {
@@ -204,19 +211,6 @@ const BudgetsScreen = (props) => {
     [dispatch]
   );
 
-  // if (props.hasError || props.hasError == "") {
-  //   return (
-  //     <View style={styles.centered}>
-  //       <Text> An error occured!</Text>
-  //       <Button
-  //         title="Try again"
-  //         onPress={loadBudgets}
-  //         color={Colors.primary}
-  //       ></Button>
-  //     </View>
-  //   );
-  // }
-
   if (FSM.hasError && FSM.hasError != "") {
     Alert.alert("Error!", FSM.hasError, [
       { text: "Okay", onPress: () => handleCloseError() },
@@ -241,7 +235,7 @@ const BudgetsScreen = (props) => {
       </View>
     );
   }
-
+  console.log("BudgetsScreen::render::" + isShowFAB);
   return (
     <SafeAreaView>
       <View style={styles.mainContent}>
@@ -295,14 +289,13 @@ const BudgetsScreen = (props) => {
           costCategories={budgets[budgetIndex].costCategories}
           deleteCallback={deleteCostCategoryHandler}
         ></BudgetAccordion>
-        {isDrawerOpen ? (
-          <View />
-        ) : (
-          <FloatingActionButton
-            visible={isShowFAB}
-            actions={FABActions}
-          ></FloatingActionButton>
-        )}
+        <FloatingActionButton
+          style={styles.fab}
+          actions={FABActions}
+          visible={isShowFAB}
+        ></FloatingActionButton>
+        {/* {isShowFAB ? (
+        ) : null} */}
         <Pagination
           dotsLength={budgets.length}
           activeDotIndex={budgetIndex}
@@ -317,6 +310,7 @@ const BudgetsScreen = (props) => {
 
 const styles = StyleSheet.create({
   centered: { ...centered, flex: 1 },
+  fab: { position: "absolute", margin: 16, right: 0, bottom: 0 },
   summary: {
     flexDirection: "row",
     height: hp(9),
@@ -325,7 +319,7 @@ const styles = StyleSheet.create({
   },
   mainContent: {
     width: SCREEN_WIDTH,
-    height: SCREEN_HEIGHT - 100,
+    height: SCREEN_HEIGHT,
   },
   costSnapShotContainer: {
     ...Styles.costSnapShotContainer,
@@ -340,10 +334,6 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
     margin: 8,
-  },
-  subHeading: {
-    marginHorizontal: wp(3),
-    marginVertical: wp(3),
   },
 });
 export default withTheme(BudgetsScreen);

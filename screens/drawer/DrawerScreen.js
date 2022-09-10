@@ -52,7 +52,6 @@ const DrawerScreen = (props) => {
     },
     [dispatch]
   );
-  console.log("budgets::count::" + budgets.count);
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props}>
