@@ -42,7 +42,12 @@ export default colors = {
   disabled: "#DCDCDC",
   placeholder: "#666666",
   white: "#FFFFFF",
+
+  //Chart
   graphLine: "#00C9FF",
+  chartBackgroundColor: "#e26a00",
+  chartBackgroundGradientFrom: "#fb8c00",
+  chartBackgroundGradientTo: "#ffa726",
 
   //Vitality Status Color
   g2: ["#F15A22", "#FBC49D"],

@@ -25,6 +25,16 @@ import {
   FAB,
 } from "react-native-paper";
 import { StyleSheet, View, Dimensions } from "react-native";
+import Colors from "@Styles/colors";
+import {
+  getFirstDayOfWeek,
+  getWeekOfDayWithOffset,
+  generateWeekArrayFromMonth,
+  generateMonthArrayFromMonth,
+  getDayOfMonthFromDate,
+  generateMonthArrayList,
+} from "@Utils/dates";
+import moment from "moment";
 
 const Chart = (props) => {
   console.log("Chart");
@@ -33,7 +43,7 @@ const Chart = (props) => {
       <Text>Bezier Line Chart</Text>
       <LineChart
         data={{
-          labels: ["January", "February", "March", "April", "May", "June"],
+          labels: generateWeekArrayFromMonth(moment().month("January")),
           datasets: [
             {
               data: [
@@ -53,9 +63,9 @@ const Chart = (props) => {
         yAxisSuffix="k"
         yAxisInterval={1} // optional, defaults to 1
         chartConfig={{
-          backgroundColor: "#e26a00",
-          backgroundGradientFrom: "#fb8c00",
-          backgroundGradientTo: "#ffa726",
+          backgroundColor: Colors.chartBackgroundColor,
+          backgroundGradientFrom: Colors.chartBackgroundGradientFrom,
+          backgroundGradientTo: Colors.chartBackgroundGradientTo,
           decimalPlaces: 2, // optional, defaults to 2dp
           color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
           labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,

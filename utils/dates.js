@@ -19,6 +19,23 @@ export function getDayOfMonthFromDate(input = moment()) {
   return result;
 }
 
+export function generateWeekArrayFromMonth(input = moment()) {
+  var days = [];
+  // var monday = moment()
+  //   .startOf('month')
+  //   .day("Monday");
+  var monday = input.clone().startOf("month").day("Monday");
+  if (monday.date() > 7) monday.add(7, "d");
+  var month = monday.month();
+  while (month === monday.month()) {
+    // document.body.innerHTML += "<p>"+monday.toString()+"</p>";
+    days.push(monday.format("MMM Do"));
+    monday.add(7, "d");
+  }
+  console.log("generateWeekArrayFromMonth::" + JSON.stringify(days));
+  return days;
+}
+
 export function generateMonthArrayFromMonth(input = moment()) {
   const days = [];
   const firstDayOfMonth = input.clone().startOf("month");
@@ -37,13 +54,12 @@ export function generateMonthArrayFromMonth(input = moment()) {
 }
 
 export function generateMonthArrayList() {
-  const months = []
-  const dateStart = moment()
-  const dateEnd = moment().add(100, 'month')
-  while (dateEnd.diff(dateStart, 'months') >= 0) {
-   months.push(dateStart.format('YYYY MMM'))
-   dateStart.add(1, 'month')
+  const months = [];
+  const dateStart = moment();
+  const dateEnd = moment().add(100, "month");
+  while (dateEnd.diff(dateStart, "months") >= 0) {
+    months.push(dateStart.format("YYYY MMM"));
+    dateStart.add(1, "month");
   }
-  return months
- 
+  return months;
 }
