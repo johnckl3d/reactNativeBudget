@@ -21,15 +21,11 @@ export function getDayOfMonthFromDate(input = moment()) {
 
 export function generateWeekArrayFromMonth(input = moment()) {
   var days = [];
-  // var monday = moment()
-  //   .startOf('month')
-  //   .day("Monday");
   var monday = input.clone().startOf("month").day("Monday");
   if (monday.date() > 7) monday.add(7, "d");
   var month = monday.month();
   while (month === monday.month()) {
-    // document.body.innerHTML += "<p>"+monday.toString()+"</p>";
-    days.push(monday.format("MMM Do"));
+    days.push(monday.format("Do"));
     monday.add(7, "d");
   }
   console.log("generateWeekArrayFromMonth::" + JSON.stringify(days));
