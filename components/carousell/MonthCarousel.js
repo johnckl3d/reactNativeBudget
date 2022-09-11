@@ -1,9 +1,8 @@
-import * as React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
 import Carousel from "react-native-snap-carousel";
 import { centered, highlightRed } from "../../styles/presentation";
 import { animatedStyles, scrollInterpolator } from "../../utils/animations";
-
+import React, { useCallback, useEffect, useState } from "react";
 import CustomText from "@CustomText";
 import Colors from "@Styles/colors";
 import Fonts from "@Styles/fonts";
@@ -12,67 +11,85 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "@Utils/scalingUtils";
-
 import {
-  List,
-  Text,
-  Chip,
+  ActivityIndicator,
+  Avatar,
+  Button,
+  Card,
   Divider,
   IconButton,
-  Avatar,
-  Card,
-  Button,
+  List,
+  Text,
   useTheme,
-  Switch,
   Caption,
   Headline,
   Paragraph,
   Subheading,
   Title,
   withTheme,
+  FAB,
 } from "react-native-paper";
+import { useDispatch, useSelector } from "react-redux";
+import moment from "moment";
+import ACTION_TYPES from "@Actions/actionTypes";
+import {
+  generateMonthArrayList,
+  getCurrentMonthIndexFromMonthArray,
+} from "@Utils/dates";
 
-export default class MonthCarousel extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeSlide: 0,
-    };
-    this._renderItem = this._renderItem.bind(this);
-  }
+const MonthCarousel = (props) => {
+  const FSM = useSelector((store) => store.FSM);
+  const login = useSelector((store) => store.login);
+  const budgets = useSelector((store) => store.budgets);
+  const dispatch = useDispatch();
+  const width = Dimensions.get("window").width;
 
-  _renderItem({ item }) {
+  const _renderItem = ({ item }) => {
     return (
       <Card style={styles.carouselItemContainer}>
         <Subheading>{item}</Subheading>
       </Card>
     );
-  }
+  };
 
-  render() {
-    const data = this.props.data;
-    return !data ? (
-      <View></View>
-    ) : (
-      <View style={styles.container}>
-        <Carousel
-          ref={(c) => (this.carousel = c)}
-          data={data}
-          renderItem={this._renderItem}
-          sliderWidth={this.props.width}
-          itemWidth={this.props.width}
-          contentContainerStyle={styles.carouselItemContainer}
-          //containerCustomStyle={{flexGrow: 0}}
-          inactiveSlideShift={0}
-          onSnapToItem={(index) => this.props.parentCallback(index)}
-          scrollInterpolator={scrollInterpolator}
-          slideInterpolatedStyle={animatedStyles}
-          useScrollView={true}
-        />
-      </View>
-    );
-  }
-}
+  const monthsList = generateMonthArrayList();
+  useEffect(() => {
+    //const index = moment().month();
+    const index = getCurrentMonthIndexFromMonthArray(monthsList);
+    dispatch({
+      type: ACTION_TYPES.SET_BUDGETMONTHINDEX,
+      selectedBudgetMonthIndex: index,
+    });
+  }, [dispatch]);
+
+  const handleMonthsSwipeCallback = (index) => {
+    dispatch({
+      type: ACTION_TYPES.SET_BUDGETMONTHINDEX,
+      selectedBudgetMonthIndex: index,
+    });
+  };
+
+  return (
+    <View style={styles.container}>
+      <Carousel
+        //ref={(c) => (this.carousel = c)}
+        data={monthsList}
+        renderItem={_renderItem}
+        sliderWidth={width}
+        itemWidth={width}
+        contentContainerStyle={styles.carouselItemContainer}
+        //containerCustomStyle={{flexGrow: 0}}
+        inactiveSlideShift={0}
+        firstItem={FSM.selectedBudgetMonthIndex}
+        initialScrollIndex={FSM.selectedBudgetMonthIndex}
+        onSnapToItem={(index) => handleMonthsSwipeCallback(index)}
+        scrollInterpolator={scrollInterpolator}
+        slideInterpolatedStyle={animatedStyles}
+        useScrollView={true}
+      />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -83,3 +100,5 @@ const styles = StyleSheet.create({
     height: hp(5),
   },
 });
+
+export default withTheme(MonthCarousel);

@@ -12,3 +12,17 @@ export function isLoading(bool) {
     isLoading: bool,
   };
 }
+
+export function setBudgetId(string) {
+  return {
+    type: ACTION_TYPES.SET_BUDGETID,
+    selectedBudgetId: string,
+  };
+}
+
+export function setBudgetMonthIndex(string) {
+  return {
+    type: ACTION_TYPES.SET_BUDGETMONTHINDEX,
+    selectedBudgetMonthIndex: string,
+  };
+}

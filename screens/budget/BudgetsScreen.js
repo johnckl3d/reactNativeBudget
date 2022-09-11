@@ -37,7 +37,7 @@ import BudgetCarousel from "../../components/carousell/BudgetCarousel";
 import MonthCarousel from "../../components/carousell/MonthCarousel";
 import BudgetAccordion from "@Accordion/BudgetAccordion";
 import HeaderButton from "../../components/UI/HeaderButton";
-import * as budgetsActions from "../../store/actions/budgets";
+import * as budgetsActions from "@Actions/budgets";
 import * as costCategoriesActions from "../../store/actions/costCategories";
 import {
   widthPercentageToDP as wp,
@@ -59,14 +59,10 @@ const mode = isOutlined ? "outlined" : "elevated";
 
 const BudgetsScreen = (props) => {
   const [budgetIndex, setBudgetIndex] = useState(0);
-  const [monthIndex, setMonthsIndex] = useState(0);
   const [isShowFAB, setIsShowFAB] = useState(true);
   const dispatch = useDispatch();
-  const monthsList = generateMonthArrayList();
   const isDrawerOpen = useDrawerStatus() === "open";
   const isFocused = useIsFocused() === true;
-  console.log("BudgetsScreen::FAB::isDrawerOpen0::" + useDrawerStatus());
-  console.log("BudgetsScreen::FAB::isFocused0::" + useIsFocused());
   const FSM = useSelector((store) => store.FSM);
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
@@ -128,10 +124,6 @@ const BudgetsScreen = (props) => {
       setBudgetIndex(0);
     }
     setBudgetIndex(childData);
-  };
-
-  const handleMonthsSwipeCallback = (childData) => {
-    setMonthsIndex(childData);
   };
 
   const handleCloseError = () => {
@@ -279,11 +271,7 @@ const BudgetsScreen = (props) => {
             width={Dimensions.get("window").width}
             height={Dimensions.get("window").height * 0.3}
           />
-          <MonthCarousel
-            data={monthsList}
-            parentCallback={handleMonthsSwipeCallback}
-            width={Dimensions.get("window").width}
-          />
+          <MonthCarousel />
         </Card>
         <BudgetAccordion
           costCategories={budgets[budgetIndex].costCategories}

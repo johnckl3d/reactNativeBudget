@@ -37,7 +37,6 @@ import {
 import moment from "moment";
 
 const Chart = (props) => {
-  console.log("Chart");
   return (
     <View>
       <Text>Bezier Line Chart</Text>

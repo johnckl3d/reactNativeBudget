@@ -28,7 +28,6 @@ export function generateWeekArrayFromMonth(input = moment()) {
     days.push(monday.format("Do"));
     monday.add(7, "d");
   }
-  console.log("generateWeekArrayFromMonth::" + JSON.stringify(days));
   return days;
 }
 
@@ -51,11 +50,17 @@ export function generateMonthArrayFromMonth(input = moment()) {
 
 export function generateMonthArrayList() {
   const months = [];
-  const dateStart = moment();
+  const dateStart = moment().subtract(100, "month");
   const dateEnd = moment().add(100, "month");
   while (dateEnd.diff(dateStart, "months") >= 0) {
     months.push(dateStart.format("YYYY MMM"));
     dateStart.add(1, "month");
   }
   return months;
+}
+
+export function getCurrentMonthIndexFromMonthArray(array) {
+  const date = moment().format("YYYY MMM");
+  const index = array.findIndex((obj) => obj === date);
+  return index;
 }

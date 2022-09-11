@@ -26,7 +26,6 @@ import {
 
 const BudgetCarousel = (props) => {
   const _renderItem = ({ item }) => {
-    console.log("_renderItem");
     return (
       <Chart />
       // <Chart
