@@ -31,9 +31,12 @@ export function generateMondayStringFromMonth(input = moment()) {
   return days;
 }
 
-export function generateMondayMomentFromMonth(input = moment()) {
+export function generateMondayMomentFromMonth(input) {
   var days = [];
-  var monday = input.clone().startOf("month").day("Monday");
+  console.log("generateMondayMomentFromMonth::input::" + JSON.stringify(input));
+  var date = moment(input, "YYYY MMM");
+  console.log("generateMondayMomentFromMonth::date::" + JSON.stringify(date));
+  var monday = date.startOf("month").day("Monday");
   if (monday.date() > 7) monday.add(7, "d");
   var month = monday.month();
   while (month === monday.month()) {
@@ -77,21 +80,18 @@ export function getCurrentMonthIndexFromMonthArray(array) {
   return index;
 }
 
-export function findWeekInMonthArr(date, month) {
+export function findWeekInMonthArr(dateStr) {
   var index = null;
-  console.log("date::findWeekInMonthArr::date::" + date);
-  console.log("date::findWeekInMonthArr::month::" + month);
-  const firstDayOfMonth = month.clone().startOf("month");
-  const firstDayOfWeek = firstDayOfMonth.clone().startOf("week");
+  var date = moment(dateStr, "YYYY MMM");
+  // console.log("date::findWeekInMonthArr::date::" + date);
+  // console.log("date::findWeekInMonthArr::month::" + month);
+  // const firstDayOfMonth = month.clone().startOf("month");
+  // const firstDayOfWeek = firstDayOfMonth.clone().startOf("week");
 
-  const offset = firstDayOfMonth.diff(firstDayOfWeek, "days");
+  // const offset = firstDayOfMonth.diff(firstDayOfWeek, "days");
 
-  index = Math.ceil((date.date() + offset) / 7);
-  console.log("date::findWeekInMonthArr::index::" + index);
-  // weekArr.forEach((element) => {
-  //   var elementWeek = element.week();
-  //   if(date === element)
-  // });
-  //const index = weekArr.findIndex((obj) => obj === date);
+  // index = Math.ceil((date.clone() + offset) / 7);
+  // console.log("date::findWeekInMonthArr::index::" + index);
+  index = date.format("w");
   return index;
 }

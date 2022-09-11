@@ -6,9 +6,7 @@ export function validateJwtExpiryDateIsExpired(value) {
   var expired = true;
   try {
     var decoded = jwt_decode(value);
-    console.log("tokenUtils::validateJwtExpiryDateIsExpired::decoded::" + decoded.exp);
-    var isBefore = moment(decoded.exp).isBefore(); 
-    console.log("tokenUtils::validateJwtExpiryDateIsExpired::isBefore::" + isBefore);
+    var isBefore = moment(decoded.exp).isBefore();
     expired = isBefore;
   } catch (e) {
     console.log(e);

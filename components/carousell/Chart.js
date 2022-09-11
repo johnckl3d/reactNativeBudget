@@ -55,11 +55,11 @@ const Chart = (props) => {
   const width = Dimensions.get("window").width;
 
   useEffect(() => {
-    var result = convertCostSnapShotsToWeekAmount();
-    dispatch({
-      type: ACTION_TYPES.SET_GRAPHDATAAMOUNT,
-      graphDataAmount: result,
-    });
+    // var result = convertCostSnapShotsToWeekAmount();
+    // dispatch({
+    //   type: ACTION_TYPES.SET_GRAPHDATAAMOUNT,
+    //   graphDataAmount: result,
+    // });
   }, [dispatch]);
 
   useEffect(() => {
@@ -80,7 +80,7 @@ const Chart = (props) => {
     const budgetIndex = budgets.findIndex(
       (obj) => obj.budgetId === FSM.selectedBudgetId
     );
-    const month = moment().month(FSM.selectedBudgetMonthIndex);
+    const month = FSM.selectedBudgetMonth;
     const weekArr = generateMondayMomentFromMonth(month);
     console.log("convertCostSnapShotsToWeekAmount::" + weekArr);
     weekArr.forEach((element) => {
@@ -103,14 +103,14 @@ const Chart = (props) => {
     const budgetIndex = budgets.findIndex(
       (obj) => obj.budgetId === FSM.selectedBudgetId
     );
-    const month = moment().month(FSM.selectedBudgetMonthIndex);
+    const month = FSM.selectedBudgetMonth;
     const weekArr = generateMondayMomentFromMonth(month);
     console.log("convertCostSnapShotsToWeekDate::" + weekArr);
     weekArr.forEach((element) => {
       dateArr.push(element);
     });
     budgets[budgetIndex].costSnapShots.forEach((costSnapShot) => {
-      const costSnapShotDate = moment(new Date(costSnapShot.dateTime)).day();
+      const costSnapShotDate = moment(new Date(costSnapShot.dateTime));
       const weekIndex = findWeekInMonthArr(costSnapShotDate, month);
       console.log(
         "convertCostSnapShotsToWeekDate::findWeekInMonthArr::weekIndex::" +

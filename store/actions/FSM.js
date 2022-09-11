@@ -22,7 +22,7 @@ export function setBudgetId(string) {
 
 export function setBudgetMonthIndex(string) {
   return {
-    type: ACTION_TYPES.SET_BUDGETMONTHINDEX,
+    type: ACTION_TYPES.SET_BUDGETMONTH,
     selectedBudgetMonthIndex: string,
   };
 }

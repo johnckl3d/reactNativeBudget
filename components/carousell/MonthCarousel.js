@@ -56,16 +56,19 @@ const MonthCarousel = (props) => {
   useEffect(() => {
     //const index = moment().month();
     const index = getCurrentMonthIndexFromMonthArray(monthsList);
+
+    const month = monthsList[index];
     dispatch({
-      type: ACTION_TYPES.SET_BUDGETMONTHINDEX,
-      selectedBudgetMonthIndex: index,
+      type: ACTION_TYPES.SET_BUDGETMONTH,
+      selectedBudgetMonth: month,
     });
   }, [dispatch]);
 
   const handleMonthsSwipeCallback = (index) => {
+    const month = monthsList[index];
     dispatch({
-      type: ACTION_TYPES.SET_BUDGETMONTHINDEX,
-      selectedBudgetMonthIndex: index,
+      type: ACTION_TYPES.SET_BUDGETMONTH,
+      selectedBudgetMonth: month,
     });
   };
 
