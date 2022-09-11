@@ -26,3 +26,17 @@ export function setBudgetMonthIndex(string) {
     selectedBudgetMonthIndex: string,
   };
 }
+
+export function setGraphDataAmount(graphDataAmount) {
+  return {
+    type: ACTION_TYPES.SET_GRAPHDATAAMOUNT,
+    graphDataAmount: graphDataAmount,
+  };
+}
+
+export function setGraphDataWeek(graphDataWeek) {
+  return {
+    type: ACTION_TYPES.SET_GRAPHDATAWEEK,
+    graphDataWeek: graphDataWeek,
+  };
+}

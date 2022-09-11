@@ -46,7 +46,6 @@ const DrawerScreen = (props) => {
   const signOutHandler = useCallback(
     async (accessToken) => {
       try {
-        console.log("signout");
         await dispatch(loginActions.logout(accessToken));
       } catch (err) {}
     },

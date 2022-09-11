@@ -1,5 +1,5 @@
-import * as React from "react";
-import { StyleSheet, View } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { StyleSheet, View, Dimensions } from "react-native";
 import Carousel from "react-native-snap-carousel";
 import { centered, highlightRed } from "@Styles/presentation";
 import { animatedStyles, scrollInterpolator } from "../../utils/animations";
@@ -23,8 +23,16 @@ import {
   withTheme,
   FAB,
 } from "react-native-paper";
+import ACTION_TYPES from "@Actions/actionTypes";
+import { useDispatch, useSelector } from "react-redux";
 
 const BudgetCarousel = (props) => {
+  const FSM = useSelector((store) => store.FSM);
+  const login = useSelector((store) => store.login);
+  const budgets = useSelector((store) => store.budgets);
+  const dispatch = useDispatch();
+  const width = Dimensions.get("window").width;
+
   const _renderItem = ({ item }) => {
     return (
       <Chart />
@@ -42,22 +50,43 @@ const BudgetCarousel = (props) => {
       // </View>
     );
   };
-  console.log("BudgetCarousel");
 
-  return !props.data ? (
-    <View></View>
-  ) : (
-    <View style={styles.container}>
+  useEffect(() => {
+    var result = budgets[0].budgetId;
+    dispatch({
+      type: ACTION_TYPES.SET_BUDGETID,
+      selectedBudgetId: result,
+    });
+  }, [dispatch]);
+
+  const handleBudgetSwipeCallback = (index) => {
+    var result = budgets[0].budgetId;
+    if (index < budgets.length - 1) {
+      result = budgets[index].budgetId;
+    }
+    dispatch({
+      type: ACTION_TYPES.SET_BUDGETID,
+      selectedBudgetId: result,
+    });
+  };
+
+  const getIndexFromBudgetArr = (id) => {
+    const index = budgets.findIndex((obj) => obj.budgetId === id);
+    return index;
+  };
+
+  return (
+    <View style={styles.centered}>
       <Carousel
         //ref={(c) => (carousel = c)}
-        data={props.data}
+        data={budgets}
         renderItem={_renderItem}
-        sliderWidth={props.width}
-        itemWidth={props.width}
+        sliderWidth={width}
+        itemWidth={width}
         // contentContainerStyle={styles.carouselItemContainer}
         // containerCustomStyle={{flexGrow: 0}}
         inactiveSlideShift={0}
-        onSnapToItem={(index) => props.parentCallback(index)}
+        onSnapToItem={(index) => handleBudgetSwipeCallback(index)}
         scrollInterpolator={scrollInterpolator}
         slideInterpolatedStyle={animatedStyles}
         useScrollView={true}
@@ -67,10 +96,7 @@ const BudgetCarousel = (props) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    ...centered,
-  },
-  carouselItemContainer: {
+  centered: {
     ...centered,
   },
 });

@@ -19,13 +19,25 @@ export function getDayOfMonthFromDate(input = moment()) {
   return result;
 }
 
-export function generateWeekArrayFromMonth(input = moment()) {
+export function generateMondayStringFromMonth(input = moment()) {
   var days = [];
   var monday = input.clone().startOf("month").day("Monday");
   if (monday.date() > 7) monday.add(7, "d");
   var month = monday.month();
   while (month === monday.month()) {
     days.push(monday.format("Do"));
+    monday.add(7, "d");
+  }
+  return days;
+}
+
+export function generateMondayMomentFromMonth(input = moment()) {
+  var days = [];
+  var monday = input.clone().startOf("month").day("Monday");
+  if (monday.date() > 7) monday.add(7, "d");
+  var month = monday.month();
+  while (month === monday.month()) {
+    days.push(monday);
     monday.add(7, "d");
   }
   return days;
@@ -62,5 +74,24 @@ export function generateMonthArrayList() {
 export function getCurrentMonthIndexFromMonthArray(array) {
   const date = moment().format("YYYY MMM");
   const index = array.findIndex((obj) => obj === date);
+  return index;
+}
+
+export function findWeekInMonthArr(date, month) {
+  var index = null;
+  console.log("date::findWeekInMonthArr::date::" + date);
+  console.log("date::findWeekInMonthArr::month::" + month);
+  const firstDayOfMonth = month.clone().startOf("month");
+  const firstDayOfWeek = firstDayOfMonth.clone().startOf("week");
+
+  const offset = firstDayOfMonth.diff(firstDayOfWeek, "days");
+
+  index = Math.ceil((date.date() + offset) / 7);
+  console.log("date::findWeekInMonthArr::index::" + index);
+  // weekArr.forEach((element) => {
+  //   var elementWeek = element.week();
+  //   if(date === element)
+  // });
+  //const index = weekArr.findIndex((obj) => obj === date);
   return index;
 }

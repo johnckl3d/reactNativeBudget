@@ -44,7 +44,6 @@ export const login = (userId, password) => {
         }),
       })
         .then((response) => {
-          console.log("action::login::response::" + JSON.stringify(response));
           storeStringData(STORAGE.ACCESS_TOKEN, response.data.accessToken);
           storeStringData(STORAGE.REFRESH_TOKEN, response.data.refresh_token);
           dispatch({
