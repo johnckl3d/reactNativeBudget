@@ -1,7 +1,7 @@
 import Colors from "@Styles/colors";
 import { centered } from "@Styles/presentation";
 import Styles from "@Styles/styles";
-import { generateMonthArrayList } from "@Utils/dates";
+import { generateMonthRange } from "@Utils/dates";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   Alert,

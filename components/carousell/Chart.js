@@ -30,12 +30,10 @@ import {
   getFirstDayOfWeek,
   getWeekOfDayWithOffset,
   generateMondayStringFromMonth,
-  generateMondayMomentFromMonth,
-  generateMonthArrayFromMonth,
   getDayOfMonthFromDate,
-  generateMonthArrayList,
+  generateMonthRange,
   getCurrentMonthIndexFromMonthArray,
-  findWeekInMonthArr,
+  generateAmountFromMonth,
 } from "@Utils/dates";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
@@ -55,11 +53,11 @@ const Chart = (props) => {
   const width = Dimensions.get("window").width;
 
   useEffect(() => {
-    // var result = convertCostSnapShotsToWeekAmount();
-    // dispatch({
-    //   type: ACTION_TYPES.SET_GRAPHDATAAMOUNT,
-    //   graphDataAmount: result,
-    // });
+    var result = convertCostSnapShotsToWeekAmount();
+    dispatch({
+      type: ACTION_TYPES.SET_GRAPHDATAAMOUNT,
+      graphDataAmount: result,
+    });
   }, [dispatch]);
 
   useEffect(() => {
@@ -76,50 +74,20 @@ const Chart = (props) => {
   };
 
   const convertCostSnapShotsToWeekAmount = () => {
-    var amountArr = [];
     const budgetIndex = budgets.findIndex(
       (obj) => obj.budgetId === FSM.selectedBudgetId
     );
-    const month = FSM.selectedBudgetMonth;
-    const weekArr = generateMondayMomentFromMonth(month);
-    console.log("convertCostSnapShotsToWeekAmount::" + weekArr);
-    weekArr.forEach((element) => {
-      amountArr.push(0);
-    });
-    budgets[budgetIndex].costSnapShots.forEach((costSnapShot) => {
-      const date = moment(new Date(costSnapShot.dateTime)).day();
-      const weekIndex = findWeekInMonthArr(date, month);
-      console.log(
-        "convertCostSnapShotsToWeekAmount::findWeekInMonthArr::weekIndex::" +
-          weekIndex
-      );
-      amountArr[weekIndex] += costSnapShot.amount;
-    });
+    const monthStr = FSM.selectedBudgetMonth;
+    const costSnapShots = budgets[budgetIndex].costSnapShots;
+    const amountArr = generateAmountFromMonth(costSnapShots, monthStr);
+
     return amountArr;
   };
 
   const convertCostSnapShotsToWeekDate = () => {
-    var dateArr = [];
-    const budgetIndex = budgets.findIndex(
-      (obj) => obj.budgetId === FSM.selectedBudgetId
-    );
-    const month = FSM.selectedBudgetMonth;
-    const weekArr = generateMondayMomentFromMonth(month);
-    console.log("convertCostSnapShotsToWeekDate::" + weekArr);
-    weekArr.forEach((element) => {
-      dateArr.push(element);
-    });
-    budgets[budgetIndex].costSnapShots.forEach((costSnapShot) => {
-      const costSnapShotDate = moment(new Date(costSnapShot.dateTime));
-      const weekIndex = findWeekInMonthArr(costSnapShotDate, month);
-      console.log(
-        "convertCostSnapShotsToWeekDate::findWeekInMonthArr::weekIndex::" +
-          weekIndex
-      );
-      const weekArrDate = moment(new Date(weekArr[weekIndex]));
-      dateArr[weekIndex] = weekArrDate.format("YYYY MMM");
-    });
-    return dateArr;
+    const monthStr = FSM.selectedBudgetMonth;
+    const arr = generateMondayStringFromMonth(monthStr);
+    return arr;
   };
 
   return (

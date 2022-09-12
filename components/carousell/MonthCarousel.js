@@ -33,7 +33,7 @@ import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import ACTION_TYPES from "@Actions/actionTypes";
 import {
-  generateMonthArrayList,
+  generateMonthRange,
   getCurrentMonthIndexFromMonthArray,
 } from "@Utils/dates";
 
@@ -52,7 +52,7 @@ const MonthCarousel = (props) => {
     );
   };
 
-  const monthsList = generateMonthArrayList();
+  const monthsList = generateMonthRange();
   useEffect(() => {
     //const index = moment().month();
     const index = getCurrentMonthIndexFromMonthArray(monthsList);

@@ -1,4 +1,5 @@
 export const SETTINGS = {
   ACCESS_TOKEN_BYPASS: true,
   TIMEOUT: 6000,
+  BUDGET_MONTH_RANGE: 20,
 };

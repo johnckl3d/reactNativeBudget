@@ -1,4 +1,5 @@
 import moment from "moment";
+import { SETTINGS } from "@Constants/settings";
 
 export function getWeekOfDayWithOffset(input = moment()) {
   const firstDayOfMonth = input.clone().startOf("month");
@@ -19,54 +20,10 @@ export function getDayOfMonthFromDate(input = moment()) {
   return result;
 }
 
-export function generateMondayStringFromMonth(input = moment()) {
-  var days = [];
-  var monday = input.clone().startOf("month").day("Monday");
-  if (monday.date() > 7) monday.add(7, "d");
-  var month = monday.month();
-  while (month === monday.month()) {
-    days.push(monday.format("Do"));
-    monday.add(7, "d");
-  }
-  return days;
-}
-
-export function generateMondayMomentFromMonth(input) {
-  var days = [];
-  console.log("generateMondayMomentFromMonth::input::" + JSON.stringify(input));
-  var date = moment(input, "YYYY MMM");
-  console.log("generateMondayMomentFromMonth::date::" + JSON.stringify(date));
-  var monday = date.startOf("month").day("Monday");
-  if (monday.date() > 7) monday.add(7, "d");
-  var month = monday.month();
-  while (month === monday.month()) {
-    days.push(monday);
-    monday.add(7, "d");
-  }
-  return days;
-}
-
-export function generateMonthArrayFromMonth(input = moment()) {
-  const days = [];
-  const firstDayOfMonth = input.clone().startOf("month");
-  const lastDayOfMonth = input.clone().endOf("month");
-  const dateStart = firstDayOfMonth;
-  const dateEnd = lastDayOfMonth;
-  while (dateEnd.diff(dateStart, "days") >= 0) {
-    if (dateStart.isBefore(dateEnd)) {
-      const obj = { x: new Date(dateStart).getTime(), y: 0 };
-      //const obj = { x: dateStart.format("YYYY-MM-DDTHH:mm:ss.SSSZ"), y: 0 };
-      days.push(obj);
-    }
-    dateStart.add(1, "days");
-  }
-  return days;
-}
-
-export function generateMonthArrayList() {
+export function generateMonthRange() {
   const months = [];
-  const dateStart = moment().subtract(100, "month");
-  const dateEnd = moment().add(100, "month");
+  const dateStart = moment().subtract(SETTINGS.BUDGET_MONTH_RANGE, "month");
+  const dateEnd = moment().add(SETTINGS.BUDGET_MONTH_RANGE, "month");
   while (dateEnd.diff(dateStart, "months") >= 0) {
     months.push(dateStart.format("YYYY MMM"));
     dateStart.add(1, "month");
@@ -80,18 +37,70 @@ export function getCurrentMonthIndexFromMonthArray(array) {
   return index;
 }
 
-export function findWeekInMonthArr(dateStr) {
-  var index = null;
-  var date = moment(dateStr, "YYYY MMM");
-  // console.log("date::findWeekInMonthArr::date::" + date);
-  // console.log("date::findWeekInMonthArr::month::" + month);
-  // const firstDayOfMonth = month.clone().startOf("month");
-  // const firstDayOfWeek = firstDayOfMonth.clone().startOf("week");
+export function generateAmountFromMonth(costSnapShots, monthStr) {
+  //console.log("convertCostSnapShotsToWeekAmount::" + weekArr);
+  var days = [];
+  //console.log("generateAmountFromMonth");
+  const date = moment(monthStr, "YYYY MMM");
+  //console.log("generateAmountFromMonth::" + JSON.stringify(date));
+  var day = date.startOf("month");
+  var month = day.month();
+  while (month === day.month()) {
+    days.push(0);
+    day.add(1, "d");
+  }
 
-  // const offset = firstDayOfMonth.diff(firstDayOfWeek, "days");
+  costSnapShots.forEach((costSnapShot) => {
+    //"2021-01-15T00:00:00"
+    //"2021-01-19T00:00:00"
+    const dt = costSnapShot.dateTime;
+    // console.log(
+    //   "generateAmountFromMonth::costSnapShots::ssDate-1::" +
+    //     JSON.stringify(moment(dt, "yyyy-MM-dd'T'HH:mm:ss", true).isValid())
+    // );
+    const dtt = dt.split("T")[0];
+    console.log(dtt);
+    const ssDate = moment(dtt, "YYYY-MM-DD");
+    var ssDay = ssDate.clone().startOf("month");
+    var ssMonth = ssDay.month();
+    console.log(
+      "generateAmountFromMonth::costSnapShots::ssDate::" +
+        JSON.stringify(ssDate)
+    );
+    console.log(
+      "generateAmountFromMonth::costSnapShots::ssDay::" + JSON.stringify(ssDay)
+    );
+    console.log(
+      "generateAmountFromMonth::costSnapShots::ssMonth::" +
+        JSON.stringify(ssMonth)
+    );
+    console.log(
+      "generateAmountFromMonth::costSnapShots::Month::" + JSON.stringify(month)
+    );
+    if (ssMonth === month) {
+      console.log("generateAmountFromMonth::costSnapShots::match");
+      const index = ssDate.day() - 1;
+      days[index] += costSnapShot.amount;
+    }
+  });
 
-  // index = Math.ceil((date.clone() + offset) / 7);
-  // console.log("date::findWeekInMonthArr::index::" + index);
-  index = date.format("w");
-  return index;
+  return days;
+}
+
+export function generateMondayStringFromMonth(monthStr) {
+  var days = [];
+  const date = moment(monthStr, "YYYY MMM");
+  //console.log(JSON.stringify(date));
+  var day = date.startOf("month");
+  var month = day.month();
+  while (month === day.month()) {
+    //console.log(day.format("dddd"));
+    if (day.format("dddd") === "Monday") {
+      days.push(day.clone().format("DD-MM"));
+    } else {
+      days.push("");
+    }
+    day.add(1, "d");
+  }
+  return days;
 }

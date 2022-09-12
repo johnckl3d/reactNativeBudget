@@ -36,7 +36,7 @@ export default (state = initialState, action) => {
         ...state,
         graphDataAmount: action.graphDataAmount,
       };
-    case ACTION_TYPES.SET_GRAPHDATAAMOUNT:
+    case ACTION_TYPES.SET_GRAPHDATAWEEK:
       return {
         ...state,
         graphDataWeek: action.graphDataWeek,
