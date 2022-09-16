@@ -34,13 +34,22 @@ import moment from "moment";
 import ACTION_TYPES from "@Actions/actionTypes";
 import {
   generateMonthRange,
-  getCurrentMonthIndexFromMonthArray,
+  getMonthIndexFromMonthArray,
+  generateMondayStringFromMonth,
+  generateAmountFromMonth,
 } from "@Utils/dates";
 
 const MonthCarousel = (props) => {
   const FSM = useSelector((store) => store.FSM);
+  const graphDataAmount = FSM.graphDataAmount;
+  const graphDataWeek = FSM.graphDataWeek;
+  const selectedBudgetMonth = FSM.selectedBudgetMonth;
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
+  const budgetIndex = budgets.findIndex(
+    (obj) => obj.budgetId === FSM.selectedBudgetId
+  );
+  const costSnapShots = budgets[budgetIndex].costSnapShots;
   const dispatch = useDispatch();
   const width = Dimensions.get("window").width;
 
@@ -53,10 +62,10 @@ const MonthCarousel = (props) => {
   };
 
   const monthsList = generateMonthRange();
+  console.log("MonthCarousel::monthList::" + monthsList);
   useEffect(() => {
-    //const index = moment().month();
-    const index = getCurrentMonthIndexFromMonthArray(monthsList);
-
+    const monthStr = moment().format("YYYY MMM");
+    const index = getMonthIndexFromMonthArray(monthStr, monthsList);
     const month = monthsList[index];
     dispatch({
       type: ACTION_TYPES.SET_BUDGETMONTH,
@@ -64,14 +73,50 @@ const MonthCarousel = (props) => {
     });
   }, [dispatch]);
 
-  const handleMonthsSwipeCallback = (index) => {
+  const handleMonthsSwipeCallback = async (index) => {
+    console.log("MonthCarousel::handleMonthsSwipeCallback::index::" + index);
     const month = monthsList[index];
     dispatch({
       type: ACTION_TYPES.SET_BUDGETMONTH,
       selectedBudgetMonth: month,
     });
+    console.log(
+      "MonthCarousel::handleMonthsSwipeCallback::selectedBudgetMonth::" +
+        selectedBudgetMonth
+    );
+    const amountArr = generateAmountFromMonth(costSnapShots, month);
+    dispatch({
+      type: ACTION_TYPES.SET_GRAPHDATAAMOUNT,
+      graphDataAmount: amountArr,
+    });
+
+    const weekArr = generateMondayStringFromMonth(month);
+    dispatch({
+      type: ACTION_TYPES.SET_GRAPHDATAWEEK,
+      graphDataWeek: weekArr,
+    });
+
+    // var weekArr = convertCostSnapShotsToWeekDate();
+
+    // var amountArr = convertCostSnapShotsToWeekAmount();
   };
 
+  const convertCostSnapShotsToWeekAmount = () => {
+    const amountArr = generateAmountFromMonth(
+      costSnapShots,
+      selectedBudgetMonth
+    );
+    return amountArr;
+  };
+
+  const convertCostSnapShotsToWeekDate = () => {
+    const arr = generateMondayStringFromMonth(selectedBudgetMonth);
+    return arr;
+  };
+
+  if (selectedBudgetMonth === "") {
+    return <View></View>;
+  }
   return (
     <View style={styles.container}>
       <Carousel
@@ -83,8 +128,11 @@ const MonthCarousel = (props) => {
         contentContainerStyle={styles.carouselItemContainer}
         //containerCustomStyle={{flexGrow: 0}}
         inactiveSlideShift={0}
-        firstItem={FSM.selectedBudgetMonthIndex}
-        initialScrollIndex={FSM.selectedBudgetMonthIndex}
+        firstItem={getMonthIndexFromMonthArray(selectedBudgetMonth, monthsList)}
+        initialScrollIndex={getMonthIndexFromMonthArray(
+          selectedBudgetMonth,
+          monthsList
+        )}
         onSnapToItem={(index) => handleMonthsSwipeCallback(index)}
         scrollInterpolator={scrollInterpolator}
         slideInterpolatedStyle={animatedStyles}

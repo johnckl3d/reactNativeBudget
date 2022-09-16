@@ -32,7 +32,6 @@ import {
   generateMondayStringFromMonth,
   getDayOfMonthFromDate,
   generateMonthRange,
-  getCurrentMonthIndexFromMonthArray,
   generateAmountFromMonth,
 } from "@Utils/dates";
 import moment from "moment";
@@ -47,8 +46,15 @@ import {
 
 const Chart = (props) => {
   const FSM = useSelector((store) => store.FSM);
+  const graphDataAmount = FSM.graphDataAmount;
+  const graphDataWeek = FSM.graphDataWeek;
+  const selectedBudgetMonth = FSM.selectedBudgetMonth;
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
+  const budgetIndex = budgets.findIndex(
+    (obj) => obj.budgetId === FSM.selectedBudgetId
+  );
+  const costSnapShots = budgets[budgetIndex].costSnapShots;
   const dispatch = useDispatch();
   const width = Dimensions.get("window").width;
 
@@ -74,37 +80,39 @@ const Chart = (props) => {
   };
 
   const convertCostSnapShotsToWeekAmount = () => {
-    const budgetIndex = budgets.findIndex(
-      (obj) => obj.budgetId === FSM.selectedBudgetId
+    const amountArr = generateAmountFromMonth(
+      costSnapShots,
+      selectedBudgetMonth
     );
-    const monthStr = FSM.selectedBudgetMonth;
-    const costSnapShots = budgets[budgetIndex].costSnapShots;
-    const amountArr = generateAmountFromMonth(costSnapShots, monthStr);
-
     return amountArr;
   };
 
   const convertCostSnapShotsToWeekDate = () => {
-    const monthStr = FSM.selectedBudgetMonth;
-    const arr = generateMondayStringFromMonth(monthStr);
+    const arr = generateMondayStringFromMonth(selectedBudgetMonth);
     return arr;
   };
-
+  //console.log("Chart::graphDataAmount::" + graphDataAmount.length);
+  if (graphDataAmount.length < 1) {
+    return <View></View>;
+  }
   return (
     <View>
       <LineChart
         data={{
-          labels: generateMondayStringFromMonth(moment()),
+          labels: generateMondayStringFromMonth(
+            moment(selectedBudgetMonth, "YYYY MMM")
+          ),
           datasets: [
             {
-              data: [
-                Math.random() * 100,
-                Math.random() * 100,
-                Math.random() * 100,
-                Math.random() * 100,
-                Math.random() * 100,
-                Math.random() * 100,
-              ],
+              // data: [
+              //   Math.random() * 100,
+              //   Math.random() * 100,
+              //   Math.random() * 100,
+              //   Math.random() * 100,
+              //   Math.random() * 100,
+              //   Math.random() * 100,
+              // ],
+              data: graphDataAmount,
             },
           ],
         }}
@@ -124,9 +132,9 @@ const Chart = (props) => {
             borderRadius: 16,
           },
           propsForDots: {
-            r: "6",
-            strokeWidth: "2",
-            stroke: "#ffa726",
+            // r: "6",
+            // strokeWidth: "2",
+            // stroke: "#ffa726",
           },
         }}
         bezier

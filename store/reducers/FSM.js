@@ -3,8 +3,8 @@ import ACTION_TYPES from "@Actions/actionTypes";
 const initialState = {
   hasError: null,
   isLoading: false,
-  selectedBudgetId: null,
-  selectedBudgetMonth: null,
+  selectedBudgetId: "",
+  selectedBudgetMonth: "",
   graphDataAmount: 0,
   graphDataWeek: null,
 };

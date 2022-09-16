@@ -227,7 +227,6 @@ const BudgetsScreen = (props) => {
       </View>
     );
   }
-  console.log("BudgetsScreen::render::" + isShowFAB);
   return (
     <SafeAreaView>
       <View style={styles.mainContent}>
