@@ -72,11 +72,11 @@ const MonthCarousel = (props) => {
     const monthStr = moment().format("YYYY MMM");
     const index = getMonthIndexFromMonthArray(monthStr, monthRange);
     if (index > -1) {
-      handleMonthsSwipeCallback(index);
+      setMonthData(index);
     }
   }, [monthRange, dispatch]);
 
-  const handleMonthsSwipeCallback = async (index) => {
+  const setMonthData = async (index) => {
     const month = monthRange[index];
     const costSnapShots = budgets[budgetIndex].costSnapShots;
 
@@ -116,7 +116,7 @@ const MonthCarousel = (props) => {
           selectedBudgetMonth,
           monthRange
         )}
-        onSnapToItem={(index) => handleMonthsSwipeCallback(index)}
+        onSnapToItem={(index) => setMonthData(index)}
         scrollInterpolator={scrollInterpolator}
         slideInterpolatedStyle={animatedStyles}
         useScrollView={true}
