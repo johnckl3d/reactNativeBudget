@@ -2,15 +2,17 @@ import { StyleSheet, View, Dimensions } from "react-native";
 import Carousel from "react-native-snap-carousel";
 import { centered, highlightRed } from "../../styles/presentation";
 import { animatedStyles, scrollInterpolator } from "../../utils/animations";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import CustomText from "@CustomText";
 import Colors from "@Styles/colors";
 import Fonts from "@Styles/fonts";
-
+import useDeepCompareEffect from "use-deep-compare-effect";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "@Utils/scalingUtils";
+
+import _ from "lodash";
 import {
   ActivityIndicator,
   Avatar,
@@ -41,8 +43,7 @@ import {
 
 const MonthCarousel = (props) => {
   const FSM = useSelector((store) => store.FSM);
-  const graphDataAmount = FSM.graphDataAmount;
-  const graphDataWeek = FSM.graphDataWeek;
+  const monthRange = FSM.monthRange;
   const selectedBudgetMonth = FSM.selectedBudgetMonth;
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
@@ -51,7 +52,6 @@ const MonthCarousel = (props) => {
   );
   const dispatch = useDispatch();
   const width = Dimensions.get("window").width;
-  const [data, setData] = useState({ data: [] });
 
   const _renderItem = ({ item }) => {
     return (
@@ -60,38 +60,30 @@ const MonthCarousel = (props) => {
       </Card>
     );
   };
+  useDeepCompareEffect(() => {
+    const result = generateMonthRange();
+    dispatch({
+      type: ACTION_TYPES.SET_MONTHRANGE,
+      monthRange: result,
+    });
+  }, [monthRange, dispatch]);
 
-  const monthsList = generateMonthRange();
-  // useEffect(() => {
-  //   const result = generateMonthRange();
-  //   setData(result);
-  // }, []);
-
-  console.log("MonthCarousel::monthList::" + monthsList);
-  console.log("MonthCarousel::data::" + JSON.stringify(data));
   useEffect(() => {
     const monthStr = moment().format("YYYY MMM");
-    const index = getMonthIndexFromMonthArray(monthStr, monthsList);
-    const month = monthsList[index];
-    dispatch({
-      type: ACTION_TYPES.SET_BUDGETMONTH,
-      selectedBudgetMonth: month,
-    });
-  }, [dispatch]);
+    const index = getMonthIndexFromMonthArray(monthStr, monthRange);
+    if (index > -1) {
+      handleMonthsSwipeCallback(index);
+    }
+  }, [monthRange, dispatch]);
 
   const handleMonthsSwipeCallback = async (index) => {
-    console.log("MonthCarousel::handleMonthsSwipeCallback::index::" + index);
-    const month = monthsList[index];
+    const month = monthRange[index];
     const costSnapShots = budgets[budgetIndex].costSnapShots;
 
     dispatch({
       type: ACTION_TYPES.SET_BUDGETMONTH,
       selectedBudgetMonth: month,
     });
-    console.log(
-      "MonthCarousel::handleMonthsSwipeCallback::selectedBudgetMonth::" +
-        selectedBudgetMonth
-    );
     const amountArr = generateAmountFromMonth(costSnapShots, month);
     dispatch({
       type: ACTION_TYPES.SET_GRAPHDATAAMOUNT,
@@ -112,17 +104,17 @@ const MonthCarousel = (props) => {
     <View style={styles.container}>
       <Carousel
         //ref={(c) => (this.carousel = c)}
-        data={monthsList}
+        data={monthRange}
         renderItem={_renderItem}
         sliderWidth={width}
         itemWidth={width}
         contentContainerStyle={styles.carouselItemContainer}
         //containerCustomStyle={{flexGrow: 0}}
         inactiveSlideShift={0}
-        firstItem={getMonthIndexFromMonthArray(selectedBudgetMonth, monthsList)}
+        firstItem={getMonthIndexFromMonthArray(selectedBudgetMonth, monthRange)}
         initialScrollIndex={getMonthIndexFromMonthArray(
           selectedBudgetMonth,
-          monthsList
+          monthRange
         )}
         onSnapToItem={(index) => handleMonthsSwipeCallback(index)}
         scrollInterpolator={scrollInterpolator}

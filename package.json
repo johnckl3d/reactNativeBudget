@@ -24,6 +24,7 @@
     "internal-ip": "^7.0.0",
     "ios-deploy": "^1.11.4",
     "jwt-decode": "^3.1.2",
+    "lodash": "^4.17.21",
     "metro-react-native-babel-preset": "^0.72.1",
     "moment": "^2.29.1",
     "npm-check": "^6.0.1",
@@ -55,7 +56,8 @@
     "react-redux": "^7.1.0",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
-    "svg-path-properties": "^1.0.9"
+    "svg-path-properties": "^1.0.9",
+    "use-deep-compare-effect": "^1.8.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

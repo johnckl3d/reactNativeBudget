@@ -32,6 +32,12 @@ export function generateMonthRange() {
 }
 
 export function getMonthIndexFromMonthArray(monthStr, array) {
+  if (!array) {
+    return -1;
+  }
+  if (monthStr == null || monthStr == "") {
+    monthStr = moment().format("YYYY MMM");
+  }
   // console.log(
   //   "dates::getMonthIndexFromMonthArray::monthStr::" + JSON.stringify(monthStr)
   // );
@@ -40,7 +46,6 @@ export function getMonthIndexFromMonthArray(monthStr, array) {
   // );
 
   const index = array.findIndex((obj) => obj === monthStr);
-  //console.log("dates::getMonthIndexFromMonthArray::index::" + index);
 
   return index;
 }

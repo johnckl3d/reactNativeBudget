@@ -7,6 +7,7 @@ const initialState = {
   selectedBudgetMonth: "",
   graphDataAmount: 0,
   graphDataWeek: null,
+  monthRange: null,
 };
 
 export default (state = initialState, action) => {
@@ -40,6 +41,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         graphDataWeek: action.graphDataWeek,
+      };
+    case ACTION_TYPES.SET_MONTHRANGE:
+      return {
+        ...state,
+        monthRange: action.monthRange,
       };
   }
   return state;

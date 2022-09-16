@@ -40,3 +40,10 @@ export function setGraphDataWeek(graphDataWeek) {
     graphDataWeek: graphDataWeek,
   };
 }
+
+export function setMonthRange(monthRange) {
+  return {
+    type: ACTION_TYPES.SET_MONTHRANGE,
+    monthRange: monthRange,
+  };
+}
