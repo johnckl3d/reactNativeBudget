@@ -46,28 +46,13 @@ export function getMonthIndexFromMonthArray(monthStr, array) {
 }
 
 export function generateAmountFromMonth(costSnapShots, monthStr) {
-  console.log("==============================================");
-  console.log("generateAmountFromMonth::monthStr::" + monthStr);
   var days = [];
-  //console.log("generateAmountFromMonth");
   const carousellMMonth = moment(monthStr, "YYYY MMM");
-  console.log(
-    "generateAmountFromMonth::carousellMMonth::" +
-      carousellMMonth.format("MM-YYYY")
-  );
-  console.log(
-    "generateAmountFromMonth::carousellMMonth::month::" +
-      carousellMMonth.month()
-  );
-  //console.log("generateAmountFromMonth::" + JSON.stringify(date));
+
   var carousellMFirstDay = carousellMMonth.clone(1, "DD").local();
-  console.log(
-    "generateAmountFromMonth::carousellMFirstDay::" +
-      JSON.stringify(carousellMFirstDay)
-  );
+
   var day = carousellMMonth.clone(1, "DD");
   while (day.month() === carousellMMonth.month()) {
-    console.log("push");
     days.push(0);
     day.add(1, "d");
   }
@@ -77,24 +62,13 @@ export function generateAmountFromMonth(costSnapShots, monthStr) {
     //"2021-01-19T00:00:00"
     const dt = costSnapShot.dateTime;
     const dtt = dt.split("T")[0];
-    console.log(dtt);
+
     const ssDate = moment(dtt, "YYYY-MM-DD").local();
     var ssMonth = ssDate.month().toString();
-    console.log(
-      "generateAmountFromMonth::costSnapShots::ssDate::" +
-        JSON.stringify(ssDate)
-    );
-    console.log(
-      "generateAmountFromMonth::costSnapShots::ssMonth::" +
-        JSON.stringify(ssMonth)
-    );
+
     if (ssMonth === carousellMMonth.month().toString()) {
-      console.log("generateAmountFromMonth::costSnapShots::match");
       const index = ssDate.day() - 1;
-      console.log(
-        "generateAmountFromMonth::costSnapShots::match::" +
-          JSON.stringify(ssDate.date())
-      );
+
       days[index] += costSnapShot.amount;
     }
   });
@@ -105,11 +79,9 @@ export function generateAmountFromMonth(costSnapShots, monthStr) {
 export function generateMondayStringFromMonth(monthStr) {
   var days = [];
   const date = moment(monthStr, "YYYY MMM");
-  //console.log(JSON.stringify(date));
   var day = date.startOf("month");
   var month = day.month();
   while (month === day.month()) {
-    //console.log(day.format("dddd"));
     if (day.format("dddd") === "Monday") {
       days.push(day.clone().format("DD-MM"));
     } else {

@@ -54,7 +54,6 @@ const Chart = (props) => {
   const budgetIndex = budgets.findIndex(
     (obj) => obj.budgetId === FSM.selectedBudgetId
   );
-  const costSnapShots = budgets[budgetIndex].costSnapShots;
   const dispatch = useDispatch();
   const width = Dimensions.get("window").width;
 
@@ -80,6 +79,7 @@ const Chart = (props) => {
   };
 
   const convertCostSnapShotsToWeekAmount = () => {
+    const costSnapShots = budgets[budgetIndex].costSnapShots;
     const amountArr = generateAmountFromMonth(
       costSnapShots,
       selectedBudgetMonth
@@ -91,7 +91,6 @@ const Chart = (props) => {
     const arr = generateMondayStringFromMonth(selectedBudgetMonth);
     return arr;
   };
-  //console.log("Chart::graphDataAmount::" + graphDataAmount.length);
   if (graphDataAmount.length < 1) {
     return <View></View>;
   }
@@ -99,20 +98,10 @@ const Chart = (props) => {
     <View>
       <LineChart
         data={{
-          labels: generateMondayStringFromMonth(
-            moment(selectedBudgetMonth, "YYYY MMM")
-          ),
+          labels: graphDataWeek ? graphDataWeek : ["?", "?", "?", "?"],
           datasets: [
             {
-              // data: [
-              //   Math.random() * 100,
-              //   Math.random() * 100,
-              //   Math.random() * 100,
-              //   Math.random() * 100,
-              //   Math.random() * 100,
-              //   Math.random() * 100,
-              // ],
-              data: graphDataAmount,
+              data: graphDataAmount ? graphDataAmount : [0, 0, 0, 0],
             },
           ],
         }}
