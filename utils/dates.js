@@ -38,14 +38,22 @@ export function getCurrentMonthIndexFromMonthArray(array) {
 }
 
 export function generateAmountFromMonth(costSnapShots, monthStr) {
-  //console.log("convertCostSnapShotsToWeekAmount::" + weekArr);
+  console.log("generateAmountFromMonth::monthStr::" + monthStr);
   var days = [];
   //console.log("generateAmountFromMonth");
-  const date = moment(monthStr, "YYYY MMM");
+  const carousellMMonth = moment(monthStr, "YYYY MMM");
+  console.log(
+    "generateAmountFromMonth::carousellMMonth::" +
+      carousellMMonth.format("MM-YYYY")
+  );
   //console.log("generateAmountFromMonth::" + JSON.stringify(date));
-  var day = date.startOf("month");
-  var month = day.month();
-  while (month === day.month()) {
+  var carousellMFirstDay = carousellMMonth.clone(1, "DD").local();
+  console.log(
+    "generateAmountFromMonth::carousellMFirstDay::" +
+      JSON.stringify(carousellMFirstDay)
+  );
+  var day = carousellMMonth.clone(1, "DD");
+  while (carousellMMonth === day.month()) {
     days.push(0);
     day.add(1, "d");
   }
@@ -54,30 +62,19 @@ export function generateAmountFromMonth(costSnapShots, monthStr) {
     //"2021-01-15T00:00:00"
     //"2021-01-19T00:00:00"
     const dt = costSnapShot.dateTime;
-    // console.log(
-    //   "generateAmountFromMonth::costSnapShots::ssDate-1::" +
-    //     JSON.stringify(moment(dt, "yyyy-MM-dd'T'HH:mm:ss", true).isValid())
-    // );
     const dtt = dt.split("T")[0];
     console.log(dtt);
-    const ssDate = moment(dtt, "YYYY-MM-DD");
-    var ssDay = ssDate.clone().startOf("month");
-    var ssMonth = ssDay.month();
+    const ssDate = moment(dtt, "YYYY-MM-DD").local();
+    var ssMonth = ssDate.month();
     console.log(
       "generateAmountFromMonth::costSnapShots::ssDate::" +
         JSON.stringify(ssDate)
     );
     console.log(
-      "generateAmountFromMonth::costSnapShots::ssDay::" + JSON.stringify(ssDay)
-    );
-    console.log(
       "generateAmountFromMonth::costSnapShots::ssMonth::" +
         JSON.stringify(ssMonth)
     );
-    console.log(
-      "generateAmountFromMonth::costSnapShots::Month::" + JSON.stringify(month)
-    );
-    if (ssMonth === month) {
+    if (ssMonth === carousellMMonth) {
       console.log("generateAmountFromMonth::costSnapShots::match");
       const index = ssDate.day() - 1;
       days[index] += costSnapShot.amount;
