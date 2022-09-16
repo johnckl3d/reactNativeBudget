@@ -37,6 +37,7 @@ import BudgetCarousel from "../../components/carousell/BudgetCarousel";
 import MonthCarousel from "../../components/carousell/MonthCarousel";
 import BudgetAccordion from "@Accordion/BudgetAccordion";
 import HeaderButton from "../../components/UI/HeaderButton";
+import MediumCurrencyText from "@UIComponents/MediumCurrencyText";
 import * as budgetsActions from "@Actions/budgets";
 import * as costCategoriesActions from "../../store/actions/costCategories";
 import {
@@ -249,17 +250,19 @@ const BudgetsScreen = (props) => {
 
             <Card.Content style={styles.summary}>
               <View style={styles.centered}>
-                <Subheading>
-                  {i18n.t("common.currency") +
-                    budgets[budgetIndex].totalBudgetAmount.toFixed(2)}
-                </Subheading>
+                <MediumCurrencyText
+                  value={budgets[budgetIndex].totalBudgetAmount}
+                  colorCode={false}
+                  color={Colors.green}
+                />
                 <Caption>Budget</Caption>
               </View>
               <View style={styles.centered}>
-                <Subheading>
-                  {i18n.t("common.currency") +
-                    budgets[budgetIndex].totalCostAmount.toFixed(2)}
-                </Subheading>
+                <MediumCurrencyText
+                  value={budgets[budgetIndex].totalCostAmount}
+                  colorCode={false}
+                  color={Colors.red}
+                />
                 <Caption>Cost</Caption>
               </View>
             </Card.Content>

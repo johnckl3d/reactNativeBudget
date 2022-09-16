@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import Colors from "@Styles/colors";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -18,6 +19,7 @@ import {
   Subheading,
   Title,
   TouchableRipple,
+  withTheme,
 } from "react-native-paper";
 import ScreenWrapper from "@UIComponents/ScreenWrapper";
 import {
@@ -38,6 +40,8 @@ import {
   highlightGreen,
 } from "../../styles/presentation";
 import moment from "moment";
+import i18n from "@I18N/i18n";
+import { nFormatter } from "@Utils/commonUtils";
 
 const BudgetAccordion = (props) => {
   const withScrollView = false;
@@ -58,7 +62,10 @@ const BudgetAccordion = (props) => {
           )}
           title={item.name}
           style={styles.centered}
-          description={item.amount.toFixed(2)}
+          description={
+            `Amount: ${i18n.t("common.currency")}` +
+            `${nFormatter(item.amount)}`
+          }
         />
       </List.Section>
     );
@@ -71,7 +78,11 @@ const BudgetAccordion = (props) => {
 
         <List.Accordion
           title={item.name}
-          description={`Amount: ${item.totalAmount.toFixed(2)}`}
+          description={
+            `Amount: ${i18n.t("common.currency")}` +
+            `${nFormatter(item.totalAmount)}`
+          }
+          descriptionStyle={[{ color: Colors.red }, styles.centered]}
         >
           <FlatList
             data={item.costItems}
@@ -85,7 +96,7 @@ const BudgetAccordion = (props) => {
       <List.Item
         title={item.name}
         description={item.totalAmount}
-        style={styles.centered}
+        descriptionStyle={[{ color: Colors.red }, styles.centered]}
         right={() => (
           <IconButton
             icon="dots-vertical"
@@ -100,7 +111,7 @@ const BudgetAccordion = (props) => {
   };
 
   return (
-    <ScreenWrapper withScrollView={withScrollView}>
+    <ScreenWrapper withScrollView={withScrollView} style={styles.container}>
       <FlatList
         data={props.costCategories}
         keyExtractor={(item) => item.costCategoryId}
@@ -111,7 +122,8 @@ const BudgetAccordion = (props) => {
 };
 
 const styles = StyleSheet.create({
+  container: { paddingBottom: hp(20) },
   centered: { ...centered, height: hp(5), flex: 1 },
 });
 
-export default BudgetAccordion;
+export default withTheme(BudgetAccordion);

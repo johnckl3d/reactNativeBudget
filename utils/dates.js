@@ -1,5 +1,6 @@
 import moment from "moment";
 import { SETTINGS } from "@Constants/settings";
+import { nFormatter } from "@Utils/commonUtils";
 
 export function getWeekOfDayWithOffset(input = moment()) {
   const firstDayOfMonth = input.clone().startOf("month");
@@ -74,7 +75,7 @@ export function generateAmountFromMonth(costSnapShots, monthStr) {
     if (ssMonth === carousellMMonth.month().toString()) {
       const index = ssDate.day() - 1;
 
-      days[index] += costSnapShot.amount;
+      days[index] += nFormatter(costSnapShot.amount);
     }
   });
 

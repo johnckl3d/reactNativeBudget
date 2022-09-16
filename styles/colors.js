@@ -42,6 +42,8 @@ export default colors = {
   disabled: "#DCDCDC",
   placeholder: "#666666",
   white: "#FFFFFF",
+  red: "#DE3163",
+  green: "#40E0D0",
 
   //Chart
   graphLine: "#00C9FF",

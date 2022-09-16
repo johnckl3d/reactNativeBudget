@@ -24,6 +24,7 @@ import {
   withTheme,
   FAB,
 } from "react-native-paper";
+import i18n from "@I18N/i18n";
 import { StyleSheet, View, Dimensions } from "react-native";
 import Colors from "@Styles/colors";
 import {
@@ -38,7 +39,6 @@ import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useCallback, useEffect, useState } from "react";
 import ACTION_TYPES from "@Actions/actionTypes";
-
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -107,8 +107,8 @@ const Chart = (props) => {
         }}
         width={Dimensions.get("window").width} // from react-native
         height={220}
-        yAxisLabel="$"
-        yAxisSuffix="k"
+        yAxisLabel={i18n.t("common.currency")}
+        yAxisSuffix=""
         yAxisInterval={1} // optional, defaults to 1
         chartConfig={{
           backgroundColor: Colors.chartBackgroundColor,
