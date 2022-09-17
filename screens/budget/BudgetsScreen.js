@@ -68,7 +68,6 @@ const BudgetsScreen = (props) => {
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
   const selectedBudgetIndex = FSM.selectedBudgetIndex;
-  const selectedBudgetMonth = FSM.selectedBudgetMonth;
 
   useEffect(() => {
     if (isDrawerOpen || !isFocused) {

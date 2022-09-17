@@ -4,9 +4,7 @@ const initialState = {
   hasError: null,
   isLoading: false,
   selectedBudgetIndex: 0,
-  selectedBudgetMonth: "",
-  graphDataAmount: null,
-  graphDataWeek: null,
+  selectedBudgetMonthIndex: 0,
   monthRange: null,
 };
 
@@ -27,20 +25,10 @@ export default (state = initialState, action) => {
         ...state,
         selectedBudgetIndex: action.selectedBudgetIndex,
       };
-    case ACTION_TYPES.SET_BUDGETMONTH:
+    case ACTION_TYPES.SET_BUDGETMONTHINDEX:
       return {
         ...state,
-        selectedBudgetMonth: action.selectedBudgetMonth,
-      };
-    case ACTION_TYPES.SET_GRAPHDATAAMOUNT:
-      return {
-        ...state,
-        graphDataAmount: action.graphDataAmount,
-      };
-    case ACTION_TYPES.SET_GRAPHDATAWEEK:
-      return {
-        ...state,
-        graphDataWeek: action.graphDataWeek,
+        selectedBudgetMonthIndex: action.selectedBudgetMonthIndex,
       };
     case ACTION_TYPES.SET_MONTHRANGE:
       return {

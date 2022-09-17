@@ -20,24 +20,10 @@ export function setBudgetIndex(int) {
   };
 }
 
-export function setBudgetMonthIndex(string) {
+export function setBudgetMonthIndex(int) {
   return {
-    type: ACTION_TYPES.SET_BUDGETMONTH,
-    selectedBudgetMonthIndex: string,
-  };
-}
-
-export function setGraphDataAmount(graphDataAmount) {
-  return {
-    type: ACTION_TYPES.SET_GRAPHDATAAMOUNT,
-    graphDataAmount: graphDataAmount,
-  };
-}
-
-export function setGraphDataWeek(graphDataWeek) {
-  return {
-    type: ACTION_TYPES.SET_GRAPHDATAWEEK,
-    graphDataWeek: graphDataWeek,
+    type: ACTION_TYPES.SET_BUDGETMONTHINDEX,
+    selectedBudgetMonthIndex: int,
   };
 }
 

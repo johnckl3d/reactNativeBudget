@@ -41,7 +41,7 @@ import {
 const BudgetCarousel = () => {
   const FSM = useSelector((store) => store.FSM);
   const selectedBudgetIndex = FSM.selectedBudgetIndex;
-  const selectedBudgetMonth = FSM.selectedBudgetMonth;
+  const selectedBudgetMonthIndex = FSM.selectedBudgetMonthIndex;
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
 
@@ -52,6 +52,10 @@ const BudgetCarousel = () => {
   const dispatch = useDispatch();
 
   const _renderItem = ({ item }) => {
+    if (!graphData.graphDataAmount || !graphData.graphDataWeek) {
+      console.log("BudgetCarousel::Can't render chart");
+      return <View></View>;
+    }
     return (
       <Chart
         graphDataAmount={graphData.graphDataAmount}
@@ -59,6 +63,10 @@ const BudgetCarousel = () => {
       />
     );
   };
+
+  useEffect(() => {
+    handleGraph(selectedBudgetIndex);
+  }, [selectedBudgetIndex]);
 
   const handleGraph = (index) => {
     console.log("BudgetCarousel::handleGraph");
@@ -71,7 +79,9 @@ const BudgetCarousel = () => {
 
       var graphDataAmount = convertCostSnapShotsToWeekAmount(costSnapShots);
 
-      var graphDataWeek = convertCostSnapShotsToWeekDate(selectedBudgetMonth);
+      var graphDataWeek = convertCostSnapShotsToWeekDate(
+        budgets[selectedBudgetMonthIndex]
+      );
       var copiedGraphData = { ...graphData };
       setGraphData((prevStat) => ({
         ...copiedGraphData,
@@ -79,8 +89,7 @@ const BudgetCarousel = () => {
         graphDataWeek: graphDataWeek,
       }));
       console.log(
-        "BudgetCarousel::handleBudgetSwipeCallback::graphData::" +
-          JSON.stringify(graphData)
+        "BudgetCarousel::handleGraph::graphData::" + JSON.stringify(graphData)
       );
     }
   };
@@ -88,13 +97,13 @@ const BudgetCarousel = () => {
   const convertCostSnapShotsToWeekAmount = (costSnapShots) => {
     const amountArr = generateAmountFromMonth(
       costSnapShots,
-      selectedBudgetMonth
+      budgets[selectedBudgetMonthIndex]
     );
     return amountArr;
   };
 
-  const convertCostSnapShotsToWeekDate = (selectedBudgetMonth) => {
-    const arr = generateMondayStringFromMonth(selectedBudgetMonth);
+  const convertCostSnapShotsToWeekDate = (monthStr) => {
+    const arr = generateMondayStringFromMonth(monthStr);
     return arr;
   };
 

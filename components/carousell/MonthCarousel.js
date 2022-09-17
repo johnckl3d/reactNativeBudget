@@ -44,7 +44,7 @@ import {
 const MonthCarousel = (props) => {
   const FSM = useSelector((store) => store.FSM);
   const monthRange = FSM.monthRange;
-  const selectedBudgetMonth = FSM.selectedBudgetMonth;
+  const selectedBudgetMonthIndex = FSM.selectedBudgetMonthIndex;
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
   const dispatch = useDispatch();
@@ -63,26 +63,25 @@ const MonthCarousel = (props) => {
       type: ACTION_TYPES.SET_MONTHRANGE,
       monthRange: result,
     });
-  }, [monthRange, dispatch]);
+  }, [dispatch]);
 
   useEffect(() => {
+    console.log("MonthCarousel::useEffect::");
     const monthStr = moment().format("YYYY MMM");
     const index = getMonthIndexFromMonthArray(monthStr, monthRange);
     if (index > -1) {
-      setMonthData(index);
+      setMonthIndex(index);
     }
   }, [monthRange, dispatch]);
 
-  const setMonthData = async (index) => {
-    const month = monthRange[index];
-
+  const setMonthIndex = async (index) => {
+    console.log("MonthCarousel::setMonthIndex::" + index);
     dispatch({
-      type: ACTION_TYPES.SET_BUDGETMONTH,
-      selectedBudgetMonth: month,
+      type: ACTION_TYPES.SET_BUDGETMONTHINDEX,
+      selectedBudgetMonthIndex: index,
     });
   };
-
-  if (selectedBudgetMonth === "") {
+  if (!monthRange) {
     return <View></View>;
   }
   return (
@@ -96,12 +95,9 @@ const MonthCarousel = (props) => {
         contentContainerStyle={styles.carouselItemContainer}
         //containerCustomStyle={{flexGrow: 0}}
         inactiveSlideShift={0}
-        firstItem={getMonthIndexFromMonthArray(selectedBudgetMonth, monthRange)}
-        initialScrollIndex={getMonthIndexFromMonthArray(
-          selectedBudgetMonth,
-          monthRange
-        )}
-        onSnapToItem={(index) => setMonthData(index)}
+        firstItem={selectedBudgetMonthIndex}
+        initialScrollIndex={selectedBudgetMonthIndex}
+        onSnapToItem={(index) => setMonthIndex(index)}
         scrollInterpolator={scrollInterpolator}
         slideInterpolatedStyle={animatedStyles}
         useScrollView={true}

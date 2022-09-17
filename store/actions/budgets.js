@@ -120,10 +120,6 @@ export const fetchBudgetById = () => {
         )
       );
       dispatch({ type: ACTION_TYPES.SET_BUDGETS, budgets: loadedBudget });
-      // dispatch({
-      //   type: ACTION_TYPES.SET_BUDGETINDEX,
-      //   selectedBudgetIndex: 1,
-      // });
     } catch (err) {
       dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: response.status });
     }
