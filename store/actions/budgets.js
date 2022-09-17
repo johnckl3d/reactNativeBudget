@@ -10,18 +10,19 @@ import moment from "moment";
 import uuid from "react-native-uuid";
 import axios from "axios";
 import ACTION_TYPES from "@Actions/actionTypes";
+import i18n from "@I18N/i18n";
 
 export const fetchBudgets = (token) => {
   return async (dispatch) => {
     try {
       dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: true });
       const transactionID = moment().format() + uuid.v4();
-      const url = JSON.stringify(API_URL.BUDGET_URL);
+      const url = JSON.stringify(API_URL.GET_BUDGET_URL);
       console.log("action::fetchBudgets::transactionID::" + transactionID);
       console.log("action::fetchBudgets::token::" + token);
       console.log("action::fetchBudgets::url::" + url);
       await axios({
-        url: API_URL.BUDGET_URL,
+        url: API_URL.GET_BUDGET_URL,
         method: "get",
         timeout: SETTINGS.TIMEOUT,
         headers: {
@@ -66,9 +67,6 @@ export const fetchBudgets = (token) => {
               )
             );
           }
-          console.log(
-            "fetchBudgets::loadedBudget::" + JSON.stringify(loadedBudget)
-          );
           dispatch({ type: ACTION_TYPES.SET_BUDGETS, budgets: loadedBudget });
         })
         .catch((error) => {
@@ -92,7 +90,7 @@ export const fetchBudgetById = () => {
     dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: null });
     var token = await getStringData(STORAGE.ACCESS_TOKEN);
     try {
-      const response = await fetch(API_URL.BUDGET_URL, {
+      const response = await fetch(API_URL.GET_BUDGET_URL, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -128,73 +126,51 @@ export const fetchBudgetById = () => {
   };
 };
 
-export const createBudget = (title, description, amount) => {
+export const createBudget = (token, title, description, amount) => {
+  console.log("createBudget::token::" + token);
+  console.log("createBudget::url::" + API_URL.CREATE_BUDGET_URL);
   return async (dispatch) => {
     try {
       dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: true });
       dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: null });
-      var token = await getStringData(STORAGE.ACCESS_TOKEN);
-      const response = await fetch(API_URL.BUDGET_URL, {
-        method: "POST",
+      const transactionID = moment().format() + uuid.v4();
+      console.log("createBudget::transactionID::" + transactionID);
+      await axios({
+        url: API_URL.CREATE_BUDGET_URL,
+        method: "post",
+        timeout: SETTINGS.TIMEOUT,
         headers: {
           "Content-Type": "application/json",
+          Accept: "application/json, text/plain, */*",
           Authorization: "Bearer " + token,
+          TransactionID: transactionID,
         },
-        body: JSON.stringify({
+        data: JSON.stringify({
           name: title,
           description: description,
           totalBudgetAmount: amount,
-          totalCostAmount: 0,
         }),
-      });
-      if (response.status != 200) {
-        dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: response.status });
-      } else {
-        const resData = await response.json();
-        //console.log("fetchBudgets::resData::" + JSON.stringify(resData));
-        const loadedBudget = [];
-
-        for (const b of resData) {
-          const css = [];
-          for (const cs of b.costSnapShots) {
-            css.push(new CostSnapShot(cs.dateTime, cs.amount));
-          }
-          const ccs = [];
-          for (const cc of b.costCategories) {
-            const cis = [];
-            for (const ci of cc.costItems) {
-              cis.push(new CostItem(ci.name, ci.amount, ci.costItemId));
-            }
-            ccs.push(
-              new CostCategory(
-                cc.budgetId,
-                cc.costCategoryId,
-                cc.name,
-                cc.totalAmount,
-                cis
-              )
-            );
-          }
-          //console.log("budgets::action::" + JSON.stringify(ccs));
-          loadedBudget.push(
-            new Budget(
-              b.budgetId,
-              b.name,
-              b.description,
-              b.totalBudgetAmount,
-              b.totalCostAmount,
-              css,
-              ccs
-            )
+      })
+        .then((response) => {
+          console.log(
+            JSON.stringify("createBudget::response::" + response.data)
           );
-        }
-        console.log(
-          "fetchBudgets::createBudget::" + JSON.stringify(loadedBudget)
-        );
-        dispatch({ type: ACTION_TYPES.SET_BUDGETS, budgets: loadedBudget });
-      }
+          fetchBudgets(token);
+          // const loadedBudget = [];
+          // const resData = response.data;
+          // dispatch({ type: ACTION_TYPES.SET_BUDGETS, budgets: loadedBudget });
+        })
+        .catch((error) => {
+          console.log("createBudget::error::" + error);
+          dispatch({
+            type: ACTION_TYPES.SET_ERROR,
+            hasError: i18n.t("common.errorMessage"),
+          });
+          dispatch({ type: ACTION_TYPES.SET_LOGOUT });
+        });
     } catch (err) {
-      dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: err });
+      console.log("createbudget::error::" + err);
+      //dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: err });
     } finally {
       dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: false });
     }

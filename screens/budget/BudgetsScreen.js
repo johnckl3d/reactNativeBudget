@@ -89,7 +89,7 @@ const BudgetsScreen = (props) => {
       icon: "email",
       label: i18n.t("budget.addCategory"),
       onPress: () => {
-        addCostCategoryHandler(budgets[budgetIndex].budgetId);
+        addCostCategoryHandler();
       },
     },
     {
@@ -117,8 +117,10 @@ const BudgetsScreen = (props) => {
   }, [dispatch]);
 
   const loadBudgets = useCallback(async () => {
-    dispatch(budgetsActions.fetchBudgets());
-    setFocus(true);
+    try {
+      await dispatch(budgetsActions.fetchBudgets(login.accessToken));
+      setFocus(true);
+    } catch (err) {}
   }, [dispatch]);
 
   const handleBudgetSwipeCallback = (childData) => {
@@ -145,9 +147,8 @@ const BudgetsScreen = (props) => {
     props.navigation.navigate("EditCostItemScreen", { budgetId: budgetId });
   };
 
-  const addCostCategoryHandler = (budgetId) => {
+  const addCostCategoryHandler = () => {
     props.navigation.navigate("EditCostCategoryScreen", {
-      budgetId: budgetId,
       onComplete: loadBudgets,
     });
   };

@@ -13,6 +13,7 @@ const UAT_API = "https://localhost:5001/api";
 const PROD_API = "https://savion-api-app.azurewebsites.net/api";
 
 let getBudgetUrl = "/budget/retrieveList";
+let createBudgetUrl = "/budget";
 let costCategoryUrl = "/costCategory";
 let registerUrl = "/account/register";
 let loginUrl = "/account/login";
@@ -22,6 +23,7 @@ let accountDeletionUrl = "/account/delete";
 let env = PROD;
 if (env == PROD) {
   getBudgetUrl = PROD_API + getBudgetUrl;
+  createBudgetUrl = PROD_API + createBudgetUrl;
   costCategoryUrl = PROD_API + costCategoryUrl;
   registerUrl = PROD_API + registerUrl;
   loginUrl = PROD_API + loginUrl;
@@ -29,6 +31,7 @@ if (env == PROD) {
   accountDeletionUrl = PROD_API + accountDeletionUrl;
 } else {
   getBudgetUrl = UAT_API + getBudgetUrl;
+  createBudgetUrl = UAT_API + createBudgetUrl;
   costCategoryUrl = UAT_API + costCategoryUrl;
   registerUrl = UAT_API + registerUrl;
   loginUrl = UAT_API + loginUrl;
@@ -38,7 +41,8 @@ if (env == PROD) {
 
 export const API_URL = {
   //AEM URL
-  BUDGET_URL: getBudgetUrl,
+  GET_BUDGET_URL: getBudgetUrl,
+  CREATE_BUDGET_URL: createBudgetUrl,
   COSTCATEGORY_URL: costCategoryUrl,
   REGISTER_URL: registerUrl,
   LOGIN_URL: loginUrl,

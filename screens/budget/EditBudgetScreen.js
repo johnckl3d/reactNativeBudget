@@ -1,4 +1,5 @@
 import React, { useCallback, useReducer } from "react";
+import { LogBox } from "react-native";
 import {
   Alert,
   KeyboardAvoidingView,
@@ -31,7 +32,7 @@ import {
   heightPercentageToDP as hp,
 } from "@Utils/scalingUtils";
 import ExtraBoldText from "@CustomText/ExtraBoldText";
-
+import { SETTINGS } from "@Constants/settings";
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
 const formReducer = (state, action) => {
@@ -57,16 +58,23 @@ const formReducer = (state, action) => {
   return state;
 };
 
-const EditBudgetScreen = ({ route, navigation, budgetId }) => {
-  console.log("EditBudgetScreen::" + budgetId);
-  let editedBudget;
-
-  if (budgetId) {
-    editedBudget = useSelector((state) =>
-      state.budgets.find((b) => b.budgetId === budgetId)
-    );
-  }
+const EditBudgetScreen = ({ route, navigation }) => {
+  LogBox.ignoreLogs([
+    "Non-serializable values were found in the navigation state",
+  ]);
+  const FSM = useSelector((store) => store.FSM);
+  const login = useSelector((store) => store.login);
+  const budgets = useSelector((store) => store.budgets);
+  const budgetIndex = budgets.findIndex(
+    (obj) => obj.budgetId === FSM.selectedBudgetId
+  );
+  //console.log("EditBudgetScreen::" + budgetId);
+  var editedBudget;
   const dispatch = useDispatch();
+
+  if (budgetIndex) {
+    editedBudget = budgets.find((b) => b.budgetId === budgetId);
+  }
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
@@ -81,20 +89,28 @@ const EditBudgetScreen = ({ route, navigation, budgetId }) => {
   });
 
   const submitHandler = useCallback(async () => {
-    if (!formState.formIsValid) {
+    if (SETTINGS.MOCK_DATA === false && !formState.formIsValid) {
       Alert.alert("Wrong input!", "Please check the errors in the form.", [
         { text: "Okay" },
       ]);
       return;
     }
-    dispatch(
-      budgetsActions.createBudget(
-        formState.inputValues.title,
-        formState.inputValues.description,
-        0
-      )
-    );
-    navigation.goBack();
+
+    var token = login.accessToken;
+    var title = formState.inputValues.title;
+    var description = formState.inputValues.description;
+    var totalBudgetAmount = 0;
+    if (SETTINGS.MOCK_DATA) {
+      title = "entertainment";
+      description = "movie";
+      totalBudgetAmount = 1000.2;
+    }
+    try {
+      dispatch(budgetsActions.createBudget(token, title, description, 0));
+      navigation.goBack();
+    } catch {
+      throw err;
+    }
   }, [dispatch, formState]);
 
   // useEffect(() => {
