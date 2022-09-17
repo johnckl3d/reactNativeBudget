@@ -3,9 +3,9 @@ import ACTION_TYPES from "@Actions/actionTypes";
 const initialState = {
   hasError: null,
   isLoading: false,
-  selectedBudgetId: "",
+  selectedBudgetIndex: 0,
   selectedBudgetMonth: "",
-  graphDataAmount: 0,
+  graphDataAmount: null,
   graphDataWeek: null,
   monthRange: null,
 };
@@ -22,10 +22,10 @@ export default (state = initialState, action) => {
         ...state,
         isLoading: action.isLoading,
       };
-    case ACTION_TYPES.SET_BUDGETID:
+    case ACTION_TYPES.SET_BUDGETINDEX:
       return {
         ...state,
-        selectedBudgetId: action.selectedBudgetId,
+        selectedBudgetIndex: action.selectedBudgetIndex,
       };
     case ACTION_TYPES.SET_BUDGETMONTH:
       return {

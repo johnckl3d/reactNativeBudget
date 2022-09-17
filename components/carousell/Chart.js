@@ -45,9 +45,6 @@ import {
 } from "@Utils/scalingUtils";
 
 const Chart = ({ graphDataAmount, graphDataWeek }) => {
-  if (!graphDataAmount || graphDataAmount.length < 1) {
-    return <View></View>;
-  }
   return (
     <View>
       <LineChart

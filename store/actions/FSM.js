@@ -13,10 +13,10 @@ export function isLoading(bool) {
   };
 }
 
-export function setBudgetId(string) {
+export function setBudgetIndex(int) {
   return {
-    type: ACTION_TYPES.SET_BUDGETID,
-    selectedBudgetId: string,
+    type: ACTION_TYPES.SET_BUDGETINDEX,
+    selectedBudgetIndex: int,
   };
 }
 

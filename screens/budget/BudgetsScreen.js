@@ -67,10 +67,7 @@ const BudgetsScreen = (props) => {
   const FSM = useSelector((store) => store.FSM);
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
-  const selectedBudgetId = FSM.selectedBudgetId;
-  const budgetIndex = budgets.findIndex(
-    (obj) => obj.budgetId === selectedBudgetId
-  );
+  const selectedBudgetIndex = FSM.selectedBudgetIndex;
   const selectedBudgetMonth = FSM.selectedBudgetMonth;
 
   useEffect(() => {
@@ -161,17 +158,15 @@ const BudgetsScreen = (props) => {
         <Card mode={mode}>
           <Card mode={mode}>
             <Card.Title
-              title={budgetIndex === "" ? budgets[budgetIndex].name : ""}
-              subtitle={
-                budgetIndex === "" ? budgets[budgetIndex].description : ""
-              }
+              title={budgets ? budgets[selectedBudgetIndex].name : ""}
+              subtitle={budgets ? budgets[selectedBudgetIndex].description : ""}
               left={(props) => <Avatar.Icon {...props} icon="folder" />}
               right={(props) => (
                 <IconButton
                   {...props}
                   icon="dots-vertical"
                   onPress={() => {
-                    editBudgetHandler(budgets[budgetIndex].budgetId);
+                    editBudgetHandler(budgets[selectedBudgetIndex].budgetId);
                   }}
                 />
               )}
@@ -181,8 +176,10 @@ const BudgetsScreen = (props) => {
               <View style={styles.centered}>
                 <MediumCurrencyText
                   value={
-                    budgetIndex === ""
-                      ? nFormatter(budgets[budgetIndex].totalBudgetAmount)
+                    budgets
+                      ? nFormatter(
+                          budgets[selectedBudgetIndex].totalBudgetAmount
+                        )
                       : ""
                   }
                   colorCode={false}
@@ -192,8 +189,8 @@ const BudgetsScreen = (props) => {
               <View style={styles.centered}>
                 <MediumCurrencyText
                   value={
-                    budgetIndex === ""
-                      ? nFormatter(budgets[budgetIndex].totalCostAmount)
+                    budgets
+                      ? nFormatter(budgets[selectedBudgetIndex].totalCostAmount)
                       : ""
                   }
                   colorCode={false}
@@ -203,10 +200,10 @@ const BudgetsScreen = (props) => {
               <View style={styles.centered}>
                 <MediumCurrencyText
                   value={
-                    budgetIndex === ""
+                    budgets
                       ? nFormatter(
-                          budgets[budgetIndex].totalBudgetAmount -
-                            budgets[budgetIndex].totalCostAmount
+                          budgets[selectedBudgetIndex].totalBudgetAmount -
+                            budgets[selectedBudgetIndex].totalCostAmount
                         )
                       : ""
                   }
@@ -221,13 +218,13 @@ const BudgetsScreen = (props) => {
         </Card>
         <BudgetAccordion
           costCategories={
-            budgetIndex === "" ? budgets[budgetIndex].costCategories : ""
+            budgets ? budgets[selectedBudgetIndex].costCategories : ""
           }
           deleteCallback={deleteCostCategoryHandler}
         ></BudgetAccordion>
         <Pagination
           dotsLength={budgets.length}
-          activeDotIndex={budgetIndex}
+          activeDotIndex={selectedBudgetIndex}
           dotStyle={styles.paginationDot}
           inactiveDotOpacity={0.4}
           inactiveDotScale={0.6}

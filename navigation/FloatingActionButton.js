@@ -11,7 +11,7 @@ const FloatingActionButton = ({ visible, actions, navigation }) => {
   const FSM = useSelector((store) => store.FSM);
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
-  const selectedBudgetId = budgets.selectedBudgetId;
+  const selectedBudgetIndex = budgets.selectedBudgetIndex;
   const dispatch = useDispatch();
 
   const FABActions = [

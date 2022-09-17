@@ -65,9 +65,7 @@ const EditBudgetScreen = ({ route, navigation }) => {
   const FSM = useSelector((store) => store.FSM);
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
-  const budgetIndex = budgets.findIndex(
-    (obj) => obj.budgetId === FSM.selectedBudgetId
-  );
+  const budgetIndex = budgets.selectedBudgetIndex;
   //console.log("EditBudgetScreen::" + budgetId);
   var editedBudget = null;
   const dispatch = useDispatch();

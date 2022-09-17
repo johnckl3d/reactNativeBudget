@@ -47,9 +47,6 @@ const MonthCarousel = (props) => {
   const selectedBudgetMonth = FSM.selectedBudgetMonth;
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
-  const budgetIndex = budgets.findIndex(
-    (obj) => obj.budgetId === FSM.selectedBudgetId
-  );
   const dispatch = useDispatch();
   const width = Dimensions.get("window").width;
 

@@ -40,14 +40,14 @@ import {
 
 const BudgetCarousel = () => {
   const FSM = useSelector((store) => store.FSM);
-  const selectedBudgetId = FSM.selectedBudgetId;
+  const selectedBudgetIndex = FSM.selectedBudgetIndex;
   const selectedBudgetMonth = FSM.selectedBudgetMonth;
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
 
   const [graphData, setGraphData] = useState({
-    graphDataAmount: [],
-    graphDataWeek: [],
+    graphDataAmount: null,
+    graphDataWeek: null,
   });
   const dispatch = useDispatch();
 
@@ -60,27 +60,13 @@ const BudgetCarousel = () => {
     );
   };
 
-  useEffect(() => {
-    console.log("BudgetCarousel::useeffect");
-    var index = budgets.findIndex((obj) => obj.budgetId === selectedBudgetId);
-    if (index === -1) {
-      index = 0;
-    }
-    dispatch({
-      type: ACTION_TYPES.SET_BUDGETID,
-      selectedBudgetId: selectedBudgetId,
-    });
-    handleGraph(index);
-  }, [selectedBudgetId, dispatch]);
-
   const handleGraph = (index) => {
-    console.log("BudgetCarousel::handleBudgetSwipeCallback");
+    console.log("BudgetCarousel::handleGraph");
     if (index != -1 && index < budgets.length - 1) {
-      var budgetId = budgets[index].budgetId;
       var costSnapShots = budgets[index].costSnapShots;
       dispatch({
-        type: ACTION_TYPES.SET_BUDGETID,
-        selectedBudgetId: budgetId,
+        type: ACTION_TYPES.SET_BUDGETINDEX,
+        selectedBudgetIndex: index,
       });
 
       var graphDataAmount = convertCostSnapShotsToWeekAmount(costSnapShots);
@@ -120,6 +106,8 @@ const BudgetCarousel = () => {
         sliderWidth={wp(100)}
         itemWidth={wp(100)}
         inactiveSlideShift={0}
+        firstItem={selectedBudgetIndex}
+        initialScrollIndex={selectedBudgetIndex}
         onSnapToItem={(index) => handleGraph(index)}
         scrollInterpolator={scrollInterpolator}
         slideInterpolatedStyle={animatedStyles}
