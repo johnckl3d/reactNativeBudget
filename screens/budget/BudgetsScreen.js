@@ -143,16 +143,6 @@ const BudgetsScreen = (props) => {
     });
   };
 
-  const addCostItemHandler = (budgetId) => {
-    props.navigation.navigate("EditCostItemScreen", { budgetId: budgetId });
-  };
-
-  const addCostCategoryHandler = () => {
-    props.navigation.navigate("EditCostCategoryScreen", {
-      onComplete: loadBudgets,
-    });
-  };
-
   const deleteCostCategoryHandler = (costCategoryId, name) => {
     Alert.alert(
       i18n.t("budget.deleteBudgetHeader"),
@@ -178,33 +168,33 @@ const BudgetsScreen = (props) => {
     [dispatch, loadBudgets]
   );
 
-  const editBudgetHandler = (budgetId) => {
-    props.navigation.navigate("EditBudgetScreen", { budgetId: budgetId });
-  };
+  // const editBudgetHandler = (budgetId) => {
+  //   props.navigation.navigate("EditBudgetScreen", { budgetId: budgetId });
+  // };
 
-  const addBudgetHandler = () => {
-    props.navigation.navigate("EditBudgetScreen");
-  };
+  // const addBudgetHandler = () => {
+  //   props.navigation.navigate("EditBudgetScreen");
+  // };
 
-  const deleteBudgetHandler = (budgetId, name) => {
-    Alert.alert("Are you sure?", `Do you really want to delete ${name}?`, [
-      { text: "No", style: "default" },
-      {
-        text: "Yes",
-        style: "destructive",
-        onPress: () => {
-          deleteBudget(budgetId);
-        },
-      },
-    ]);
-  };
+  // const deleteBudgetHandler = (budgetId, name) => {
+  //   Alert.alert("Are you sure?", `Do you really want to delete ${name}?`, [
+  //     { text: "No", style: "default" },
+  //     {
+  //       text: "Yes",
+  //       style: "destructive",
+  //       onPress: () => {
+  //         deleteBudget(budgetId);
+  //       },
+  //     },
+  //   ]);
+  // };
 
-  const deleteBudget = useCallback(
-    async (budgetId) => {
-      dispatch(budgetsActions.deleteBudget(budgetId));
-    },
-    [dispatch]
-  );
+  // const deleteBudget = useCallback(
+  //   async (budgetId) => {
+  //     dispatch(budgetsActions.deleteBudget(budgetId));
+  //   },
+  //   [dispatch]
+  // );
 
   if (FSM.hasError && FSM.hasError != "") {
     Alert.alert("Error!", FSM.hasError, [
@@ -297,9 +287,8 @@ const BudgetsScreen = (props) => {
           inactiveDotScale={0.6}
         />
         <FloatingActionButton
-          style={styles.fab}
-          actions={FABActions}
           visible={isShowFAB}
+          navigation={props.navigation}
         ></FloatingActionButton>
       </View>
     </SafeAreaView>
