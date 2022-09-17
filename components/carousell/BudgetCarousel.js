@@ -23,51 +23,103 @@ import {
   withTheme,
   FAB,
 } from "react-native-paper";
+import {
+  getFirstDayOfWeek,
+  getWeekOfDayWithOffset,
+  generateMondayStringFromMonth,
+  getDayOfMonthFromDate,
+  generateMonthRange,
+  generateAmountFromMonth,
+} from "@Utils/dates";
 import ACTION_TYPES from "@Actions/actionTypes";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "@Utils/scalingUtils";
 
-const BudgetCarousel = (props) => {
+const BudgetCarousel = () => {
   const FSM = useSelector((store) => store.FSM);
+  const selectedBudgetId = FSM.selectedBudgetId;
+  const selectedBudgetMonth = FSM.selectedBudgetMonth;
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
+  // const budgetIndex = budgets.findIndex(
+  //   (obj) => obj.budgetId === FSM.selectedBudgetId
+  // );
+  const graphDataAmount = FSM.graphDataAmount;
+  const graphDataWeek = FSM.graphDataWeek;
+  const [graphData, setGraphData] = useState({
+    graphDataAmount: [],
+    graphDataWeek: [],
+  });
   const dispatch = useDispatch();
-  const width = Dimensions.get("window").width;
 
   const _renderItem = ({ item }) => {
     return (
-      <Chart />
-      // <Chart
-      //   snapshots={item.costSnapShots}
-      //   width={props.width}
-      //   height={props.height}
-      // />
-      // <View
-      //   style={styles.carouselItemContainer}
-      //   width={props.width}
-      //   height={props.height}
-      // >
-
-      // </View>
+      <Chart graphDataAmount={graphDataAmount} graphDataWeek={graphDataWeek} />
     );
   };
 
   useEffect(() => {
-    var result = budgets[0].budgetId;
+    console.log("BudgetCarousel::useeffect");
+    var selectedBudgetId = budgets[0].budgetId;
+    var costSnapShots = budgets[0].costSnapShots;
     dispatch({
       type: ACTION_TYPES.SET_BUDGETID,
-      selectedBudgetId: result,
+      selectedBudgetId: selectedBudgetId,
     });
-  }, [dispatch]);
+
+    var graphDataAmount = convertCostSnapShotsToWeekAmount(costSnapShots);
+    dispatch({
+      type: ACTION_TYPES.SET_GRAPHDATAAMOUNT,
+      graphDataAmount: graphDataAmount,
+    });
+
+    var graphDataWeek = convertCostSnapShotsToWeekDate(selectedBudgetMonth);
+    dispatch({
+      type: ACTION_TYPES.SET_GRAPHDATAWEEK,
+      graphDataWeek: graphDataWeek,
+    });
+  }, [selectedBudgetId, selectedBudgetMonth, dispatch]);
 
   const handleBudgetSwipeCallback = (index) => {
-    var result = budgets[0].budgetId;
     if (index < budgets.length - 1) {
-      result = budgets[index].budgetId;
+      var budgetId = budgets[index].budgetId;
+      var costSnapShots = budgets[index].costSnapShots;
+      console.log(
+        "BudgetCarousell::handleBudgetSwipeCallback::result::" + result
+      );
+      dispatch({
+        type: ACTION_TYPES.SET_BUDGETID,
+        selectedBudgetId: budgetId,
+      });
+
+      var graphDataAmount = convertCostSnapShotsToWeekAmount(costSnapShots);
+      dispatch({
+        type: ACTION_TYPES.SET_GRAPHDATAAMOUNT,
+        graphDataAmount: graphDataAmount,
+      });
+
+      var graphDataWeek = convertCostSnapShotsToWeekDate(selectedBudgetMonth);
+      dispatch({
+        type: ACTION_TYPES.SET_GRAPHDATAWEEK,
+        graphDataWeek: graphDataWeek,
+      });
     }
-    dispatch({
-      type: ACTION_TYPES.SET_BUDGETID,
-      selectedBudgetId: result,
-    });
+  };
+
+  const convertCostSnapShotsToWeekAmount = (costSnapShots) => {
+    const amountArr = generateAmountFromMonth(
+      costSnapShots,
+      selectedBudgetMonth
+    );
+    return amountArr;
+  };
+
+  const convertCostSnapShotsToWeekDate = (selectedBudgetMonth) => {
+    const arr = generateMondayStringFromMonth(selectedBudgetMonth);
+    return arr;
   };
 
   const getIndexFromBudgetArr = (id) => {
@@ -78,13 +130,10 @@ const BudgetCarousel = (props) => {
   return (
     <View style={styles.centered}>
       <Carousel
-        //ref={(c) => (carousel = c)}
         data={budgets}
         renderItem={_renderItem}
-        sliderWidth={width}
-        itemWidth={width}
-        // contentContainerStyle={styles.carouselItemContainer}
-        // containerCustomStyle={{flexGrow: 0}}
+        sliderWidth={wp(100)}
+        itemWidth={wp(100)}
         inactiveSlideShift={0}
         onSnapToItem={(index) => handleBudgetSwipeCallback(index)}
         scrollInterpolator={scrollInterpolator}

@@ -44,54 +44,47 @@ import {
   heightPercentageToDP as hp,
 } from "@Utils/scalingUtils";
 
-const Chart = (props) => {
-  const FSM = useSelector((store) => store.FSM);
-  const graphDataAmount = FSM.graphDataAmount;
-  const graphDataWeek = FSM.graphDataWeek;
-  const selectedBudgetMonth = FSM.selectedBudgetMonth;
-  const login = useSelector((store) => store.login);
-  const budgets = useSelector((store) => store.budgets);
-  const budgetIndex = budgets.findIndex(
-    (obj) => obj.budgetId === FSM.selectedBudgetId
-  );
-  const dispatch = useDispatch();
-  const width = Dimensions.get("window").width;
+const Chart = ({ graphDataAmount, graphDataWeek }) => {
+  // const FSM = useSelector((store) => store.FSM);
+  // const graphDataAmount = FSM.graphDataAmount;
+  // const graphDataWeek = FSM.graphDataWeek;
+  // const selectedBudgetId = FSM.selectedBudgetId;
+  // const selectedBudgetMonth = FSM.selectedBudgetMonth;
+  //const dispatch = useDispatch();
 
-  useEffect(() => {
-    var result = convertCostSnapShotsToWeekAmount();
-    dispatch({
-      type: ACTION_TYPES.SET_GRAPHDATAAMOUNT,
-      graphDataAmount: result,
-    });
-  }, [dispatch]);
+  // useEffect(() => {
+  //   console.log("Chart::useeffect");
+  //   var graphDataAmount = convertCostSnapShotsToWeekAmount();
+  //   dispatch({
+  //     type: ACTION_TYPES.SET_GRAPHDATAAMOUNT,
+  //     graphDataAmount: graphDataAmount,
+  //   });
 
-  useEffect(() => {
-    var result = convertCostSnapShotsToWeekDate();
-    dispatch({
-      type: ACTION_TYPES.SET_GRAPHDATAWEEK,
-      graphDataWeek: result,
-    });
-  }, [dispatch]);
+  //   var graphDataWeek = convertCostSnapShotsToWeekDate();
+  //   dispatch({
+  //     type: ACTION_TYPES.SET_GRAPHDATAWEEK,
+  //     graphDataWeek: graphDataWeek,
+  //   });
+  // }, [selectedBudgetId, selectedBudgetMonth, dispatch]);
 
-  const getIndexFromBudgetArr = (id) => {
-    const index = budgets.findIndex((obj) => obj.budgetId === id);
-    return index;
-  };
+  // const convertCostSnapShotsToWeekAmount = () => {
+  //   const costSnapShots = data.costSnapShots;
+  //   console.log(
+  //     "Chart::convertCostSnapShotsToWeekAmount::" +
+  //       JSON.stringify(costSnapShots)
+  //   );
+  //   const amountArr = generateAmountFromMonth(
+  //     costSnapShots,
+  //     selectedBudgetMonth
+  //   );
+  //   return amountArr;
+  // };
 
-  const convertCostSnapShotsToWeekAmount = () => {
-    const costSnapShots = budgets[budgetIndex].costSnapShots;
-    const amountArr = generateAmountFromMonth(
-      costSnapShots,
-      selectedBudgetMonth
-    );
-    return amountArr;
-  };
-
-  const convertCostSnapShotsToWeekDate = () => {
-    const arr = generateMondayStringFromMonth(selectedBudgetMonth);
-    return arr;
-  };
-  if (graphDataAmount.length < 1) {
+  // const convertCostSnapShotsToWeekDate = () => {
+  //   const arr = generateMondayStringFromMonth(selectedBudgetMonth);
+  //   return arr;
+  // };
+  if (graphDataAmount || graphDataAmount.length < 1) {
     return <View></View>;
   }
   return (
@@ -105,7 +98,7 @@ const Chart = (props) => {
             },
           ],
         }}
-        width={Dimensions.get("window").width} // from react-native
+        width={wp(100)} // from react-native
         height={220}
         yAxisLabel={i18n.t("common.currency")}
         yAxisSuffix=""

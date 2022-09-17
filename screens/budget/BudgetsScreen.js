@@ -60,7 +60,6 @@ const isOutlined = false;
 const mode = isOutlined ? "outlined" : "elevated";
 
 const BudgetsScreen = (props) => {
-  const [budgetIndex, setBudgetIndex] = useState(0);
   const [isShowFAB, setIsShowFAB] = useState(true);
   const dispatch = useDispatch();
   const isDrawerOpen = useDrawerStatus() === "open";
@@ -68,6 +67,11 @@ const BudgetsScreen = (props) => {
   const FSM = useSelector((store) => store.FSM);
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
+  const selectedBudgetId = FSM.selectedBudgetId;
+  const budgetIndex = budgets.findIndex(
+    (obj) => obj.budgetId === selectedBudgetId
+  );
+  const selectedBudgetMonth = FSM.selectedBudgetMonth;
 
   useEffect(() => {
     if (isDrawerOpen || !isFocused) {
@@ -76,40 +80,6 @@ const BudgetsScreen = (props) => {
       setIsShowFAB(true);
     }
   }, [isDrawerOpen, isFocused]);
-
-  const FABActions = [
-    {
-      icon: "plus",
-      label: i18n.t("budget.addCostItem"),
-      onPress: () => {
-        addCostItemHandler(budgets[budgetIndex].budgetId);
-      },
-    },
-    {
-      icon: "email",
-      label: i18n.t("budget.addCategory"),
-      onPress: () => {
-        addCostCategoryHandler();
-      },
-    },
-    {
-      icon: "star",
-      label: i18n.t("budget.deleteBudget"),
-      onPress: () => {
-        deleteBudgetHandler(
-          budgets[budgetIndex].budgetId,
-          budgets[budgetIndex].name
-        );
-      },
-    },
-    {
-      icon: "bell",
-      label: i18n.t("budget.addBudget"),
-      onPress: () => {
-        addBudgetHandler();
-      },
-    },
-  ];
 
   useEffect(() => {
     dispatch(budgetsActions.fetchBudgets(login.accessToken));
@@ -122,13 +92,6 @@ const BudgetsScreen = (props) => {
       setFocus(true);
     } catch (err) {}
   }, [dispatch]);
-
-  const handleBudgetSwipeCallback = (childData) => {
-    if (childData >= budgets[budgetIndex].length - 1) {
-      setBudgetIndex(0);
-    }
-    setBudgetIndex(childData);
-  };
 
   const handleCloseError = () => {
     dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: "" });
@@ -168,34 +131,6 @@ const BudgetsScreen = (props) => {
     [dispatch, loadBudgets]
   );
 
-  // const editBudgetHandler = (budgetId) => {
-  //   props.navigation.navigate("EditBudgetScreen", { budgetId: budgetId });
-  // };
-
-  // const addBudgetHandler = () => {
-  //   props.navigation.navigate("EditBudgetScreen");
-  // };
-
-  // const deleteBudgetHandler = (budgetId, name) => {
-  //   Alert.alert("Are you sure?", `Do you really want to delete ${name}?`, [
-  //     { text: "No", style: "default" },
-  //     {
-  //       text: "Yes",
-  //       style: "destructive",
-  //       onPress: () => {
-  //         deleteBudget(budgetId);
-  //       },
-  //     },
-  //   ]);
-  // };
-
-  // const deleteBudget = useCallback(
-  //   async (budgetId) => {
-  //     dispatch(budgetsActions.deleteBudget(budgetId));
-  //   },
-  //   [dispatch]
-  // );
-
   if (FSM.hasError && FSM.hasError != "") {
     Alert.alert("Error!", FSM.hasError, [
       { text: "Okay", onPress: () => handleCloseError() },
@@ -226,8 +161,10 @@ const BudgetsScreen = (props) => {
         <Card mode={mode}>
           <Card mode={mode}>
             <Card.Title
-              title={budgets[budgetIndex].name}
-              subtitle={budgets[budgetIndex].description}
+              title={budgetIndex === "" ? budgets[budgetIndex].name : ""}
+              subtitle={
+                budgetIndex === "" ? budgets[budgetIndex].description : ""
+              }
               left={(props) => <Avatar.Icon {...props} icon="folder" />}
               right={(props) => (
                 <IconButton
@@ -243,40 +180,49 @@ const BudgetsScreen = (props) => {
             <Card.Content style={styles.summary}>
               <View style={styles.centered}>
                 <MediumCurrencyText
-                  value={nFormatter(budgets[budgetIndex].totalBudgetAmount)}
+                  value={
+                    budgetIndex === ""
+                      ? nFormatter(budgets[budgetIndex].totalBudgetAmount)
+                      : ""
+                  }
                   colorCode={false}
                 />
                 <Caption>Budget</Caption>
               </View>
               <View style={styles.centered}>
                 <MediumCurrencyText
-                  value={nFormatter(budgets[budgetIndex].totalCostAmount)}
+                  value={
+                    budgetIndex === ""
+                      ? nFormatter(budgets[budgetIndex].totalCostAmount)
+                      : ""
+                  }
                   colorCode={false}
                 />
                 <Caption>Cost</Caption>
               </View>
               <View style={styles.centered}>
                 <MediumCurrencyText
-                  value={nFormatter(
-                    budgets[budgetIndex].totalBudgetAmount -
-                      budgets[budgetIndex].totalCostAmount
-                  )}
+                  value={
+                    budgetIndex === ""
+                      ? nFormatter(
+                          budgets[budgetIndex].totalBudgetAmount -
+                            budgets[budgetIndex].totalCostAmount
+                        )
+                      : ""
+                  }
                   colorCode={true}
                 />
                 <Caption>Gain/Loss</Caption>
               </View>
             </Card.Content>
           </Card>
-          <BudgetCarousel
-            data={budgets}
-            parentCallback={handleBudgetSwipeCallback}
-            width={Dimensions.get("window").width}
-            height={Dimensions.get("window").height * 0.3}
-          />
+          <BudgetCarousel data={budgets} width={wp(100)} height={hp(30)} />
           <MonthCarousel />
         </Card>
         <BudgetAccordion
-          costCategories={budgets[budgetIndex].costCategories}
+          costCategories={
+            budgetIndex === "" ? budgets[budgetIndex].costCategories : ""
+          }
           deleteCallback={deleteCostCategoryHandler}
         ></BudgetAccordion>
         <Pagination
