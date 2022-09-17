@@ -9,7 +9,6 @@ import { Subheading, withTheme } from "react-native-paper";
 
 const MediumCurrencyText = ({ value, colorCode, color }) => {
   const nValue = nFormatter(value);
-  console.log("MediumCurrencyText::nValue::" + nValue);
   const formattedValue = formatNumber(nValue, {
     separator: ".",
     prefix: i18n.t("common.currency"),

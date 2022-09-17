@@ -52,6 +52,7 @@ import i18n from "@I18N/i18n";
 import { useDrawerStatus } from "@react-navigation/drawer";
 import { useIsFocused } from "@react-navigation/native";
 import ACTION_TYPES from "@Actions/actionTypes";
+import { nFormatter } from "@Utils/commonUtils";
 
 const SCREEN_WIDTH = Math.round(Dimensions.get("window").width);
 const SCREEN_HEIGHT = Math.round(Dimensions.get("window").height);
@@ -251,19 +252,27 @@ const BudgetsScreen = (props) => {
             <Card.Content style={styles.summary}>
               <View style={styles.centered}>
                 <MediumCurrencyText
-                  value={budgets[budgetIndex].totalBudgetAmount}
+                  value={nFormatter(budgets[budgetIndex].totalBudgetAmount)}
                   colorCode={false}
-                  color={Colors.green}
                 />
                 <Caption>Budget</Caption>
               </View>
               <View style={styles.centered}>
                 <MediumCurrencyText
-                  value={budgets[budgetIndex].totalCostAmount}
+                  value={nFormatter(budgets[budgetIndex].totalCostAmount)}
                   colorCode={false}
-                  color={Colors.red}
                 />
                 <Caption>Cost</Caption>
+              </View>
+              <View style={styles.centered}>
+                <MediumCurrencyText
+                  value={nFormatter(
+                    budgets[budgetIndex].totalBudgetAmount -
+                      budgets[budgetIndex].totalCostAmount
+                  )}
+                  colorCode={true}
+                />
+                <Caption>Gain/Loss</Caption>
               </View>
             </Card.Content>
           </Card>

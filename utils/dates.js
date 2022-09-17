@@ -71,10 +71,14 @@ export function generateAmountFromMonth(costSnapShots, monthStr) {
 
     const ssDate = moment(dtt, "YYYY-MM-DD").local();
     var ssMonth = ssDate.month().toString();
-
+    // console.log("costSnapShot::" + costSnapShot.dateTime);
+    // console.log("ssDate::" + JSON.stringify(ssDate));
+    // console.log("ssMonth::" + ssMonth);
+    // console.log("carousellMMonth::" + carousellMMonth.month().toString());
     if (ssMonth === carousellMMonth.month().toString()) {
-      const index = ssDate.day() - 1;
-
+      const index = ssDate.date() - 1;
+      // console.log("ssDate.date::" + ssDate.date());
+      // console.log("index::" + index);
       days[index] += nFormatter(costSnapShot.amount);
     }
   });
