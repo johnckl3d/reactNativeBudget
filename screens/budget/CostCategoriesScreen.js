@@ -13,7 +13,7 @@ import {
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useDispatch, useSelector } from "react-redux";
 import ProductItem from "../../components/budget/ProductItem";
-import HeaderButton from "../../components/UI/HeaderButton";
+import HeaderButton from "@UIComponents/HeaderButton";
 import Colors from "@Styles/colors";
 import * as costCategoriesActions from "../../store/actions/costCategories";
 

@@ -1,6 +1,8 @@
 import React, { useReducer, useEffect } from "react";
 import { View, TextInput, StyleSheet } from "react-native";
 import { Text } from "react-native-paper";
+import { COMMON } from "@Constants/Common";
+
 const INPUT_CHANGE = "INPUT_CHANGE";
 const INPUT_BLUR = "INPUT_BLUR";
 
@@ -11,6 +13,7 @@ const inputReducer = (state, action) => {
         ...state,
         value: action.value,
         isValid: action.isValid,
+        error: action.error,
       };
     case INPUT_BLUR:
       return {
@@ -22,7 +25,8 @@ const inputReducer = (state, action) => {
   }
 };
 
-const Input = (props) => {
+const CustomTextInput = (props) => {
+  console.log("Input::" + JSON.stringify(props));
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: props.initialValue ? props.initialValue : "",
     isValid: props.initiallyValid,
@@ -38,25 +42,48 @@ const Input = (props) => {
   }, [inputState, onInputChange, id]);
 
   const textChangeHandler = (text) => {
-    const emailRegex =
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    let isValid = true;
+    // const emailRegex =
+    //   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    // const noRegex = /^[0-9\b]+$/;
+
+    const emailRegex = COMMON.REGEX_EMAIL;
+    const noRegex = COMMON.REGEX_NUMERIC;
+    var isValid = true;
+    var error = "";
     if (props.required && text.trim().length === 0) {
       isValid = false;
+      error = "Field empty";
     }
     if (props.email && !emailRegex.test(text.toLowerCase())) {
       isValid = false;
+      error = "Please enter a valid email!";
     }
     if (props.min != null && +text < props.min) {
       isValid = false;
+      error = "Field incomplete";
     }
     if (props.max != null && +text > props.max) {
       isValid = false;
+      error = "Maximum character length reached";
     }
     if (props.minLength != null && text.length < props.minLength) {
       isValid = false;
+      error = "Field incomplete";
     }
-    dispatch({ type: INPUT_CHANGE, value: text, isValid: isValid });
+    if (
+      props.keyboardType != null &&
+      props.keyboardType === "numeric" &&
+      !noRegex.test(text.toLowerCase())
+    ) {
+      isValid = false;
+      error = "Please key in numeric values";
+    }
+    dispatch({
+      type: INPUT_CHANGE,
+      value: text,
+      isValid: isValid,
+      error: error,
+    });
   };
 
   const lostFocusHandler = () => {
@@ -75,7 +102,7 @@ const Input = (props) => {
       />
       {!inputState.isValid && inputState.touched && (
         <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>{props.errorText}</Text>
+          <Text style={styles.errorText}>{inputState.error}</Text>
         </View>
       )}
     </View>
@@ -106,4 +133,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Input;
+export default CustomTextInput;

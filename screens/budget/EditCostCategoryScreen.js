@@ -1,16 +1,16 @@
 import React, { useCallback, useReducer } from "react";
 import {
   Alert,
-  KeyboardAvoidingView, ScrollView,
-  StyleSheet, View
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
+  View,
 } from "react-native";
-import {
-  Button
-} from "react-native-paper";
+import { Button } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
-import Input from "../../components/UI/Input";
+import CustomTextInput from "@UIComponents/CustomTextInput";
 import * as costCategoriesActions from "../../store/actions/costCategories";
-import i18n from '@I18N/i18n';
+import i18n from "@I18N/i18n";
 
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
@@ -105,7 +105,7 @@ const EditCostCategoryScreen = ({ route, navigation }) => {
     >
       <ScrollView>
         <View style={styles.form}>
-          <Input
+          <CustomTextInput
             id="title"
             label={i18n.t("editCostCategory.name")}
             errorText="Please enter a valid name!"
@@ -118,7 +118,7 @@ const EditCostCategoryScreen = ({ route, navigation }) => {
             initiallyValid={!!editedCostCategory}
             required
           />
-          <Input
+          <CustomTextInput
             id="description"
             label={i18n.t("editCostCategory.description")}
             errorText="Please enter a valid description!"

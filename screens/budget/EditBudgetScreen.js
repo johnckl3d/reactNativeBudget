@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Button, Text } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
-import Input from "../../components/UI/Input";
+import CustomTextInput from "@UIComponents/CustomTextInput";
 import * as budgetsActions from "../../store/actions/budgets";
 import Colors from "@Styles/colors";
 import Styles from "@Styles/styles";
@@ -89,7 +89,7 @@ const EditBudgetScreen = ({ route, navigation }) => {
     },
     formIsValid: editedBudget ? true : false,
   });
-  i18n.t("editBudget.wrongInputTitle");
+
   const submitHandler = useCallback(async () => {
     if (SETTINGS.MOCK_DATA === false && !formState.formIsValid) {
       Alert.alert(
@@ -142,7 +142,7 @@ const EditBudgetScreen = ({ route, navigation }) => {
       >
         <View style={{ backgroundColor: Colors.white }}>
           <View style={styles.form}>
-            <Input
+            <CustomTextInput
               id="title"
               label="Name"
               errorText="Please enter a valid name!"
@@ -154,8 +154,9 @@ const EditBudgetScreen = ({ route, navigation }) => {
               initialValue={editedBudget ? editedBudget.name : ""}
               initiallyValid={!!editedBudget}
               required
+              minLength={5}
             />
-            <Input
+            <CustomTextInput
               id="description"
               label="Description"
               errorText="Please enter a valid description!"
@@ -168,7 +169,7 @@ const EditBudgetScreen = ({ route, navigation }) => {
               required
               minLength={5}
             />
-            <Input
+            <CustomTextInput
               id="amount"
               label="Budget Amount"
               errorText="Please enter a valid amount!"

@@ -9,9 +9,9 @@ import {
   View,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import Input from "../../components/UI/Input";
+import CustomTextInput from "@UIComponents/CustomTextInput";
 import * as costCategoriesActions from "../../store/actions/costCategories";
-import i18n from '@I18N/i18n';
+import i18n from "@I18N/i18n";
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
 const formReducer = (state, action) => {
@@ -131,7 +131,7 @@ const EditCostItemScreen = ({ route, navigation }) => {
     >
       <ScrollView>
         <View style={styles.form}>
-          <Input
+          <CustomTextInput
             id="title"
             label={i18n.t("editCostItem.name")}
             errorText="Please enter a valid name!"
@@ -144,7 +144,7 @@ const EditCostItemScreen = ({ route, navigation }) => {
             initiallyValid={!!editedCostItem}
             required
           />
-          <Input
+          <CustomTextInput
             id="description"
             label={i18n.t("editCostItem.description")}
             errorText="Please enter a valid description!"
@@ -159,7 +159,7 @@ const EditCostItemScreen = ({ route, navigation }) => {
             required
             minLength={5}
           />
-          <Input
+          <CustomTextInput
             id="amount"
             label={i18n.t("editCostItem.amount")}
             errorText="Please enter a valid amount!"

@@ -11,12 +11,10 @@ import {
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector, useDispatch } from "react-redux";
 import Colors from "@Styles/colors";
-import HeaderButton from "../../components/UI/HeaderButton";
+import HeaderButton from "@UIComponents/HeaderButton";
 import * as productsActions from "../../store/actions/products";
 import * as costCategoriesActions from "../../store/actions/costCategories";
-import Input from "../../components/UI/Input";
-
-
+import CustomTextInput from "@UIComponents/CustomTextInput";
 
 const formReducer = (state, action) => {
   return state;
@@ -43,8 +41,6 @@ const EditProductScreen = (props) => {
     formIsValid: editedProduct ? true : false,
   });
 
-  
-
   const submitHandler = useCallback(() => {
     if (!formState.formIsValid) {
       Alert.alert("Wrong input!", "Please check the errors in the form.", [
@@ -55,8 +51,7 @@ const EditProductScreen = (props) => {
     dispatch(
       costCategoriesActions.createProduct(
         formState.inputValues.title,
-        formState.inputValues.description
-        +formState.inputValues.price
+        formState.inputValues.description + formState.inputValues.price
       )
     );
     // props.navigation.navigate("ProductsOverview"
@@ -69,9 +64,7 @@ const EditProductScreen = (props) => {
   }, [submitHandler]);
 
   const inputChangeHandler = useCallback(
-    (inputIdentifier, inputValue, inputValidity) => {
-      
-    }
+    (inputIdentifier, inputValue, inputValidity) => {}
   );
 
   return (
@@ -82,7 +75,7 @@ const EditProductScreen = (props) => {
     >
       <ScrollView>
         <View style={styles.form}>
-          <Input
+          <CustomTextInput
             id="title"
             label="Name"
             errorText="Please enter a valid name!"
@@ -97,7 +90,7 @@ const EditProductScreen = (props) => {
           />
 
           {editedProduct ? null : (
-            <Input
+            <CustomTextInput
               id="price"
               label="Amount"
               errorText="Please enter a valid amount!"
@@ -108,7 +101,7 @@ const EditProductScreen = (props) => {
               min={0.1}
             />
           )}
-          <Input
+          <CustomTextInput
             id="description"
             label="Description"
             errorText="Please enter a valid description!"
@@ -124,17 +117,16 @@ const EditProductScreen = (props) => {
             minLength={5}
           />
           <View style={styles.button}>
-          <Button
-            style={styles.button}
-            color={Colors.primary}
-            title="Add"
-            onPress={() => {
-              submitHandler();
-              //navData.navigation.getParam("submit");
-              //addItemHandler(itemData.item.name);
-            }}
-          />
-
+            <Button
+              style={styles.button}
+              color={Colors.primary}
+              title="Add"
+              onPress={() => {
+                submitHandler();
+                //navData.navigation.getParam("submit");
+                //addItemHandler(itemData.item.name);
+              }}
+            />
           </View>
         </View>
       </ScrollView>

@@ -14,7 +14,7 @@ import ProductItem from "../../components/shop/ProductItem";
 import Colors from "@Styles/colors";
 import * as costCategoriesActions from "../../store/actions/costCategories";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import HeaderButton from "../../components/UI/HeaderButton";
+import HeaderButton from "@UIComponents/HeaderButton";
 
 const CostItemsScreen = (props) => {
   const costCategoryId = props.navigation.getParam("costCategoryId");
