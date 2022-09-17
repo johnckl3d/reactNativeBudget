@@ -44,11 +44,7 @@ const BudgetCarousel = () => {
   const selectedBudgetMonth = FSM.selectedBudgetMonth;
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
-  // const budgetIndex = budgets.findIndex(
-  //   (obj) => obj.budgetId === FSM.selectedBudgetId
-  // );
-  const graphDataAmount = FSM.graphDataAmount;
-  const graphDataWeek = FSM.graphDataWeek;
+
   const [graphData, setGraphData] = useState({
     graphDataAmount: [],
     graphDataWeek: [],
@@ -57,55 +53,49 @@ const BudgetCarousel = () => {
 
   const _renderItem = ({ item }) => {
     return (
-      <Chart graphDataAmount={graphDataAmount} graphDataWeek={graphDataWeek} />
+      <Chart
+        graphDataAmount={graphData.graphDataAmount}
+        graphDataWeek={graphData.graphDataWeek}
+      />
     );
   };
 
   useEffect(() => {
     console.log("BudgetCarousel::useeffect");
-    var selectedBudgetId = budgets[0].budgetId;
-    var costSnapShots = budgets[0].costSnapShots;
+    var index = budgets.findIndex((obj) => obj.budgetId === selectedBudgetId);
+    if (index === -1) {
+      index = 0;
+    }
     dispatch({
       type: ACTION_TYPES.SET_BUDGETID,
       selectedBudgetId: selectedBudgetId,
     });
+    handleGraph(index);
+  }, [selectedBudgetId, dispatch]);
 
-    var graphDataAmount = convertCostSnapShotsToWeekAmount(costSnapShots);
-    dispatch({
-      type: ACTION_TYPES.SET_GRAPHDATAAMOUNT,
-      graphDataAmount: graphDataAmount,
-    });
-
-    var graphDataWeek = convertCostSnapShotsToWeekDate(selectedBudgetMonth);
-    dispatch({
-      type: ACTION_TYPES.SET_GRAPHDATAWEEK,
-      graphDataWeek: graphDataWeek,
-    });
-  }, [selectedBudgetId, selectedBudgetMonth, dispatch]);
-
-  const handleBudgetSwipeCallback = (index) => {
-    if (index < budgets.length - 1) {
+  const handleGraph = (index) => {
+    console.log("BudgetCarousel::handleBudgetSwipeCallback");
+    if (index != -1 && index < budgets.length - 1) {
       var budgetId = budgets[index].budgetId;
       var costSnapShots = budgets[index].costSnapShots;
-      console.log(
-        "BudgetCarousell::handleBudgetSwipeCallback::result::" + result
-      );
       dispatch({
         type: ACTION_TYPES.SET_BUDGETID,
         selectedBudgetId: budgetId,
       });
 
       var graphDataAmount = convertCostSnapShotsToWeekAmount(costSnapShots);
-      dispatch({
-        type: ACTION_TYPES.SET_GRAPHDATAAMOUNT,
-        graphDataAmount: graphDataAmount,
-      });
 
       var graphDataWeek = convertCostSnapShotsToWeekDate(selectedBudgetMonth);
-      dispatch({
-        type: ACTION_TYPES.SET_GRAPHDATAWEEK,
+      var copiedGraphData = { ...graphData };
+      setGraphData((prevStat) => ({
+        ...copiedGraphData,
+        graphDataAmount: graphDataAmount,
         graphDataWeek: graphDataWeek,
-      });
+      }));
+      console.log(
+        "BudgetCarousel::handleBudgetSwipeCallback::graphData::" +
+          JSON.stringify(graphData)
+      );
     }
   };
 
@@ -122,11 +112,6 @@ const BudgetCarousel = () => {
     return arr;
   };
 
-  const getIndexFromBudgetArr = (id) => {
-    const index = budgets.findIndex((obj) => obj.budgetId === id);
-    return index;
-  };
-
   return (
     <View style={styles.centered}>
       <Carousel
@@ -135,7 +120,7 @@ const BudgetCarousel = () => {
         sliderWidth={wp(100)}
         itemWidth={wp(100)}
         inactiveSlideShift={0}
-        onSnapToItem={(index) => handleBudgetSwipeCallback(index)}
+        onSnapToItem={(index) => handleGraph(index)}
         scrollInterpolator={scrollInterpolator}
         slideInterpolatedStyle={animatedStyles}
         useScrollView={true}

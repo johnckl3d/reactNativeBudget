@@ -45,46 +45,7 @@ import {
 } from "@Utils/scalingUtils";
 
 const Chart = ({ graphDataAmount, graphDataWeek }) => {
-  // const FSM = useSelector((store) => store.FSM);
-  // const graphDataAmount = FSM.graphDataAmount;
-  // const graphDataWeek = FSM.graphDataWeek;
-  // const selectedBudgetId = FSM.selectedBudgetId;
-  // const selectedBudgetMonth = FSM.selectedBudgetMonth;
-  //const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   console.log("Chart::useeffect");
-  //   var graphDataAmount = convertCostSnapShotsToWeekAmount();
-  //   dispatch({
-  //     type: ACTION_TYPES.SET_GRAPHDATAAMOUNT,
-  //     graphDataAmount: graphDataAmount,
-  //   });
-
-  //   var graphDataWeek = convertCostSnapShotsToWeekDate();
-  //   dispatch({
-  //     type: ACTION_TYPES.SET_GRAPHDATAWEEK,
-  //     graphDataWeek: graphDataWeek,
-  //   });
-  // }, [selectedBudgetId, selectedBudgetMonth, dispatch]);
-
-  // const convertCostSnapShotsToWeekAmount = () => {
-  //   const costSnapShots = data.costSnapShots;
-  //   console.log(
-  //     "Chart::convertCostSnapShotsToWeekAmount::" +
-  //       JSON.stringify(costSnapShots)
-  //   );
-  //   const amountArr = generateAmountFromMonth(
-  //     costSnapShots,
-  //     selectedBudgetMonth
-  //   );
-  //   return amountArr;
-  // };
-
-  // const convertCostSnapShotsToWeekDate = () => {
-  //   const arr = generateMondayStringFromMonth(selectedBudgetMonth);
-  //   return arr;
-  // };
-  if (graphDataAmount || graphDataAmount.length < 1) {
+  if (!graphDataAmount || graphDataAmount.length < 1) {
     return <View></View>;
   }
   return (

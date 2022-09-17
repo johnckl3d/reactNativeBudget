@@ -78,22 +78,10 @@ const MonthCarousel = (props) => {
 
   const setMonthData = async (index) => {
     const month = monthRange[index];
-    const costSnapShots = budgets[budgetIndex].costSnapShots;
 
     dispatch({
       type: ACTION_TYPES.SET_BUDGETMONTH,
       selectedBudgetMonth: month,
-    });
-    const amountArr = generateAmountFromMonth(costSnapShots, month);
-    dispatch({
-      type: ACTION_TYPES.SET_GRAPHDATAAMOUNT,
-      graphDataAmount: amountArr,
-    });
-
-    const weekArr = generateMondayStringFromMonth(month);
-    dispatch({
-      type: ACTION_TYPES.SET_GRAPHDATAWEEK,
-      graphDataWeek: weekArr,
     });
   };
 
