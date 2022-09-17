@@ -69,7 +69,7 @@ const EditBudgetScreen = ({ route, navigation }) => {
     (obj) => obj.budgetId === FSM.selectedBudgetId
   );
   //console.log("EditBudgetScreen::" + budgetId);
-  var editedBudget;
+  var editedBudget = null;
   const dispatch = useDispatch();
 
   if (budgetIndex) {
@@ -80,26 +80,30 @@ const EditBudgetScreen = ({ route, navigation }) => {
     inputValues: {
       title: editedBudget ? editedBudget.title : "",
       description: editedBudget ? editedBudget.description : "",
+      totalBudgetAmount: editedBudget ? editedBudget.description : "",
     },
     inputValidities: {
       title: editedBudget ? true : false,
       description: editedBudget ? true : false,
+      totalBudgetAmount: editedBudget ? true : false,
     },
     formIsValid: editedBudget ? true : false,
   });
-
+  i18n.t("editBudget.wrongInputTitle");
   const submitHandler = useCallback(async () => {
     if (SETTINGS.MOCK_DATA === false && !formState.formIsValid) {
-      Alert.alert("Wrong input!", "Please check the errors in the form.", [
-        { text: "Okay" },
-      ]);
+      Alert.alert(
+        i18n.t("editBudget.wrongInputTitle"),
+        "Please check the errors in the form.",
+        [{ text: "Okay" }]
+      );
       return;
     }
 
     var token = login.accessToken;
     var title = formState.inputValues.title;
     var description = formState.inputValues.description;
-    var totalBudgetAmount = 0;
+    var totalBudgetAmount = formState.inputValues.totalBudgetAmount;
     if (SETTINGS.MOCK_DATA) {
       title = "entertainment";
       description = "movie";

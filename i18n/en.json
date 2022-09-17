@@ -35,7 +35,8 @@
     "name": "Name",
     "description": "Description",
     "amount": "Amount",
-    "add": "Add"
+    "add": "Add",
+    "wrongInputTitle": "Wrong input!"
   },
   "editCostItem": {
     "title": "Edit Cost Item",
