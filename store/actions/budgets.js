@@ -1,7 +1,7 @@
-import CostSnapShot from "../../models/costSnapShot";
-import CostCategory from "../../models/costCategory";
-import CostItem from "../../models/costItem";
-import Budget from "../../models/budget";
+import CostSnapShot from "@Models/costSnapShot";
+import CostCategory from "@Models/costCategory";
+import CostItem from "@Models/costItem";
+import Budget from "@Models/budget";
 import { API_URL } from "@Constants/url";
 import { SETTINGS } from "@Constants/settings";
 import { STORAGE } from "@Constants/storage";
@@ -11,6 +11,7 @@ import uuid from "react-native-uuid";
 import axios from "axios";
 import ACTION_TYPES from "@Actions/actionTypes";
 import i18n from "@I18N/i18n";
+//import { fetchBudgets } from "@Actions/budgets";
 
 export const fetchBudgets = (token) => {
   return async (dispatch) => {
@@ -155,10 +156,9 @@ export const createBudget = (token, title, description, amount) => {
           console.log(
             JSON.stringify("createBudget::response::" + response.data)
           );
-          fetchBudgets(token);
           // const loadedBudget = [];
           // const resData = response.data;
-          // dispatch({ type: ACTION_TYPES.SET_BUDGETS, budgets: loadedBudget });
+          dispatch(fetchBudgets(token));
         })
         .catch((error) => {
           console.log("createBudget::error::" + error);

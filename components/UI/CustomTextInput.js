@@ -26,7 +26,6 @@ const inputReducer = (state, action) => {
 };
 
 const CustomTextInput = (props) => {
-  console.log("Input::" + JSON.stringify(props));
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: props.initialValue ? props.initialValue : "",
     isValid: props.initiallyValid,
