@@ -52,6 +52,11 @@ export function getMonthIndexFromMonthArray(monthStr, array) {
 }
 
 export function generateAmountFromMonth(costSnapShots, monthStr) {
+  console.log(
+    "date::generateAmountFromMonth::costSnapShots::" +
+      JSON.stringify(costSnapShots)
+  );
+  console.log("date::generateAmountFromMonth::monthStr::" + monthStr);
   var days = [];
   const carousellMMonth = moment(monthStr, "YYYY MMM");
 

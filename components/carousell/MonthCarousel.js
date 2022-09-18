@@ -43,7 +43,7 @@ import {
 
 const MonthCarousel = (props) => {
   const FSM = useSelector((store) => store.FSM);
-  const monthRange = FSM.monthRange;
+  //const monthRange = FSM.monthRange;
   const selectedBudgetMonthIndex = FSM.selectedBudgetMonthIndex;
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
@@ -57,22 +57,22 @@ const MonthCarousel = (props) => {
       </Card>
     );
   };
-  useDeepCompareEffect(() => {
-    const result = generateMonthRange();
-    dispatch({
-      type: ACTION_TYPES.SET_MONTHRANGE,
-      monthRange: result,
-    });
-  }, [dispatch]);
+  // useDeepCompareEffect(() => {
+  //   const result = generateMonthRange();
+  //   dispatch({
+  //     type: ACTION_TYPES.SET_MONTHRANGE,
+  //     monthRange: result,
+  //   });
+  // }, [dispatch]);
 
   useEffect(() => {
     console.log("MonthCarousel::useEffect::");
     const monthStr = moment().format("YYYY MMM");
-    const index = getMonthIndexFromMonthArray(monthStr, monthRange);
+    const index = getMonthIndexFromMonthArray(monthStr, generateMonthRange());
     if (index > -1) {
       setMonthIndex(index);
     }
-  }, [monthRange, dispatch]);
+  }, [dispatch]);
 
   const setMonthIndex = async (index) => {
     console.log("MonthCarousel::setMonthIndex::" + index);
@@ -81,14 +81,14 @@ const MonthCarousel = (props) => {
       selectedBudgetMonthIndex: index,
     });
   };
-  if (!monthRange) {
-    return <View></View>;
-  }
+  // if (!monthRange) {
+  //   return <View></View>;
+  // }
   return (
     <View style={styles.container}>
       <Carousel
         //ref={(c) => (this.carousel = c)}
-        data={monthRange}
+        data={generateMonthRange()}
         renderItem={_renderItem}
         sliderWidth={width}
         itemWidth={width}

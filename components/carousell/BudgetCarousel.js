@@ -52,24 +52,34 @@ const BudgetCarousel = () => {
   const dispatch = useDispatch();
 
   const _renderItem = ({ item }) => {
-    if (!graphData.graphDataAmount || !graphData.graphDataWeek) {
+    if (!item) {
       console.log("BudgetCarousel::Can't render chart");
       return <View></View>;
     }
+    for (var i = 0; i < item.length; i++) {
+      handleBudgetGraph(selectedBudgetIndex);
+    }
+
     return (
       <Chart
-        graphDataAmount={graphData.graphDataAmount}
-        graphDataWeek={graphData.graphDataWeek}
+        graphDataAmount={item.graphDataAmount}
+        graphDataWeek={item.graphDataWeek}
       />
     );
   };
 
   useEffect(() => {
-    handleGraph(selectedBudgetIndex);
+    handleBudgetsGraph();
   }, [selectedBudgetIndex]);
 
-  const handleGraph = (index) => {
-    console.log("BudgetCarousel::handleGraph");
+  const handleBudgetsGraph = () => {
+    for (var i = 0; i < budgets.length; i++) {
+      handleBudgetGraph(selectedBudgetIndex);
+    }
+  };
+
+  const handleBudgetGraph = (index) => {
+    console.log("BudgetCarousel::handleGraph::index::" + index);
     if (index != -1 && index < budgets.length - 1) {
       var costSnapShots = budgets[index].costSnapShots;
       dispatch({
@@ -77,11 +87,14 @@ const BudgetCarousel = () => {
         selectedBudgetIndex: index,
       });
 
-      var graphDataAmount = convertCostSnapShotsToWeekAmount(costSnapShots);
-
-      var graphDataWeek = convertCostSnapShotsToWeekDate(
-        budgets[selectedBudgetMonthIndex]
+      var monthArr = generateMonthRange(selectedBudgetMonthIndex);
+      var monthStr = monthArr[selectedBudgetMonthIndex];
+      var graphDataAmount = convertCostSnapShotsToWeekAmount(
+        costSnapShots,
+        monthStr
       );
+
+      var graphDataWeek = convertCostSnapShotsToWeekDate(monthStr);
       var copiedGraphData = { ...graphData };
       setGraphData((prevStat) => ({
         ...copiedGraphData,
@@ -94,11 +107,8 @@ const BudgetCarousel = () => {
     }
   };
 
-  const convertCostSnapShotsToWeekAmount = (costSnapShots) => {
-    const amountArr = generateAmountFromMonth(
-      costSnapShots,
-      budgets[selectedBudgetMonthIndex]
-    );
+  const convertCostSnapShotsToWeekAmount = (costSnapShots, monthStr) => {
+    const amountArr = generateAmountFromMonth(costSnapShots, monthStr);
     return amountArr;
   };
 
@@ -117,7 +127,7 @@ const BudgetCarousel = () => {
         inactiveSlideShift={0}
         firstItem={selectedBudgetIndex}
         initialScrollIndex={selectedBudgetIndex}
-        onSnapToItem={(index) => handleGraph(index)}
+        onSnapToItem={(index) => handleBudgetGraph(index)}
         scrollInterpolator={scrollInterpolator}
         slideInterpolatedStyle={animatedStyles}
         useScrollView={true}
