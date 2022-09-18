@@ -43,7 +43,7 @@ import {
 
 const MonthCarousel = (props) => {
   const FSM = useSelector((store) => store.FSM);
-  //const monthRange = FSM.monthRange;
+  const monthRange = generateMonthRange();
   const selectedBudgetMonthIndex = FSM.selectedBudgetMonthIndex;
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
@@ -68,9 +68,13 @@ const MonthCarousel = (props) => {
   useEffect(() => {
     console.log("MonthCarousel::useEffect::");
     const monthStr = moment().format("YYYY MMM");
-    const index = getMonthIndexFromMonthArray(monthStr, generateMonthRange());
+    const index = getMonthIndexFromMonthArray(monthStr, monthRange);
+    console.log("MonthCarousel::useEffect::index::" + index);
     if (index > -1) {
-      setMonthIndex(index);
+      dispatch({
+        type: ACTION_TYPES.SET_BUDGETMONTHINDEX,
+        selectedBudgetMonthIndex: index,
+      });
     }
   }, [dispatch]);
 
@@ -81,22 +85,23 @@ const MonthCarousel = (props) => {
       selectedBudgetMonthIndex: index,
     });
   };
-  // if (!monthRange) {
-  //   return <View></View>;
-  // }
+
+  const initMonthStr = moment().format("YYYY MMM");
+  const initIndex = getMonthIndexFromMonthArray(initMonthStr, monthRange);
+
   return (
     <View style={styles.container}>
       <Carousel
         //ref={(c) => (this.carousel = c)}
-        data={generateMonthRange()}
+        data={monthRange}
         renderItem={_renderItem}
         sliderWidth={width}
         itemWidth={width}
         contentContainerStyle={styles.carouselItemContainer}
         //containerCustomStyle={{flexGrow: 0}}
         inactiveSlideShift={0}
-        firstItem={selectedBudgetMonthIndex}
-        initialScrollIndex={selectedBudgetMonthIndex}
+        firstItem={initIndex}
+        initialScrollIndex={initIndex}
         onSnapToItem={(index) => setMonthIndex(index)}
         scrollInterpolator={scrollInterpolator}
         slideInterpolatedStyle={animatedStyles}

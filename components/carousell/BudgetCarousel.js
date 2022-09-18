@@ -48,10 +48,6 @@ const BudgetCarousel = () => {
   const dispatch = useDispatch();
 
   const _renderItem = ({ item }) => {
-    if (!item) {
-      console.log("BudgetCarousel::Can't render chart");
-      return <View></View>;
-    }
     var costSnapShots = item.costSnapShots;
     var monthArr = generateMonthRange(selectedBudgetMonthIndex);
     var monthStr = monthArr[selectedBudgetMonthIndex];
@@ -66,10 +62,6 @@ const BudgetCarousel = () => {
       <Chart graphDataAmount={graphDataAmount} graphDataWeek={graphDataWeek} />
     );
   };
-
-  useEffect(() => {
-    handleBudgetGraph(selectedBudgetIndex);
-  }, [selectedBudgetIndex]);
 
   const handleBudgetGraph = (index) => {
     console.log("BudgetCarousel::handleGraph::index::" + index);

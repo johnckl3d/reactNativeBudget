@@ -45,8 +45,6 @@ import {
 } from "@Utils/scalingUtils";
 
 const Chart = ({ graphDataAmount, graphDataWeek }) => {
-  console.log("Chart::graphDataAmount::" + graphDataAmount);
-  console.log("Chart::graphDataWeek::" + graphDataWeek);
   return (
     <View>
       <LineChart
