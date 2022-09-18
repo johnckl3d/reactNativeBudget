@@ -42,6 +42,7 @@ import {
 import moment from "moment";
 import i18n from "@I18N/i18n";
 import { nFormatter } from "@Utils/commonUtils";
+import Styles from "@Styles/styles";
 
 const BudgetAccordion = (props) => {
   const withScrollView = false;
@@ -53,20 +54,39 @@ const BudgetAccordion = (props) => {
 
   const renderCostItem = ({ item }) => {
     return (
-      <List.Section>
-        <List.Subheader>{moment(item.dateTime).format("LL")}</List.Subheader>
+      <List.Section style={[styles.layoutList, styles.highlightRed]}>
+        <List.Subheader
+          style={[
+            styles.textHeading5,
+            styles.listItemTight,
+            styles.highlightRed,
+            { height: hp(3) },
+          ]}
+        >
+          {moment(item.dateTime).format("LL")}
+        </List.Subheader>
         <List.Item
-          left={() => <IconButton icon="camera" size={24} onPress={() => {}} />}
+          left={() => (
+            <IconButton icon="camera" size={hp(3)} onPress={() => {}} />
+          )}
           right={(props) => (
             <IconButton {...props} icon="dots-vertical" onPress={() => {}} />
           )}
           title={item.name}
-          style={styles.centered}
+          titleStyle={styles.textCitation}
+          style={[
+            styles.centered,
+            styles.listItemTight,
+            styles.highlightRed,
+            { height: hp(8) },
+          ]}
           description={
             `Amount: ${i18n.t("common.currency")}` +
             `${nFormatter(item.amount)}`
           }
+          descriptionStyle={styles.textCitation}
         />
+        <View></View>
       </List.Section>
     );
   };
@@ -74,15 +94,24 @@ const BudgetAccordion = (props) => {
   const renderCostCategoriesItem = ({ item }) => {
     return item.costItems.length > 0 ? (
       <List.Section>
-        <Divider />
-
         <List.Accordion
+          style={[
+            styles.layoutList,
+            styles.listItemTight,
+            styles.highlightRed,
+            { height: hp(7) },
+          ]}
           title={item.name}
+          titleStyle={styles.textHeading5}
           description={
             `Amount: ${i18n.t("common.currency")}` +
             `${nFormatter(item.totalAmount)}`
           }
-          descriptionStyle={[{ color: Colors.red }, styles.centered]}
+          descriptionStyle={[
+            { color: Colors.red },
+            styles.centered,
+            styles.textCitation,
+          ]}
         >
           <FlatList
             data={item.costItems}
@@ -95,13 +124,13 @@ const BudgetAccordion = (props) => {
     ) : (
       <List.Item
         title={item.name}
+        titleStyle={styles.textCitation}
         description={item.totalAmount}
         descriptionStyle={[{ color: Colors.red }, styles.centered]}
         right={() => (
           <IconButton
             icon="dots-vertical"
             onPress={() => {
-              console.log("TouchableRipple::" + JSON.stringify(item));
               props.deleteCallback(item.costCategoryId, item.name);
             }}
           />
@@ -123,7 +152,12 @@ const BudgetAccordion = (props) => {
 
 const styles = StyleSheet.create({
   container: { paddingBottom: hp(20) },
+  layoutList: { ...Styles.layoutList },
+  textHeading5: { ...Styles.textHeading5, borderColor: Colors.red },
+  textCitation: { ...Styles.textCitation },
   centered: { ...centered, height: hp(5), flex: 1 },
+  highlightRed: { ...Styles.highlightRed },
+  listItemTight: { ...Styles.listItemTight },
 });
 
 export default withTheme(BudgetAccordion);

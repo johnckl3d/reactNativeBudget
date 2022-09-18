@@ -156,12 +156,32 @@ export default StyleSheet.create({
     color: Colors.primary,
     fontSize: 18,
   },
+  textHeading5: {
+    fontSize: 13,
+  },
+  textCitation: {
+    fontSize: 12,
+  },
+  layoutList: {
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+  },
+  listItemTight: {
+    marginTop: 0,
+    marginBottom: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
   footer: {
     flex: 3,
     backgroundColor: Colors.white,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
+    borderTopLeftRadius: wp(10),
+    borderTopRightRadius: wp(10),
     // paddingHorizontal: 20,
     // paddingVertical: 30,
+  },
+  highlightRed: {
+    borderColor: Colors.red,
+    borderWidth: 2,
   },
 });

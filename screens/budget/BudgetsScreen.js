@@ -239,7 +239,6 @@ const BudgetsScreen = (props) => {
 
 const styles = StyleSheet.create({
   centered: { ...centered, flex: 1 },
-  fab: { position: "absolute", margin: 16, right: 0, bottom: 0 },
   summary: {
     flexDirection: "row",
     height: hp(9),

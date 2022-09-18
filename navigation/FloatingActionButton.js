@@ -12,6 +12,10 @@ import {
   View,
 } from "react-native";
 import * as budgetsActions from "@Actions/budgets";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "@Utils/scalingUtils";
 
 const FloatingActionButton = ({ visible, actions, navigation }) => {
   const [state, setState] = useState({ open: false });
@@ -93,11 +97,16 @@ const FloatingActionButton = ({ visible, actions, navigation }) => {
     },
     [dispatch]
   );
+  if (!visible) {
+    return null;
+  }
 
   return (
     <Portal>
-      <FAB.Group
+      <FAB
         style={styles.fab}
+        prop
+        size="small"
         open={open}
         icon={open ? "calendar-today" : "plus"}
         actions={FABActions}
@@ -124,7 +133,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  fab: { position: "absolute", margin: 16, right: 0, bottom: 0 },
+  fab: { position: "absolute", margin: wp(1), right: wp(3), bottom: hp(3) },
 });
 
 export default withTheme(FloatingActionButton);
