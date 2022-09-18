@@ -4,13 +4,42 @@ import Styles from "@Styles/styles";
 import { nFormatter } from "@Utils/commonUtils";
 import { heightPercentageToDP as hp } from "@Utils/scalingUtils";
 import moment from "moment";
-import React from "react";
-import { StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import { IconButton, List, withTheme } from "react-native-paper";
 import { centered } from "../../styles/presentation";
+import React, { useCallback, useEffect, useState } from "react";
+import * as budgetsActions from "@Actions/budgets";
+import { useDispatch, useSelector } from "react-redux";
 
-const CostItem = ({ item }) => {
-  console.log("CostItem");
+const CostItem = ({ costCategoryId, item }) => {
+  console.log("CostItem::costCategoryId::" + costCategoryId);
+  const dispatch = useDispatch();
+  const FSM = useSelector((store) => store.FSM);
+  const login = useSelector((store) => store.login);
+
+  const deleteHandler = (name, costItemId) => {
+    Alert.alert("Are you sure?", `Do you really want to delete ${name}?`, [
+      { text: "No", style: "default" },
+      {
+        text: "Yes",
+        style: "destructive",
+        onPress: () => {
+          deleteCostItem(login.accessToken, costCategoryId, costItemId);
+        },
+      },
+    ]);
+    return;
+  };
+
+  const deleteCostItem = useCallback(
+    async (token, costCategoryId, costItemId) => {
+      dispatch(
+        budgetsActions.deleteCostItem(token, costCategoryId, costItemId)
+      );
+    },
+    [dispatch]
+  );
+
   return (
     <List.Section style={[styles.layoutList, styles.highlightRed]}>
       <List.Subheader
@@ -28,7 +57,13 @@ const CostItem = ({ item }) => {
           <IconButton icon="camera" size={hp(3)} onPress={() => {}} />
         )}
         right={(props) => (
-          <IconButton {...props} icon="dots-vertical" onPress={() => {}} />
+          <IconButton
+            {...props}
+            icon="dots-vertical"
+            onPress={() => {
+              deleteHandler(item.name, item.costItemId);
+            }}
+          />
         )}
         title={item.name}
         titleStyle={styles.textCitation}

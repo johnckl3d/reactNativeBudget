@@ -10,9 +10,11 @@ import { Divider, IconButton, List, withTheme } from "react-native-paper";
 import { centered } from "../../styles/presentation";
 
 const CostCategoryItem = ({ item }) => {
-  console.log("CostCategoryItem");
+  console.log("CostCategoryItem::costCategoryId::" + item.costCategoryId);
   const renderCostItem = ({ item }) => {
-    return <CostItem item={item}></CostItem>;
+    return (
+      <CostItem costCategoryId={item.costCategoryId} item={item}></CostItem>
+    );
   };
 
   return item.costItems.length > 0 ? (

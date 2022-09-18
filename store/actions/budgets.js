@@ -222,3 +222,56 @@ export const deleteBudget = (token, budgetId) => {
     }
   };
 };
+
+export const deleteCostItem = (token, costCategoryId, costItemId) => {
+  console.log("budgets::deleteCostItem::token::" + token);
+  console.log("budgets::deleteCostItem::costCategoryId::" + costCategoryId);
+  console.log("budgets::deleteCostItem::costItemId::" + costItemId);
+  return async (dispatch) => {
+    try {
+      dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: true });
+      dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: null });
+      const transactionID = moment().format() + uuid.v4();
+      const url =
+        API_URL.DELETE_COSTITEM_URL +
+        "/" +
+        costCategoryId +
+        "/costItem/" +
+        costItemId;
+      console.log("deleteCostItem::transactionID::" + transactionID);
+      console.log("deleteCostItem::url::" + url);
+      await axios({
+        url: url,
+        method: "delete",
+        timeout: SETTINGS.TIMEOUT,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json, text/plain, */*",
+          Authorization: "Bearer " + token,
+          TransactionID: transactionID,
+        },
+        params: { budgetId },
+      })
+        .then((response) => {
+          console.log(
+            JSON.stringify("deleteCostItem::response::" + response.data)
+          );
+          // const loadedBudget = [];
+          // const resData = response.data;
+          dispatch(fetchBudgets(token));
+        })
+        .catch((error) => {
+          console.log("deleteCostItem::error::" + error);
+          dispatch({
+            type: ACTION_TYPES.SET_ERROR,
+            hasError: i18n.t("common.errorMessage"),
+          });
+          dispatch({ type: ACTION_TYPES.SET_LOGOUT });
+        });
+    } catch (err) {
+      dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: err });
+    } finally {
+      dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: false });
+    }
+  };
+};

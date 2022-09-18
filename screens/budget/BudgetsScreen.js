@@ -39,7 +39,7 @@ import BudgetAccordion from "@Accordion/BudgetAccordion";
 import HeaderButton from "@UIComponents/HeaderButton";
 import MediumCurrencyText from "@UIComponents/MediumCurrencyText";
 import * as budgetsActions from "@Actions/budgets";
-import * as costCategoriesActions from "../../store/actions/costCategories";
+import * as costCategoriesActions from "@Actions/costCategories";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
