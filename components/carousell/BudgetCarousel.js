@@ -45,10 +45,6 @@ const BudgetCarousel = () => {
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
 
-  const [graphData, setGraphData] = useState({
-    graphDataAmount: null,
-    graphDataWeek: null,
-  });
   const dispatch = useDispatch();
 
   const _renderItem = ({ item }) => {
@@ -56,54 +52,32 @@ const BudgetCarousel = () => {
       console.log("BudgetCarousel::Can't render chart");
       return <View></View>;
     }
-    for (var i = 0; i < item.length; i++) {
-      handleBudgetGraph(selectedBudgetIndex);
-    }
+    var costSnapShots = item.costSnapShots;
+    var monthArr = generateMonthRange(selectedBudgetMonthIndex);
+    var monthStr = monthArr[selectedBudgetMonthIndex];
+    var graphDataAmount = convertCostSnapShotsToWeekAmount(
+      costSnapShots,
+      monthStr
+    );
+
+    var graphDataWeek = convertCostSnapShotsToWeekDate(monthStr);
 
     return (
-      <Chart
-        graphDataAmount={item.graphDataAmount}
-        graphDataWeek={item.graphDataWeek}
-      />
+      <Chart graphDataAmount={graphDataAmount} graphDataWeek={graphDataWeek} />
     );
   };
 
   useEffect(() => {
-    handleBudgetsGraph();
+    handleBudgetGraph(selectedBudgetIndex);
   }, [selectedBudgetIndex]);
-
-  const handleBudgetsGraph = () => {
-    for (var i = 0; i < budgets.length; i++) {
-      handleBudgetGraph(selectedBudgetIndex);
-    }
-  };
 
   const handleBudgetGraph = (index) => {
     console.log("BudgetCarousel::handleGraph::index::" + index);
     if (index != -1 && index < budgets.length - 1) {
-      var costSnapShots = budgets[index].costSnapShots;
       dispatch({
         type: ACTION_TYPES.SET_BUDGETINDEX,
         selectedBudgetIndex: index,
       });
-
-      var monthArr = generateMonthRange(selectedBudgetMonthIndex);
-      var monthStr = monthArr[selectedBudgetMonthIndex];
-      var graphDataAmount = convertCostSnapShotsToWeekAmount(
-        costSnapShots,
-        monthStr
-      );
-
-      var graphDataWeek = convertCostSnapShotsToWeekDate(monthStr);
-      var copiedGraphData = { ...graphData };
-      setGraphData((prevStat) => ({
-        ...copiedGraphData,
-        graphDataAmount: graphDataAmount,
-        graphDataWeek: graphDataWeek,
-      }));
-      console.log(
-        "BudgetCarousel::handleGraph::graphData::" + JSON.stringify(graphData)
-      );
     }
   };
 
