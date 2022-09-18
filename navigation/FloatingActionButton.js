@@ -11,6 +11,7 @@ import {
   StyleSheet,
   View,
 } from "react-native";
+import * as budgetsActions from "@Actions/budgets";
 
 const FloatingActionButton = ({ visible, actions, navigation }) => {
   const [state, setState] = useState({ open: false });
@@ -19,7 +20,7 @@ const FloatingActionButton = ({ visible, actions, navigation }) => {
   const FSM = useSelector((store) => store.FSM);
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
-  const selectedBudgetIndex = budgets.selectedBudgetIndex;
+  const selectedBudgetIndex = FSM.selectedBudgetIndex;
   const dispatch = useDispatch();
 
   const FABActions = [
@@ -71,22 +72,24 @@ const FloatingActionButton = ({ visible, actions, navigation }) => {
     navigation.navigate("EditBudgetScreen");
   };
 
-  const deleteBudgetHandler = (budgetId, name) => {
+  const deleteBudgetHandler = () => {
+    const name = budgets[selectedBudgetIndex].name;
+    const budgetId = budgets[selectedBudgetIndex].budgetId;
     Alert.alert("Are you sure?", `Do you really want to delete ${name}?`, [
       { text: "No", style: "default" },
       {
         text: "Yes",
         style: "destructive",
         onPress: () => {
-          deleteBudget(budgetId);
+          deleteBudget(login.accessToken, budgetId);
         },
       },
     ]);
   };
 
   const deleteBudget = useCallback(
-    async (budgetId) => {
-      dispatch(budgetsActions.deleteBudget(budgetId));
+    async (token, budgetId) => {
+      dispatch(budgetsActions.deleteBudget(token, budgetId));
     },
     [dispatch]
   );

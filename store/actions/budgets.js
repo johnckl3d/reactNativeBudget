@@ -177,86 +177,44 @@ export const createBudget = (token, title, description, amount) => {
   };
 };
 
-export const deleteBudget = (budgetId) => {
+export const deleteBudget = (token, budgetId) => {
   console.log("budgets::deleteBudget::budgetId::" + budgetId);
   return async (dispatch) => {
     try {
       dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: true });
       dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: null });
-      // const transactionID = moment().format() + uuid.v4();
-      // console.log("deleteBudget::transactionID::" + transactionID);
-      // await axios({
-      //   url: API_URL.CREATE_BUDGET_URL,
-      //   method: "delete",
-      //   timeout: SETTINGS.TIMEOUT,
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     Accept: "application/json, text/plain, */*",
-      //     Authorization: "Bearer " + token,
-      //     TransactionID: transactionID,
-      //   },
-      //   data: JSON.stringify({
-      //     name: title,
-      //     description: description,
-      //     totalBudgetAmount: amount,
-      //   }),
-      // })
-
-      var token = await getStringData(STORAGE.ACCESS_TOKEN);
-      const response = await fetch(`${API_URL.BUDGET_URL}/${budgetId}`, {
-        method: "DELETE",
+      const transactionID = moment().format() + uuid.v4();
+      const url = API_URL.DELETE_BUDGET_URL + "/" + budgetId;
+      console.log("deleteBudget::transactionID::" + transactionID);
+      console.log("deleteBudget::url::" + url);
+      await axios({
+        url: url,
+        method: "delete",
+        timeout: SETTINGS.TIMEOUT,
         headers: {
           "Content-Type": "application/json",
+          Accept: "application/json, text/plain, */*",
           Authorization: "Bearer " + token,
+          TransactionID: transactionID,
         },
-      });
-      console.log("budgets::deleteBudget::" + JSON.stringify(response));
-      if (response.status != 200) {
-        dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: response.status });
-      } else {
-        const resData = await response.json();
-        //console.log("fetchBudgets::resData::" + JSON.stringify(resData));
-        const loadedBudget = [];
-
-        for (const b of resData) {
-          const css = [];
-          for (const cs of b.costSnapShots) {
-            css.push(new CostSnapShot(cs.dateTime, cs.amount));
-          }
-          const ccs = [];
-          for (const cc of b.costCategories) {
-            const cis = [];
-            for (const ci of cc.costItems) {
-              cis.push(new CostItem(ci.name, ci.amount, ci.costItemId));
-            }
-            ccs.push(
-              new CostCategory(
-                cc.budgetId,
-                cc.costCategoryId,
-                cc.name,
-                cc.totalAmount,
-                cis
-              )
-            );
-          }
-          //console.log("budgets::action::" + JSON.stringify(ccs));
-          loadedBudget.push(
-            new Budget(
-              b.budgetId,
-              b.name,
-              b.description,
-              b.totalBudgetAmount,
-              b.totalCostAmount,
-              css,
-              ccs
-            )
+        params: { budgetId },
+      })
+        .then((response) => {
+          console.log(
+            JSON.stringify("deleteBudget::response::" + response.data)
           );
-        }
-        console.log(
-          "fetchBudgets::deleteBudget::" + JSON.stringify(loadedBudget)
-        );
-        dispatch({ type: ACTION_TYPES.SET_BUDGETS, budgets: loadedBudget });
-      }
+          // const loadedBudget = [];
+          // const resData = response.data;
+          dispatch(fetchBudgets(token));
+        })
+        .catch((error) => {
+          console.log("deleteBudget::error::" + error);
+          dispatch({
+            type: ACTION_TYPES.SET_ERROR,
+            hasError: i18n.t("common.errorMessage"),
+          });
+          dispatch({ type: ACTION_TYPES.SET_LOGOUT });
+        });
     } catch (err) {
       dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: err });
     } finally {
