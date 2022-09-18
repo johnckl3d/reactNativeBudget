@@ -183,6 +183,25 @@ export const deleteBudget = (budgetId) => {
     try {
       dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: true });
       dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: null });
+      // const transactionID = moment().format() + uuid.v4();
+      // console.log("deleteBudget::transactionID::" + transactionID);
+      // await axios({
+      //   url: API_URL.CREATE_BUDGET_URL,
+      //   method: "delete",
+      //   timeout: SETTINGS.TIMEOUT,
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Accept: "application/json, text/plain, */*",
+      //     Authorization: "Bearer " + token,
+      //     TransactionID: transactionID,
+      //   },
+      //   data: JSON.stringify({
+      //     name: title,
+      //     description: description,
+      //     totalBudgetAmount: amount,
+      //   }),
+      // })
+
       var token = await getStringData(STORAGE.ACCESS_TOKEN);
       const response = await fetch(`${API_URL.BUDGET_URL}/${budgetId}`, {
         method: "DELETE",

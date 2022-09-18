@@ -1,8 +1,16 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { View, StyleSheet } from "react-native";
 import { withTheme, Colors, Text, FAB, Portal } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import i18n from "@I18N/i18n";
+import {
+  Alert,
+  Dimensions,
+  FlatList,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  View,
+} from "react-native";
 
 const FloatingActionButton = ({ visible, actions, navigation }) => {
   const [state, setState] = useState({ open: false });

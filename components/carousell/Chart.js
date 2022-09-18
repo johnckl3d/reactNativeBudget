@@ -58,7 +58,7 @@ const Chart = ({ graphDataAmount, graphDataWeek }) => {
         }}
         width={wp(100)} // from react-native
         height={220}
-        yAxisLabel={i18n.t("common.currency")}
+        yAxisLabel=""
         yAxisSuffix=""
         yAxisInterval={1} // optional, defaults to 1
         chartConfig={{
