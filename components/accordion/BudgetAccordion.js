@@ -43,6 +43,7 @@ import moment from "moment";
 import i18n from "@I18N/i18n";
 import { nFormatter } from "@Utils/commonUtils";
 import Styles from "@Styles/styles";
+import CostCategoryItem from "@Accordion/CostCategoryItem";
 
 const BudgetAccordion = (props) => {
   const withScrollView = false;
@@ -92,51 +93,8 @@ const BudgetAccordion = (props) => {
   };
 
   const renderCostCategoriesItem = ({ item }) => {
-    return item.costItems.length > 0 ? (
-      <List.Section>
-        <List.Accordion
-          style={[
-            styles.layoutList,
-            styles.listItemTight,
-            styles.highlightRed,
-            { height: hp(7) },
-          ]}
-          title={item.name}
-          titleStyle={styles.textHeading5}
-          description={
-            `Amount: ${i18n.t("common.currency")}` +
-            `${nFormatter(item.totalAmount)}`
-          }
-          descriptionStyle={[
-            { color: Colors.red },
-            styles.centered,
-            styles.textCitation,
-          ]}
-        >
-          <FlatList
-            data={item.costItems}
-            keyExtractor={(item) => item.costItemId}
-            renderItem={renderCostItem}
-          />
-        </List.Accordion>
-        <Divider />
-      </List.Section>
-    ) : (
-      <List.Item
-        title={item.name}
-        titleStyle={styles.textCitation}
-        description={item.totalAmount}
-        descriptionStyle={[{ color: Colors.red }, styles.centered]}
-        right={() => (
-          <IconButton
-            icon="dots-vertical"
-            onPress={() => {
-              props.deleteCallback(item.costCategoryId, item.name);
-            }}
-          />
-        )}
-      />
-    );
+    console.log("BudgetAccordion::renderCostCategoriesItem");
+    return <CostCategoryItem item={item}></CostCategoryItem>;
   };
 
   return (
