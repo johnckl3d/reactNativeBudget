@@ -11,10 +11,9 @@ import { centered } from "../../styles/presentation";
 
 const CostCategoryItem = ({ item }) => {
   console.log("CostCategoryItem::costCategoryId::" + item.costCategoryId);
+  const costCategoryId = item.costCategoryId;
   const renderCostItem = ({ item }) => {
-    return (
-      <CostItem costCategoryId={item.costCategoryId} item={item}></CostItem>
-    );
+    return <CostItem costCategoryId={costCategoryId} item={item}></CostItem>;
   };
 
   return item.costItems.length > 0 ? (

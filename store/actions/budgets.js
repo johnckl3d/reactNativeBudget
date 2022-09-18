@@ -197,7 +197,6 @@ export const deleteBudget = (token, budgetId) => {
           Authorization: "Bearer " + token,
           TransactionID: transactionID,
         },
-        params: { budgetId },
       })
         .then((response) => {
           console.log(
@@ -250,7 +249,6 @@ export const deleteCostItem = (token, costCategoryId, costItemId) => {
           Authorization: "Bearer " + token,
           TransactionID: transactionID,
         },
-        params: { budgetId },
       })
         .then((response) => {
           console.log(
@@ -258,7 +256,7 @@ export const deleteCostItem = (token, costCategoryId, costItemId) => {
           );
           // const loadedBudget = [];
           // const resData = response.data;
-          dispatch(fetchBudgets(token));
+          //dispatch(fetchBudgets(token));
         })
         .catch((error) => {
           console.log("deleteCostItem::error::" + error);
