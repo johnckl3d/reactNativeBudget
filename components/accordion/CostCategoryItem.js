@@ -4,11 +4,21 @@ import Colors from "@Styles/colors";
 import Styles from "@Styles/styles";
 import { nFormatter } from "@Utils/commonUtils";
 import { heightPercentageToDP as hp } from "@Utils/scalingUtils";
-import { Divider, IconButton, List, withTheme } from "react-native-paper";
+import {
+  Divider,
+  Menu,
+  Button,
+  IconButton,
+  List,
+  withTheme,
+  Provider,
+  Text,
+} from "react-native-paper";
 import { centered } from "../../styles/presentation";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useCallback, useEffect, useState } from "react";
 import * as costCategoriesActions from "../../store/actions/costCategories";
+import * as CostCategoryContextMenu from "@Accordion/CostCategoryContextMenu";
 import {
   Alert,
   Dimensions,
@@ -20,23 +30,34 @@ import {
 } from "react-native";
 
 const CostCategoryItem = ({ item }) => {
-  console.log("CostCategoryItem::costCategoryId::" + item.costCategoryId);
+  const costCategoryId = item.costCategoryId;
+  console.log("CostCategoryItem::costCategoryId::" + costCategoryId);
   const login = useSelector((store) => store.login);
   const token = login.accessToken;
   const FSM = useSelector((store) => store.FSM);
   const dispatch = useDispatch();
+  const [visible, setVisible] = useState(false);
+  const closeMenu = () => setVisible(false);
+  const openMenu = () => setVisible(true);
 
   const renderCostItem = ({ item }) => {
     return <CostItem costCategoryId={costCategoryId} item={item}></CostItem>;
   };
 
-  const deleteCostCategoryHander = (costCategoryId, name) => {
+  const deleteCostCategoryHander = (name) => {
     Alert.alert("Are you sure?", `Do you really want to delete ${name}?`, [
-      { text: "No", style: "default" },
+      {
+        text: "No",
+        style: "default",
+        onPress: () => {
+          closeMenu();
+        },
+      },
       {
         text: "Yes",
         style: "destructive",
         onPress: () => {
+          closeMenu();
           deleteCostCategory(login.accessToken, costCategoryId);
         },
       },
@@ -86,12 +107,25 @@ const CostCategoryItem = ({ item }) => {
       description={item.totalAmount}
       descriptionStyle={[{ color: Colors.red }, styles.centered]}
       right={() => (
-        <IconButton
-          icon="dots-vertical"
-          onPress={() => {
-            deleteCostCategoryHander(item.costCategoryId, item.name);
-          }}
-        />
+        //<Button>{JSON.stringify(item)}</Button>
+        <Menu
+          visible={visible}
+          onDismiss={closeMenu}
+          anchor={
+            <IconButton
+              icon="dots-vertical"
+              onPress={() => openMenu(item.name)}
+            >
+              Show menu
+            </IconButton>
+          }
+        >
+          <Menu.Item onPress={() => {}} title="Edit" />
+          <Menu.Item
+            onPress={() => deleteCostCategoryHander(item.name)}
+            title="Delete"
+          />
+        </Menu>
       )}
     />
   );
