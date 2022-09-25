@@ -7,7 +7,7 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { Button, Text } from "react-native-paper";
+import { Button, Text, withTheme } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import CustomTextInput from "@UIComponents/CustomTextInput";
 import * as budgetsActions from "../../store/actions/budgets";
@@ -222,4 +222,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditBudgetScreen;
+export default withTheme(EditBudgetScreen);

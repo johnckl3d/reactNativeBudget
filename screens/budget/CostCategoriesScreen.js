@@ -20,6 +20,10 @@ import * as costCategoriesActions from "../../store/actions/costCategories";
 const CostCategoriesScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
+  const FSM = useSelector((store) => store.FSM);
+  const budgets = useSelector((store) => store.budgets);
+  const selectedBudgetIndex = FSM.selectedBudgetIndex;
+  const editedBudget = budgets[selectedBudgetIndex];
   const costCategories = useSelector((state) => state.costCategories);
   const dispatch = useDispatch();
 

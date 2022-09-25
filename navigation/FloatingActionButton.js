@@ -19,7 +19,7 @@ import {
 
 const FloatingActionButton = ({ visible, actions, navigation }) => {
   const [state, setState] = useState({ open: false });
-  const onStateChange = ({ open }) => setState({ open });
+  const [fabIsOpen, setFabIsOpen] = useState(false);
   const { open } = state;
   const FSM = useSelector((store) => store.FSM);
   const login = useSelector((store) => store.login);
@@ -63,9 +63,7 @@ const FloatingActionButton = ({ visible, actions, navigation }) => {
   };
 
   const addCostCategoryHandler = () => {
-    navigation.navigate("EditCostCategoryScreen", {
-      onComplete: loadBudgets,
-    });
+    navigation.navigate("EditCostCategoryScreen");
   };
 
   const editBudgetHandler = () => {
@@ -97,25 +95,21 @@ const FloatingActionButton = ({ visible, actions, navigation }) => {
     },
     [dispatch]
   );
-  if (!visible) {
-    return null;
-  }
+  // if (!visible) {
+  //   return null;
+  // }
 
   return (
     <Portal>
-      <FAB
-        style={styles.fab}
+      <FAB.Group
+        //style={styles.fab}
         prop
         size="small"
-        open={open}
-        icon={open ? "calendar-today" : "plus"}
+        open={fabIsOpen}
+        icon={fabIsOpen ? "close" : "account-multiple"}
         actions={FABActions}
-        onStateChange={onStateChange}
-        onPress={() => {
-          if (open) {
-            // do something if the speed dial is open
-          }
-        }}
+        onStateChange={({ open }) => setFabIsOpen(open)}
+        //onPress={}
         visible={visible}
       />
     </Portal>

@@ -8,13 +8,39 @@ import React from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { Divider, IconButton, List, withTheme } from "react-native-paper";
 import { centered } from "../../styles/presentation";
+import { useDispatch, useSelector } from "react-redux";
+import * as costCategoriesActions from "../../store/actions/costCategories";
 
 const CostCategoryItem = ({ item }) => {
   console.log("CostCategoryItem::costCategoryId::" + item.costCategoryId);
-  const costCategoryId = item.costCategoryId;
+  const login = useSelector((store) => store.login);
+  const token = login.accessToken;
+  const FSM = useSelector((store) => store.FSM);
+  const dispatch = useDispatch();
+
   const renderCostItem = ({ item }) => {
     return <CostItem costCategoryId={costCategoryId} item={item}></CostItem>;
   };
+
+  const deleteCostCategoryHander = (costCategoryId, name) => {
+    Alert.alert("Are you sure?", `Do you really want to delete ${name}?`, [
+      { text: "No", style: "default" },
+      {
+        text: "Yes",
+        style: "destructive",
+        onPress: () => {
+          deleteCostCategory(login.accessToken, costCategoryId);
+        },
+      },
+    ]);
+  };
+
+  const deleteCostCategory = useCallback(
+    async (token, costCategoryId) => {
+      dispatch(costCategoriesActions.deleteCostCategory(token, costCategoryId));
+    },
+    [dispatch]
+  );
 
   return item.costItems.length > 0 ? (
     <List.Section>
@@ -55,7 +81,7 @@ const CostCategoryItem = ({ item }) => {
         <IconButton
           icon="dots-vertical"
           onPress={() => {
-            props.deleteCallback(item.costCategoryId, item.name);
+            deleteCostCategoryHander(item.costCategoryId, item.name);
           }}
         />
       )}

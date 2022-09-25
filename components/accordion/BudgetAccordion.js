@@ -93,7 +93,6 @@ const BudgetAccordion = (props) => {
   };
 
   const renderCostCategoriesItem = ({ item }) => {
-    console.log("BudgetAccordion::renderCostCategoriesItem");
     return <CostCategoryItem item={item}></CostCategoryItem>;
   };
 

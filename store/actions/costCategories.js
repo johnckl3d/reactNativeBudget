@@ -4,11 +4,23 @@ import { API_URL } from "@Constants/url";
 export const SET_PRODUCTS = "SET_PRODUCTS";
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const SET_COSTITEMS = "SET_COSTITEMS";
+import ACTION_TYPES from "@Actions/actionTypes";
+import moment from "moment";
+import uuid from "react-native-uuid";
+import axios from "axios";
+import { SETTINGS } from "@Constants/settings";
+import i18n from "@I18N/i18n";
+import { fetchBudgets } from "@Actions/budgets";
 
 export const fetchCostCategories = () => {
   return async (dispatch) => {
     // any async code you want!
+
     try {
+      dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: true });
+      dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: null });
+      const transactionID = moment().format() + uuid.v4();
+      console.log("createBudget::transactionID::" + transactionID);
       const response = await fetch(
         "https://meetup-api-app-john.azurewebsites.net/api/costCategory",
         {
@@ -44,25 +56,50 @@ export const fetchCostCategories = () => {
   };
 };
 
-export const createCostCategories = (name, budgetId) => {
+export const createCostCategory = (token, budgetId, name, description) => {
   return async (dispatch) => {
     try {
       // any async code you want!
-      const response = await fetch(API_URL.COSTCATEGORY_URL, {
-        method: "POST",
+      dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: true });
+      dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: null });
+      const transactionID = moment().format() + uuid.v4();
+      console.log("createCostCategory::token::" + token);
+      console.log("createCostCategory::budgetId::" + budgetId);
+      console.log("createCostCategory::name::" + name);
+      console.log("createCostCategory::description::" + description);
+      console.log("createCostCategory::transactionID::" + transactionID);
+      await axios({
+        url: API_URL.COSTCATEGORY_URL,
+        method: "post",
+        timeout: SETTINGS.TIMEOUT,
         headers: {
           "Content-Type": "application/json",
+          Accept: "application/json, text/plain, */*",
+          Authorization: "Bearer " + token,
+          TransactionID: transactionID,
         },
-        body: JSON.stringify({
-          name: name,
+        data: JSON.stringify({
           budgetId: budgetId,
+          name: name,
+          description: description,
         }),
-      });
-      if (response.status != 201) {
-        throw new Error("something went wrong!");
-      } else {
-        console.log("costCategories::createCostCategory::" + JSON.stringify(response));
-      }
+      })
+        .then((response) => {
+          console.log(
+            JSON.stringify("createCostCategory::response::" + response.data)
+          );
+          // const loadedBudget = [];
+          // const resData = response.data;
+          dispatch(fetchBudgets(token));
+        })
+        .catch((error) => {
+          console.log("createCostCategory::error::" + error);
+          dispatch({
+            type: ACTION_TYPES.SET_ERROR,
+            hasError: i18n.t("common.errorMessage"),
+          });
+          dispatch({ type: ACTION_TYPES.SET_LOGOUT });
+        });
     } catch (err) {
       throw err;
     }
@@ -72,10 +109,37 @@ export const createCostCategories = (name, budgetId) => {
 export const deleteCostCategory = (costCategoryId) => {
   return async (dispatch) => {
     try {
-      const response = await fetch(`${API_URL.COSTCATEGORY_URL}/${costCategoryId}`, {
+      dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: true });
+      dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: null });
+      const transactionID = moment().format() + uuid.v4();
+      console.log("deleteCostCategory::token::" + token);
+      console.log("deleteCostCategory::budgetId::" + costCategoryId);
+      console.log("deleteCostCategory::transactionID::" + transactionID);
+      await axios({
+        url: API_URL.COSTCATEGORY_URL,
         method: "DELETE",
+        timeout: SETTINGS.TIMEOUT,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json, text/plain, */*",
+          Authorization: "Bearer " + token,
+          TransactionID: transactionID,
+        },
+        data: JSON.stringify({
+          budgetId: budgetId,
+          name: name,
+          description: description,
+        }),
       });
-      console.log("costCategories::deleteCostCategory::" + JSON.stringify(response));
+      const response = await fetch(
+        `${API_URL.COSTCATEGORY_URL}/${costCategoryId}`,
+        {
+          method: "DELETE",
+        }
+      );
+      console.log(
+        "costCategories::deleteCostCategory::" + JSON.stringify(response)
+      );
       if (response.status != 204) {
         throw new Error("something went wrong!");
       } else {
