@@ -5,7 +5,7 @@ import { nFormatter } from "@Utils/commonUtils";
 import { heightPercentageToDP as hp } from "@Utils/scalingUtils";
 import moment from "moment";
 import { Alert, StyleSheet, View } from "react-native";
-import { IconButton, List, withTheme } from "react-native-paper";
+import { IconButton, List, withTheme, Menu } from "react-native-paper";
 import { centered } from "../../styles/presentation";
 import React, { useCallback, useEffect, useState } from "react";
 import * as budgetsActions from "@Actions/budgets";
@@ -17,14 +17,23 @@ const CostItem = ({ costCategoryId, item }) => {
   const dispatch = useDispatch();
   const FSM = useSelector((store) => store.FSM);
   const login = useSelector((store) => store.login);
+  console.log("CostCategoryItem::costCategoryId::" + costCategoryId);
+  const token = login.accessToken;
+  const [visible, setVisible] = useState(false);
+  const closeMenu = () => setVisible(false);
+  const openMenu = () => setVisible(true);
 
-  const deleteHandler = (name, costItemId) => {
+  const deleteCostItemHander = (name, costItemId) => {
     Alert.alert("Are you sure?", `Do you really want to delete ${name}?`, [
       { text: "No", style: "default" },
       {
         text: "Yes",
         style: "destructive",
         onPress: () => {
+          closeMenu();
+        },
+        onPress: () => {
+          closeMenu();
           deleteCostItem(login.accessToken, costCategoryId, costItemId);
         },
       },
@@ -57,14 +66,25 @@ const CostItem = ({ costCategoryId, item }) => {
         left={() => (
           <IconButton icon="camera" size={hp(3)} onPress={() => {}} />
         )}
-        right={(props) => (
-          <IconButton
-            {...props}
-            icon="dots-vertical"
-            onPress={() => {
-              deleteHandler(item.name, item.costItemId);
-            }}
-          />
+        right={() => (
+          <Menu
+            visible={visible}
+            onDismiss={closeMenu}
+            anchor={
+              <IconButton
+                icon="dots-vertical"
+                onPress={() => openMenu(item.name)}
+              >
+                Show menu
+              </IconButton>
+            }
+          >
+            <Menu.Item onPress={() => {}} title="Edit" />
+            <Menu.Item
+              onPress={() => deleteCostItemHander(item.name)}
+              title="Delete"
+            />
+          </Menu>
         )}
         title={item.name}
         titleStyle={styles.textCitation}

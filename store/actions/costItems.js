@@ -61,7 +61,9 @@ export const createCostCategories = (name, budgetId) => {
       if (response.status != 201) {
         throw new Error("something went wrong!");
       } else {
-        console.log("budgets::createCostCategories::" + JSON.stringify(response));
+        console.log(
+          "budgets::createCostCategories::" + JSON.stringify(response)
+        );
       }
     } catch (err) {
       throw err;
@@ -102,34 +104,8 @@ export const fetchCostItems = (costCategoryId) => {
   };
 };
 
-export const createProduct = (title, description, imageUrl, price) => {
-  return async (dispatch) => {
-    try {
-      // any async code you want!
-      const response = await fetch(
-        "https://meetup-api-app-john.azurewebsites.net/api/costCategory",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: title,
-          }),
-        }
-      );
-      if (response.status != 201) {
-        throw new Error("something went wrong!");
-      } else {
-      }
-    } catch (err) {
-      throw err;
-    }
-  };
-};
-
 export const createCostItem = (costCategoryId, name, description, amount) => {
-
+  console.log("costItems::createCostItem");
   return async (dispatch) => {
     try {
       // any async code you want!
@@ -169,8 +145,7 @@ export const deleteProduct = (productId) => {
         throw new Error("something went wrong!");
       } else {
       }
-    } catch (err) {
-    }
+    } catch (err) {}
   };
 };
 
@@ -187,8 +162,7 @@ export const deleteCostItem = (costCategoryId, costItemId) => {
         throw new Error("something went wrong!");
       } else {
       }
-    } catch (err) {
-    }
+    } catch (err) {}
   };
 };
 
@@ -210,7 +184,7 @@ export const updateProduct = (id, title, description, imageUrl) => {
       );
 
       const resData = await response.json();
-      
+
       // dispatch({
       //   type: CREATE_PRODUCT,
       //   productData: {

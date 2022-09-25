@@ -10,8 +10,21 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import CustomTextInput from "@UIComponents/CustomTextInput";
-import * as costCategoriesActions from "../../store/actions/costCategories";
+import * as costItemActions from "../../store/actions/costItems";
 import i18n from "@I18N/i18n";
+import CustomBottomButton from "@UIComponents/CustomBottomButton";
+import Styles from "@Styles/styles";
+import {
+  column,
+  row,
+  highlightRed,
+  highlightYellow,
+  centered,
+  shadow,
+  bottom,
+  centeredStretch,
+  highlightGreen,
+} from "@Styles/presentation";
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
 const formReducer = (state, action) => {
@@ -39,36 +52,25 @@ const formReducer = (state, action) => {
 
 const EditCostItemScreen = ({ route, navigation }) => {
   console.log("EditCostItemScreen::" + JSON.stringify(route.params));
-  const budgetId = route.params.budgetId;
+  const login = useSelector((store) => store.login);
+  const FSM = useSelector((store) => store.FSM);
+  const budgets = useSelector((store) => store.budgets);
+  const selectedBudgetIndex = FSM.selectedBudgetIndex;
+  const dispatch = useDispatch();
   let costCategoryId = null;
   let costItemId = null;
-  let editedBudget;
-  let editedCostCategory;
-  let editedCostItem;
-  editedBudget = useSelector((state) =>
-    state.budgets.find((b) => b.budgetId === budgetId)
-  );
-  if (editedBudget != null && route.params.costCategoryId != null) {
-    editedCostCategory = editedBudget.find(
-      (cc) => cc.costCategoryId === costCategoryId
-    );
+  const editedBudget = budgets[selectedBudgetIndex];
+  let selectedCostCategoryIndex = route.params?.selectedCostCategoryIndex;
+  let selectedCostItemIndex = route.params?.selectedCostItemIndex;
+  let editedCostCategory = null;
+  let editedCostItem = null;
+  if (editedBudget != null && selectedCostCategoryIndex != null) {
+    editedCostCategory = editedBudget.costCategories[selectedCostCategoryIndex];
 
-    if (editedCostCategory != null && route.params.costItemId != null) {
-      editedCostItem = editedCostCategory.find(
-        (ci) => ci.costItemId === costItemId
-      );
+    if (editedCostCategory != null && selectedCostItemIndex != null) {
+      editedCostItem = editedCostCategory[selectedCostItemIndex];
     }
   }
-  // const costCategoryId = props.navigation.getParam("costCategoryId");
-  // const costItemId = props.navigation.getParam("costItemId");
-  // const editedCostCategory = useSelector((state) =>
-  //   state.costCategories.costCategories.find(
-  //     (cc) => cc.costCategoryId === costCategoryId
-  //   )
-  // );
-  // const costItems = [...editedCostCategory.costItems];
-  // const editedCostItem = costItems.find((ci) => ci.costItemId === costItemId);
-  const dispatch = useDispatch();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
@@ -93,7 +95,7 @@ const EditCostItemScreen = ({ route, navigation }) => {
     }
     try {
       await dispatch(
-        costCategoriesActions.createCostItem(
+        costItemActions.createCostItem(
           costCategoryId,
           formState.inputValues.title,
           formState.inputValues.description,
@@ -103,13 +105,8 @@ const EditCostItemScreen = ({ route, navigation }) => {
     } catch (err) {
       throw err;
     }
-    route.params.onComplete();
     navigation.goBack();
   }, [dispatch, formState]);
-
-  useEffect(() => {
-    navigation.setParams({ submit: submitHandler });
-  }, [submitHandler]);
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
@@ -124,13 +121,13 @@ const EditCostItemScreen = ({ route, navigation }) => {
   );
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior="padding"
-      keyboardVerticalOffset={100}
-    >
-      <ScrollView>
-        <View style={styles.form}>
+    <View style={{ flex: 1, backgroundColor: Colors.white }}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior="padding"
+        keyboardVerticalOffset={100}
+      >
+        <View style={[styles.form, { backgroundColor: Colors.white }]}>
           <CustomTextInput
             id="title"
             label={i18n.t("editCostItem.name")}
@@ -173,29 +170,34 @@ const EditCostItemScreen = ({ route, navigation }) => {
             required
             min={0.1}
           />
-          <View style={styles.button}>
-            <Button
-              style={styles.button}
-              color={Colors.primary}
-              title={i18n.t("editCostItem.add")}
-              onPress={() => {
-                submitHandler();
-              }}
-            />
-          </View>
         </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+        <View style={styles.buttonBottom}>
+          <CustomBottomButton
+            text={i18n.t("editCostCategory.add")}
+            onPress={() => {
+              submitHandler();
+            }}
+          />
+        </View>
+      </KeyboardAvoidingView>
+    </View>
   );
 };
 
-// EditCostItemScreen.navigationOptions = (navData) => {
-//   return {
-//     headerTitle: "Add Cost Item",
-//   };
-// };
-
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.white,
+  },
+  centered: {
+    ...centered,
+  },
+  buttonBottom: {
+    ...Styles.buttonBottom,
+  },
+  footer: {
+    ...Styles.footer,
+  },
   form: {
     margin: 20,
   },

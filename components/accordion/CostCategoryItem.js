@@ -18,7 +18,6 @@ import { centered } from "../../styles/presentation";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useCallback, useEffect, useState } from "react";
 import * as costCategoriesActions from "../../store/actions/costCategories";
-import * as CostCategoryContextMenu from "@Accordion/CostCategoryContextMenu";
 import {
   Alert,
   Dimensions,
