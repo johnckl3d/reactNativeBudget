@@ -106,17 +106,20 @@ export const createCostCategory = (token, budgetId, name, description) => {
   };
 };
 
-export const deleteCostCategory = (costCategoryId) => {
+export const deleteCostCategory = (token, costCategoryId) => {
+  console.log("deleteCostCategory::");
   return async (dispatch) => {
     try {
       dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: true });
       dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: null });
       const transactionID = moment().format() + uuid.v4();
+      const url = API_URL.DELETE_COSTCATEGORY_URL + "/" + costCategoryId;
+      console.log("deleteCostCategory::url::" + url);
       console.log("deleteCostCategory::token::" + token);
-      console.log("deleteCostCategory::budgetId::" + costCategoryId);
+      console.log("deleteCostCategory::costCategoryId::" + costCategoryId);
       console.log("deleteCostCategory::transactionID::" + transactionID);
       await axios({
-        url: API_URL.COSTCATEGORY_URL,
+        url: url,
         method: "DELETE",
         timeout: SETTINGS.TIMEOUT,
         headers: {
@@ -125,25 +128,21 @@ export const deleteCostCategory = (costCategoryId) => {
           Authorization: "Bearer " + token,
           TransactionID: transactionID,
         },
-        data: JSON.stringify({
-          budgetId: budgetId,
-          name: name,
-          description: description,
-        }),
-      });
-      const response = await fetch(
-        `${API_URL.COSTCATEGORY_URL}/${costCategoryId}`,
-        {
-          method: "DELETE",
-        }
-      );
-      console.log(
-        "costCategories::deleteCostCategory::" + JSON.stringify(response)
-      );
-      if (response.status != 204) {
-        throw new Error("something went wrong!");
-      } else {
-      }
+      })
+        .then((response) => {
+          console.log(
+            JSON.stringify("deleteCostCategory::response::" + response.data)
+          );
+          dispatch(fetchBudgets(token));
+        })
+        .catch((error) => {
+          console.log("deleteCostCategory::error::" + error);
+          dispatch({
+            type: ACTION_TYPES.SET_ERROR,
+            hasError: i18n.t("common.errorMessage"),
+          });
+          dispatch({ type: ACTION_TYPES.SET_LOGOUT });
+        });
     } catch (err) {}
   };
 };

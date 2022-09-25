@@ -16,6 +16,7 @@ let getBudgetUrl = "/budget/retrieveList";
 let createBudgetUrl = "/budget";
 let deleteBudgetUrl = "/budget";
 let costCategoryUrl = "/costCategory";
+let deleteCostCategoryUrl = "/costCategory";
 let deleteCostItemUrl = "/costCategory";
 let registerUrl = "/account/register";
 let loginUrl = "/account/login";
@@ -28,6 +29,7 @@ if (env == PROD) {
   createBudgetUrl = PROD_API + createBudgetUrl;
   deleteBudgetUrl = PROD_API + deleteBudgetUrl;
   costCategoryUrl = PROD_API + costCategoryUrl;
+  deleteCostCategoryUrl = PROD_API + deleteCostCategoryUrl;
   deleteCostItemUrl = PROD_API + deleteCostItemUrl;
   registerUrl = PROD_API + registerUrl;
   loginUrl = PROD_API + loginUrl;
@@ -38,6 +40,7 @@ if (env == PROD) {
   createBudgetUrl = UAT_API + createBudgetUrl;
   deleteBudgetUrl = UAT_API + deleteBudgetUrl;
   costCategoryUrl = UAT_API + costCategoryUrl;
+  deleteCostCategoryUrl = UAT_API + deleteCostCategoryUrl;
   deleteCostItemUrl = UAT_API + deleteCostItemUrl;
   registerUrl = UAT_API + registerUrl;
   loginUrl = UAT_API + loginUrl;
@@ -51,6 +54,7 @@ export const API_URL = {
   CREATE_BUDGET_URL: createBudgetUrl,
   DELETE_BUDGET_URL: deleteBudgetUrl,
   COSTCATEGORY_URL: costCategoryUrl,
+  DELETE_COSTCATEGORY_URL: deleteCostCategoryUrl,
   DELETE_COSTITEM_URL: deleteCostItemUrl,
   REGISTER_URL: registerUrl,
   LOGIN_URL: loginUrl,

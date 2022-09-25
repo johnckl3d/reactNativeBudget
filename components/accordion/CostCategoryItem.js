@@ -4,12 +4,20 @@ import Colors from "@Styles/colors";
 import Styles from "@Styles/styles";
 import { nFormatter } from "@Utils/commonUtils";
 import { heightPercentageToDP as hp } from "@Utils/scalingUtils";
-import React from "react";
-import { FlatList, StyleSheet } from "react-native";
 import { Divider, IconButton, List, withTheme } from "react-native-paper";
 import { centered } from "../../styles/presentation";
 import { useDispatch, useSelector } from "react-redux";
+import React, { useCallback, useEffect, useState } from "react";
 import * as costCategoriesActions from "../../store/actions/costCategories";
+import {
+  Alert,
+  Dimensions,
+  FlatList,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  View,
+} from "react-native";
 
 const CostCategoryItem = ({ item }) => {
   console.log("CostCategoryItem::costCategoryId::" + item.costCategoryId);
