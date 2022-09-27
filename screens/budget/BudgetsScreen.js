@@ -33,8 +33,8 @@ import {
 import { Pagination } from "react-native-snap-carousel";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useDispatch, useSelector } from "react-redux";
-import BudgetCarousel from "../../components/carousell/BudgetCarousel";
-import MonthCarousel from "../../components/carousell/MonthCarousel";
+import BudgetCarousel from "@Carousel/BudgetCarousel";
+import MonthCarousel from "@Carousel/MonthCarousel";
 import BudgetAccordion from "@Accordion/BudgetAccordion";
 import HeaderButton from "@UIComponents/HeaderButton";
 import MediumCurrencyText from "@UIComponents/MediumCurrencyText";

@@ -12,12 +12,9 @@ import * as budgetsActions from "@Actions/budgets";
 import { useDispatch, useSelector } from "react-redux";
 
 const CostItem = ({ costCategoryId, item }) => {
-  console.log("CostItem::costCategoryId::" + costCategoryId);
-  console.log("CostItem::item::" + item);
   const dispatch = useDispatch();
   const FSM = useSelector((store) => store.FSM);
   const login = useSelector((store) => store.login);
-  console.log("CostCategoryItem::costCategoryId::" + costCategoryId);
   const token = login.accessToken;
   const [visible, setVisible] = useState(false);
   const closeMenu = () => setVisible(false);

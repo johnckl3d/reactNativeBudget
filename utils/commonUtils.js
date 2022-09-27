@@ -39,3 +39,21 @@ export const nFormatter = (num, digits) => {
 //   tests.forEach(function(test) {
 //     console.log("nFormatter(" + test.num + ", " + test.digits + ") = " + nFormatter(test.num, test.digits));
 // });
+
+export const extractCostCategoryList = (budget) => {
+  var result = [];
+  const ccArr = budget.costCategories.slice();
+  //console.log("extractCostCategoryList::ccArr::" + JSON.stringify(ccArr));
+  for (let i = 0; i < ccArr.length; i++) {
+    const obj = {
+      label: ccArr[i].name,
+      value: ccArr[i].costCategoryId,
+    };
+    result.push(obj);
+    // console.log(
+    //   "extractCostCategoryList::result[i]::" + JSON.stringify(result[i])
+    // );
+  }
+  //console.log("extractCostCategoryList::result::" + JSON.stringify(result));
+  return result;
+};

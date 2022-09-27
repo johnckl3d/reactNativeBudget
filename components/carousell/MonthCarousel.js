@@ -66,10 +66,8 @@ const MonthCarousel = (props) => {
   // }, [dispatch]);
 
   useEffect(() => {
-    console.log("MonthCarousel::useEffect::");
     const monthStr = moment().format("YYYY MMM");
     const index = getMonthIndexFromMonthArray(monthStr, monthRange);
-    console.log("MonthCarousel::useEffect::index::" + index);
     if (index > -1) {
       dispatch({
         type: ACTION_TYPES.SET_BUDGETMONTHINDEX,
@@ -79,7 +77,6 @@ const MonthCarousel = (props) => {
   }, [dispatch]);
 
   const setMonthIndex = async (index) => {
-    console.log("MonthCarousel::setMonthIndex::" + index);
     dispatch({
       type: ACTION_TYPES.SET_BUDGETMONTHINDEX,
       selectedBudgetMonthIndex: index,

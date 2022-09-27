@@ -1,8 +1,7 @@
 import Colors from "@Styles/colors";
-import React, { useCallback, useEffect, useReducer } from "react";
+import React, { useCallback, useEffect, useState, useReducer } from "react";
 import {
   Alert,
-  Button,
   KeyboardAvoidingView,
   ScrollView,
   StyleSheet,
@@ -25,7 +24,29 @@ import {
   centeredStretch,
   highlightGreen,
 } from "@Styles/presentation";
+import { extractCostCategoryList } from "@Utils/commonUtils";
+import SelectDropdown from "react-native-select-dropdown";
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
+
+import {
+  ActivityIndicator,
+  Avatar,
+  Button,
+  Card,
+  Divider,
+  IconButton,
+  List,
+  Text,
+  useTheme,
+  Caption,
+  Headline,
+  Paragraph,
+  Subheading,
+  Title,
+  withTheme,
+  FAB,
+} from "react-native-paper";
+import DropDown from "react-native-paper-dropdown";
 
 const formReducer = (state, action) => {
   if (action.type === FORM_INPUT_UPDATE) {
@@ -51,7 +72,6 @@ const formReducer = (state, action) => {
 };
 
 const EditCostItemScreen = ({ route, navigation }) => {
-  console.log("EditCostItemScreen::" + JSON.stringify(route.params));
   const login = useSelector((store) => store.login);
   const FSM = useSelector((store) => store.FSM);
   const budgets = useSelector((store) => store.budgets);
@@ -71,19 +91,33 @@ const EditCostItemScreen = ({ route, navigation }) => {
       editedCostItem = editedCostCategory[selectedCostItemIndex];
     }
   }
+  const [showDropDown, setShowDropDown] = useState(false);
+  const [category, setCategory] = useState("");
+
+  // const setCategory = (val) => {
+  //   console.log("editCostItemScreen::setCategory::val::" + val);
+  //   const result = costCategoryArr.find((item) => item.value === val);
+  //   console.log(
+  //     "editCostItemScreen::setCategory::result::" + JSON.stringify(result)
+  //   );
+  //   category = result.value;
+  //   console.log(
+  //     "editCostItemScreen::setCategory::category::" + JSON.stringify(category)
+  //   );
+  // };
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       title: editedCostItem ? editedCostItem.title : "",
       description: editedCostItem ? editedCostItem.description : "",
-      price: "",
+      amount: editedCostItem ? editedCostItem.amount : "",
     },
     inputValidities: {
-      title: editedCostItem ? true : false,
-      description: editedCostItem ? true : false,
-      price: editedCostItem ? true : false,
+      title: editedCostItem ? true : true,
+      description: editedCostItem ? true : true,
+      amount: editedCostItem ? true : true,
     },
-    formIsValid: editedCostItem ? true : false,
+    formIsValid: editedCostItem ? true : true,
   });
 
   const submitHandler = useCallback(async () => {
@@ -94,12 +128,27 @@ const EditCostItemScreen = ({ route, navigation }) => {
       return;
     }
     try {
+      var token = login.accessToken;
+      var costCategoryArr = [];
+      if (editedBudget != null && editedBudget.costCategories.length > 0) {
+        costCategoryArr = extractCostCategoryList(budgets[selectedBudgetIndex]);
+      }
+      const obj = costCategoryArr.find((item) => item.value === category);
+      console.log(
+        "EditCostItemScreen::submitHandler::obj::" + JSON.stringify(obj)
+      );
+      console.log(
+        JSON.stringify(
+          "editCostItemScreen::category::" + JSON.stringify(category)
+        )
+      );
       await dispatch(
         costItemActions.createCostItem(
-          costCategoryId,
+          token,
+          category,
           formState.inputValues.title,
           formState.inputValues.description,
-          +formState.inputValues.price
+          +formState.inputValues.amount
         )
       );
     } catch (err) {
@@ -110,6 +159,9 @@ const EditCostItemScreen = ({ route, navigation }) => {
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
+      console.log("inputChangeHandler::inputIdentifier::" + inputIdentifier);
+      console.log("inputChangeHandler::inputValue::" + inputValue);
+      console.log("inputChangeHandler::inputValidity::" + inputValidity);
       dispatchFormState({
         type: FORM_INPUT_UPDATE,
         value: inputValue,
@@ -137,9 +189,10 @@ const EditCostItemScreen = ({ route, navigation }) => {
             autoCorrect
             returnKeyType="next"
             onInputChange={inputChangeHandler}
-            initialValue={editedCostItem ? editedCostItem.name : ""}
+            initialValue={editedCostItem ? editedCostCategory.name : ""}
             initiallyValid={!!editedCostItem}
             required
+            minLength={5}
           />
           <CustomTextInput
             id="description"
@@ -148,13 +201,28 @@ const EditCostItemScreen = ({ route, navigation }) => {
             keyboardType="default"
             autoCapitalize="sentences"
             autoCorrect
-            multiline
-            numberOfLines={3}
+            returnKeyType="next"
             onInputChange={inputChangeHandler}
-            initialValue={editedCostItem ? editedCostItem.description : ""}
+            initialValue={editedCostItem ? editedCostCategory.description : ""}
             initiallyValid={!!editedCostItem}
             required
             minLength={5}
+          />
+          <SelectDropdown
+            data={extractCostCategoryList(budgets[selectedBudgetIndex])}
+            onSelect={(selectedItem, index) => {
+              setCategory(selectedItem.value);
+            }}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              // text represented after item is selected
+              // if data array is an array of objects then return selectedItem.property to render after item is selected
+              return selectedItem.label;
+            }}
+            rowTextForSelection={(item, index) => {
+              // text represented for each item in dropdown
+              // if data array is an array of objects then return item.property to represent item in dropdown
+              return item.label;
+            }}
           />
           <CustomTextInput
             id="amount"

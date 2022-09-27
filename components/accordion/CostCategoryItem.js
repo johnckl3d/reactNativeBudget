@@ -30,7 +30,6 @@ import {
 
 const CostCategoryItem = ({ item }) => {
   const costCategoryId = item.costCategoryId;
-  console.log("CostCategoryItem::costCategoryId::" + costCategoryId);
   const login = useSelector((store) => store.login);
   const token = login.accessToken;
   const FSM = useSelector((store) => store.FSM);
