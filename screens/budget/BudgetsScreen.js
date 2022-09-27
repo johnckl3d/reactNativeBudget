@@ -63,13 +63,15 @@ const BudgetsScreen = (props) => {
   const [isShowFAB, setIsShowFAB] = useState(true);
   const dispatch = useDispatch();
   const isDrawerOpen = useDrawerStatus() === "open";
-  const isFocused = useIsFocused() === true;
+  const isFocused = useIsFocused();
   const FSM = useSelector((store) => store.FSM);
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
   const selectedBudgetIndex = FSM.selectedBudgetIndex;
 
   useEffect(() => {
+    console.log("BudgetsScreen::isDrawerOpen::" + isDrawerOpen);
+    console.log("BudgetsScreen::isFocused::" + isFocused);
     if (isDrawerOpen || !isFocused) {
       setIsShowFAB(false);
     } else {
@@ -88,10 +90,6 @@ const BudgetsScreen = (props) => {
       setFocus(true);
     } catch (err) {}
   }, [dispatch]);
-
-  const handleCloseError = () => {
-    dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: "" });
-  };
 
   const selectItemHandler = (costCategoryId, name, totalAmount) => {
     setFocus(false);
@@ -133,6 +131,10 @@ const BudgetsScreen = (props) => {
     ]);
   }
 
+  const handleCloseError = () => {
+    dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: "" });
+  };
+
   if (FSM.isLoading) {
     return (
       <View style={styles.centered}>
@@ -151,6 +153,7 @@ const BudgetsScreen = (props) => {
       </View>
     );
   }
+
   return (
     <SafeAreaView>
       <View style={styles.mainContent}>

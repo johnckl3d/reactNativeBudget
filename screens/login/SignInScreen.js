@@ -134,22 +134,16 @@ const SignInScreen = ({ navigation }) => {
     [dispatch]
   );
 
-  const handleCloseError = () => {
-    dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: "" });
-  };
-
   useEffect(() => {
     checkConnectivity();
   }, []);
 
   const checkConnectivity = async () => {
     var result = await isConnected();
-    console.log("signinscreen::checkConnectivity::" + result);
-    setIsInternetOn(isInternetOn);
+    setIsInternetOn(result);
   };
 
   if (!isInternetOn) {
-    console.log("signinscreen::isInternetOn::" + isInternetOn);
     Alert.alert("Error!", "Please check your internet connection", [
       { text: "Okay", onPress: () => {} },
     ]);
@@ -171,6 +165,10 @@ const SignInScreen = ({ navigation }) => {
       { text: "Okay", onPress: () => handleCloseError() },
     ]);
   }
+
+  const handleCloseError = () => {
+    dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: "" });
+  };
 
   return (
     <View style={styles.container}>

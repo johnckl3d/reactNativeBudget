@@ -18,9 +18,7 @@ import {
 } from "@Utils/scalingUtils";
 
 const FloatingActionButton = ({ visible, actions, navigation }) => {
-  const [state, setState] = useState({ open: false });
   const [fabIsOpen, setFabIsOpen] = useState(false);
-  const { open } = state;
   const FSM = useSelector((store) => store.FSM);
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
@@ -95,9 +93,10 @@ const FloatingActionButton = ({ visible, actions, navigation }) => {
     },
     [dispatch]
   );
-  // if (!visible) {
-  //   return null;
-  // }
+  console.log("FAB::visible::" + visible);
+  if (!visible) {
+    return null;
+  }
 
   return (
     <Portal>

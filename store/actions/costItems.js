@@ -6,41 +6,8 @@ import uuid from "react-native-uuid";
 import ACTION_TYPES from "@Actions/actionTypes";
 import axios from "axios";
 import { SETTINGS } from "@Constants/settings";
-import { fetchBudgets } from "@Actions/budgets";
+import * as budgetsActions from "@Actions/budgets";
 import i18n from "@I18N/i18n";
-
-// export const fetchCostItems = (costCategoryId) => {
-//   return async (dispatch) => {
-//     // any async code you want!
-//     try {
-//       const response = await fetch(
-//         `https://meetup-api-app-john.azurewebsites.net/api/costCategory/${costCategoryId}/costItem`,
-//         {
-//           method: "GET",
-//         }
-//       );
-
-//       if (!response.ok) {
-//         throw new Error("something went wrong!");
-//       }
-//       const resData = await response.json();
-//       const loadedCostItems = [];
-
-//       for (const item of resData) {
-//         loadedCostItems.push(
-//           new CostItem(item.name, item.amount, item.costItemId)
-//         );
-//       }
-//       dispatch({
-//         type: SET_COSTITEMS,
-//         costCategoryId: costCategoryId,
-//         costItems: loadedCostItems,
-//       });
-//     } catch (err) {
-//       throw err;
-//     }
-//   };
-// };
 
 export const createCostItem = (
   token,
@@ -49,16 +16,16 @@ export const createCostItem = (
   description,
   amount
 ) => {
-  console.log("costItems::createCostItem");
   return async (dispatch) => {
     try {
       // any async code you want!
       dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: true });
       dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: null });
+
       const transactionID = moment().format() + uuid.v4();
-      //`https://meetup-api-app-john.azurewebsites.net/api/costCategory/${costCategoryId}/costItem`,
       const url =
         API_URL.CREATE_COSTITEM_URL + "/" + costCategoryId + "/costItem";
+      console.log("=======================================================");
       console.log("createCostItem::url::" + url);
       console.log("createCostItem::token::" + token);
       console.log("createCostItem::budgetId::" + costCategoryId);
@@ -84,11 +51,12 @@ export const createCostItem = (
       })
         .then((response) => {
           console.log(
-            JSON.stringify("createCostItem::response::" + response.data)
+            "createCostItem::response::" + JSON.stringify(response.data)
           );
           // const loadedBudget = [];
           // const resData = response.data;
-          dispatch(fetchBudgets(token));
+          dispatch(budgetsActions.fetchBudgets(token));
+          //fetchBudgets(token);
         })
         .catch((error) => {
           console.log("createCostItem::error::" + error);
@@ -104,7 +72,7 @@ export const createCostItem = (
   };
 };
 
-export const deleteCostItem = (costCategoryId, costItemId) => {
+export const deleteCostItem = (token, costCategoryId, costItemId) => {
   return async (dispatch) => {
     try {
       dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: true });
@@ -116,13 +84,12 @@ export const deleteCostItem = (costCategoryId, costItemId) => {
         costCategoryId +
         "/costItem/" +
         costItemId;
+      console.log("=======================================================");
       console.log("deleteCostItem::url::" + url);
       console.log("deleteCostItem::token::" + token);
-      console.log("deleteCostItem::budgetId::" + costCategoryId);
-      console.log("deleteCostItem::budgetId::" + costItemId);
-      console.log("deleteCostItem::description::" + description);
+      console.log("deleteCostItem::costCategoryId::" + costCategoryId);
+      console.log("deleteCostItem::costItemId::" + costItemId);
       console.log("deleteCostItem::transactionID::" + transactionID);
-      console.log("deleteCostItem::amount::" + amount);
       await axios({
         url: url,
         method: "delete",
@@ -135,13 +102,11 @@ export const deleteCostItem = (costCategoryId, costItemId) => {
         },
       })
         .then((response) => {
-          console.log(
-            JSON.stringify("createCostItem::response::" + response.data)
-          );
-          dispatch(fetchBudgets(token));
+          console.log("deleteCostItem::response::" + response.status);
+          dispatch(budgetsActions.fetchBudgets(token));
         })
         .catch((error) => {
-          console.log("createCostItem::error::" + error);
+          console.log("deleteCostItem::error::" + error);
           dispatch({
             type: ACTION_TYPES.SET_ERROR,
             hasError: i18n.t("common.errorMessage"),
@@ -149,40 +114,5 @@ export const deleteCostItem = (costCategoryId, costItemId) => {
           dispatch({ type: ACTION_TYPES.SET_LOGOUT });
         });
     } catch (err) {}
-  };
-};
-
-export const updateProduct = (id, title, description, imageUrl) => {
-  return async (dispatch) => {
-    try {
-      // any async code you want!
-      const response = await fetch(
-        "https://meetup-api-app-john.azurewebsites.net/api/costCategory",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: "Petrol2",
-          }),
-        }
-      );
-
-      const resData = await response.json();
-
-      // dispatch({
-      //   type: CREATE_PRODUCT,
-      //   productData: {
-      //     id: resData.name,
-      //     title,
-      //     description,
-      //     imageUrl,
-      //     price
-      //   }
-      // });
-    } catch (err) {
-      throw err;
-    }
   };
 };

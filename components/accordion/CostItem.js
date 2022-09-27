@@ -9,6 +9,7 @@ import { IconButton, List, withTheme, Menu } from "react-native-paper";
 import { centered } from "../../styles/presentation";
 import React, { useCallback, useEffect, useState } from "react";
 import * as budgetsActions from "@Actions/budgets";
+import * as costItemsActions from "@Actions/costItems";
 import { useDispatch, useSelector } from "react-redux";
 
 const CostItem = ({ costCategoryId, item }) => {
@@ -41,7 +42,7 @@ const CostItem = ({ costCategoryId, item }) => {
   const deleteCostItem = useCallback(
     async (token, costCategoryId, costItemId) => {
       dispatch(
-        budgetsActions.deleteCostItem(token, costCategoryId, costItemId)
+        costItemsActions.deleteCostItem(token, costCategoryId, costItemId)
       );
     },
     [dispatch]
