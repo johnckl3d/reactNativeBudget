@@ -78,7 +78,7 @@ const CostItem = ({ costCategoryId, item }) => {
           >
             <Menu.Item onPress={() => {}} title="Edit" />
             <Menu.Item
-              onPress={() => deleteCostItemHander(item.name)}
+              onPress={() => deleteCostItemHander(item.name, item.costItemId)}
               title="Delete"
             />
           </Menu>

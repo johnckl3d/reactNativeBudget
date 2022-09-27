@@ -104,36 +104,50 @@ export const createCostItem = (
   };
 };
 
-export const deleteProduct = (productId) => {
-  return async (dispatch) => {
-    try {
-      const response = await fetch(
-        `https://meetup-api-app-john.azurewebsites.net/api/costCategory/${productId}`,
-        {
-          method: "DELETE",
-        }
-      );
-      if (response.status != 204) {
-        throw new Error("something went wrong!");
-      } else {
-      }
-    } catch (err) {}
-  };
-};
-
 export const deleteCostItem = (costCategoryId, costItemId) => {
   return async (dispatch) => {
     try {
-      const response = await fetch(
-        `https://meetup-api-app-john.azurewebsites.net/api/costCategory/${costCategoryId}/costItem/${costItemId}`,
-        {
-          method: "DELETE",
-        }
-      );
-      if (response.status != 204) {
-        throw new Error("something went wrong!");
-      } else {
-      }
+      dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: true });
+      dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: null });
+      const transactionID = moment().format() + uuid.v4();
+      const url =
+        API_URL.DELETE_COSTITEM_URL +
+        "/" +
+        costCategoryId +
+        "/costItem/" +
+        costItemId;
+      console.log("deleteCostItem::url::" + url);
+      console.log("deleteCostItem::token::" + token);
+      console.log("deleteCostItem::budgetId::" + costCategoryId);
+      console.log("deleteCostItem::budgetId::" + costItemId);
+      console.log("deleteCostItem::description::" + description);
+      console.log("deleteCostItem::transactionID::" + transactionID);
+      console.log("deleteCostItem::amount::" + amount);
+      await axios({
+        url: url,
+        method: "delete",
+        timeout: SETTINGS.TIMEOUT,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json, text/plain, */*",
+          Authorization: "Bearer " + token,
+          TransactionID: transactionID,
+        },
+      })
+        .then((response) => {
+          console.log(
+            JSON.stringify("createCostItem::response::" + response.data)
+          );
+          dispatch(fetchBudgets(token));
+        })
+        .catch((error) => {
+          console.log("createCostItem::error::" + error);
+          dispatch({
+            type: ACTION_TYPES.SET_ERROR,
+            hasError: i18n.t("common.errorMessage"),
+          });
+          dispatch({ type: ACTION_TYPES.SET_LOGOUT });
+        });
     } catch (err) {}
   };
 };
