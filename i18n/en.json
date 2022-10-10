@@ -40,12 +40,16 @@
   },
   "editCostItem": {
     "title": "Edit Cost Item",
+    "budget": "Budget",
     "name": "Name",
     "description": "Description",
     "amount": "Amount",
     "add": "Add",
     "category": "Category",
-    "date": "Date"
+    "date": "Date",
+    "namePlaceholder": "key in a name",
+    "descriptionPlaceholder": "key in a description",
+    "amountPlaceholder": "key in an amount"
   },
   "editCostCategory": {
     "title": "Edit Cost Category",

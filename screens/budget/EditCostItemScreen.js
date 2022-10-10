@@ -132,13 +132,13 @@ const EditCostItemScreen = ({ route, navigation }) => {
       amount: editedCostItem ? editedCostItem.amount : "",
     },
     inputValidities: {
-      title: editedCostItem ? true : true,
-      description: editedCostItem ? true : true,
-      category: editedCostItem ? true : true,
-      date: editedCostItem ? true : true,
-      amount: editedCostItem ? true : true,
+      title: editedCostItem ? true : false,
+      description: editedCostItem ? true : false,
+      category: editedCostItem ? true : false,
+      date: editedCostItem ? true : false,
+      amount: editedCostItem ? true : false,
     },
-    formIsValid: editedCostItem ? true : true,
+    formIsValid: editedCostItem ? true : false,
   });
 
   const submitHandler = useCallback(async () => {
@@ -186,17 +186,6 @@ const EditCostItemScreen = ({ route, navigation }) => {
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
-      console.log(
-        "EditCostItemScreen::inputChangeHandler::inputIdentifier::" +
-          inputIdentifier
-      );
-      console.log(
-        "EditCostItemScreen::inputChangeHandler::inputValue::" + inputValue
-      );
-      console.log(
-        "EditCostItemScreen::inputChangeHandler::inputValidity::" +
-          inputValidity
-      );
       dispatchFormState({
         type: FORM_INPUT_UPDATE,
         value: inputValue,
@@ -208,13 +197,31 @@ const EditCostItemScreen = ({ route, navigation }) => {
   );
 
   return (
-    <View style={{ flex: 1, backgroundColor: Colors.white }}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "flex-start",
+        backgroundColor: Colors.white,
+      }}
+    >
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={{ flex: 1, justifyContent: "flex-start" }}
         behavior="padding"
         keyboardVerticalOffset={100}
       >
         <View style={[styles.form, { backgroundColor: Colors.white }]}>
+          <Text style={styles.textHeading1}>
+            {editedBudget ? editedBudget.name : ""}
+          </Text>
+          {/* <CustomTextInput
+            id="budget"
+            label={i18n.t("editCostItem.budget") + }
+            initialValue={
+              selectedBudgetIndex ? budgets[selectedBudgetIndex].name : ""
+            }
+            initiallyValid={!!editedCostItem}
+            disabled={true}
+          /> */}
           <CustomTextInput
             id="title"
             label={i18n.t("editCostItem.name")}
@@ -228,6 +235,7 @@ const EditCostItemScreen = ({ route, navigation }) => {
             initiallyValid={!!editedCostItem}
             required
             minLength={5}
+            placeholderText={i18n.t("editCostItem.namePlaceholder")}
           />
           <CustomTextInput
             id="description"
@@ -242,6 +250,7 @@ const EditCostItemScreen = ({ route, navigation }) => {
             initiallyValid={!!editedCostItem}
             required
             minLength={5}
+            placeholderText={i18n.t("editCostItem.descriptionPlaceholder")}
           />
           <View
             style={{ flexDirection: "row", marginTop: 15, marginBottom: 15 }}
@@ -302,6 +311,7 @@ const EditCostItemScreen = ({ route, navigation }) => {
             initiallyValid={!!editedCostItem}
             required
             min={0.1}
+            placeholderText={i18n.t("editCostItem.amountPlaceholder")}
           />
         </View>
         <View style={styles.buttonBottom}>
@@ -324,6 +334,9 @@ const styles = StyleSheet.create({
   },
   centered: {
     ...centered,
+  },
+  textHeading1: {
+    ...Styles.textHeading1,
   },
   buttonBottom: {
     ...Styles.buttonBottom,

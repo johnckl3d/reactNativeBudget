@@ -66,6 +66,10 @@ const CustomDatePicker = (props) => {
     }
   }, [inputState, onInputChange, id]);
 
+  useEffect(() => {
+    onInputChange(id, date, true);
+  }, []);
+
   const dateChangeHandler = (val) => {
     console.log("dateChangeHandler::val::" + val);
     setDate(val);
@@ -115,7 +119,7 @@ const CustomDatePicker = (props) => {
           lostFocusHandler();
         }}
       />
-      <Divider style={styles.divider} />
+      <Divider />
     </View>
   );
 };
@@ -133,10 +137,6 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderBottomColor: "#ccc",
     borderBottomWidth: 1,
-  },
-  divider: {
-    marginVertical: 30,
-    bold: true,
   },
   errorText: {
     fontFamily: "OpenSans",

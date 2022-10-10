@@ -1,8 +1,12 @@
 import React, { useReducer, useEffect } from "react";
-import { View, TextInput, StyleSheet } from "react-native";
-import { Text } from "react-native-paper";
+import { View, StyleSheet } from "react-native";
+import { Text, TextInput } from "react-native-paper";
 import { COMMON } from "@Constants/Common";
 import { KEY } from "@Constants/key";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "@Utils/scalingUtils";
 
 const inputReducer = (state, action) => {
   switch (action.type) {
@@ -30,12 +34,15 @@ const CustomTextInput = (props) => {
     touched: false,
   });
 
-  const { onInputChange, id } = props;
+  const { onInputChange, id, disabled, placeholderText, label } = props;
 
   useEffect(() => {
-    if (inputState.touched) {
-      onInputChange(id, inputState.value, inputState.isValid);
-    }
+    onInputChange
+      ? onInputChange(id, inputState.value, inputState.isValid)
+      : null;
+    // if (inputState.touched) {
+    //   onInputChange(id, inputState.value, inputState.isValid);
+    // }
   }, [inputState, onInputChange, id]);
 
   const textChangeHandler = (text) => {
@@ -89,13 +96,16 @@ const CustomTextInput = (props) => {
 
   return (
     <View style={styles.formControl}>
-      <Text style={styles.label}>{props.label}</Text>
+      {/* <Text style={styles.label}>{props.label}</Text> */}
       <TextInput
         {...props}
+        label={label}
+        placeholder={placeholderText}
         style={styles.input}
         value={inputState.value}
         onChangeText={textChangeHandler}
         onBlur={lostFocusHandler}
+        disabled={disabled}
       />
       {!inputState.isValid && inputState.touched && (
         <View style={styles.errorContainer}>
