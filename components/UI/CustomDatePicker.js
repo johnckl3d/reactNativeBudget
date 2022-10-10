@@ -67,7 +67,7 @@ const CustomDatePicker = (props) => {
   }, [inputState, onInputChange, id]);
 
   const dateChangeHandler = (val) => {
-    //console.log("dateChangeHandler::val::" + val);
+    console.log("dateChangeHandler::val::" + val);
     setDate(val);
     lostFocusHandler();
     var isValid = true;

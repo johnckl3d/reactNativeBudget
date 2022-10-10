@@ -33,6 +33,7 @@ export const createCostItem = (
       console.log("createCostItem::name::" + name);
       console.log("createCostItem::description::" + description);
       console.log("createCostItem::transactionID::" + transactionID);
+      console.log("createCostItem::dateTime::" + dateTime);
       console.log("createCostItem::amount::" + amount);
       await axios({
         url: url,

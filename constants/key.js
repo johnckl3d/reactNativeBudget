@@ -5,4 +5,5 @@ export const KEY = {
   REFRESH_TOKEN: "refresh_token",
   INPUT_CHANGE: "INPUT_CHANGE",
   INPUT_BLUR: "INPUT_BLUR",
+  FORMAT_DATETIME_MSSQL: "YYYY-MM-DD HH:mm:ss",
 };

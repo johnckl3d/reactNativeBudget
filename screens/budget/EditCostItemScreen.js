@@ -60,6 +60,7 @@ import {
   formatDate,
 } from "@Utils/dates";
 import moment from "moment";
+import { KEY } from "@Constants/key";
 
 const formReducer = (state, action) => {
   if (action.type === FORM_INPUT_UPDATE) {
@@ -75,6 +76,9 @@ const formReducer = (state, action) => {
     for (const key in updatedValidities) {
       updatedFormIsValid = updatedFormIsValid && updatedValidities[key];
     }
+    console.log(
+      "EditCostItemScreen::formReducer::state::" + JSON.stringify(state)
+    );
     return {
       formIsValid: updatedFormIsValid,
       inputValidities: updatedValidities,
@@ -123,14 +127,16 @@ const EditCostItemScreen = ({ route, navigation }) => {
     inputValues: {
       title: editedCostItem ? editedCostItem.title : "",
       description: editedCostItem ? editedCostItem.description : "",
-      amount: editedCostItem ? editedCostItem.amount : "",
+      category: editedCostItem ? editedCostItem.category : "",
       date: editedCostItem ? editedCostItem.date : "",
+      amount: editedCostItem ? editedCostItem.amount : "",
     },
     inputValidities: {
       title: editedCostItem ? true : true,
       description: editedCostItem ? true : true,
-      amount: editedCostItem ? true : true,
+      category: editedCostItem ? true : true,
       date: editedCostItem ? true : true,
+      amount: editedCostItem ? true : true,
     },
     formIsValid: editedCostItem ? true : true,
   });
@@ -159,7 +165,7 @@ const EditCostItemScreen = ({ route, navigation }) => {
       );
       const dateTime = formatDate(
         moment(formState.inputValues.dateTime),
-        "d MMM"
+        KEY.FORMAT_DATETIME_MSSQL
       );
       console.log("EditCostItemScreen::submitHandler::dateTime::" + dateTime);
       await dispatch(
@@ -180,9 +186,17 @@ const EditCostItemScreen = ({ route, navigation }) => {
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
-      // console.log("inputChangeHandler::inputIdentifier::" + inputIdentifier);
-      // console.log("inputChangeHandler::inputValue::" + inputValue);
-      // console.log("inputChangeHandler::inputValidity::" + inputValidity);
+      console.log(
+        "EditCostItemScreen::inputChangeHandler::inputIdentifier::" +
+          inputIdentifier
+      );
+      console.log(
+        "EditCostItemScreen::inputChangeHandler::inputValue::" + inputValue
+      );
+      console.log(
+        "EditCostItemScreen::inputChangeHandler::inputValidity::" +
+          inputValidity
+      );
       dispatchFormState({
         type: FORM_INPUT_UPDATE,
         value: inputValue,
@@ -273,7 +287,7 @@ const EditCostItemScreen = ({ route, navigation }) => {
             <Text style={{ ...styles.label, marginRight: hp(5) }}>
               {i18n.t("editCostItem.date")}
             </Text>
-            <CustomDatePicker id="date" onInputChange={inputChangeHandler} />
+            <CustomDatePicker onInputChange={inputChangeHandler} id="date" />
           </View>
           <CustomTextInput
             id="amount"
