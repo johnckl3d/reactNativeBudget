@@ -3,7 +3,6 @@ import * as React from "react";
 import { Text, View } from "react-native";
 import { Appbar } from "react-native-paper";
 import BudgetsScreen from "../screens/budget/BudgetsScreen";
-import CostItemsScreen from "../screens/budget/CostItemsScreen";
 import EditCostCategoryScreen from "../screens/budget/EditCostCategoryScreen";
 import EditCostItemScreen from "../screens/budget/EditCostItemScreen";
 import EditBudgetScreen from "../screens/budget/EditBudgetScreen";

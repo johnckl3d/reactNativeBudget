@@ -79,16 +79,24 @@ export function generateAmountFromMonth(costSnapShots, monthStr) {
     //"2021-01-15T00:00:00"
     //"2021-01-19T00:00:00"
     const dt = costSnapShot.dateTime;
+    //console.log("generateAmountFromMonth::dt::" + JSON.stringify(dt));
     const dtt = dt.split("T")[0];
-
+    //console.log("generateAmountFromMonth::dtt::" + JSON.stringify(dtt));
     const ssDate = moment(dtt, "YYYY-MM-DD").local();
+    //console.log("generateAmountFromMonth::ssDate::" + JSON.stringify(ssDate));
     var ssMonth = ssDate.month().toString();
-    if (ssMonth === carousellMMonth.month().toString()) {
+    var ssYear = ssDate.year().toString();
+    //console.log("generateAmountFromMonth::ssMonth::" + JSON.stringify(ssMonth));
+    if (
+      ssMonth === carousellMMonth.month().toString() &&
+      ssYear === carousellMMonth.year().toString()
+    ) {
       const index = ssDate.date() - 1;
-      days[index] += nFormatter(costSnapShot.amount);
+      days[index] += costSnapShot.amount;
+      console.log("generateAmountFromMonth::days[index]::" + days[index]);
     }
   });
-
+  //console.log("generateAmountFromMonth::days::" + JSON.stringify(days));
   return days;
 }
 

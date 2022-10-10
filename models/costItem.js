@@ -1,9 +1,11 @@
 class CostItem {
-    constructor(name, amount, costItemId) {
-      this.name = name;
-      this.amount = amount;
-      this.costItemId = costItemId;
-    }
+  constructor(costItemId, name, description, dateTime, amount) {
+    this.costItemId = costItemId;
+    this.name = name;
+    this.description = description;
+    this.dateTime = dateTime;
+    this.amount = amount;
   }
-  
-  export default CostItem;
+}
+
+export default CostItem;

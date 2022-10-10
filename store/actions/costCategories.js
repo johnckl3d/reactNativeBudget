@@ -12,50 +12,6 @@ import { SETTINGS } from "@Constants/settings";
 import i18n from "@I18N/i18n";
 import { fetchBudgets } from "@Actions/budgets";
 
-export const fetchCostCategories = () => {
-  return async (dispatch) => {
-    // any async code you want!
-
-    try {
-      dispatch({ type: ACTION_TYPES.SET_LOADING, isLoading: true });
-      dispatch({ type: ACTION_TYPES.SET_ERROR, hasError: null });
-      const transactionID = moment().format() + uuid.v4();
-      console.log("createBudget::transactionID::" + transactionID);
-      const response = await fetch(
-        "https://meetup-api-app-john.azurewebsites.net/api/costCategory",
-        {
-          method: "GET",
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("something went wrong!");
-      }
-      const resData = await response.json();
-      const loadedCostCategories = [];
-
-      for (const item of resData) {
-        const cIs = [];
-        for (const cI of item.costItems) {
-          cIs.push(new CostItem(cI.name, cI.amount, cI.costItemId));
-        }
-
-        loadedCostCategories.push(
-          new CostCategory(
-            item.costCategoryId,
-            item.name,
-            item.totalAmount,
-            cIs
-          )
-        );
-      }
-      dispatch({ type: SET_PRODUCTS, costCategories: loadedCostCategories });
-    } catch (err) {
-      throw err;
-    }
-  };
-};
-
 export const createCostCategory = (token, budgetId, name, description) => {
   return async (dispatch) => {
     try {

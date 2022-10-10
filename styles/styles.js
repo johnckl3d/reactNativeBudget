@@ -136,6 +136,12 @@ export default StyleSheet.create({
     borderRadius: hp(2),
     margin: hp(1),
   },
+  buttonIcon: {
+    height: hp(6),
+    width: wp(70),
+    justifyContent: "center",
+    alignItems: "center",
+  },
   buttonText: {
     fontSize: 18,
     fontWeight: "bold",

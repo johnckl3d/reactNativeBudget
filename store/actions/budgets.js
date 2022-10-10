@@ -33,6 +33,9 @@ export const fetchBudgets = (token) => {
         },
       })
         .then((response) => {
+          console.log(
+            "action::fetchBudgets::response::" + JSON.stringify(response.data)
+          );
           const loadedBudget = [];
           const resData = response.data;
           for (const b of resData) {
@@ -44,7 +47,15 @@ export const fetchBudgets = (token) => {
             for (const cc of b.costCategories) {
               const cis = [];
               for (const ci of cc.costItems) {
-                cis.push(new CostItem(ci.name, ci.amount, ci.costItemId));
+                cis.push(
+                  new CostItem(
+                    ci.costItemId,
+                    ci.name,
+                    ci.description,
+                    ci.dateTime,
+                    ci.amount
+                  )
+                );
               }
               ccs.push(
                 new CostCategory(

@@ -44,6 +44,7 @@
     "description": "Description",
     "amount": "Amount",
     "add": "Add",
+    "category": "Category",
     "date": "Date"
   },
   "editCostCategory": {

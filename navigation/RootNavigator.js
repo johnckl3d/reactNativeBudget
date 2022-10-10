@@ -5,8 +5,6 @@ import { createDrawerNavigator } from "react-navigation-drawer";
 import { Platform } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import BudgetsScreen from "../screens/budget/BudgetsScreen";
-import CostCategoriesScreen from "../screens/budget/CostCategoriesScreen";
-import CostItemsScreen from "../screens/budget/CostItemsScreen";
 import UserProductsScreen from "../screens/user/UserProductsScreen";
 import EditProductScreen from "../screens/user/EditProductScreen";
 import EditCostCategoryScreen from "../screens/budget/EditCostCategoryScreen";
@@ -30,8 +28,6 @@ const defaultNavOptions = {
 const ProductsNavigator = createStackNavigator(
   {
     Budget: BudgetsScreen,
-    CostCategory: CostCategoriesScreen,
-    ProductDetail: CostItemsScreen,
     EditCostCategory: EditCostCategoryScreen,
     EditCostItem: EditCostItemScreen,
   },

@@ -44,9 +44,22 @@ import {
   Title,
   withTheme,
   FAB,
+  Icon,
 } from "react-native-paper";
 import DropDown from "react-native-paper-dropdown";
 import CustomDatePicker from "@UIComponents/CustomDatePicker";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "@Utils/scalingUtils";
+import {
+  generateMonthRange,
+  getMonthIndexFromMonthArray,
+  generateMondayStringFromMonth,
+  generateAmountFromMonth,
+  formatDate,
+} from "@Utils/dates";
+import moment from "moment";
 
 const formReducer = (state, action) => {
   if (action.type === FORM_INPUT_UPDATE) {
@@ -144,12 +157,18 @@ const EditCostItemScreen = ({ route, navigation }) => {
           "editCostItemScreen::category::" + JSON.stringify(category)
         )
       );
+      const dateTime = formatDate(
+        moment(formState.inputValues.dateTime),
+        "d MMM"
+      );
+      console.log("EditCostItemScreen::submitHandler::dateTime::" + dateTime);
       await dispatch(
         costItemActions.createCostItem(
           token,
           category,
           formState.inputValues.title,
           formState.inputValues.description,
+          dateTime,
           +formState.inputValues.amount
         )
       );
@@ -161,9 +180,9 @@ const EditCostItemScreen = ({ route, navigation }) => {
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
-      console.log("inputChangeHandler::inputIdentifier::" + inputIdentifier);
-      console.log("inputChangeHandler::inputValue::" + inputValue);
-      console.log("inputChangeHandler::inputValidity::" + inputValidity);
+      // console.log("inputChangeHandler::inputIdentifier::" + inputIdentifier);
+      // console.log("inputChangeHandler::inputValue::" + inputValue);
+      // console.log("inputChangeHandler::inputValidity::" + inputValidity);
       dispatchFormState({
         type: FORM_INPUT_UPDATE,
         value: inputValue,
@@ -210,24 +229,50 @@ const EditCostItemScreen = ({ route, navigation }) => {
             required
             minLength={5}
           />
-          <SelectDropdown
-            data={extractCostCategoryList(budgets[selectedBudgetIndex])}
-            onSelect={(selectedItem, index) => {
-              setCategory(selectedItem.value);
-            }}
-            buttonTextAfterSelection={(selectedItem, index) => {
-              // text represented after item is selected
-              // if data array is an array of objects then return selectedItem.property to render after item is selected
-              return selectedItem.label;
-            }}
-            rowTextForSelection={(item, index) => {
-              // text represented for each item in dropdown
-              // if data array is an array of objects then return item.property to represent item in dropdown
-              return item.label;
-            }}
-          />
-          <View>
-            <Text style={styles.label}>{i18n.t("editCostItem.date")}</Text>
+          <View
+            style={{ flexDirection: "row", marginTop: 15, marginBottom: 15 }}
+          >
+            <Text style={styles.label}>{i18n.t("editCostItem.category")}</Text>
+            <View style={{ paddingLeft: hp(2) }}>
+              <SelectDropdown
+                data={extractCostCategoryList(budgets[selectedBudgetIndex])}
+                buttonStyle={styles.dropdown1BtnStyle}
+                buttonTextStyle={styles.dropdown1BtnTxtStyle}
+                renderDropdownIcon={(isOpened) => {
+                  return (
+                    <IconButton
+                      disabled={true}
+                      icon={isOpened ? "chevron-up" : "chevron-down"}
+                      color={"#444"}
+                      size={hp(3)}
+                    />
+                  );
+                }}
+                dropdownIconPosition={"right"}
+                dropdownStyle={styles.dropdown1DropdownStyle}
+                rowStyle={styles.dropdown1RowStyle}
+                rowTextStyle={styles.dropdown1RowTxtStyle}
+                onSelect={(selectedItem, index) => {
+                  setCategory(selectedItem.value);
+                }}
+                buttonTextAfterSelection={(selectedItem, index) => {
+                  // text represented after item is selected
+                  // if data array is an array of objects then return selectedItem.property to render after item is selected
+                  return selectedItem.label;
+                }}
+                rowTextForSelection={(item, index) => {
+                  // text represented for each item in dropdown
+                  // if data array is an array of objects then return item.property to represent item in dropdown
+                  return item.label;
+                }}
+              />
+            </View>
+          </View>
+          <Divider style={styles.divider} />
+          <View style={{ flexDirection: "row" }}>
+            <Text style={{ ...styles.label, marginRight: hp(5) }}>
+              {i18n.t("editCostItem.date")}
+            </Text>
             <CustomDatePicker id="date" onInputChange={inputChangeHandler} />
           </View>
           <CustomTextInput
@@ -278,6 +323,28 @@ const styles = StyleSheet.create({
   button: {
     paddingTop: 20,
   },
+  shadow: {
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: hp(2) },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 10,
+  },
+  dropdown1BtnStyle: {
+    width: wp(70),
+    height: hp(5),
+    backgroundColor: "#FFF",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#444",
+  },
+  dropdown1BtnTxtStyle: { color: "#444", textAlign: "left" },
+  dropdown1DropdownStyle: { backgroundColor: "#EFEFEF" },
+  dropdown1RowStyle: {
+    backgroundColor: "#EFEFEF",
+    borderBottomColor: "#C5C5C5",
+  },
+  dropdown1RowTxtStyle: { color: "#444", textAlign: "left" },
 });
 
 export default EditCostItemScreen;

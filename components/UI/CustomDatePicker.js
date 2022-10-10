@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState, useReducer } from "react";
 import { View, StyleSheet } from "react-native";
 import DatePicker from "react-native-date-picker";
+import Styles from "@Styles/styles";
 import {
   ActivityIndicator,
   Card,
@@ -23,6 +24,10 @@ import Colors from "@Styles/colors";
 import i18n from "@I18N/i18n";
 import { KEY } from "@Constants/key";
 import { formatDate } from "@Utils/dates";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "@Utils/scalingUtils";
 
 const inputReducer = (state, action) => {
   switch (action.type) {
@@ -81,21 +86,23 @@ const CustomDatePicker = (props) => {
   };
 
   return (
-    <View style={{ flexDirection: "row", marginTop: 15 }}>
-      <View
-        style={{
-          marginLeft: 15,
-          flexDirection: "column",
-        }}
-      ></View>
+    <View>
       <Button
+        style={{
+          ...styles.buttonIcon,
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
         icon="calendar-month"
         iconColor={Colors.primary}
         size={20}
         mode="contained"
         onPress={() => setOpen(true)}
-      ></Button>
-      <Text style={styles.label}>{formatDate(date, "lll")}</Text>
+      >
+        {formatDate(date, "lll")}
+      </Button>
+      {/* <Text style={styles.label}>{formatDate(date, "lll")}</Text> */}
       <DatePicker
         modal
         mode="date"
@@ -135,6 +142,9 @@ const styles = StyleSheet.create({
     fontFamily: "OpenSans",
     color: "red",
     fontSize: 13,
+  },
+  buttonIcon: {
+    ...Styles.buttonIcon,
   },
 });
 

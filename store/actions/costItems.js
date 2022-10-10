@@ -14,6 +14,7 @@ export const createCostItem = (
   costCategoryId,
   name,
   description,
+  dateTime,
   amount
 ) => {
   return async (dispatch) => {
@@ -46,6 +47,7 @@ export const createCostItem = (
         data: JSON.stringify({
           name: name,
           description: description,
+          dateTime: dateTime,
           amount: amount,
         }),
       })
