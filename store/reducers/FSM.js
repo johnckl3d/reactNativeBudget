@@ -9,6 +9,7 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
+  console.log(JSON.stringify(state));
   switch (action.type) {
     case ACTION_TYPES.SET_ERROR:
       return {

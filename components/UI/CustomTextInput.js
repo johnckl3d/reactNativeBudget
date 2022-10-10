@@ -2,20 +2,18 @@ import React, { useReducer, useEffect } from "react";
 import { View, TextInput, StyleSheet } from "react-native";
 import { Text } from "react-native-paper";
 import { COMMON } from "@Constants/Common";
-
-const INPUT_CHANGE = "INPUT_CHANGE";
-const INPUT_BLUR = "INPUT_BLUR";
+import { KEY } from "@Constants/key";
 
 const inputReducer = (state, action) => {
   switch (action.type) {
-    case INPUT_CHANGE:
+    case KEY.INPUT_CHANGE:
       return {
         ...state,
         value: action.value,
         isValid: action.isValid,
         error: action.error,
       };
-    case INPUT_BLUR:
+    case KEY.INPUT_BLUR:
       return {
         ...state,
         touched: true,
@@ -78,7 +76,7 @@ const CustomTextInput = (props) => {
       error = "Please key in numeric values";
     }
     dispatch({
-      type: INPUT_CHANGE,
+      type: KEY.INPUT_CHANGE,
       value: text,
       isValid: isValid,
       error: error,
@@ -86,7 +84,7 @@ const CustomTextInput = (props) => {
   };
 
   const lostFocusHandler = () => {
-    dispatch({ type: INPUT_BLUR });
+    dispatch({ type: KEY.INPUT_BLUR });
   };
 
   return (

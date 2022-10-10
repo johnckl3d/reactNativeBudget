@@ -43,7 +43,8 @@
     "name": "Name",
     "description": "Description",
     "amount": "Amount",
-    "add": "Add"
+    "add": "Add",
+    "date": "Date"
   },
   "editCostCategory": {
     "title": "Edit Cost Category",

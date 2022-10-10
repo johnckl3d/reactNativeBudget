@@ -7,11 +7,12 @@ import CustomText from "@CustomText";
 import Colors from "@Styles/colors";
 import Fonts from "@Styles/fonts";
 import useDeepCompareEffect from "use-deep-compare-effect";
+import i18n from "@I18N/i18n";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "@Utils/scalingUtils";
-
+import CustomMonthPicker from "@UIComponents/CustomMonthPicker";
 import _ from "lodash";
 import {
   ActivityIndicator,
@@ -53,7 +54,8 @@ const MonthCarousel = (props) => {
   const _renderItem = ({ item }) => {
     return (
       <Card style={styles.carouselItemContainer}>
-        <Subheading>{item}</Subheading>
+        {/* <Subheading>{item}</Subheading> */}
+        <Subheading>{monthRange[FSM.selectedBudgetMonthIndex]}</Subheading>
       </Card>
     );
   };
@@ -83,6 +85,18 @@ const MonthCarousel = (props) => {
     });
   };
 
+  const inputChangeHandler = (inputIdentifier, inputValue, inputValidity) => {
+    console.log("inputChangeHandler::inputIdentifier::" + inputIdentifier);
+    console.log("inputChangeHandler::inputValue::" + inputValue);
+    console.log("inputChangeHandler::inputValidity::" + inputValidity);
+    // dispatchFormState({
+    //   type: FORM_INPUT_UPDATE,
+    //   value: inputValue,
+    //   isValid: inputValidity,
+    //   input: inputIdentifier,
+    // });
+  };
+
   const initMonthStr = moment().format("YYYY MMM");
   const initIndex = getMonthIndexFromMonthArray(initMonthStr, monthRange);
 
@@ -104,6 +118,7 @@ const MonthCarousel = (props) => {
         slideInterpolatedStyle={animatedStyles}
         useScrollView={true}
       />
+      <CustomMonthPicker id="date" onInputChange={inputChangeHandler} />
     </View>
   );
 };

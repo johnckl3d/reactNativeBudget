@@ -21,6 +21,7 @@ export function setBudgetIndex(int) {
 }
 
 export function setBudgetMonthIndex(int) {
+  console.log("setBudgetMonthIndex::int::" + int);
   return {
     type: ACTION_TYPES.SET_BUDGETMONTHINDEX,
     selectedBudgetMonthIndex: int,

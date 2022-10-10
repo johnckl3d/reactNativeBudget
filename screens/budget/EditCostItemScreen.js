@@ -27,7 +27,6 @@ import {
 import { extractCostCategoryList } from "@Utils/commonUtils";
 import SelectDropdown from "react-native-select-dropdown";
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
-
 import {
   ActivityIndicator,
   Avatar,
@@ -47,6 +46,7 @@ import {
   FAB,
 } from "react-native-paper";
 import DropDown from "react-native-paper-dropdown";
+import CustomDatePicker from "@UIComponents/CustomDatePicker";
 
 const formReducer = (state, action) => {
   if (action.type === FORM_INPUT_UPDATE) {
@@ -111,11 +111,13 @@ const EditCostItemScreen = ({ route, navigation }) => {
       title: editedCostItem ? editedCostItem.title : "",
       description: editedCostItem ? editedCostItem.description : "",
       amount: editedCostItem ? editedCostItem.amount : "",
+      date: editedCostItem ? editedCostItem.date : "",
     },
     inputValidities: {
       title: editedCostItem ? true : true,
       description: editedCostItem ? true : true,
       amount: editedCostItem ? true : true,
+      date: editedCostItem ? true : true,
     },
     formIsValid: editedCostItem ? true : true,
   });
@@ -224,6 +226,10 @@ const EditCostItemScreen = ({ route, navigation }) => {
               return item.label;
             }}
           />
+          <View>
+            <Text style={styles.label}>{i18n.t("editCostItem.date")}</Text>
+            <CustomDatePicker id="date" onInputChange={inputChangeHandler} />
+          </View>
           <CustomTextInput
             id="amount"
             label={i18n.t("editCostItem.amount")}

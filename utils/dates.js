@@ -2,6 +2,11 @@ import moment from "moment";
 import { SETTINGS } from "@Constants/settings";
 import { nFormatter } from "@Utils/commonUtils";
 
+export function formatDate(input = moment(), format) {
+  const result = moment(input).format(format);
+  return result;
+}
+
 export function getWeekOfDayWithOffset(input = moment()) {
   const firstDayOfMonth = input.clone().startOf("month");
   const firstDayOfWeek = firstDayOfMonth.clone().startOf("week");
@@ -32,6 +37,23 @@ export function generateMonthRange() {
   return months;
 }
 
+export function getMinimumMonth() {
+  const monthRange = generateMonthRange();
+  //console.log("getMinimumMonth::monthRange::" + JSON.stringify(monthRange));
+  var result = moment(monthRange[0]).toDate();
+  //console.log("getMinimumMonth::result::" + JSON.stringify(result));
+  return result;
+}
+
+export function getMaximumMonth() {
+  const monthRange = generateMonthRange();
+  var max = monthRange.length;
+  //console.log("getMinimumMonth::monthRange::" + JSON.stringify(monthRange));
+  var result = moment(monthRange[max - 1]).toDate();
+  //console.log("getMinimumMonth::result::" + JSON.stringify(result));
+  return result;
+}
+
 export function getMonthIndexFromMonthArray(monthStr, array) {
   if (!array) {
     return -1;
@@ -39,29 +61,14 @@ export function getMonthIndexFromMonthArray(monthStr, array) {
   if (monthStr == null || monthStr == "") {
     monthStr = moment().format("YYYY MMM");
   }
-  // console.log(
-  //   "dates::getMonthIndexFromMonthArray::monthStr::" + JSON.stringify(monthStr)
-  // );
-  // console.log(
-  //   "dates::getMonthIndexFromMonthArray::array::" + JSON.stringify(array)
-  // );
-
   const index = array.findIndex((obj) => obj === monthStr);
 
   return index;
 }
 
 export function generateAmountFromMonth(costSnapShots, monthStr) {
-  // console.log(
-  //   "date::generateAmountFromMonth::costSnapShots::" +
-  //     JSON.stringify(costSnapShots)
-  // );
-  // console.log("date::generateAmountFromMonth::monthStr::" + monthStr);
   var days = [];
   const carousellMMonth = moment(monthStr, "YYYY MMM");
-
-  var carousellMFirstDay = carousellMMonth.clone(1, "DD").local();
-
   var day = carousellMMonth.clone(1, "DD");
   while (day.month() === carousellMMonth.month()) {
     days.push(0);
@@ -76,14 +83,8 @@ export function generateAmountFromMonth(costSnapShots, monthStr) {
 
     const ssDate = moment(dtt, "YYYY-MM-DD").local();
     var ssMonth = ssDate.month().toString();
-    // console.log("costSnapShot::" + costSnapShot.dateTime);
-    // console.log("ssDate::" + JSON.stringify(ssDate));
-    // console.log("ssMonth::" + ssMonth);
-    // console.log("carousellMMonth::" + carousellMMonth.month().toString());
     if (ssMonth === carousellMMonth.month().toString()) {
       const index = ssDate.date() - 1;
-      // console.log("ssDate.date::" + ssDate.date());
-      // console.log("index::" + index);
       days[index] += nFormatter(costSnapShot.amount);
     }
   });
