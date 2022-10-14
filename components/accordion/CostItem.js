@@ -11,12 +11,17 @@ import React, { useCallback, useEffect, useState } from "react";
 import * as budgetsActions from "@Actions/budgets";
 import * as costItemsActions from "@Actions/costItems";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
 const CostItem = ({ costCategoryId, item }) => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const FSM = useSelector((store) => store.FSM);
   const login = useSelector((store) => store.login);
   const token = login.accessToken;
+  const budgets = useSelector((store) => store.budgets);
+  const selectedBudgetIndex = FSM.selectedBudgetIndex;
+  const editedBudget = budgets[selectedBudgetIndex];
   const [visible, setVisible] = useState(false);
   const closeMenu = () => setVisible(false);
   const openMenu = () => setVisible(true);
@@ -48,6 +53,36 @@ const CostItem = ({ costCategoryId, item }) => {
     [dispatch]
   );
 
+  const editCostItemHander = () => {
+    // console.log(
+    //   "CostItem::editCostItemHander::editedBudget::" +
+    //     JSON.stringify(editedBudget)
+    // );
+    // console.log(
+    //   "CostItem::editCostItemHander::costCategoryId::" + costCategoryId
+    // );
+    //console.log("CostItem::editCostItemHander::costItemId::" + item.costItemId);
+    const selectedCostCategoryIndex = editedBudget.costCategories.findIndex(
+      (obj) => obj.costCategoryId === costCategoryId
+    );
+    // console.log(
+    //   "CostItem::editCostItemHander::selectedCostCategoryIndex::" +
+    //     selectedCostCategoryIndex
+    // );
+    const cc = editedBudget.costCategories[selectedCostCategoryIndex];
+    //console.log("CostItem::editCostItemHander::cc::" + JSON.stringify(cc));
+    const selectedCostItemIndex = cc.costItems.findIndex(
+      (obj) => obj.costItemId === item.costItemId
+    );
+    const ci = cc.costItems[selectedCostItemIndex];
+    //console.log("CostItem::editCostItemHander::ci::" + JSON.stringify(ci));
+    closeMenu();
+    navigation.navigate("EditCostItemScreen", {
+      costCategoryId: costCategoryId,
+      costItem: ci,
+    });
+  };
+
   return (
     <List.Section style={[styles.layoutList, styles.highlightRed]}>
       <List.Subheader
@@ -77,7 +112,7 @@ const CostItem = ({ costCategoryId, item }) => {
               </IconButton>
             }
           >
-            <Menu.Item onPress={() => {}} title="Edit" />
+            <Menu.Item onPress={editCostItemHander} title="Edit" />
             <Menu.Item
               onPress={() => deleteCostItemHander(item.name, item.costItemId)}
               title="Delete"

@@ -76,9 +76,6 @@ const formReducer = (state, action) => {
     for (const key in updatedValidities) {
       updatedFormIsValid = updatedFormIsValid && updatedValidities[key];
     }
-    console.log(
-      "EditCostItemScreen::formReducer::state::" + JSON.stringify(state)
-    );
     return {
       formIsValid: updatedFormIsValid,
       inputValidities: updatedValidities,
@@ -94,42 +91,20 @@ const EditCostItemScreen = ({ route, navigation }) => {
   const budgets = useSelector((store) => store.budgets);
   const selectedBudgetIndex = FSM.selectedBudgetIndex;
   const dispatch = useDispatch();
-  let costCategoryId = null;
-  let costItemId = null;
   const editedBudget = budgets[selectedBudgetIndex];
-  let selectedCostCategoryIndex = route.params?.selectedCostCategoryIndex;
-  let selectedCostItemIndex = route.params?.selectedCostItemIndex;
-  let editedCostCategory = null;
-  let editedCostItem = null;
-  if (editedBudget != null && selectedCostCategoryIndex != null) {
-    editedCostCategory = editedBudget.costCategories[selectedCostCategoryIndex];
-
-    if (editedCostCategory != null && selectedCostItemIndex != null) {
-      editedCostItem = editedCostCategory[selectedCostItemIndex];
-    }
-  }
-  const [showDropDown, setShowDropDown] = useState(false);
-  const [category, setCategory] = useState("");
-
-  // const setCategory = (val) => {
-  //   console.log("editCostItemScreen::setCategory::val::" + val);
-  //   const result = costCategoryArr.find((item) => item.value === val);
-  //   console.log(
-  //     "editCostItemScreen::setCategory::result::" + JSON.stringify(result)
-  //   );
-  //   category = result.value;
-  //   console.log(
-  //     "editCostItemScreen::setCategory::category::" + JSON.stringify(category)
-  //   );
-  // };
+  let costCategoryId = route.params?.costCategoryId;
+  let editedCostItem = route.params?.costItem;
+  let selectedCostCategoryIndex = editedBudget?.costCategories?.findIndex(
+    (obj) => obj.costCategoryId === costCategoryId
+  );
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
-      title: editedCostItem ? editedCostItem.title : "",
+      title: editedCostItem ? editedCostItem.name : "",
       description: editedCostItem ? editedCostItem.description : "",
-      category: editedCostItem ? editedCostItem.category : "",
+      category: costCategoryId ? costCategoryId : "",
       date: editedCostItem ? editedCostItem.date : "",
-      amount: editedCostItem ? editedCostItem.amount : "",
+      amount: editedCostItem ? editedCostItem.amount : 0,
     },
     inputValidities: {
       title: editedCostItem ? true : false,
@@ -150,32 +125,23 @@ const EditCostItemScreen = ({ route, navigation }) => {
     }
     try {
       var token = login.accessToken;
-      var costCategoryArr = [];
-      if (editedBudget != null && editedBudget.costCategories.length > 0) {
-        costCategoryArr = extractCostCategoryList(budgets[selectedBudgetIndex]);
+      var ciId = null;
+      if (editedCostItem) {
+        ciId = editedCostItem.costItemId;
       }
-      const obj = costCategoryArr.find((item) => item.value === category);
-      console.log(
-        "EditCostItemScreen::submitHandler::obj::" + JSON.stringify(obj)
-      );
-      console.log(
-        JSON.stringify(
-          "editCostItemScreen::category::" + JSON.stringify(category)
-        )
-      );
       const dateTime = formatDate(
         moment(formState.inputValues.dateTime),
         KEY.FORMAT_DATETIME_MSSQL
       );
-      console.log("EditCostItemScreen::submitHandler::dateTime::" + dateTime);
       await dispatch(
         costItemActions.createCostItem(
           token,
-          category,
+          formState.inputValues.category,
           formState.inputValues.title,
           formState.inputValues.description,
           dateTime,
-          +formState.inputValues.amount
+          +formState.inputValues.amount,
+          ciId ? ciId : null
         )
       );
     } catch (err) {
@@ -191,6 +157,18 @@ const EditCostItemScreen = ({ route, navigation }) => {
         value: inputValue,
         isValid: inputValidity,
         input: inputIdentifier,
+      });
+    },
+    [dispatchFormState]
+  );
+
+  const setCategory = useCallback(
+    (val) => {
+      dispatchFormState({
+        type: FORM_INPUT_UPDATE,
+        value: val,
+        isValid: true,
+        input: "category",
       });
     },
     [dispatchFormState]
@@ -231,7 +209,7 @@ const EditCostItemScreen = ({ route, navigation }) => {
             autoCorrect
             returnKeyType="next"
             onInputChange={inputChangeHandler}
-            initialValue={editedCostItem ? editedCostCategory.name : ""}
+            initialValue={editedCostItem ? editedCostItem.name : ""}
             initiallyValid={!!editedCostItem}
             required
             minLength={5}
@@ -246,7 +224,7 @@ const EditCostItemScreen = ({ route, navigation }) => {
             autoCorrect
             returnKeyType="next"
             onInputChange={inputChangeHandler}
-            initialValue={editedCostItem ? editedCostCategory.description : ""}
+            initialValue={editedCostItem ? editedCostItem.description : ""}
             initiallyValid={!!editedCostItem}
             required
             minLength={5}
@@ -271,6 +249,8 @@ const EditCostItemScreen = ({ route, navigation }) => {
                     />
                   );
                 }}
+                //defaultValue={costCategoryId}
+                defaultValueByIndex={selectedCostCategoryIndex}
                 dropdownIconPosition={"right"}
                 dropdownStyle={styles.dropdown1DropdownStyle}
                 rowStyle={styles.dropdown1RowStyle}
@@ -296,7 +276,11 @@ const EditCostItemScreen = ({ route, navigation }) => {
             <Text style={{ ...styles.label, marginRight: hp(5) }}>
               {i18n.t("editCostItem.date")}
             </Text>
-            <CustomDatePicker onInputChange={inputChangeHandler} id="date" />
+            <CustomDatePicker
+              onInputChange={inputChangeHandler}
+              id="date"
+              dateTime={editedCostItem ? editedCostItem.dateTime : moment()}
+            />
           </View>
           <CustomTextInput
             id="amount"

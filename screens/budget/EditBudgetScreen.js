@@ -66,7 +66,6 @@ const EditBudgetScreen = ({ route, navigation }) => {
   const login = useSelector((store) => store.login);
   const budgets = useSelector((store) => store.budgets);
   const budgetIndex = budgets.selectedBudgetIndex;
-  //console.log("EditBudgetScreen::" + budgetId);
   var editedBudget = null;
   const dispatch = useDispatch();
 

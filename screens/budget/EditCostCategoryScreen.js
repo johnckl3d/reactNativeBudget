@@ -52,7 +52,6 @@ const formReducer = (state, action) => {
 };
 
 const EditCostCategoryScreen = ({ route, navigation }) => {
-  console.log("EditCostCategoryScreen::" + JSON.stringify(route));
   const login = useSelector((store) => store.login);
   const FSM = useSelector((store) => store.FSM);
   const budgets = useSelector((store) => store.budgets);

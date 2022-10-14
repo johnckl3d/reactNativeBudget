@@ -65,8 +65,7 @@ const BudgetCarousel = () => {
   };
 
   const handleBudgetGraph = (index) => {
-    console.log("BudgetCarousel::handleGraph::index::" + index);
-    if (index != -1 && index < budgets.length - 1) {
+    if (index != -1 && index <= budgets.length - 1) {
       dispatch({
         type: ACTION_TYPES.SET_BUDGETINDEX,
         selectedBudgetIndex: index,

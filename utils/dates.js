@@ -93,7 +93,7 @@ export function generateAmountFromMonth(costSnapShots, monthStr) {
     ) {
       const index = ssDate.date() - 1;
       days[index] += costSnapShot.amount;
-      console.log("generateAmountFromMonth::days[index]::" + days[index]);
+      //console.log("generateAmountFromMonth::days[index]::" + days[index]);
     }
   });
   //console.log("generateAmountFromMonth::days::" + JSON.stringify(days));

@@ -28,6 +28,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "@Utils/scalingUtils";
+import moment from "moment";
 
 const inputReducer = (state, action) => {
   switch (action.type) {
@@ -58,8 +59,7 @@ const CustomDatePicker = (props) => {
     touched: false,
   });
 
-  const { onInputChange, id } = props;
-
+  const { onInputChange, id, dateTime } = props;
   useEffect(() => {
     if (inputState.touched) {
       onInputChange(id, inputState.value, inputState.isValid);
@@ -67,11 +67,17 @@ const CustomDatePicker = (props) => {
   }, [inputState, onInputChange, id]);
 
   useEffect(() => {
+    if (dateTime) {
+      const d = new Date(dateTime);
+      setDate(d);
+    }
+  }, []);
+
+  useEffect(() => {
     onInputChange(id, date, true);
   }, []);
 
   const dateChangeHandler = (val) => {
-    console.log("dateChangeHandler::val::" + val);
     setDate(val);
     lostFocusHandler();
     var isValid = true;
@@ -108,6 +114,7 @@ const CustomDatePicker = (props) => {
       </Button>
       {/* <Text style={styles.label}>{formatDate(date, "lll")}</Text> */}
       <DatePicker
+        selected={date}
         modal
         mode="date"
         open={open}

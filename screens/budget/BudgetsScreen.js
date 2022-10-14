@@ -70,8 +70,6 @@ const BudgetsScreen = (props) => {
   const selectedBudgetIndex = FSM.selectedBudgetIndex;
 
   useEffect(() => {
-    console.log("BudgetsScreen::isDrawerOpen::" + isDrawerOpen);
-    console.log("BudgetsScreen::isFocused::" + isFocused);
     if (isDrawerOpen || !isFocused) {
       setIsShowFAB(false);
     } else {

@@ -15,7 +15,8 @@ export const createCostItem = (
   name,
   description,
   dateTime,
-  amount
+  amount,
+  costItemId
 ) => {
   return async (dispatch) => {
     try {
@@ -29,12 +30,15 @@ export const createCostItem = (
       console.log("=======================================================");
       console.log("createCostItem::url::" + url);
       console.log("createCostItem::token::" + token);
-      console.log("createCostItem::budgetId::" + costCategoryId);
+      console.log("createCostItem::costCategoryId::" + costCategoryId);
       console.log("createCostItem::name::" + name);
       console.log("createCostItem::description::" + description);
       console.log("createCostItem::transactionID::" + transactionID);
       console.log("createCostItem::dateTime::" + dateTime);
       console.log("createCostItem::amount::" + amount);
+      if (costItemId) {
+        console.log("createCostItem::costItemId::" + costItemId);
+      }
       await axios({
         url: url,
         method: "post",
@@ -50,6 +54,7 @@ export const createCostItem = (
           description: description,
           dateTime: dateTime,
           amount: amount,
+          costItemId: costItemId ? costItemId : null,
         }),
       })
         .then((response) => {

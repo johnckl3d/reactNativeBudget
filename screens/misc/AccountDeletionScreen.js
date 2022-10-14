@@ -27,7 +27,6 @@ const AccountDeletionScreen = () => {
   const dispatch = useDispatch();
 
   const deleteAccount = useCallback(async () => {
-    console.log("deleteAccount");
     dispatch(loginActions.deleteAccount(login.accessToken));
   }, [dispatch]);
 

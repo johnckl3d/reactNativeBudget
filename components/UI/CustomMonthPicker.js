@@ -74,7 +74,6 @@ const CustomMonthPicker = (props) => {
     showPicker(false);
     const month = moment(selectedDate).format("YYYY MMM");
     var index = monthRange.findIndex((data) => data === month);
-    console.log("CustomMonthPicker::onValueChange::index::" + index);
     dispatch({
       type: ACTION_TYPES.SET_BUDGETMONTHINDEX,
       selectedBudgetMonthIndex: index,

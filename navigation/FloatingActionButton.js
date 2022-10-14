@@ -93,7 +93,6 @@ const FloatingActionButton = ({ visible, actions, navigation }) => {
     },
     [dispatch]
   );
-  console.log("FAB::visible::" + visible);
   if (!visible) {
     return null;
   }

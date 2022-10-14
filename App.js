@@ -133,12 +133,7 @@ const App = () => {
     const restoreState = async () => {
       try {
         const accessToken = await getStringData(STORAGE.ACCESS_TOKEN);
-        console.log("App.js::getasyncstorage::accessToken::" + accessToken);
         if (accessToken) {
-          console.log(
-            "app::validateJwtExpiryDate::" +
-              validateJwtExpiryDateIsExpired(accessToken)
-          );
           if (!validateJwtExpiryDateIsExpired(accessToken)) {
             dispatch({
               type: ACTION_TYPES.SET_LOGIN,

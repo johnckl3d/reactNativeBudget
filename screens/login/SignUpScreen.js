@@ -113,7 +113,6 @@ const SignUpScreen = ({ navigation }) => {
   };
 
   const register = useCallback(async () => {
-    console.log("register");
     var userId = "";
     var email = "";
     var firstName = "";
@@ -152,7 +151,6 @@ const SignUpScreen = ({ navigation }) => {
         )
       );
     } catch (err) {
-      console.log("register::err::" + err);
       Alert.alert(i18n.t("common.errorTitle"), i18n.t("common.errorMessage"), [
         { text: i18n.t("common.ok"), onPress: () => handleCloseError() },
       ]);

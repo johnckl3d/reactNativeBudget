@@ -80,6 +80,27 @@ const CostCategoryItem = ({ item }) => {
         ]}
         title={item.name}
         titleStyle={styles.textHeading5}
+        left={() => <List.Icon icon="folder" />}
+        right={() => (
+          <Menu
+            visible={visible}
+            onDismiss={closeMenu}
+            anchor={
+              <IconButton
+                icon="dots-vertical"
+                onPress={() => openMenu(item.name)}
+              >
+                Show menu
+              </IconButton>
+            }
+          >
+            <Menu.Item onPress={editCostItemHander} title="Edit" />
+            <Menu.Item
+              onPress={() => deleteCostItemHander(item.name, item.costItemId)}
+              title="Delete"
+            />
+          </Menu>
+        )}
         description={
           `Amount: ${i18n.t("common.currency")}` +
           `${nFormatter(item.totalAmount)}`
@@ -104,6 +125,7 @@ const CostCategoryItem = ({ item }) => {
       titleStyle={styles.textCitation}
       description={item.totalAmount}
       descriptionStyle={[{ color: Colors.red }, styles.centered]}
+      left={() => <List.Icon icon="folder" />}
       right={() => (
         //<Button>{JSON.stringify(item)}</Button>
         <Menu
