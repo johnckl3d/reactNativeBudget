@@ -1,5 +1,13 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { withTheme, Colors, Text, FAB, Portal } from "react-native-paper";
+import {
+  withTheme,
+  Colors,
+  Text,
+  FAB,
+  Portal,
+  Menu,
+  IconButton,
+} from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import i18n from "@I18N/i18n";
 import {
@@ -25,6 +33,10 @@ const FloatingActionButton = ({ visible, actions, navigation }) => {
   const selectedBudgetIndex = FSM.selectedBudgetIndex;
   const dispatch = useDispatch();
 
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const closeMenu = () => setIsOpenMenu(false);
+  const openMenu = () => setIsOpenMenu(true);
+
   const FABActions = [
     {
       icon: "plus",
@@ -35,9 +47,16 @@ const FloatingActionButton = ({ visible, actions, navigation }) => {
     },
     {
       icon: "email",
-      label: i18n.t("budget.addCategory"),
+      label: i18n.t("budget.addCostCategory"),
       onPress: () => {
         addCostCategoryHandler();
+      },
+    },
+    {
+      icon: "email",
+      label: i18n.t("budget.editCostCategoryListScreen"),
+      onPress: () => {
+        editCostCategoryListHandler();
       },
     },
     {
@@ -62,6 +81,10 @@ const FloatingActionButton = ({ visible, actions, navigation }) => {
 
   const addCostCategoryHandler = () => {
     navigation.navigate("EditCostCategoryScreen");
+  };
+
+  const editCostCategoryListHandler = () => {
+    navigation.navigate("EditCostCategoryListScreen");
   };
 
   const editBudgetHandler = () => {

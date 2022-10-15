@@ -51,7 +51,7 @@ const formReducer = (state, action) => {
   return state;
 };
 
-const EditCostCategoryScreen = ({ route, navigation }) => {
+const EditCostCategoryItemScreen = ({ route, navigation }) => {
   const login = useSelector((store) => store.login);
   const FSM = useSelector((store) => store.FSM);
   const budgets = useSelector((store) => store.budgets);
@@ -186,4 +186,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withTheme(EditCostCategoryScreen);
+export default withTheme(EditCostCategoryItemScreen);

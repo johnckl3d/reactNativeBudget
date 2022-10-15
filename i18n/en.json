@@ -23,9 +23,11 @@
     "title": "",
     "noBudget": "No budgets found. Maybe start adding some!",
     "addCostItem": "Add Cost Item",
-    "addCategory": "Add Category",
+    "addCostCategory": "Add Cost Category",
     "deleteBudget": "Delete Budget",
     "addBudget": "Add Budget",
+    "addCostCategoryScreen": "Add Cost Category",
+    "editCostCategoryListScreen": "Edit Cost Category",
     "editCostCategoryScreen": "Edit Cost Category",
     "editCostItemScreen": "Edit Cost Item",
     "deleteBudgetHeader": "Are you sure?"
@@ -53,6 +55,15 @@
   },
   "editCostCategory": {
     "title": "Edit Cost Category",
+    "name": "Name",
+    "description": "Description",
+    "amount": "Amount",
+    "add": "Add",
+    "expenses": "expenses",
+    "income": "income"
+  },
+  "addCostCategory": {
+    "title": "Add Cost Category",
     "name": "Name",
     "description": "Description",
     "amount": "Amount",

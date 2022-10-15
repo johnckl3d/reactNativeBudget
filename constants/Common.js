@@ -16,4 +16,20 @@ export const COMMON = {
   REGEX_EMAIL:
     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
   REGEX_NUMERIC: /^[0-9\b]+$/,
+  ICON_ARRAY: [
+    "bag-suitcase",
+    "airplane",
+    "silverware-fork-knife",
+    "drama-masks",
+    "flash",
+    "bottle-tonic-plus",
+    "paw",
+    "home",
+    "account-school",
+    "soccer",
+    "water-pump",
+    "van-utility",
+    "teddy-bear",
+    "music",
+  ],
 };

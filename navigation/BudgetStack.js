@@ -2,10 +2,11 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as React from "react";
 import { Text, View } from "react-native";
 import { Appbar } from "react-native-paper";
-import BudgetsScreen from "../screens/budget/BudgetsScreen";
-import EditCostCategoryScreen from "../screens/budget/EditCostCategoryScreen";
-import EditCostItemScreen from "../screens/budget/EditCostItemScreen";
-import EditBudgetScreen from "../screens/budget/EditBudgetScreen";
+import BudgetsScreen from "@BudgetScreens/BudgetsScreen";
+import EditCostCategoryItemScreen from "@BudgetScreens/EditCostCategoryItemScreen";
+import EditCostCategoryListScreen from "@BudgetScreens/EditCostCategoryListScreen";
+import EditCostItemScreen from "@BudgetScreens/EditCostItemScreen";
+import EditBudgetScreen from "@BudgetScreens/EditBudgetScreen";
 import i18n from "@I18N/i18n";
 import { withTheme, useTheme, Button } from "react-native-paper";
 import Colors from "@Styles/colors";
@@ -33,7 +34,6 @@ const BudgetStack = () => {
         component={BudgetsScreen}
         options={{ title: i18n.t("budget.title") }}
       />
-      {/* <Stack.Screen name="CostItemsScreen" component={CostItemsScreen}  options={{ title: 'CostItemsScreen' }}/> */}
       <Stack.Screen
         name="EditBudgetScreen"
         component={EditBudgetScreen}
@@ -41,7 +41,12 @@ const BudgetStack = () => {
       />
       <Stack.Screen
         name="EditCostCategoryScreen"
-        component={EditCostCategoryScreen}
+        component={EditCostCategoryItemScreen}
+        options={{ title: i18n.t("addCostCategory.title") }}
+      />
+      <Stack.Screen
+        name="EditCostCategoryListScreen"
+        component={EditCostCategoryListScreen}
         options={{ title: i18n.t("editCostCategory.title") }}
       />
       <Stack.Screen

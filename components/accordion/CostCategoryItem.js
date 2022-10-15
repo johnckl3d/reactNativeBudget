@@ -34,9 +34,9 @@ const CostCategoryItem = ({ item }) => {
   const token = login.accessToken;
   const FSM = useSelector((store) => store.FSM);
   const dispatch = useDispatch();
-  const [visible, setVisible] = useState(false);
-  const closeMenu = () => setVisible(false);
-  const openMenu = () => setVisible(true);
+  const [isMaximize, setIsMaximize] = useState(false);
+  const minimize = () => setIsMaximize(false);
+  const maximize = () => setIsMaximize(true);
 
   const renderCostItem = ({ item }) => {
     return <CostItem costCategoryId={costCategoryId} item={item}></CostItem>;
@@ -48,14 +48,14 @@ const CostCategoryItem = ({ item }) => {
         text: "No",
         style: "default",
         onPress: () => {
-          closeMenu();
+          minimize();
         },
       },
       {
         text: "Yes",
         style: "destructive",
         onPress: () => {
-          closeMenu();
+          minimize();
           deleteCostCategory(login.accessToken, costCategoryId);
         },
       },
@@ -70,55 +70,26 @@ const CostCategoryItem = ({ item }) => {
   );
 
   return item.costItems.length > 0 ? (
-    <List.Section>
-      <List.Accordion
-        style={[
-          styles.layoutList,
-          styles.listItemTight,
-          styles.highlightRed,
-          { height: hp(7) },
-        ]}
-        title={item.name}
-        titleStyle={styles.textHeading5}
-        left={() => <List.Icon icon="folder" />}
-        right={() => (
-          <Menu
-            visible={visible}
-            onDismiss={closeMenu}
-            anchor={
-              <IconButton
-                icon="dots-vertical"
-                onPress={() => openMenu(item.name)}
-              >
-                Show menu
-              </IconButton>
-            }
-          >
-            <Menu.Item onPress={editCostItemHander} title="Edit" />
-            <Menu.Item
-              onPress={() => deleteCostItemHander(item.name, item.costItemId)}
-              title="Delete"
-            />
-          </Menu>
-        )}
-        description={
-          `Amount: ${i18n.t("common.currency")}` +
-          `${nFormatter(item.totalAmount)}`
-        }
-        descriptionStyle={[
-          { color: Colors.red },
-          styles.centered,
-          styles.textCitation,
-        ]}
-      >
-        <FlatList
-          data={item.costItems}
-          keyExtractor={(item) => item.costItemId}
-          renderItem={renderCostItem}
-        />
-      </List.Accordion>
-      <Divider />
-    </List.Section>
+    <List.Accordion
+      style={[styles.layoutList, styles.listItemTight, { height: hp(7) }]}
+      title={item.name}
+      titleStyle={styles.textHeading5}
+      description={
+        `Amount: ${i18n.t("common.currency")}` +
+        `${nFormatter(item.totalAmount)}`
+      }
+      descriptionStyle={[
+        { color: Colors.red },
+        styles.centered,
+        styles.textCitation,
+      ]}
+    >
+      <FlatList
+        data={item.costItems}
+        keyExtractor={(item) => item.costItemId}
+        renderItem={renderCostItem}
+      />
+    </List.Accordion>
   ) : (
     <List.Item
       title={item.name}
@@ -129,12 +100,12 @@ const CostCategoryItem = ({ item }) => {
       right={() => (
         //<Button>{JSON.stringify(item)}</Button>
         <Menu
-          visible={visible}
-          onDismiss={closeMenu}
+          visible={isMaximize}
+          onDismiss={minimize}
           anchor={
             <IconButton
               icon="dots-vertical"
-              onPress={() => openMenu(item.name)}
+              onPress={() => maximize(item.name)}
             >
               Show menu
             </IconButton>

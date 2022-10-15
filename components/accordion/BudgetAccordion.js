@@ -53,45 +53,6 @@ const BudgetAccordion = (props) => {
     setExpanded(!expanded);
   };
 
-  const renderCostItem = ({ item }) => {
-    return (
-      <List.Section style={[styles.layoutList, styles.highlightRed]}>
-        <List.Subheader
-          style={[
-            styles.textHeading5,
-            styles.listItemTight,
-            styles.highlightRed,
-            { height: hp(3) },
-          ]}
-        >
-          {moment(item.dateTime).format("LL")}
-        </List.Subheader>
-        <List.Item
-          left={() => (
-            <IconButton icon="camera" size={hp(3)} onPress={() => {}} />
-          )}
-          right={(props) => (
-            <IconButton {...props} icon="dots-vertical" onPress={() => {}} />
-          )}
-          title={item.name}
-          titleStyle={styles.textCitation}
-          style={[
-            styles.centered,
-            styles.listItemTight,
-            styles.highlightRed,
-            { height: hp(8) },
-          ]}
-          description={
-            `Amount: ${i18n.t("common.currency")}` +
-            `${nFormatter(item.amount)}`
-          }
-          descriptionStyle={styles.textCitation}
-        />
-        <View></View>
-      </List.Section>
-    );
-  };
-
   const renderCostCategoriesItem = ({ item }) => {
     return <CostCategoryItem item={item}></CostCategoryItem>;
   };

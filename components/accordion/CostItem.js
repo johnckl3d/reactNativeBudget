@@ -84,18 +84,14 @@ const CostItem = ({ costCategoryId, item }) => {
   };
 
   return (
-    <List.Section style={[styles.layoutList, styles.highlightRed]}>
+    <View>
       <List.Subheader
-        style={[
-          styles.textHeading5,
-          styles.listItemTight,
-          styles.highlightRed,
-          { height: hp(3) },
-        ]}
+        style={[styles.textHeading5, styles.listItemTight, { height: hp(3) }]}
       >
         {moment(item.dateTime).format("LL")}
       </List.Subheader>
       <List.Item
+        style={[styles.listItemTight, { height: hp(5) }]}
         left={() => (
           <IconButton icon="camera" size={hp(3)} onPress={() => {}} />
         )}
@@ -105,6 +101,7 @@ const CostItem = ({ costCategoryId, item }) => {
             onDismiss={closeMenu}
             anchor={
               <IconButton
+                size={hp(3)}
                 icon="dots-vertical"
                 onPress={() => openMenu(item.name)}
               >
@@ -121,19 +118,12 @@ const CostItem = ({ costCategoryId, item }) => {
         )}
         title={item.name}
         titleStyle={styles.textCitation}
-        style={[
-          styles.centered,
-          styles.listItemTight,
-          styles.highlightRed,
-          { height: hp(8) },
-        ]}
         description={
           `Amount: ${i18n.t("common.currency")}` + `${nFormatter(item.amount)}`
         }
         descriptionStyle={styles.textCitation}
       />
-      <View></View>
-    </List.Section>
+    </View>
   );
 };
 
@@ -142,7 +132,7 @@ const styles = StyleSheet.create({
   layoutList: { ...Styles.layoutList },
   textHeading5: { ...Styles.textHeading5, borderColor: Colors.red },
   textCitation: { ...Styles.textCitation },
-  centered: { ...centered, height: hp(5), flex: 1 },
+  centered: { ...centered },
   highlightRed: { ...Styles.highlightRed },
   listItemTight: { ...Styles.listItemTight },
 });
