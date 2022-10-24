@@ -30,7 +30,7 @@ import {
 import Colors from "@Styles/colors";
 import { centered } from "@Styles/presentation";
 import { AuthProvider } from "@Context/AuthContext";
-import { STORAGE } from "@Constants/storage";
+import { KEY } from "@Constants/key";
 import { getStringData } from "@Utils/storageUtils";
 import { validateJwtExpiryDateIsExpired } from "@Utils/tokenUtils";
 import AuthStack from "@Navigation/AuthStack";
@@ -132,7 +132,7 @@ const App = () => {
   useEffect(() => {
     const restoreState = async () => {
       try {
-        const accessToken = await getStringData(STORAGE.ACCESS_TOKEN);
+        const accessToken = await getStringData(KEY.ACCESS_TOKEN);
         if (accessToken) {
           if (!validateJwtExpiryDateIsExpired(accessToken)) {
             dispatch({

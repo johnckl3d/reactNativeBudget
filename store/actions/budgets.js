@@ -1,10 +1,10 @@
 import CostSnapShot from "@Models/costSnapShot";
 import CostCategory from "@Models/costCategory";
 import CostItem from "@Models/costItem";
+import IncomeItem from "@Models/incomeItem";
 import Budget from "@Models/budget";
 import { API_URL } from "@Constants/url";
 import { SETTINGS } from "@Constants/settings";
-import { STORAGE } from "@Constants/storage";
 import { getStringData } from "@Utils/storageUtils";
 import moment from "moment";
 import uuid from "react-native-uuid";
@@ -58,6 +58,30 @@ export const fetchBudgets = (token) => {
                 );
               }
               ccs.push(
+                new CostCategory(
+                  cc.budgetId,
+                  cc.costCategoryId,
+                  cc.name,
+                  cc.totalAmount,
+                  cis
+                )
+              );
+            }
+            const ics = [];
+            for (const ic of b.costCategories) {
+              const iis = [];
+              for (const ii of ic.costItems) {
+                iis.push(
+                  new IncomeItem(
+                    ii.costItemId,
+                    ii.name,
+                    ii.description,
+                    ii.dateTime,
+                    ii.amount
+                  )
+                );
+              }
+              ics.push(
                 new CostCategory(
                   cc.budgetId,
                   cc.costCategoryId,

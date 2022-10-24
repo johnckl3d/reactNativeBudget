@@ -40,20 +40,31 @@ export const nFormatter = (num, digits) => {
 //     console.log("nFormatter(" + test.num + ", " + test.digits + ") = " + nFormatter(test.num, test.digits));
 // });
 
-export const extractCostCategoryList = (budget) => {
+export const extractCostCategoryList = (
+  budget,
+  isExpense = true,
+  isIncome = true
+) => {
   var result = [];
-  const ccArr = budget.costCategories.slice();
-  //console.log("extractCostCategoryList::ccArr::" + JSON.stringify(ccArr));
-  for (let i = 0; i < ccArr.length; i++) {
-    const obj = {
-      label: ccArr[i].name,
-      value: ccArr[i].costCategoryId,
-    };
-    result.push(obj);
-    // console.log(
-    //   "extractCostCategoryList::result[i]::" + JSON.stringify(result[i])
-    // );
+  const eArr = budget.costCategories.slice();
+  const iArr = budget.incomeCategories.slice();
+  if (isExpense) {
+    for (let i = 0; i < eArr.length; i++) {
+      const obj = {
+        label: eArr[i].name,
+        value: eArr[i].costCategoryId,
+      };
+      result.push(obj);
+    }
   }
-  //console.log("extractCostCategoryList::result::" + JSON.stringify(result));
+  if (isIncome) {
+    for (let i = 0; i < iArr.length; i++) {
+      const obj = {
+        label: iArr[i].name,
+        value: iArr[i].costCategoryId,
+      };
+      result.push(obj);
+    }
+  }
   return result;
 };

@@ -5,9 +5,9 @@ import Budget from "../../models/budget";
 import { API_URL } from "@Constants/url";
 import { SETTINGS } from "@Constants/settings";
 import i18n from "@I18N/i18n";
-//export const RETRIEVE_TOKEN = "RETRIEVE_TOKEN";
-//export const REGISTER = "REGISTER";
-import { STORAGE } from "@Constants/storage";
+
+import { KEY } from "@Constants/key";
+
 import { storeStringData } from "@Utils/storageUtils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -44,8 +44,8 @@ export const login = (userId, password) => {
         }),
       })
         .then((response) => {
-          storeStringData(STORAGE.ACCESS_TOKEN, response.data.accessToken);
-          storeStringData(STORAGE.REFRESH_TOKEN, response.data.refresh_token);
+          storeStringData(KEY.ACCESS_TOKEN, response.data.accessToken);
+          storeStringData(KEY.REFRESH_TOKEN, response.data.refresh_token);
           dispatch({
             type: ACTION_TYPES.SET_LOGIN,
             refreshToken: response.data.refreshToken,
@@ -98,8 +98,8 @@ export const logout = (refreshToken) => {
       })
         .then((response) => {
           console.log("login::logout::" + response);
-          storeStringData(STORAGE.ACCESS_TOKEN, "");
-          storeStringData(STORAGE.REFRESH_TOKEN, "");
+          storeStringData(KEY.ACCESS_TOKEN, "");
+          storeStringData(KEY.REFRESH_TOKEN, "");
           dispatch({
             type: ACTION_TYPES.SET_LOGOUT,
           });
@@ -145,8 +145,8 @@ export const deleteAccount = (accessToken) => {
       })
         .then((response) => {
           console.log("action::deleteAccount::response::" + response);
-          storeStringData(STORAGE.ACCESS_TOKEN, "");
-          storeStringData(STORAGE.REFRESH_TOKEN, "");
+          storeStringData(KEY.ACCESS_TOKEN, "");
+          storeStringData(KEY.REFRESH_TOKEN, "");
           dispatch({
             type: ACTION_TYPES.SET_LOGOUT,
           });

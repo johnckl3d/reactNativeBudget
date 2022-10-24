@@ -52,6 +52,7 @@ import {
   useTabNavigation,
 } from "react-native-paper-tabs";
 import ScreenWrapper from "@UIComponents/ScreenWrapper";
+import { ICON_ARRAY } from "@Constants/common";
 
 const formReducer = (state, action) => {
   if (action.type === FORM_INPUT_UPDATE) {
@@ -76,40 +77,27 @@ const formReducer = (state, action) => {
   return state;
 };
 
-const EditCostCategoryListScreen = ({ route, navigation }) => {
+const ExpensesCategoryView = ({ route, navigation }) => {
   const login = useSelector((store) => store.login);
   const FSM = useSelector((store) => store.FSM);
-  const budgets = useSelector((store) => store.budgets);
-  const selectedBudgetIndex = FSM.selectedBudgetIndex;
-
   const dispatch = useDispatch();
-  const goTo = useTabNavigation();
-  const index = useTabIndex();
-  let editedCostCategory = null;
-  const editedBudget = budgets[selectedBudgetIndex];
-  let costCategoryId = null;
-
-  let categoryId = route.params?.costCategoryId;
-  let color = route.params?.color;
-  let icon = route.params?.icon;
+  let editedCostCategory = route.params?.data;
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       title: editedCostCategory ? editedCostCategory.title : "",
-      description: editedCostCategory ? editedCostCategory.description : "",
+      color: editedCostCategory ? editedCostCategory.color : "black",
+      icon: editedCostCategory ? icon : "",
     },
     inputValidities: {
       title: editedCostCategory ? true : false,
-      description: editedCostCategory ? true : false,
+      color: editedCostCategory ? true : false,
+      icon: editedCostCategory ? true : false,
     },
-    formIsValid: editedCostCategory ? true : false,
+    formIsValid: false,
   });
 
-  const openMenuHandler = () => {
-    console.log("openMenuHandler");
-  };
-
-  const deleteCostCategoryHander = (name, costItemId) => {
+  const deleteExpenseCategoryHander = (name, costItemId) => {
     Alert.alert("Are you sure?", `Do you really want to delete ${name}?`, [
       { text: "No", style: "default" },
       {
@@ -127,14 +115,14 @@ const EditCostCategoryListScreen = ({ route, navigation }) => {
     return;
   };
 
-  const deleteCostItem = useCallback(
-    async (token, costCategoryId, costItemId) => {
-      dispatch(
-        costItemsActions.deleteCostItem(token, costCategoryId, costItemId)
-      );
-    },
+  const deleteExpenseCategory = useCallback(
+    async (token, costCategoryId, costItemId) => {},
     [dispatch]
   );
+
+  const selectIcon = () => {
+    console.log("select icon");
+  };
 
   const submitHandler = useCallback(async () => {
     if (!formState.formIsValid) {
@@ -144,16 +132,6 @@ const EditCostCategoryListScreen = ({ route, navigation }) => {
       return;
     }
     try {
-      var token = login.accessToken;
-      await dispatch(
-        costCategoriesActions.createCostCategory(
-          token,
-          editedBudget.budgetId,
-          formState.inputValues.title,
-          formState.inputValues.description,
-          editedBudget
-        )
-      );
     } catch (err) {
       throw err;
     }
@@ -172,68 +150,58 @@ const EditCostCategoryListScreen = ({ route, navigation }) => {
     [dispatchFormState]
   );
 
-  const renderCostCategoriesItem = ({ item }) => {
-    console.log("renderCostCategoriesItem::" + JSON.stringify(item));
-    return (
-      <List.Item
-        right={() => (
-          <IconButton
-            icon="dots-vertical"
-            onPress={openMenuHandler}
-          ></IconButton>
-        )}
-        title={item.label}
-        titleStyle={styles.textCitation}
-        style={[
-          styles.centered,
-          styles.listItemTight,
-          styles.highlightRed,
-          { height: hp(8) },
-        ]}
-      />
-    );
-  };
-
-  const ExpensesView = () => {
-    return (
-      <View style={{ flex: 1 }}>
-        <FlatList
-          data={extractCostCategoryList(budgets[selectedBudgetIndex])}
-          keyExtractor={(item) => item.value}
-          renderItem={renderCostCategoriesItem}
-        />
-      </View>
-    );
-  };
-
-  const IncomeView = () => {
-    return (
-      <View style={{ flex: 1 }}>
-        <Title>{i18n.t("editCostCategory.income")}</Title>
-        <Paragraph>Index: {index}</Paragraph>
-        <Button onPress={() => goTo(1)}>Go to Flights</Button>
-      </View>
-    );
-  };
-
   return (
-    <View style={{ flex: 1, backgroundColor: Colors.white }}>
-      <Tabs>
-        <TabScreen label={i18n.t("editCostCategory.expenses")} icon="compass">
-          <ExpensesView />
-        </TabScreen>
-        <TabScreen label={i18n.t("editCostCategory.income")} icon="airplane">
-          <IncomeView />
-        </TabScreen>
-      </Tabs>
-      <View style={styles.buttonBottom}>
-        <CustomBottomButton
-          text={i18n.t("editCostCategory.add")}
-          onPress={() => {
-            submitHandler();
-          }}
-        />
-      </View>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "flex-start",
+        backgroundColor: Colors.white,
+      }}
+    >
+      <KeyboardAvoidingView
+        style={{ flex: 1, justifyContent: "flex-start" }}
+        behavior="padding"
+        keyboardVerticalOffset={100}
+      >
+        <View style={[styles.form, { backgroundColor: Colors.white }]}>
+          <CustomTextInput
+            id="title"
+            label={i18n.t("expenseCategory.name")}
+            errorText="Please enter a valid name!"
+            keyboardType="default"
+            autoCapitalize="sentences"
+            autoCorrect
+            returnKeyType="next"
+            onInputChange={inputChangeHandler}
+            initialValue={editedCostItem ? editedCostItem.name : ""}
+            initiallyValid={!!editedCostItem}
+            required
+            minLength={5}
+            placeholderText={i18n.t("editCostItem.namePlaceholder")}
+          />
+          <SafeAreaView style={styles.container}>
+            <FlatList
+              data={ICON_ARRAY}
+              renderItem={({ item }) => (
+                <View style={{ flex: 1, flexDirection: "column", margin: 1 }}>
+                  <IconButton icon={item} onPress={() => selectIcon(item)} />
+                </View>
+              )}
+              //Setting the number of column
+              numColumns={3}
+              keyExtractor={(item, index) => index}
+            />
+          </SafeAreaView>
+        </View>
+        <View style={styles.buttonBottom}>
+          <CustomBottomButton
+            text={i18n.t("expenseCategory.save")}
+            onPress={() => {
+              submitHandler();
+            }}
+          />
+        </View>
+      </KeyboardAvoidingView>
     </View>
   );
 };
@@ -266,4 +234,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withTheme(EditCostCategoryListScreen);
+export default withTheme(ExpensesCategoryView);

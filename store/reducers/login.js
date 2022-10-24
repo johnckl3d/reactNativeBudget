@@ -1,5 +1,4 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { STORAGE } from "@Constants/storage";
 import ACTION_TYPES from "@Actions/actionTypes";
 
 const initialState = {

@@ -62,6 +62,20 @@
     "expenses": "expenses",
     "income": "income"
   },
+  "expenseCategory": {
+    "title": "Edit Category",
+    "name": "Category Name",
+    "color": "Category Color",
+    "icon": "Category Icon",
+    "save": "Save Changes"
+  },
+  "incomeCategory": {
+    "title": "Edit Category",
+    "name": "Category Name",
+    "color": "Category Color",
+    "icon": "Category Icon",
+    "save": "Save Changes"
+  },
   "addCostCategory": {
     "title": "Add Cost Category",
     "name": "Name",
