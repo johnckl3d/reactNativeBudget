@@ -52,6 +52,7 @@ import {
   useTabNavigation,
 } from "react-native-paper-tabs";
 import ScreenWrapper from "@UIComponents/ScreenWrapper";
+import ExpensesCategoryView from "./ExpensesCategoryView";
 
 const formReducer = (state, action) => {
   if (action.type === FORM_INPUT_UPDATE) {
@@ -220,7 +221,14 @@ const EditCostCategoryListScreen = ({ route, navigation }) => {
     <View style={{ flex: 1, backgroundColor: Colors.white }}>
       <Tabs>
         <TabScreen label={i18n.t("editCostCategory.expenses")} icon="compass">
-          <ExpensesView />
+          <ExpensesCategoryView
+            data={extractCostCategoryList(budgets[selectedBudgetIndex])}
+          ></ExpensesCategoryView>
+          <FlatList
+            data={extractCostCategoryList(budgets[selectedBudgetIndex])}
+            keyExtractor={(item) => item.value}
+            renderItem={renderCostCategoriesItem}
+          />
         </TabScreen>
         <TabScreen label={i18n.t("editCostCategory.income")} icon="airplane">
           <IncomeView />

@@ -67,9 +67,9 @@ export const fetchBudgets = (token) => {
                 )
               );
             }
-            const ics = [];
+            const ics = []; //income cost snapshot
             for (const ic of b.costCategories) {
-              const iis = [];
+              const iis = []; //income items
               for (const ii of ic.costItems) {
                 iis.push(
                   new IncomeItem(
@@ -83,11 +83,11 @@ export const fetchBudgets = (token) => {
               }
               ics.push(
                 new CostCategory(
-                  cc.budgetId,
-                  cc.costCategoryId,
-                  cc.name,
-                  cc.totalAmount,
-                  cis
+                  ic.budgetId,
+                  ic.costCategoryId,
+                  ic.name,
+                  ic.totalAmount,
+                  iis
                 )
               );
             }
@@ -99,7 +99,8 @@ export const fetchBudgets = (token) => {
                 b.totalBudgetAmount,
                 b.totalCostAmount,
                 css,
-                ccs
+                ccs,
+                ics
               )
             );
           }

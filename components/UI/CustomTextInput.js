@@ -1,7 +1,7 @@
 import React, { useReducer, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import { Text, TextInput } from "react-native-paper";
-import { COMMON } from "@Constants/Common";
+import { COMMON } from "@Constants/common";
 import { KEY } from "@Constants/key";
 import {
   widthPercentageToDP as wp,
